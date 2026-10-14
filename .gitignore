@@ -1,0 +1,27 @@
+# Unity-generated caches and local builds
+/[Ll]ibrary/
+/Library.initial-import-backup/
+/[Tt]emp/
+/[Oo]bj/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Bb]uild/
+/[Bb]uilds/
+/TempMigration/
+/MemoryCaptures/
+/Recordings/
+/.vs/
+/.idea/
+*.csproj
+*.sln
+*.slnx
+*.user
+*.log
+*.pidb
+*.pdb
+*.opendb
+*.VC.db
+.DS_Store
+Thumbs.db
+
+# Preserve Assets, Packages, ProjectSettings and all .meta files.
