@@ -9,6 +9,15 @@ using UnityEngine.Events;
     public Transform anchor;
 }
 
+[Serializable] public class InteriorConnection
+{
+    public string id,displayName,destinationSpawnId;
+    public Transform anchor;
+    public BuildingEntranceDefinition destination;
+    [Min(.5f)] public float radius=1.6f;
+    public bool IsNear(Vector3 p)=>anchor&&anchor.gameObject.activeInHierarchy&&Mathf.Abs(p.y-anchor.position.y)<1&&Vector2.Distance(new Vector2(p.x,p.z),new Vector2(anchor.position.x,anchor.position.z))<=radius;
+}
+
 // Keep exactly one of these in each interior scene. Artists own the remaining
 // hierarchy; no CampusGame, player, camera or AudioListener should be duplicated.
 public class InteriorSceneRoot : MonoBehaviour
@@ -16,10 +25,12 @@ public class InteriorSceneRoot : MonoBehaviour
     public string buildingId;
     public InteriorSpawnPoint[] spawnPoints;
     public Transform[] exits;
+    public InteriorConnection[] connections=Array.Empty<InteriorConnection>();
     [Min(.5f)] public float exitRadius=2.4f;
     public float fallRecoveryHeight=-10;
     public bool isPlaceholder=true;
     public bool showExitMarkers=true;
+    public Color backgroundColor=new Color(.18f,.21f,.24f);
     CampusGame game;
     public UnityEvent onPlayerEntered=new UnityEvent();
     public UnityEvent onPlayerLeaving=new UnityEvent();
@@ -37,6 +48,7 @@ public class InteriorSceneRoot : MonoBehaviour
     }
 
     public Transform FindSpawn(string id)=>spawnPoints?.FirstOrDefault(p=>p!=null&&p.id==id)?.anchor;
+    public InteriorConnection NearbyConnection(Vector3 position)=>connections?.Where(c=>c!=null&&c.IsNear(position)).OrderBy(c=>(c.anchor.position-position).sqrMagnitude).FirstOrDefault();
     public bool NearExit(Vector3 position)=>exits!=null&&exits.Any(p=>p&&p.gameObject.activeInHierarchy&&Mathf.Abs(p.position.y-position.y)<2&&Vector2.Distance(new Vector2(p.position.x,p.position.z),new Vector2(position.x,position.z))<=exitRadius);
     public string ValidateContract(string expectedId,string spawnId) {
         if(buildingId!=expectedId)return "室内建筑 ID 与入口配置不一致";

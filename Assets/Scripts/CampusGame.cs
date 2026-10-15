@@ -23,7 +23,7 @@ public class CampusGame : MonoBehaviour {
  float messageUntil=10; Animation animationPlayer; SkinnedMeshRenderer face; string motion=""; GUIStyle title,body,small; Texture2D minimap;
  void Awake(){
   data=JsonUtility.FromJson<CampusData>(mapData.text);qa=Environment.GetCommandLineArgs().Contains("-campusQA");
-  Interiors=GetComponent<BuildingInteriorTravel>();Automated=qa||Environment.GetCommandLineArgs().Contains("-entranceQA");
+  Interiors=GetComponent<BuildingInteriorTravel>();Automated=qa||Environment.GetCommandLineArgs().Contains("-entranceQA")||Environment.GetCommandLineArgs().Contains("-teachingCQA")||Environment.GetCommandLineArgs().Contains("-teachingABQA")||Environment.GetCommandLineArgs().Contains("-skybridgeQA");
   Application.targetFrameRate=60;
   animationPlayer=player.GetComponentInChildren<Animation>();face=player.GetComponentInChildren<SkinnedMeshRenderer>();
   foreach(var actor in new[]{player,guide})foreach(var skin in actor.GetComponentsInChildren<SkinnedMeshRenderer>())skin.updateWhenOffscreen=true;
@@ -50,7 +50,7 @@ public class CampusGame : MonoBehaviour {
    Vector3 before=player.position;
    var movement=(player.right*input.x+player.forward*input.y)*speed*Mathf.Min(Time.deltaTime,.06f);
    if(grounded&&Input.GetKeyDown(KeyCode.Space)){vertical=6.5f;grounded=false;}
-   if(Interiors&&Interiors.Inside){vertical-=18*Mathf.Min(Time.deltaTime,.06f);var flags=Interiors.MoveCharacter(movement+Vector3.up*vertical*Mathf.Min(Time.deltaTime,.06f));grounded=(flags&CollisionFlags.Below)!=0;if(grounded)vertical=-2;if((flags&CollisionFlags.Above)!=0&&vertical>0)vertical=0;}
+   if(Interiors&&Interiors.Inside)MoveIndoor(movement,Mathf.Min(Time.deltaTime,.06f));
    else {player.position=MapToWorld(CampusCollision.Move(WorldToMap(before),WorldToMap(movement),data.obstacles));
     if(!grounded){vertical-=18*Time.deltaTime;var p=player.position;p.y+=vertical*Time.deltaTime;if(p.y<=.23f){p.y=.23f;grounded=true;vertical=0;}player.position=p;}}
    float actual=Vector2.Distance(new Vector2(before.x,before.z),new Vector2(player.position.x,player.position.z))/Mathf.Max(.001f,Time.deltaTime);
@@ -63,6 +63,23 @@ public class CampusGame : MonoBehaviour {
   }
   if(face!=null){for(int i=0;i<face.sharedMesh.blendShapeCount;i++){string n=face.sharedMesh.GetBlendShapeName(i);if(n.Contains("Blink"))face.SetBlendShapeWeight(i,Mathf.Pow(Mathf.Max(0,Mathf.Cos(Time.time*1.8f)),35)*100);else if(n.Contains("Smile"))face.SetBlendShapeWeight(i,complete?65:10);}}
   foreach(var item in memories)if(item.activeSelf){item.transform.Rotate(0,Time.deltaTime*32,0);}
+ }
+ // Shared by normal play and the stair traversal regression check. Only gravity
+ // changes vertical velocity; floor transitions never reposition the character.
+ public void MoveIndoor(Vector3 horizontalDisplacement,float deltaTime){
+  if(!Interiors||!Interiors.Inside)return;
+  deltaTime=Mathf.Clamp(deltaTime,0,.06f);horizontalDisplacement.y=0;
+  // A long sprint frame must not skip two risers at once. Substeps preserve the
+  // real stair colliders and give the capsule consistent low-frame-rate steps.
+  int count=Mathf.Max(1,Mathf.CeilToInt(horizontalDisplacement.magnitude/.14f));
+  float dt=deltaTime/count;
+  for(int i=0;i<count;i++){
+   vertical-=18*dt;
+   var flags=Interiors.MoveCharacter(horizontalDisplacement/count+Vector3.up*vertical*dt);
+   grounded=(flags&CollisionFlags.Below)!=0;
+   if(grounded)vertical=-2;
+   if((flags&CollisionFlags.Above)!=0&&vertical>0)vertical=0;
+  }
  }
  void LateUpdate(){if(!qa)UpdateCamera();}
  void UpdateCamera(){

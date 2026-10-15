@@ -17,9 +17,9 @@ MonoBehaviour:
   displayName: "\u6559\u5B66\u697C B"
   category: 3
   mapFeatureId: 77928
-  approachMapPosition: {x: 44.244476, y: 0.23, z: -82.38221}
-  returnMapPosition: {x: 45.423424, y: 0.23, z: -83.137245}
-  enterYaw: 57.3632
+  approachMapPosition: {x: 42.1, y: 0.23, z: -74}
+  returnMapPosition: {x: 43.5, y: 0.23, z: -74}
+  enterYaw: 90
   interactionRadius: 2.5
   interiorScenePath: Assets/Interiors/Scenes/teaching-b.unity
   spawnId: main

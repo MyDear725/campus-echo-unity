@@ -34,7 +34,9 @@ Unity：6000.3.26f1 / URP。主场景：Assets/Scenes/CampusLiving.unity。
 目前共 13 个入口、12 个室内场景；室内出口返回本次进入的那扇门，不跨门传送。
 
 3. 室内美术/关卡同伴操作
-打开自己负责的 .unity 文件。当前只有可行走地面、边界墙、出口色块和测试灯光。
+打开自己负责的 .unity 文件。ABC 楼均已完成五层室内：A 为阶梯教室，B 为普通/多媒体/语音/研讨教室及中部自习区，C 为多媒体教室和机房；每栋均有男女卫生间与物理楼梯。其余 9 个室内仍为占位场景。
+C 楼的生成源码是 Assets/Editor/TeachingCInteriorBuilder.cs，资源在 Assets/TeachingCInterior。
+手工编辑 C 楼场景后，不要直接重跑 Generate Teaching C，它会重建该场景。主场景通过 E 自动接入，不要更换其 .meta GUID。
 保留 InteriorRoot 上的 InteriorSceneRoot 组件及其 buildingId。
 可以删除或替换 PlaceholderShell 的内容，搭建真实房间、走廊和楼梯。
 重新布置 Spawn_main 和 Exit_toCampus；检查组件中的引用仍然正确。
@@ -67,6 +69,7 @@ InteriorSceneRoot：室内场景唯一入口契约。
   onPlayerLeaving：离开前触发的 UnityEvent，可供室内脚本保存自身状态。
   fallRecoveryHeight：掉落保护高度，低于它会回到当前出生点。
   showExitMarkers：显示出口位置提示；自行制作出口 UI 后可取消勾选。
+  backgroundColor：进入室内后的相机背景色，C 楼设置为窗外天空色；离开时自动恢复校园设置。
   FindSpawn(id)、NearExit(position)、ValidateContract(buildingId,spawnId)。
 
 BuildingInteriorTravel：挂在主场景 Campus Game 上的通用进出服务。
@@ -100,7 +103,7 @@ BuildingInteriorTravel：挂在主场景 Campus Game 上的通用进出服务。
 
 自动回归：运行 CampusEcho.exe -entranceQA -force-d3d11
 结果：Builds/Windows/QA/Interiors/result.txt。
-此用例专门针对当前空白占位场景（20×20 米、中心原点），会测试 13 个入口往返（含图书馆前后门）、
+此用例检查当前独立室内（含 ABC 成品和其他占位房间），测试 13 个入口往返（含图书馆前后门）、
 角色胶囊、异常回退和重复进入。替换房间尺寸/出生点后，应相应调整测试中的墙体断言。
 正常校园任务回归：CampusEcho.exe -campusQA -force-d3d11。
 
@@ -109,3 +112,10 @@ BuildingInteriorTravel：挂在主场景 Campus Game 上的通用进出服务。
 只改自己负责的室内场景和独立美术资源，避免多人同时改 CampusLiving.unity。
 新增场景时再协调修改入口配置与 EditorBuildSettings.asset。
 Library、Temp、Logs、Builds 不提交。当前修改没有自动提交或推送。
+
+C 楼画面配置：TeachingCInteriorPresentation 通过 onPlayerEntered/onPlayerLeaving 切换室内渲染器、抗锯齿与阴影距离，退出或销毁时恢复校园设置。InteriorRenderer.asset 和 InteriorVolume.asset 保存在 Assets/TeachingCInterior；CampusURP.asset 的渲染器列表包含该室内渲染器，提交时需一并保留。
+
+A/B 楼差异化布局：Assets/Editor/TeachingABInteriorBuilder.cs，与 TeachingCInteriorBuilder 的共享结构一起编译。场景资源分别存入 Assets/TeachingAInterior、Assets/TeachingBInterior；共享 C 楼室内渲染器，Volume 各自独立。Generate Teaching A and B 只重建 A/B 室内；外部 B 楼直边由 TeachingBuilder 负责，仍使用原始楼号及入口 ID。
+A/B 回归：CampusEcho.exe -teachingABQA -force-d3d11。Preview-Teaching-A-Interior.cmd / Preview-Teaching-B-Interior.cmd 分别进入对应室内。
+
+二楼连廊：A↔B、A↔C 已配置独立 connections 与 bridge-from-* 出生点。接口、生命周期回调、重建注意事项与测试入口详见 SKYBRIDGE_HANDOFF.md。替换室内时请保留对应二楼锚点和出口。

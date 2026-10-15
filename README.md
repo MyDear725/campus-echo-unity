@@ -51,19 +51,45 @@ WASD 移动，鼠标转向，Shift 无限奔跑，空格跳跃，E 交互，M �
 
 ### ABC 教学楼参考外观与间距
 
-ABC 保留原教学区的凹字形关系、各楼轮廓和编号，中央喷泉与原广场保留。基于原始地图，后侧 A 楼向北退 4 米；西侧 B 楼向西 5 米、向南 3 米；东侧 C 楼向东 5 米、向南 5 米。两处原本紧贴的楼角最小墙体间距约 3.8 米和 4.0 米，避免移动北侧楼侵占校外道路。
+ABC 保留凹字形关系、原编号、中央喷泉和广场。A 在后侧、B 在西侧、C 在东侧；A/C 的现有位置不变。B 改为直线楼体，地图范围 x=24.5–39.5、z=-105.5–-42.5 米，两端收在 A/C 的范围内，楼角保留步行间隔。入口、室外碰撞、相机碰撞与路线随 B 楼轮廓同步更新；原弧形楼留下的低矮地基底板已清理，露出原有草地。
 
-三栋楼统一为五层浅色石材外墙、深色窗框、透明玻璃和木色竖向格栅；各自配有玻璃入口大厅、檐顶、雨棚、台阶与实体楼号字牌。窗后课桌、学生和灯光仅作为外观景深；三份独立室内场景保持不变，入口交互点和碰撞跟随楼体移动。
+三栋楼统一为五层浅色石材外墙、深色窗框、透明玻璃和木色竖向格栅；各自配有玻璃入口大厅、檐顶、雨棚、台阶与实体楼号字牌。窗后课桌、学生和灯光仅作为外观景深；入口交互点和碰撞跟随楼体移动。ABC 三栋楼均已制作可进入的五层室内，分别为阶梯教学、综合教学与自习、计算机与多媒体教学。
 
-双击 `Preview-Teaching.cmd` 可打开教学区预览，游戏中也可按 T 到教学广场。`Campus/Apply Reference Teaching Buildings` 根据保存的 `Assets/TeachingRevision/OriginalFootprints.json` 重建，重复执行不会继续平移楼体。完整改造顺序为食堂 → 图书馆 → 体育馆 → 教学区；前三项单独重建命令会保留并重建现有教学区改造。`-teachingQA` 输出教学区整体、三楼正面与俯视图至 `Builds/Windows/QA/Teaching`。
+双击 `Preview-Teaching.cmd` 可打开教学区预览，游戏中也可按 T 到教学广场。`Campus/Apply Reference Teaching Buildings` 根据保存的 `Assets/TeachingRevision/OriginalFootprints.json` 重建，重复执行不会继续平移楼体。完整改造顺序为食堂 → 图书馆 → 体育馆 → 教学区；前三项单独重建命令会保留并重建现有教学区改造。`-teachingQA` 输出教学区整体、三楼正面、俯视及完整正交轮廓图至 `Builds/Windows/QA/Teaching`。
 
 ### 建筑入口与室内场景接口
 
-图书馆、体育馆、食堂、ABC 教学楼和六栋宿舍共 13 个入口（图书馆含前后门）、12 个室内场景已接入 E 键交互。靠近正门显示“进入建筑”，进入后靠近出口按 E 返回原建筑门外。室内目前仅有空白测试房间，不包含正式陈设；角色移动、跳跃、相机、暂停、碰撞和进出流程可以直接测试。
+图书馆、体育馆、食堂、ABC 教学楼和六栋宿舍共 13 个入口（图书馆含前后门）、12 个室内场景已接入 E 键交互。靠近正门显示“进入建筑”，进入后靠近出口按 E 返回原建筑门外。ABC 楼均为可探索的五层教学空间，其余 9 个室内仍为空白测试房间；角色移动、跳跃、相机、暂停、碰撞和进出流程可以直接测试。
 
 各楼的独立场景在 `Assets/Interiors/Scenes`，对应配置在 `Assets/Interiors/Entrances`。同伴只需编辑各自场景并保留 `InteriorSceneRoot` 的出生点和出口引用，无需修改主校园场景。具体配置、生命周期事件、场景构建和协作说明见 [INTERIOR_HANDOFF.txt](INTERIOR_HANDOFF.txt)。双击 `Preview-Interiors.cmd` 可到食堂门外测试。
 
+### C 楼可进入室内
+
+`Assets/Interiors/Scenes/teaching-c.unity` 按参考图的浅灰石材、木饰面、玻璃栏杆和明亮教室设计为五层，层高 4.2 米。每层有两间多媒体教室、两间机房和男女卫生间，共 10 间教室、10 间机房；每间有 15 个课桌/计算机座位。中庭通高，楼层和房号标识为墙面实体文字。不设置自习室或休息区。空间尺寸是游戏设计，并非实测室内图。
+
+后侧双跑楼梯每半层 12 级，单级高 0.175 米、进深 0.42 米，四组楼梯共 96 个带独立碰撞的台阶，连接 1F–5F。角色沿台阶实际上下楼，不使用传送、隐形坡道或切换楼层按钮。中庭与楼梯设置护栏碰撞，房间通过敞开的门洞进入。电脑、投影、卫生间设施目前为场景陈设。
+
+室内墙体、门框、吊顶和地面按统一边界拼接；卫生间使用贴墙洗手柜、凹面洗手盆、完整隔间收边。桌椅、柜体、陶瓷设施增加细小圆角，扶手和桌腿采用圆管。C 楼使用独立室内渲染器和 Volume，提供抗锯齿、接触阴影及柔和色调；退出后恢复校园相机和阴影设置。渲染器与配置保存在 `Assets/TeachingCInterior`，通过 `TeachingCInteriorPresentation` 接入场景生命周期。
+
+双击 `Preview-Teaching-C-Interior.cmd` 可直接进入 C 楼预览，点击继续探索后使用 WASD 行走；走廊尽头上楼，回到一楼正门附近按 E 返回校园。普通校园入口也已使用同一场景。
+
+`Campus/Interiors/Generate Teaching C` 从 `Assets/Editor/TeachingCInteriorBuilder.cs` 重新生成 C 楼，资源保存于 `Assets/TeachingCInterior`。该命令会重建 C 楼室内，因此手工编辑场景后不要直接重跑生成器；它不改其他建筑室内或户外布局。`-teachingCQA` 自动通过 E 进出，使用与键盘相同的 `CampusGame.MoveIndoor` 行走逻辑完成一楼到五楼及返回，验证房门通路和中庭护栏，检查十处卫生间的墙体、门楣、地面和吊顶闭合，并输出十张渲染图及结果到 `Builds/Windows/QA/TeachingCInterior`。
+
+### A、B 楼室内
+
+A 楼每层两间阶梯教室，共 10 间。每间 5 排、30 座，逐排升高 0.18 米，配深蓝座椅、木质吸音墙、讲台和投影；座位两侧为连续可行走的台阶通道。教学空间全部为阶梯教室，不设机房或自习室。
+
+B 楼每层各一间普通教室、多媒体教室、语音教室和研讨教室，共 20 间。语音桌配屏幕、隔板、耳机及麦克风；研讨室采用分组桌。每层中部设 8 个自习座位、书架和台灯，留出中央贯通通道。采用浅木色与灰绿色，中央楼板连续，与 C 楼通高中庭不同。
+
+两栋楼均为五层、层高 4.2 米，每层有男女卫生间；各有 96 级带碰撞的实体楼梯。室内为功能设计，非学校实测图。电脑、耳机、投影等为陈设。进入与返回仍使用建筑门口的 E 键。
+
+`Preview-Teaching-A-Interior.cmd`、`Preview-Teaching-B-Interior.cmd` 可分别预览。菜单 `Campus/Interiors/Generate Teaching A and B` 重建两个独立场景，资源在 `Assets/TeachingAInterior` 和 `Assets/TeachingBInterior`。共享结构与细节生成器在 `TeachingCInteriorBuilder.cs`，差异化布局在 `TeachingABInteriorBuilder.cs`；重建会覆盖对应场景的手工修改，C 场景不随 A/B 重建。三楼共用 C 的室内渲染器，色调配置各自独立。
+
+运行 `CampusEcho.exe -teachingABQA -force-d3d11` 检查两栋楼全部楼层、阶梯座位通道、房门、自习区和进出流程，结果与实际渲染图保存到 `Builds/Windows/QA/TeachingABInterior`。
+
 ## 目录
+
+二楼新增 A↔B、A↔C 玻璃连廊。走到连廊尽头按 E，在目标楼二楼进入，再通过实体楼梯前往其他楼层。双击 `Preview-Skybridges.cmd` 可从 A 楼二楼预览；场景连接、出生点和回调接口详见 [SKYBRIDGE_HANDOFF.md](SKYBRIDGE_HANDOFF.md)。
 
 - `Assets/Scripts`：角色移动、相机、任务、界面与碰撞代码。
 - `Assets/Editor`：场景生成和 Windows 构建工具。
@@ -74,6 +100,7 @@ ABC 保留原教学区的凹字形关系、各楼轮廓和编号，中央喷泉�
 - `Assets/LibraryRevision`：图书馆、前场环境和材质。
 - `Assets/GymnasiumRevision`：体育馆、前场环境和材质。
 - `Assets/TeachingRevision`：ABC 教学楼、原始轮廓快照、材质及当前整合运行地图。
+- `Assets/TeachingCInterior`：C 楼五层室内材质与网格；室内场景仍在 `Assets/Interiors/Scenes`。
 - `Assets/Characters`：校园人物与动画。
 - `Assets/Shaders`：材质渲染代码。
 - `Packages`、`ProjectSettings`：项目依赖和设置。

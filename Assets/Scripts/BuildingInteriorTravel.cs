@@ -9,10 +9,12 @@ using UnityEngine.SceneManagement;
 public class BuildingInteriorTravel : MonoBehaviour
 {
     public BuildingEntranceDefinition[] entrances=Array.Empty<BuildingEntranceDefinition>();
-    public enum TravelState { Outside, Loading, Inside, Leaving }
+    public enum TravelState { Outside, Loading, Inside, Leaving, Connecting }
     public TravelState State {get;private set;}
-    public bool Inside=>State==TravelState.Inside||State==TravelState.Leaving;
-    public bool Busy=>State==TravelState.Loading||State==TravelState.Leaving;
+    public bool Inside=>State==TravelState.Inside||State==TravelState.Leaving||State==TravelState.Connecting;
+    public bool Busy=>State==TravelState.Loading||State==TravelState.Leaving||State==TravelState.Connecting;
+    public string CurrentSpawnId {get;private set;}
+    public event Action<BuildingEntranceDefinition,BuildingEntranceDefinition> Transferred;
     public BuildingEntranceDefinition Current {get;private set;}
     public InteriorSceneRoot Interior {get;private set;}
     public string LastError {get;private set;}
@@ -35,7 +37,7 @@ public class BuildingInteriorTravel : MonoBehaviour
     }
     void Update(){
         fade=Mathf.MoveTowards(fade,Busy?1:0,Time.unscaledDeltaTime*5);
-        if(State==TravelState.Inside&&Interior&&game.player.position.y<Interior.fallRecoveryHeight)PlaceInside(Interior.FindSpawn(Current.spawnId));
+        if(State==TravelState.Inside&&Interior&&game.player.position.y<Interior.fallRecoveryHeight)PlaceInside(Interior.FindSpawn(CurrentSpawnId));
     }
     public BuildingEntranceDefinition NearbyEntrance() {
         if(State!=TravelState.Outside)return null;
@@ -45,15 +47,15 @@ public class BuildingInteriorTravel : MonoBehaviour
     }
     public string InteractionPrompt {
         get {
-            if(Busy)return State==TravelState.Loading?"正在进入…":"正在返回校园…";
-            if(Inside)return Interior&&Interior.NearExit(game.player.position)?"[ E ] 返回校园":"";
+            if(Busy)return State==TravelState.Connecting?"正在通过二楼连廊…":State==TravelState.Loading?"正在进入…":"正在返回校园…";
+            if(Inside){var connection=Interior?Interior.NearbyConnection(game.player.position):null;return connection!=null?"[ E ] 进入 "+connection.displayName:Interior&&Interior.NearExit(game.player.position)?"[ E ] 返回校园":"";}
             var entry=NearbyEntrance();return entry?"[ E ] 进入 "+entry.displayName:"";
         }
     }
     // Called once by CampusGame's E-key dispatcher, before outdoor NPC/quest actions.
     public bool TryInteract() {
         if(Busy)return true;
-        if(Inside){if(Interior.NearExit(game.player.position))TryExit();return true;}
+        if(Inside){var connection=Interior.NearbyConnection(game.player.position);if(connection!=null)TryTransfer(connection);else if(Interior.NearExit(game.player.position))TryExit();return true;}
         var entry=NearbyEntrance();if(!entry)return false;TryEnter(entry);return true;
     }
     public bool TryEnter(BuildingEntranceDefinition entry) {
@@ -95,17 +97,60 @@ public class BuildingInteriorTravel : MonoBehaviour
             hiddenCampusRoots.Add(root);root.SetActive(false);
         }
         SceneManager.SetActiveScene(loadedScene);
-        game.followCamera.clearFlags=CameraClearFlags.SolidColor;game.followCamera.backgroundColor=new Color(.18f,.21f,.24f);
+        game.followCamera.clearFlags=CameraClearFlags.SolidColor;game.followCamera.backgroundColor=Interior.backgroundColor;
         originalPlayerLayer=game.player.gameObject.layer;game.player.gameObject.layer=2; // IgnoreRaycast keeps camera off the shared player capsule.
         IndoorController=game.player.GetComponent<CharacterController>()??game.player.gameObject.AddComponent<CharacterController>();
         IndoorController.enabled=false;IndoorController.height=1.8f;IndoorController.radius=.32f;IndoorController.center=new Vector3(0,.9f,0);IndoorController.stepOffset=.3f;IndoorController.slopeLimit=45;IndoorController.skinWidth=.025f;IndoorController.minMoveDistance=0;
-        State=TravelState.Inside;PlaceInside(Interior.FindSpawn(Current.spawnId));
+        CurrentSpawnId=Current.spawnId;State=TravelState.Inside;PlaceInside(Interior.FindSpawn(CurrentSpawnId));
         game.Notify(Current.displayName+(Interior.isPlaceholder?" · 空白室内。转身找到绿色出口，靠近后按 E 返回。":" · 靠近出口按 E 返回校园。"));
         try{Interior.onPlayerEntered.Invoke();Entered?.Invoke(Current);}catch(Exception e){Debug.LogException(e);}
     }
     void PlaceInside(Transform anchor) {
         if(!anchor)return;IndoorController.enabled=false;
         game.SetTravelPose(anchor.position,anchor.eulerAngles.y,12);Physics.SyncTransforms();IndoorController.enabled=true;
+    }
+    public bool TryTransfer(InteriorConnection connection) {
+        if(State!=TravelState.Inside||game.paused||connection==null||Interior.NearbyConnection(game.player.position)!=connection)return false;
+        LastError=null;var target=connection.destination;
+        if(!target||!entrances.Contains(target)||string.IsNullOrWhiteSpace(target.interiorScenePath)||!Application.CanStreamedLevelBeLoaded(target.interiorScenePath)) {TransferFailed("目标建筑尚未接入");return false;}
+        if(target.interiorScenePath==campusScene.path||SceneManager.GetSceneByPath(target.interiorScenePath).isLoaded){TransferFailed("连廊不能指向当前或已加载场景");return false;}
+        State=TravelState.Connecting;StartCoroutine(Transfer(target,connection.destinationSpawnId));return true;
+    }
+    void TransferFailed(string reason){LastError=reason;game.Notify("连廊暂时不可通行："+reason+"。你仍在原楼内。");Debug.LogWarning("Interior connection: "+reason);}
+    string ValidateArrival(Scene scene,BuildingEntranceDefinition entry,string spawnId,out InteriorSceneRoot contract) {
+        contract=null;
+        if(!scene.IsValid()||!scene.isLoaded)return "目标场景加载失败";
+        var roots=scene.GetRootGameObjects().SelectMany(r=>r.GetComponentsInChildren<InteriorSceneRoot>(true)).ToArray();
+        if(roots.Length!=1)return "目标室内需要且只能有一个 InteriorSceneRoot";
+        contract=roots[0];string error=contract.ValidateContract(entry.buildingId,spawnId);if(error!=null)return error;
+        var spawn=contract.FindSpawn(spawnId);Physics.SyncTransforms();
+        if(!contract.gameObject.activeInHierarchy||!spawn.gameObject.activeInHierarchy)return "目标出生点被禁用";
+        if(!Physics.RaycastAll(spawn.position+Vector3.up*.15f,Vector3.down,3,Physics.AllLayers,QueryTriggerInteraction.Ignore).Any(h=>h.collider.gameObject.scene==scene))return "目标出生点缺少地面";
+        if(Physics.OverlapCapsule(spawn.position+Vector3.up*.34f,spawn.position+Vector3.up*1.46f,.3f,Physics.AllLayers,QueryTriggerInteraction.Ignore).Any(c=>c.gameObject.scene==scene))return "目标出生点被碰撞体阻挡";
+        if(scene.GetRootGameObjects().Any(r=>r.GetComponentsInChildren<Camera>(true).Length>0||r.GetComponentsInChildren<AudioListener>(true).Length>0||r.GetComponentsInChildren<CampusGame>(true).Length>0))return "目标室内包含重复玩家或相机";
+        return null;
+    }
+    IEnumerator Transfer(BuildingEntranceDefinition target,string spawnId) {
+        yield return new WaitForSecondsRealtime(.2f);
+        IndoorController.enabled=false;
+        var operation=BeginLoad(target.interiorScenePath,out string error);
+        if(operation==null){IndoorController.enabled=true;State=TravelState.Inside;TransferFailed(error??"场景加载未启动");yield break;}
+        while(!operation.isDone)yield return null;
+        var next=SceneManager.GetSceneByPath(target.interiorScenePath);
+        error=ValidateArrival(next,target,spawnId,out var contract);
+        if(error!=null){if(next.IsValid()&&next.isLoaded)yield return SceneManager.UnloadSceneAsync(next);SceneManager.SetActiveScene(loadedScene);IndoorController.enabled=true;State=TravelState.Inside;TransferFailed(error);yield break;}
+        // Commit only after validating the destination. Preserve the original
+        // outdoor camera, layer and hidden roots for the eventual campus exit.
+        var previous=Current;var oldScene=loadedScene;
+        try{Interior.onPlayerLeaving.Invoke();}catch(Exception e){Debug.LogException(e);}
+        foreach(var oldRoot in oldScene.GetRootGameObjects())oldRoot.SetActive(false);
+        loadedScene=next;Interior=contract;Current=target;CurrentSpawnId=spawnId;SceneManager.SetActiveScene(next);
+        game.followCamera.backgroundColor=Interior.backgroundColor;
+        PlaceInside(Interior.FindSpawn(spawnId));
+        try{Interior.onPlayerEntered.Invoke();}catch(Exception e){Debug.LogException(e);}
+        yield return SceneManager.UnloadSceneAsync(oldScene);
+        State=TravelState.Inside;game.Notify("已抵达"+Current.displayName+"二楼；沿走廊可前往教室或楼梯。");
+        try{Transferred?.Invoke(previous,Current);}catch(Exception e){Debug.LogException(e);}
     }
     IEnumerator Leave() {
         yield return new WaitForSecondsRealtime(.2f);
@@ -118,7 +163,7 @@ public class BuildingInteriorTravel : MonoBehaviour
         var destination=game.IsMapWalkable(previous.returnMapPosition)?game.MapToWorld(previous.returnMapPosition):fallbackOutsidePosition;
         game.SetTravelPose(destination,previous.enterYaw+180,12);Physics.SyncTransforms();
         if(loadedScene.IsValid()&&loadedScene.isLoaded)yield return SceneManager.UnloadSceneAsync(loadedScene);
-        loadedScene=default;Interior=null;Current=null;State=TravelState.Outside;
+        loadedScene=default;Interior=null;Current=null;CurrentSpawnId=null;State=TravelState.Outside;
         game.Notify("已回到"+previous.displayName+"门外。");
         try{Exited?.Invoke(previous);}catch(Exception e){Debug.LogException(e);}
     }

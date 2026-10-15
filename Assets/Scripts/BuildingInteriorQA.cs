@@ -44,7 +44,10 @@ public class BuildingInteriorQA : MonoBehaviour
             Require(!travel.TryExit(),"Exit activated from across room");
             // Capsule falls onto floor and is stopped by a wall (real interior colliders).
             for(int i=0;i<30;i++)travel.MoveCharacter(Vector3.down*.1f);Require(game.player.position.y>-.05f&&game.player.position.y<.15f,"Indoor floor collision failed");
-            for(int i=0;i<120;i++)travel.MoveCharacter(Vector3.right*.2f);Require(game.player.position.x<9.7f,"Walked through interior wall");
+            Require(Physics.Raycast(game.player.position+Vector3.up*.9f,Vector3.right,out var wall,80,Physics.DefaultRaycastLayers),"No interior boundary to the right");
+            float wallX=wall.point.x;
+            for(int i=0;i<Mathf.CeilToInt((wall.distance+3)/.2f);i++)travel.MoveCharacter(Vector3.right*.2f);
+            Require(game.player.position.x<wallX-.15f,"Walked through interior wall");
             travel.IndoorController.enabled=false;game.SetTravelPose(new Vector3(0,-20,0),0);travel.IndoorController.enabled=true;yield return null;yield return null;
             Require(Vector3.Distance(game.player.position,spawn.position)<.1f,"Fall recovery failed");
             if(entry.buildingId=="cafeteria") {

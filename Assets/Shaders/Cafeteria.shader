@@ -4,6 +4,8 @@ Shader "Campus/Cafeteria" {
   _Wood("Wood grain",Float)=0 _Stone("Stone panels",Float)=0 _Glass("Glass",Float)=0 _Emission("Emission",Float)=0
   _Smoothness("Smoothness",Range(0,1))=.3 _Cutoff("Cutoff",Float)=0 _Cull("Cull",Float)=0
   _SrcBlend("Source",Float)=1 _DstBlend("Destination",Float)=0 _ZWrite("Depth",Float)=1
+  [HideInInspector] _ViewCutCenter("View cut center",Vector)=(0,0,0,0)
+  [HideInInspector] _ViewCutSize("View cut half size",Vector)=(0,0,0,0)
  }
  SubShader {
   Tags {"RenderPipeline"="UniversalPipeline" "RenderType"="Opaque"}
@@ -18,12 +20,13 @@ Shader "Campus/Cafeteria" {
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
    CBUFFER_START(UnityPerMaterial)
-    float4 _BaseColor;float _Wood,_Stone,_Glass,_Emission,_Smoothness;
+    float4 _BaseColor,_ViewCutCenter,_ViewCutSize;float _Wood,_Stone,_Glass,_Emission,_Smoothness;
    CBUFFER_END
    struct A{float4 p:POSITION;float3 n:NORMAL;};struct V{float4 p:SV_POSITION;float3 w:TEXCOORD0;float3 n:TEXCOORD1;};
    V vert(A a){V o;o.w=TransformObjectToWorld(a.p.xyz);o.p=TransformWorldToHClip(o.w);o.n=TransformObjectToWorldNormal(a.n);return o;}
    float hash(float2 p){return frac(sin(dot(p,float2(127.1,311.7)))*43758.5453);}
    half4 frag(V i):SV_Target {
+    if(_ViewCutCenter.w>.5&&all(abs(i.w-_ViewCutCenter.xyz)<_ViewCutSize.xyz))clip(-1);
     float3 view=normalize(GetWorldSpaceViewDir(i.w)),n=normalize(i.n);if(dot(n,view)<0)n=-n;
     float2 uv=abs(n.y)>.7?i.w.xz:float2(abs(n.x)>.7?i.w.z:i.w.x,i.w.y);
     float3 c=_BaseColor.rgb;
@@ -50,6 +53,20 @@ Shader "Campus/Cafeteria" {
    ENDHLSL
   }
   UsePass "Universal Render Pipeline/Lit/ShadowCaster"
-  UsePass "Universal Render Pipeline/Lit/DepthOnly"
+  Pass {
+   Name "DepthOnly" Tags {"LightMode"="DepthOnly"}
+   ZWrite On ColorMask 0 Cull Off
+   HLSLPROGRAM
+   #pragma vertex depthVert
+   #pragma fragment depthFrag
+   #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+   CBUFFER_START(UnityPerMaterial)
+    float4 _BaseColor,_ViewCutCenter,_ViewCutSize;float _Wood,_Stone,_Glass,_Emission,_Smoothness;
+   CBUFFER_END
+   struct DA{float4 p:POSITION;};struct DV{float4 p:SV_POSITION;float3 w:TEXCOORD0;};
+   DV depthVert(DA a){DV o;o.w=TransformObjectToWorld(a.p.xyz);o.p=TransformWorldToHClip(o.w);return o;}
+   half4 depthFrag(DV i):SV_Target{if(_ViewCutCenter.w>.5&&all(abs(i.w-_ViewCutCenter.xyz)<_ViewCutSize.xyz))clip(-1);return 0;}
+   ENDHLSL
+  }
  }
 }

@@ -8,7 +8,8 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 // Five-storey teaching exteriors fitted to the existing irregular U-shaped campus layout.
-// Keep the fountain and original footprints; only translate the wings slightly apart.
+// Keep A/C positions and the fountain; B is a straight western wing whose ends
+// stay within the A/C envelope, with open pedestrian gaps at the corners.
 public static class TeachingBuilder
 {
     const string Folder="Assets/TeachingRevision";
@@ -16,7 +17,17 @@ public static class TeachingBuilder
     const float Storey=4.25f,Height=22.0f;
     static readonly Rect WholeArea=Rect.MinMaxRect(19,-137,107,-40);
     static Rect Mask=WholeArea;
-    static readonly Rect[] Masks={Rect.MinMaxRect(21,-136.5f,105,-103.7f),Rect.MinMaxRect(73.5f,-116,106,-41),Rect.MinMaxRect(70.5f,-97,77,-86),Rect.MinMaxRect(20,-116,44,-91),Rect.MinMaxRect(24,-95,49,-80),Rect.MinMaxRect(32,-83,55,-71),Rect.MinMaxRect(44,-74,63,-62),Rect.MinMaxRect(51,-74,70,-51),Rect.MinMaxRect(43,-90,53,-79),Rect.MinMaxRect(50,-110,66,-100.5f)};
+    static float MinimumCutHeight=.2f;
+    // Overlap the old curved wing's clipping regions: disconnected wall/floor
+    // slivers otherwise remain standing in the courtyard between the new wings.
+    static readonly Rect[] Masks={
+        Rect.MinMaxRect(47.5f,-63,52,-59),Rect.MinMaxRect(54.8f,-75.5f,56.3f,-73.5f),
+        Rect.MinMaxRect(39.5f,-74,44.5f,-65.5f),Rect.MinMaxRect(24,-106,40,-42),
+        Rect.MinMaxRect(21,-136.5f,105,-103.7f),Rect.MinMaxRect(73.5f,-116,106,-41),
+        Rect.MinMaxRect(70.5f,-97,77,-86),Rect.MinMaxRect(20,-116,44,-91),
+        Rect.MinMaxRect(24,-95,49,-80),Rect.MinMaxRect(32,-83,55,-71),
+        Rect.MinMaxRect(44,-74,63,-62),Rect.MinMaxRect(51,-74,70,-51),
+        Rect.MinMaxRect(43,-90,53,-79),Rect.MinMaxRect(50,-110,66,-100.5f)};
     class Spec {public int id;public string letter;public Vector2 offset,anchor;}
     static readonly Spec[] Specs={new Spec{id=77925,letter="A",offset=new Vector2(0,-4),anchor=new Vector2(58.3f,-105.4f)},new Spec{id=77928,letter="B",offset=new Vector2(-5,3),anchor=new Vector2(47,-84)},new Spec{id=77927,letter="C",offset=new Vector2(5,5),anchor=new Vector2(75,-91.5f)}};
     class Edge {public Vector3 mid,u,n;public float length;}
@@ -57,6 +68,10 @@ public static class TeachingBuilder
         Mat("Skin","#ad8d73",.1f);Mat("Hair","#303832",.1f);Mat("Shirt","#526775",.1f);Mat("Cream shirt","#a49f8b",.1f);
         Mat("Board","#3d554e",.1f);Mat("Leaves","#64794b",.1f);Mat("Leaves light","#87995b",.1f);Mat("Soil","#625844",.1f);
         var paving=new Material(Shader.Find("Campus/Courtyard")){name="Teaching entry paving"};ColorUtility.TryParseHtmlString("#b8b6ad",out var pc);paving.SetColor("_BaseColor",pc);paving.SetFloat("_Surface",1);materials["Paving"]=Save(paving,Folder+"/Materials/Paving.mat");geometry["Paving"]=new DormitoryBuilder.Geometry();
+        foreach(var tone in new[]{("Entry stone", "#bcb9b1"),("Entry stone warm", "#c2bdb2"),("Entry stone cool", "#b5b6b1"),("Entry border", "#777d7c"),("Entry joints", "#656966")}){
+            var m=new Material(Shader.Find("Campus/Courtyard")){name=tone.Item1};ColorUtility.TryParseHtmlString(tone.Item2,out var color);m.SetColor("_BaseColor",color);m.SetFloat("_Surface",3);
+            materials[tone.Item1]=Save(m,Folder+"/Materials/"+tone.Item1+".mat");geometry[tone.Item1]=new DormitoryBuilder.Geometry();
+        }
         var extras=new List<CampusObstacle>();var routes=new List<CampusRoute>();
         // Retain all mapped buildings and the central fountain. Clear only obsolete
         // small facade-side obstructions before adding the new entrance steps.
@@ -64,7 +79,7 @@ public static class TeachingBuilder
         data.obstacles=data.obstacles.Where(o=>!o.name.StartsWith("Teaching ")&&(names.Contains(o.name)||!InOldFacade(o))).ToArray();
         foreach(var spec in Specs) {
             var source=originals.features.Single(f=>f.id==spec.id);var feature=data.features.Single(f=>f.id==spec.id);
-            feature.points=source.points.Select(p=>P(p.x+spec.offset.x,p.z+spec.offset.y)).ToArray();
+            feature.points=spec.letter=="B"?new[]{P(24.5f,-105.5f),P(39.5f,-105.5f),P(39.5f,-42.5f),P(24.5f,-42.5f)}:source.points.Select(p=>P(p.x+spec.offset.x,p.z+spec.offset.y)).ToArray();
             var edges=Edges(feature.points);var anchor=spec.anchor+spec.offset;
             var entry=edges.Where(e=>e.length>6).OrderBy(e=>Vector2.Distance(anchor,new Vector2(e.mid.x,e.mid.z))).First();
             foreach(var e in edges){frame=e;Facade(feature.points,e==entry,spec);}
@@ -79,6 +94,7 @@ public static class TeachingBuilder
             var start=V(0,.23f,-6.2f);routes.Add(new CampusRoute{name="teaching-"+spec.letter+"-approach",points=new[]{P(start.x,start.z),P(config.returnMapPosition.x,config.returnMapPosition.z),P(config.approachMapPosition.x,config.approachMapPosition.z)}});
             CameraWalls(feature,game);
         }
+        TeachingSkybridgeBuilder.Exterior(holder,game);
         foreach(var pair in geometry.Where(p=>p.Value.vertices.Count>0)) {
             var mesh=Save(pair.Value.Mesh("Teaching "+pair.Key),Folder+"/Meshes/"+pair.Key+".asset");var obj=new GameObject(pair.Key);obj.transform.SetParent(holder,false);obj.AddComponent<MeshFilter>().sharedMesh=mesh;
             var r=obj.AddComponent<MeshRenderer>();r.sharedMaterial=materials[pair.Key];r.shadowCastingMode=pair.Key=="Glass"?ShadowCastingMode.Off:ShadowCastingMode.TwoSided;
@@ -86,7 +102,7 @@ public static class TeachingBuilder
         data.obstacles=data.obstacles.Concat(extras).ToArray();data.routes=data.routes.Where(r=>!r.name.StartsWith("teaching-")).Concat(routes).ToArray();
         ValidateSpacing(data);ValidateRoutes(data);string path=Folder+"/CampusMap.json";File.WriteAllText(path,JsonUtility.ToJson(data,true));AssetDatabase.ImportAsset(path);game.mapData=AssetDatabase.LoadAssetAtPath<TextAsset>(path);
         if(!game.GetComponent<TeachingPreview>())game.gameObject.AddComponent<TeachingPreview>();EditorUtility.SetDirty(game);BuildingInteriorBuilder.ValidateConfiguration();
-        AssetDatabase.Refresh();Directory.CreateDirectory("QA");File.WriteAllText("QA/teaching-generation.txt","PASS: A translated (0,-4), B (-5,+3), C (+5,+5) metres from saved original footprints; same U-shaped layout and fountain; 5-storey stone/glass/wood facades; all routes and door approaches validated.\n");
+        AssetDatabase.Refresh();Directory.CreateDirectory("QA");File.WriteAllText("QA/teaching-generation.txt","PASS: A and C retained; B straight western wing x=24.5..39.5, z=-105.5..-42.5, inside A/C envelope; pedestrian corner gaps retained; U-shaped layout and fountain; all routes and door approaches validated.\n");
     }
     static void Mat(string name,string hex,float smooth,float stone=0,float glass=0,float emission=0) {
         ColorUtility.TryParseHtmlString(hex,out var c);if(glass>0)c.a=.24f;var m=new Material(Shader.Find("Campus/Cafeteria")){name=name};m.SetColor("_BaseColor",c);m.SetFloat("_Smoothness",smooth);m.SetFloat("_Stone",stone);m.SetFloat("_Glass",glass);m.SetFloat("_Emission",emission);
@@ -150,7 +166,7 @@ public static class TeachingBuilder
         Box("Metal",0,3.65f,-.27f,door,.1f,.14f);
         foreach(float x in new[]{-.18f,.18f})Box("Stainless",x,2.0f,-.37f,.035f,.7f,.06f);
         for(int i=0;i<5;i++){float d=-1.7f+i*.34f,y=.18f+(i+1)*.085f;Box("Grey stone",0,(y+.1f)/2,d/2,width,y-.1f,-d+.12f);Box("Limestone",0,y+.01f,d,width,.02f,.06f);}
-        Box("Paving",0,.148f,-5,width+4,.05f,7);
+        EntryForecourt(width,door);
         foreach(float side in new[]{-1f,1f})Planter(side*(width/2+1),.18f,-.8f,1.2f,1.2f,true);
         float panel=Mathf.Min(frame.length/2-1.8f,width/2+2.2f);
         Box("Limestone",panel,16.9f,-.4f,3.1f,8.8f,.4f);
@@ -159,6 +175,39 @@ public static class TeachingBuilder
         Sign(holder,game,"LEARNING\nINSPIRES\nA BRIGHTER\nTOMORROW",panel,15.4f,-.64f,.21f);
         Sign(holder,game,"教学楼 "+spec.letter,0,4.9f,-2.73f,.3f,true);
         Sign(holder,game,"KNOWLEDGE CREATES A BETTER FUTURE",0,4.55f,-2.73f,.13f,true);
+    }
+    static void EntryForecourt(float width,float door) {
+        float half=(width+4)/2,back=-8.5f,front=-1.5f,border=.24f;
+        Box("Entry joints",0,.155f,-5,width+4,.08f,7);
+        // Actual chamfered slabs: narrow mortar joints and restrained stone variation.
+        void Slab(string material,float left,float right,float near,float far){
+            const float top=.208f,shoulder=.203f,inset=.004f;var g=geometry[material];
+            var a=V(left,shoulder,near);var b=V(right,shoulder,near);var c=V(right,shoulder,far);var d=V(left,shoulder,far);
+            var aa=V(left+inset,top,near+inset);var bb=V(right-inset,top,near+inset);var cc=V(right-inset,top,far-inset);var dd=V(left+inset,top,far-inset);
+            g.Quad(aa,bb,cc,dd);g.Quad(a,b,bb,aa);g.Quad(b,c,cc,bb);g.Quad(c,d,dd,cc);g.Quad(d,a,aa,dd);
+        }
+        float leftEdge=-half+border,rightEdge=half-border;
+        int rows=Mathf.CeilToInt((front-back-2*border)/.6f);float rowDepth=(front-back-2*border)/rows;
+        for(int row=0;row<rows;row++){
+            float near=back+border+row*rowDepth;
+            for(float left=leftEdge-(row%2)*.6f;left<rightEdge;left+=1.2f){
+                float a=Mathf.Max(left,leftEdge),b=Mathf.Min(left+1.2f,rightEdge);if(b-a<.01f)continue;
+                int tone=(row*17+Mathf.RoundToInt((left-leftEdge)*5)+30)%7;
+                Slab(tone==0?"Entry stone warm":tone==3?"Entry stone cool":"Entry stone",a+.006f,b-.006f,near+.006f,near+rowDepth-.006f);
+            }
+        }
+        foreach(float side in new[]{-1f,1f}){
+            float a=side<0?-half:half-border;
+            for(float d=back;d<front;d+=1)Slab("Entry border",a+.006f,a+border-.006f,d+.006f,Mathf.Min(d+1,front)-.006f);
+            // Flush inlays guide the eye towards the doorway without narrowing the route.
+            Box("Entry border",side*(door/2+.4f),.2085f,-5,.09f,.003f,7-2*border);
+        }
+        foreach(float d in new[]{back,front-border})for(float u=leftEdge;u<rightEdge;u+=1.2f)
+            Slab("Entry border",u+.006f,Mathf.Min(u+1.2f,rightEdge)-.006f,d+.006f,d+border-.006f);
+        // Recessed slot drain and cross bars in front of the bottom stair.
+        Box("Entry joints",0,.209f,-1.94f,width,.012f,.16f);
+        foreach(float d in new[]{-2.025f,-1.855f})Box("Metal",0,.213f,d,width,.012f,.018f);
+        for(float u=-width/2+.04f;u<width/2;u+=.09f)Box("Stainless",u,.215f,-1.94f,.018f,.012f,.14f);
     }
     static void Sign(Transform holder,CampusGame game,string text,float u,float y,float d,float size,bool light=false) {
         var neutral=holder.Find("Lettering world basis");
@@ -188,6 +237,8 @@ public static class TeachingBuilder
     }
     static void ValidateSpacing(CampusData data) {
         var wings=Specs.Select(s=>data.features.Single(f=>f.id==s.id)).ToArray();
+        var aWing=wings[0].points;var bWing=wings[1].points;var cWing=wings[2].points;
+        if(bWing.Min(p=>p.x)<aWing.Min(p=>p.x)||bWing.Min(p=>p.z)<aWing.Max(p=>p.z)||bWing.Max(p=>p.z)>cWing.Max(p=>p.z))throw new Exception("B extends outside the A/C end envelope");
         for(int i=0;i<wings.Length;i++)for(int j=i+1;j<wings.Length;j++) {
             float gap=float.MaxValue;var a=wings[i].points;var b=wings[j].points;
             foreach(var p in a){if(CampusCollision.Inside(p.x,p.z,b))throw new Exception("Teaching footprints overlap");for(int k=0;k<b.Length;k++)gap=Mathf.Min(gap,CampusCollision.Segment(p.x,p.z,b[k],b[(k+1)%b.Length]));}
@@ -237,10 +288,14 @@ public static class TeachingBuilder
         var suppressed=new List<Renderer>();
         foreach(var filter in root.GetComponentsInChildren<MeshFilter>()) {
             var r=filter.GetComponent<MeshRenderer>();if(!r||!r.enabled||!filter.sharedMesh)continue;
+            // Imported building trim/base materials include the former building's ground
+            // plates at y=0..0.14. Clip those too when reshaping B; keep grass and
+            // roads (other materials) below the usual .2 m threshold untouched.
+            MinimumCutHeight=r.sharedMaterials.Any(m=>m&&Array.IndexOf(new[]{"54","57","59","64","71","72"},m.name)>=0)?-.01f:.2f;
             // New native dorms are far outside this area; retained imported batches
             // may contain multiple buildings and must be clipped without deleting the batch.
             var source=filter.sharedMesh;var b=source.bounds;
-            if(b.max.x<Mask.xMin||b.min.x>Mask.xMax||b.max.z<Mask.yMin||b.min.z>Mask.yMax||b.max.y<.2f)continue;
+            if(b.max.x<Mask.xMin||b.min.x>Mask.xMax||b.max.z<Mask.yMin||b.min.z>Mask.yMax||b.max.y<MinimumCutHeight)continue;
             var path=AssetDatabase.GetAssetPath(source);
             if(!(path.StartsWith("Assets/LivingRevision/Meshes/")||path.Contains("Retained-")||path.Contains("Surroundings-")||path.Contains("Preserved-")))continue;
             Mesh mesh=null;
@@ -264,7 +319,7 @@ public static class TeachingBuilder
         void Append(List<Vertex> poly){for(int j=1;j<poly.Count-1;j++){output.Add(poly[0]);output.Add(poly[j]);output.Add(poly[j+1]);}}
         for(int i=0;i<tri.Length;i+=3) {
             var a=Vtx(tri[i]);var b=Vtx(tri[i+1]);var c=Vtx(tri[i+2]);
-            if(Mathf.Max(a.p.y,b.p.y,c.p.y)<.2f||Mathf.Max(a.p.x,b.p.x,c.p.x)<Mask.xMin||Mathf.Min(a.p.x,b.p.x,c.p.x)>Mask.xMax||Mathf.Max(a.p.z,b.p.z,c.p.z)<Mask.yMin||Mathf.Min(a.p.z,b.p.z,c.p.z)>Mask.yMax){output.Add(a);output.Add(b);output.Add(c);continue;}
+            if(Mathf.Max(a.p.y,b.p.y,c.p.y)<MinimumCutHeight||Mathf.Max(a.p.x,b.p.x,c.p.x)<Mask.xMin||Mathf.Min(a.p.x,b.p.x,c.p.x)>Mask.xMax||Mathf.Max(a.p.z,b.p.z,c.p.z)<Mask.yMin||Mathf.Min(a.p.z,b.p.z,c.p.z)>Mask.yMax){output.Add(a);output.Add(b);output.Add(c);continue;}
             var remain=new List<Vertex>{a,b,c};var outside=new List<Vertex>();
             for(int plane=0;plane<4&&remain.Count>0;plane++){var part=Cut(remain,plane,false);for(int j=1;j<part.Count-1;j++){outside.Add(part[0]);outside.Add(part[j]);outside.Add(part[j+1]);}remain=Cut(remain,plane,true);}
             if(remain.Count>=3){changed=true;output.AddRange(outside);}else Append(new List<Vertex>{a,b,c});

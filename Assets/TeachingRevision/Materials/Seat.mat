@@ -41,5 +41,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 0.6666667, g: 0.54901963, b: 0.38431373, a: 1}
+    - _ViewCutCenter: {r: 0, g: 0, b: 0, a: 0}
+    - _ViewCutSize: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
