@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d48b6766ecbeb834d824bf8fc868ea02, type: 3}
+  m_Name: teaching-a
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingEntranceDefinition
+  buildingId: teaching-a
+  entranceId: 
+  displayName: "\u6559\u5B66\u697C A"
+  category: 3
+  mapFeatureId: 77925
+  approachMapPosition: {x: 58.302097, y: 0.23, z: -106.83015}
+  returnMapPosition: {x: 58.28707, y: 0.23, z: -105.43023}
+  enterYaw: -179.38504
+  interactionRadius: 2.5
+  interiorScenePath: Assets/Interiors/Scenes/teaching-a.unity
+  spawnId: main

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d48b6766ecbeb834d824bf8fc868ea02, type: 3}
+  m_Name: library
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingEntranceDefinition
+  buildingId: library
+  entranceId: 
+  displayName: "\u56FE\u4E66\u9986"
+  category: 0
+  mapFeatureId: 77917
+  approachMapPosition: {x: 46, y: 0.23, z: 92}
+  returnMapPosition: {x: 44.6, y: 0.23, z: 92}
+  enterYaw: 270
+  interactionRadius: 2.5
+  interiorScenePath: Assets/Interiors/Scenes/library.unity
+  spawnId: main

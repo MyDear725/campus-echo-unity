@@ -1,0 +1,1 @@
+PASS: all three building footprints retain their original vertex shapes; translations match A (0,-4), B (-5,+3), C (+5,+5) metres; every other feature, road and quest spot unchanged.

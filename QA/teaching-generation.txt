@@ -1,0 +1,1 @@
+PASS: A translated (0,-4), B (-5,+3), C (+5,+5) metres from saved original footprints; same U-shaped layout and fountain; 5-storey stone/glass/wood facades; all routes and door approaches validated.

@@ -12,6 +12,9 @@ public class CampusGame : MonoBehaviour {
  public GameObject[] memories;
  public bool paused=true;
  public bool pixelStudy;
+ public BuildingInteriorTravel Interiors {get;private set;}
+ public bool Automated {get;private set;}
+ public bool ExteriorShortcutsAllowed=>Interiors==null||(!Interiors.Inside&&!Interiors.Busy);
  public float mapXSign=1;
  public Vector3 MapToWorld(Vector3 point)=>new Vector3(point.x*mapXSign,point.y,point.z);
  public Vector3 WorldToMap(Vector3 point)=>MapToWorld(point);
@@ -20,6 +23,7 @@ public class CampusGame : MonoBehaviour {
  float messageUntil=10; Animation animationPlayer; SkinnedMeshRenderer face; string motion=""; GUIStyle title,body,small; Texture2D minimap;
  void Awake(){
   data=JsonUtility.FromJson<CampusData>(mapData.text);qa=Environment.GetCommandLineArgs().Contains("-campusQA");
+  Interiors=GetComponent<BuildingInteriorTravel>();Automated=qa||Environment.GetCommandLineArgs().Contains("-entranceQA");
   Application.targetFrameRate=60;
   animationPlayer=player.GetComponentInChildren<Animation>();face=player.GetComponentInChildren<SkinnedMeshRenderer>();
   foreach(var actor in new[]{player,guide})foreach(var skin in actor.GetComponentsInChildren<SkinnedMeshRenderer>())skin.updateWhenOffscreen=true;
@@ -29,27 +33,32 @@ public class CampusGame : MonoBehaviour {
   if(interfaceFont==null)interfaceFont=Font.CreateDynamicFontFromOSFont("Microsoft YaHei",20);
   BuildMap();if(pixelStudy&&!qa)Teleport(new Vector3(65,.23f,-72));ApplyCursor();if(qa){StartCoroutine(QA());StartCoroutine(QATimeout());}
  }
- void ApplyCursor(){Cursor.lockState=paused||qa?CursorLockMode.None:CursorLockMode.Locked;Cursor.visible=paused||qa;}
- void OnApplicationFocus(bool focus){if(!focus&&!qa){paused=true;ApplyCursor();}}
+ void ApplyCursor(){Cursor.lockState=paused||Automated?CursorLockMode.None:CursorLockMode.Locked;Cursor.visible=paused||Automated;}
+ void OnApplicationFocus(bool focus){if(!focus&&!Automated){paused=true;ApplyCursor();}}
  void Update(){
-  if(!qa){
+  if(!Automated){
    if(Input.GetKeyDown(KeyCode.Escape)){paused=!paused;ApplyCursor();}
    if(paused){Animate("Idle",0);return;}
-   if(Input.GetKeyDown(KeyCode.M))mapOpen=!mapOpen;
+   if(Interiors&&Interiors.Busy){Animate("Idle",0);return;}
+   if(Input.GetKeyDown(KeyCode.M)&&ExteriorShortcutsAllowed)mapOpen=!mapOpen;
    targetYaw=Mathf.Repeat(targetYaw+Input.GetAxisRaw("Mouse X")*2.3f,360);targetPitch=Mathf.Clamp(targetPitch-Input.GetAxisRaw("Mouse Y")*1.8f,-32,68);
    distance=Mathf.Clamp(distance-Input.mouseScrollDelta.y*.5f,2.5f,11);
    yaw=Mathf.LerpAngle(yaw,targetYaw,1-Mathf.Exp(-22*Time.deltaTime));pitch=Mathf.Lerp(pitch,targetPitch,1-Mathf.Exp(-22*Time.deltaTime));
    player.rotation=Quaternion.Euler(0,yaw,0);
    Vector2 input=new Vector2((Input.GetKey(KeyCode.D)||Input.GetKey(KeyCode.RightArrow)?1:0)-(Input.GetKey(KeyCode.A)||Input.GetKey(KeyCode.LeftArrow)?1:0),(Input.GetKey(KeyCode.W)||Input.GetKey(KeyCode.UpArrow)?1:0)-(Input.GetKey(KeyCode.S)||Input.GetKey(KeyCode.DownArrow)?1:0));
    input=Vector2.ClampMagnitude(input,1);float speed=Input.GetKey(KeyCode.LeftShift)||Input.GetKey(KeyCode.RightShift)?10:5.4f;
-   Vector3 before=player.position;player.position=MapToWorld(CampusCollision.Move(WorldToMap(before),WorldToMap((player.right*input.x+player.forward*input.y)*speed*Mathf.Min(Time.deltaTime,.06f)),data.obstacles));
-   float actual=Vector3.Distance(before,player.position)/Mathf.Max(.001f,Time.deltaTime);
+   Vector3 before=player.position;
+   var movement=(player.right*input.x+player.forward*input.y)*speed*Mathf.Min(Time.deltaTime,.06f);
    if(grounded&&Input.GetKeyDown(KeyCode.Space)){vertical=6.5f;grounded=false;}
-   if(!grounded){vertical-=18*Time.deltaTime;var p=player.position;p.y+=vertical*Time.deltaTime;if(p.y<=.23f){p.y=.23f;grounded=true;vertical=0;}player.position=p;}
+   if(Interiors&&Interiors.Inside){vertical-=18*Mathf.Min(Time.deltaTime,.06f);var flags=Interiors.MoveCharacter(movement+Vector3.up*vertical*Mathf.Min(Time.deltaTime,.06f));grounded=(flags&CollisionFlags.Below)!=0;if(grounded)vertical=-2;if((flags&CollisionFlags.Above)!=0&&vertical>0)vertical=0;}
+   else {player.position=MapToWorld(CampusCollision.Move(WorldToMap(before),WorldToMap(movement),data.obstacles));
+    if(!grounded){vertical-=18*Time.deltaTime;var p=player.position;p.y+=vertical*Time.deltaTime;if(p.y<=.23f){p.y=.23f;grounded=true;vertical=0;}player.position=p;}}
+   float actual=Vector2.Distance(new Vector2(before.x,before.z),new Vector2(player.position.x,player.position.z))/Mathf.Max(.001f,Time.deltaTime);
    Animate(!grounded?(vertical>0?"Jump":"Fall"):actual>.15f?(speed>6?"Run":"Walk"):"Idle",actual,input.y<0);
-   if(Input.GetKeyDown(KeyCode.R))Teleport(new Vector3(3,.23f,194));
-   if(Input.GetKeyDown(KeyCode.T)){yaw=targetYaw=180;pitch=targetPitch=18;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(new Vector3(65,.23f,-72));Say("教学区：ABC 教学楼与喷泉广场。");}
-   if(Input.GetKeyDown(KeyCode.L)){yaw=targetYaw=180;pitch=targetPitch=18;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(new Vector3(175.14f,.23f,14));Say("生活区西1门：沿西侧主路向北，可到恩苑和公寓中庭。");}
+   if(ExteriorShortcutsAllowed){
+    if(Input.GetKeyDown(KeyCode.R))Teleport(new Vector3(3,.23f,194));
+    if(Input.GetKeyDown(KeyCode.T)){yaw=targetYaw=180;pitch=targetPitch=18;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(new Vector3(65,.23f,-72));Say("教学区：ABC 教学楼与喷泉广场。");}
+    if(Input.GetKeyDown(KeyCode.L)){yaw=targetYaw=180;pitch=targetPitch=18;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(new Vector3(175.14f,.23f,14));Say("生活区西1门：沿西侧主路向北，可到恩苑和公寓中庭。");}}
    if(Input.GetKeyDown(KeyCode.E))Interact();
   }
   if(face!=null){for(int i=0;i<face.sharedMesh.blendShapeCount;i++){string n=face.sharedMesh.GetBlendShapeName(i);if(n.Contains("Blink"))face.SetBlendShapeWeight(i,Mathf.Pow(Mathf.Max(0,Mathf.Cos(Time.time*1.8f)),35)*100);else if(n.Contains("Smile"))face.SetBlendShapeWeight(i,complete?65:10);}}
@@ -58,16 +67,23 @@ public class CampusGame : MonoBehaviour {
  void LateUpdate(){if(!qa)UpdateCamera();}
  void UpdateCamera(){
   Vector3 pivot=player.position+Vector3.up*1.5f,back=Quaternion.Euler(pitch,yaw,0)*Vector3.back;
-  float d=distance;if(Physics.SphereCast(pivot,.2f,back,out RaycastHit hit,d,1<<8,QueryTriggerInteraction.Ignore))d=Mathf.Max(.6f,hit.distance-.15f);
+  float d=distance;int mask=Interiors&&Interiors.Inside?Physics.DefaultRaycastLayers:1<<8;if(Physics.SphereCast(pivot,.2f,back,out RaycastHit hit,d,mask,QueryTriggerInteraction.Ignore))d=Mathf.Max(.6f,hit.distance-.15f);
   followCamera.transform.position=pivot+back*d;followCamera.transform.rotation=Quaternion.LookRotation(pivot-followCamera.transform.position);
  }
- public void Teleport(Vector3 position){player.position=MapToWorld(position);vertical=0;grounded=true;UpdateCamera();}
+ public void Teleport(Vector3 position){if(!ExteriorShortcutsAllowed)return;player.position=MapToWorld(position);vertical=0;grounded=true;UpdateCamera();}
+ public void VisitDormitory(){if(!ExteriorShortcutsAllowed)return;yaw=targetYaw=180;pitch=targetPitch=12;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(new Vector3(245,.23f,-68));Say("宿舍花园：靠近公寓入口，按 E 进入。");}
+ public void VisitCafeteria(){if(!ExteriorShortcutsAllowed)return;yaw=targetYaw=270;pitch=targetPitch=8;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(new Vector3(174.5f,.23f,8));Say("学生食堂：向正门走近，按 E 进入。");}
+ public bool IsMapWalkable(Vector3 position)=>!CampusCollision.Blocked(position.x,position.z,data.obstacles);
+ // Shared travel API uses world coordinates indoors and resets movement/camera state.
+ public void SetTravelPose(Vector3 worldPosition,float heading,float elevation=12){player.position=worldPosition;yaw=targetYaw=heading;pitch=targetPitch=elevation;player.rotation=Quaternion.Euler(0,yaw,0);vertical=0;grounded=true;mapOpen=false;Animate("Idle",0);UpdateCamera();}
+ public void Notify(string text)=>Say(text);
  void Animate(string state,float speed,bool backwards=false){
   if(animationPlayer==null)return;
   if(motion!=state&&animationPlayer[state]!=null){animationPlayer.CrossFade(state,.16f);motion=state;}
   if(animationPlayer[state]!=null){animationPlayer[state].speed=(state=="Walk"||state=="Run")?Mathf.Clamp(speed/(state=="Run"?10:5.4f),.35f,1.3f)*(backwards?-1:1):1;}
  }
  public bool Interact(){
+  if(Interiors&&Interiors.TryInteract())return true;
   if(Vector3.Distance(player.position,guide.position)<4){
    if(!started){started=true;Say("小岚：请在图书馆、涌泉湖畔和田径场寻找三枚校园记忆。");}
    else if(collected==7){complete=true;Say("小岚：三枚记忆都找到了！欢迎继续探索我们的校园。");}
@@ -81,7 +97,7 @@ public class CampusGame : MonoBehaviour {
   if(Vector2.Distance(new Vector2(player.position.x*mapXSign,player.position.z),new Vector2(-8,191))<4){Say("校园导览：WASD 移动，Shift 无限奔跑，空格跳跃，M 地图，ESC 暂停。");return true;}
   return false;
  }
- void Save(){if(qa)return;PlayerPrefs.SetInt("CampusUnityStarted",started?1:0);PlayerPrefs.SetInt("CampusUnityMemories",collected);PlayerPrefs.SetInt("CampusUnityComplete",complete?1:0);PlayerPrefs.Save();}
+ void Save(){if(Automated)return;PlayerPrefs.SetInt("CampusUnityStarted",started?1:0);PlayerPrefs.SetInt("CampusUnityMemories",collected);PlayerPrefs.SetInt("CampusUnityComplete",complete?1:0);PlayerPrefs.Save();}
  void Say(string text){message=text;messageUntil=Time.time+9;}
  int Count(){return (collected&1)+((collected>>1)&1)+((collected>>2)&1);}
  void OnGUI(){
@@ -89,14 +105,17 @@ public class CampusGame : MonoBehaviour {
   GUI.skin.font=interfaceFont;
   if(title==null){title=new GUIStyle(GUI.skin.label){font=interfaceFont,fontSize=26,fontStyle=FontStyle.Bold};body=new GUIStyle(GUI.skin.label){font=interfaceFont,fontSize=17,wordWrap=true};small=new GUIStyle(body){fontSize=14};}
   float scale=Mathf.Clamp(Screen.height/900f,.7f,1.5f);GUI.matrix=Matrix4x4.Scale(Vector3.one*scale);float w=Screen.width/scale,h=Screen.height/scale;
-  GUI.Box(new Rect(20,20,350,125),"");GUI.Label(new Rect(38,32,320,36),pixelStudy?"风起 · 校园  /  像素试作":"风起 · 校园  /  UNITY",title);GUI.Label(new Rect(38,73,315,65),"大连理工大学 · 开发区校区\n"+(complete?"探索完成 · 自由漫游":started?"校园记忆  "+Count()+" / 3":"前往书韵广场，与小岚交谈"),body);
+  bool indoors=Interiors&&Interiors.Inside;
+  GUI.Box(new Rect(20,20,350,125),"");GUI.Label(new Rect(38,32,320,36),pixelStudy?"风起 · 校园  /  像素试作":"风起 · 校园  /  UNITY",title);GUI.Label(new Rect(38,73,315,65),indoors?Interiors.Current.displayName+"\n"+(Interiors.Interior.isPlaceholder?"室内场景待制作 · 靠近出口按 E 返回":"室内探索 · 靠近出口按 E 返回"):"大连理工大学 · 开发区校区\n"+(complete?"探索完成 · 自由漫游":started?"校园记忆  "+Count()+" / 3":"前往书韵广场，与小岚交谈"),body);
   if(pixelStudy)GUI.Label(new Rect(24,h-65,w-48,26),"T 返回教学广场    F6 切换像素大小（标准 / 粗 / 细 / 原生分辨率）",small);
-  GUI.Label(new Rect(24,h-37,w-48,30),"WASD 移动    鼠标转向    Shift 奔跑    空格跳跃    E 交互    M 地图    L 生活区    ESC 暂停",small);
+  GUI.Label(new Rect(24,h-37,w-48,30),indoors?"WASD 移动    鼠标转向    Shift 奔跑    空格跳跃    E 出口交互    ESC 暂停":"WASD 移动    鼠标转向    Shift 奔跑    空格跳跃    E 交互 / 进入建筑    M 地图    L 生活区    B 宿舍    F 食堂    ESC 暂停",small);
   if(Time.time<messageUntil){GUI.Box(new Rect(w*.5f-330,h-130,660,72),"");GUI.Label(new Rect(w*.5f-312,h-119,624,60),message,body);}
   bool near=Vector3.Distance(player.position,guide.position)<4||memories.Any(m=>m.activeSelf&&Vector3.Distance(player.position,m.transform.position)<4);
-  if(near&&!paused)GUI.Label(new Rect(w*.5f-75,h*.64f,180,35),"[ E ]  交谈 / 收集",body);
+  string doorPrompt=Interiors?Interiors.InteractionPrompt:"";
+  if(!paused&&!string.IsNullOrEmpty(doorPrompt)){GUI.Box(new Rect(w*.5f-190,h*.68f,380,48),"");GUI.Label(new Rect(w*.5f-180,h*.68f+8,360,40),doorPrompt,new GUIStyle(body){alignment=TextAnchor.MiddleCenter});}
+  else if(near&&!paused&&!indoors)GUI.Label(new Rect(w*.5f-75,h*.64f,180,35),"[ E ]  交谈 / 收集",body);
   if(mapOpen){float s=Mathf.Min(h-190,620);var r=new Rect(w-s-25,25,s,s*.692f);GUI.DrawTexture(r,minimap);foreach(var spot in data.spots)Dot(r,spot.x,spot.z,new Color(1,.76f,.3f));Dot(r,20,109,Color.cyan);Dot(r,player.position.x*mapXSign,player.position.z,Color.white);GUI.Label(new Rect(r.x,r.yMax+8,s,35),"北 ↑   白：你   蓝：小岚   金：记忆",small);}
-  if(paused&&(!qa||pixelStudy)){GUI.Box(new Rect(w/2-230,h/2-135,460,265),"");GUI.Label(new Rect(w/2-185,h/2-113,400,40),"校园漫游已准备就绪",title);GUI.Label(new Rect(w/2-185,h/2-60,370,65),"点击开始后，鼠标控制视角。\n按 ESC 可暂停并释放鼠标。",body);if(GUI.Button(new Rect(w/2-175,h/2+18,350,44),"开始 / 继续探索")){paused=false;ApplyCursor();}if(GUI.Button(new Rect(w/2-175,h/2+72,350,30),"重置探索任务")){started=false;complete=false;collected=0;foreach(var m in memories)m.SetActive(true);Save();}}
+  if(paused&&(!qa||pixelStudy)){GUI.Box(new Rect(w/2-230,h/2-135,460,265),"");GUI.Label(new Rect(w/2-185,h/2-113,400,40),"校园漫游已准备就绪",title);GUI.Label(new Rect(w/2-185,h/2-60,370,65),"点击开始后，鼠标控制视角。\n按 ESC 可暂停并释放鼠标。",body);if(GUI.Button(new Rect(w/2-175,h/2+18,350,44),"开始 / 继续探索")){paused=false;ApplyCursor();}if(!indoors&&GUI.Button(new Rect(w/2-175,h/2+72,350,30),"重置探索任务")){started=false;complete=false;collected=0;foreach(var m in memories)m.SetActive(true);Save();}}
  }
  void Dot(Rect r,float x,float z,Color color){var old=GUI.color;GUI.color=color;GUI.DrawTexture(new Rect(r.x+(x+290)/600*r.width-3,r.y+(z+180)/415*r.height-3,6,6),Texture2D.whiteTexture);GUI.color=old;}
  void BuildMap(){

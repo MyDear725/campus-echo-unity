@@ -8,5 +8,41 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CampusLiving.unity
     guid: 73d53a073f7bd8e47a4766048ff291eb
+  - enabled: 1
+    path: Assets/Interiors/Scenes/library.unity
+    guid: e4170e74e16a66d448e4c938bf83de86
+  - enabled: 1
+    path: Assets/Interiors/Scenes/gymnasium.unity
+    guid: cf56dbe7871b1dd4089557b9308b3f50
+  - enabled: 1
+    path: Assets/Interiors/Scenes/cafeteria.unity
+    guid: 7f621056c2869c34e9d83f525c29623e
+  - enabled: 1
+    path: Assets/Interiors/Scenes/teaching-a.unity
+    guid: 3d8ca6dc505a85d4cac989b9d6be99d8
+  - enabled: 1
+    path: Assets/Interiors/Scenes/teaching-b.unity
+    guid: 908a028e7b2cf664888f7f36cc7b52f5
+  - enabled: 1
+    path: Assets/Interiors/Scenes/teaching-c.unity
+    guid: 4c35b9d4ccb6c864a9c8e242eade863d
+  - enabled: 1
+    path: Assets/Interiors/Scenes/dormitory-1.unity
+    guid: a08cf19eec3ad9e40b6da28a27e35cf1
+  - enabled: 1
+    path: Assets/Interiors/Scenes/dormitory-2.unity
+    guid: f60269e7f10cc134b861741cab5abc7a
+  - enabled: 1
+    path: Assets/Interiors/Scenes/dormitory-west.unity
+    guid: 191299a9f63d57641894819a8e422f3b
+  - enabled: 1
+    path: Assets/Interiors/Scenes/dormitory-4.unity
+    guid: 4bd7740e5fb8a504392e434ac8460ecb
+  - enabled: 1
+    path: Assets/Interiors/Scenes/dormitory-5.unity
+    guid: 97a88073cd7afe644a7e03b9815e3625
+  - enabled: 1
+    path: Assets/Interiors/Scenes/dormitory-6.unity
+    guid: 905e72677b850b045905fc0074adce1f
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

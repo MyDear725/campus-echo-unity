@@ -1,0 +1,111 @@
+校园建筑室内接入说明
+
+项目：D:\UnityProjects\campus-echo-unity
+Unity：6000.3.26f1 / URP。主场景：Assets/Scenes/CampusLiving.unity。
+
+1. 已实现的交互
+靠近建筑正门时出现“[E] 进入 建筑名”；按 E 淡出并加载独立室内场景。
+室内沿用校园角色、第三人称相机、WASD、Shift、跳跃和 ESC 暂停。
+走近室内出口，出现“[E] 返回校园”，按 E 回到进入的建筑门外。
+进出时锁定重复输入；室内禁用校园瞬移快捷键和校园地图。
+室内加载采用 Additive，校园保留在内存但暂停显示，任务状态不重置。
+离开后卸载室内场景。室内自行生成的状态默认不保存，需要持久化时由室内模块自行管理。
+
+2. 场景与配置（一栋建筑一份场景，入口可以有多份）
+以下每个 ID 同时对应：
+  场景 Assets/Interiors/Scenes/<ID>.unity
+  入口 Assets/Interiors/Entrances/<ID>.asset
+
+  library          图书馆
+  gymnasium        体育馆
+  cafeteria        第六食堂
+  teaching-a       教学楼 A
+  teaching-b       教学楼 B
+  teaching-c       教学楼 C
+  dormitory-1      第一学生公寓
+  dormitory-2      第二学生公寓
+  dormitory-west   西侧学生公寓（实际楼名待确认，不强行标为第三公寓）
+  dormitory-4      第四学生公寓
+  dormitory-5      第五学生公寓
+  dormitory-6      第六学生宿舍
+
+图书馆另有后门入口 Assets/Interiors/Entrances/library-rear.asset。
+它的 buildingId 仍为 library，独立 entranceId 为 library-rear，和正门共用 library.unity。
+目前共 13 个入口、12 个室内场景；室内出口返回本次进入的那扇门，不跨门传送。
+
+3. 室内美术/关卡同伴操作
+打开自己负责的 .unity 文件。当前只有可行走地面、边界墙、出口色块和测试灯光。
+保留 InteriorRoot 上的 InteriorSceneRoot 组件及其 buildingId。
+可以删除或替换 PlaceholderShell 的内容，搭建真实房间、走廊和楼梯。
+重新布置 Spawn_main 和 Exit_toCampus；检查组件中的引用仍然正确。
+spawnPoints 里至少保留一个 id="main" 的出生点；位置是人物脚底，forward 是进入后的朝向。
+exits 可以引用多个出口 Transform；它们都返回本次进入的校园门口。
+出生点必须在当前场景中、处于启用状态、站在带 Collider 的地面上，不能与墙体相交。
+出口要放在人物可走到的位置。默认交互半径 2.4 米，不要放在墙体背后。
+完成内容后，把 InteriorSceneRoot.isPlaceholder 取消勾选，HUD 不再显示“场景待制作”。
+地面、墙壁、家具及楼梯必须按需要加 Collider。室内使用真实 CharacterController 碰撞。
+默认人物胶囊高 1.8 米、半径 0.32 米、可跨步高 0.3 米；狭窄通道需留足空间。
+不要添加第二套玩家、CampusGame、主相机或 AudioListener，系统复用校园中的那一套。
+人物胶囊在室内临时使用 Ignore Raycast 层以免挡住相机；不要把室内墙体也放到该层。
+场景使用正常 Unity 世界坐标，1 单位约 1 米；不需要镜像，也不需要摆到校园建筑的世界坐标。
+当前空房间以 (0,0,0) 为中心，仅供交互测试。整体大小与布局可以更换。
+不要修改其他建筑的文件；自建美术资源建议放在 Assets/Interiors/Art/<ID>/。
+
+4. 接口与扩展
+BuildingEntranceDefinition：入口配置资源。
+  buildingId：建筑 ID，应与室内 InteriorSceneRoot.buildingId 相同；同一建筑的不同门可以共用。
+  entranceId：入口唯一 ID；留空时自动使用 buildingId，运行时代码用 EntranceId 属性读取。
+  interiorScenePath：完整场景路径，包含 Assets/ 和 .unity。
+  spawnId：选择 spawnPoints 内的出生点 ID，当前均为 main。
+  approachMapPosition / returnMapPosition：校园原始地图坐标，不是镜像后的世界坐标。
+  enterYaw：Unity 世界朝向；现有配置已与正门对齐。
+  interactionRadius：校园入口交互范围。
+
+InteriorSceneRoot：室内场景唯一入口契约。
+  spawnPoints / exits：室内出生点与出口 Transform 引用。
+  onPlayerEntered：加载、切换和定位完成后触发的 UnityEvent。
+  onPlayerLeaving：离开前触发的 UnityEvent，可供室内脚本保存自身状态。
+  fallRecoveryHeight：掉落保护高度，低于它会回到当前出生点。
+  showExitMarkers：显示出口位置提示；自行制作出口 UI 后可取消勾选。
+  FindSpawn(id)、NearExit(position)、ValidateContract(buildingId,spawnId)。
+
+BuildingInteriorTravel：挂在主场景 Campus Game 上的通用进出服务。
+  TryInteract()：由 CampusGame 唯一的 E 键入口调用，不要再写一套 E 键监听。
+  TryEnter(definition)、TryExit()：仍会检查距离、暂停状态和切换状态。
+  State、Inside、Busy、Current、Interior、LastError：供 UI 或其他系统查询。
+  Entered / Exited：C# 事件，参数为 BuildingEntranceDefinition。
+  不要绕过这个服务直接卸载 CampusLiving，或复制/销毁共享玩家和相机。
+
+缺失场景/构建配置会提示失败并留在校园；出生点、出口、地面或场景契约错误，
+会卸载刚加载的室内并恢复可操作状态。修正配置后可以再次按 E 尝试。
+
+5. 预览、验证与构建
+先单独打开 CampusLiving 再 Play。F 到食堂广场，向正门走近后按 E；B 到宿舍花园。
+也可以双击 Preview-Interiors.cmd，默认直接放在食堂门口；打开后点击“开始 / 继续探索”。
+已构建的程序可用：CampusEcho.exe -entrancePreview library
+将 library 换成上面的任意 ID，可在对应建筑门外测试；library-rear 对应图书馆后门。
+
+菜单 Campus/Interiors/Install Entrances and Missing Placeholders：
+  安装/补齐入口、缺少的占位场景和构建列表；不会覆盖已存在的场景或入口资源。
+  此菜单会保存主场景，请先保存你自己的编辑。
+菜单 Campus/Interiors/Validate Configuration：
+  校验入口 ID、场景路径、构建列表、室外碰撞和门口通路。
+菜单 Campus/Build Windows Demo：构建到 Builds/Windows。
+
+12 个室内场景均已加入 ProjectSettings/EditorBuildSettings.asset。
+如果只在现有场景文件里做内容，不需要修改主场景、入口配置或构建列表。
+如果改用新文件，请更新对应入口的 interiorScenePath，并把新场景加入构建列表。
+手工验收：靠近显示提示、离开提示消失、进入后落在正确位置、墙壁挡住人物、
+出口能返回原楼、重复按 E 不重复加载、ESC 可暂停、回到校园任务状态仍在。
+
+自动回归：运行 CampusEcho.exe -entranceQA -force-d3d11
+结果：Builds/Windows/QA/Interiors/result.txt。
+此用例专门针对当前空白占位场景（20×20 米、中心原点），会测试 13 个入口往返（含图书馆前后门）、
+角色胶囊、异常回退和重复进入。替换房间尺寸/出生点后，应相应调整测试中的墙体断言。
+正常校园任务回归：CampusEcho.exe -campusQA -force-d3d11。
+
+6. GitHub 协作
+同时提交 .unity/.asset/.cs/.shader 和各自 .meta；不能删除再重建原场景的 .meta。
+只改自己负责的室内场景和独立美术资源，避免多人同时改 CampusLiving.unity。
+新增场景时再协调修改入口配置与 EditorBuildSettings.asset。
+Library、Temp、Logs、Builds 不提交。当前修改没有自动提交或推送。
