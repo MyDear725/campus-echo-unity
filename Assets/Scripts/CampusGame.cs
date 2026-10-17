@@ -14,6 +14,7 @@ public class CampusGame : MonoBehaviour {
  public bool pixelStudy;
  public BuildingInteriorTravel Interiors {get;private set;}
  public bool Automated {get;private set;}
+ public bool UiBlocking;   // set by an interior UI (e.g. the lift picker) while it is open
  public bool ExteriorShortcutsAllowed=>Interiors==null||(!Interiors.Inside&&!Interiors.Busy);
  public float mapXSign=1;
  public Vector3 MapToWorld(Vector3 point)=>new Vector3(point.x*mapXSign,point.y,point.z);
@@ -33,10 +34,14 @@ public class CampusGame : MonoBehaviour {
   if(interfaceFont==null)interfaceFont=Font.CreateDynamicFontFromOSFont("Microsoft YaHei",20);
   BuildMap();if(pixelStudy&&!qa)Teleport(new Vector3(65,.23f,-72));ApplyCursor();if(qa){StartCoroutine(QA());StartCoroutine(QATimeout());}
  }
- void ApplyCursor(){Cursor.lockState=paused||Automated?CursorLockMode.None:CursorLockMode.Locked;Cursor.visible=paused||Automated;}
+ void ApplyCursor(){bool free=paused||Automated||UiBlocking;Cursor.lockState=free?CursorLockMode.None:CursorLockMode.Locked;Cursor.visible=free;}
+ // Called by an interior UI to release/recapture the mouse without pausing the game.
+ public void SetUiCursor(bool free){UiBlocking=free;ApplyCursor();}
  void OnApplicationFocus(bool focus){if(!focus&&!Automated){paused=true;ApplyCursor();}}
  void Update(){
   if(!Automated){
+   // An interior UI owns input while it is open: no pause toggle, no movement.
+   if(UiBlocking){Animate("Idle",0);return;}
    if(Input.GetKeyDown(KeyCode.Escape)){paused=!paused;ApplyCursor();}
    if(paused){Animate("Idle",0);return;}
    if(Interiors&&Interiors.Busy){Animate("Idle",0);return;}
