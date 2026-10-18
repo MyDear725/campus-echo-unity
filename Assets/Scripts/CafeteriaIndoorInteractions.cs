@@ -28,35 +28,11 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
         },
         new InteractiveSpot
         {
-            id = "serving_1f",
-            position = new Vector3(-4.0f, 0.5f, 10.0f),
-            radius = 3.2f,
-            prompt = "[ E ] 浏览一层大众快餐菜谱",
-            message = "一层特选：酱牛肉拼盘、红烧排骨、清炒时蔬、大工手工面与风味蒸点！"
-        },
-        new InteractiveSpot
-        {
-            id = "waterbar_1f",
-            position = new Vector3(-0.5f, 0.5f, -1.0f),
-            radius = 2.5f,
-            prompt = "[ E ] 点单水吧饮品 / 现磨咖啡",
-            message = "在水吧点了一杯招牌热拿铁（¥12），香气扑鼻，精神满满！"
-        },
-        new InteractiveSpot
-        {
             id = "washbasin_1f",
             position = new Vector3(16.5f, 0.5f, -3.0f),
             radius = 2.6f,
             prompt = "[ E ] 使用洗手间 / 洁手消毒",
             message = "使用东侧洗手间与感应洁手台，完成手部清洁消毒！"
-        },
-        new InteractiveSpot
-        {
-            id = "trayreturn_1f",
-            position = new Vector3(12.0f, 0.5f, 4.0f),
-            radius = 2.5f,
-            prompt = "[ E ] 归还餐盘 · 垃圾分类",
-            message = "践行光盘行动，餐盘已分类送入残餐回收台！"
         },
         new InteractiveSpot
         {
@@ -78,35 +54,11 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
         // --- 2F Spots ---
         new InteractiveSpot
         {
-            id = "serving_2f",
-            position = new Vector3(-4.0f, 4.8f, 10.0f),
-            radius = 3.2f,
-            prompt = "[ E ] 浏览二层风味档口菜单",
-            message = "二层特色：川湘热炒、经典砂锅煲仔、铁板烧肉饭与现调甜品！"
-        },
-        new InteractiveSpot
-        {
-            id = "waterbar_2f",
-            position = new Vector3(-0.5f, 4.8f, -1.0f),
-            radius = 2.5f,
-            prompt = "[ E ] 二层休闲水吧 · 点调饮品",
-            message = "在二层水吧点了一杯生椰抹茶拿铁（¥14），舒享悠闲时光！"
-        },
-        new InteractiveSpot
-        {
             id = "washbasin_2f",
             position = new Vector3(16.5f, 4.8f, -3.0f),
             radius = 2.6f,
             prompt = "[ E ] 二层洗手间 · 洁手消毒",
             message = "使用二层东侧洗手间与感应洁手台，完成手部清洁消毒！"
-        },
-        new InteractiveSpot
-        {
-            id = "trayreturn_2f",
-            position = new Vector3(12.0f, 4.8f, 4.0f),
-            radius = 2.5f,
-            prompt = "[ E ] 二层餐盘归还 · 垃圾分类",
-            message = "二层餐盘已妥善归还回收！"
         },
         new InteractiveSpot
         {
@@ -160,14 +112,6 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
         },
         new InteractiveSpot
         {
-            id = "serving_3f",
-            position = new Vector3(10.0f, 9.1f, 8.5f),
-            radius = 3.5f,
-            prompt = "[ E ] 浏览三层特色档口菜品",
-            message = "三层直排档口供应：特色广式烧味拼盘、砂锅滋补靓汤与营养热炒！"
-        },
-        new InteractiveSpot
-        {
             id = "washbasin_3f",
             position = new Vector3(16.5f, 9.1f, -3.0f),
             radius = 2.6f,
@@ -181,14 +125,6 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
             radius = 2.4f,
             prompt = "[ E ] 领取三层餐盘与消毒筷勺",
             message = "已领取三层餐盘与消毒餐具！"
-        },
-        new InteractiveSpot
-        {
-            id = "trayreturn_3f",
-            position = new Vector3(12.0f, 9.1f, 1.2f),
-            radius = 2.5f,
-            prompt = "[ E ] 三层餐盘归还 · 垃圾分类",
-            message = "三层餐盘已妥善归还回收！"
         },
         new InteractiveSpot
         {
@@ -221,6 +157,12 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
+            // The ordering system owns the serving window, the tray return and the seat
+            // while a flow is active; let it answer first so one press is one action.
+            var ordering = GetComponent<CafeteriaOrdering>();
+            if (ordering != null && ordering.HandlesCurrentSpot())
+                return;
+
             var spot = CurrentSpot();
             if (spot.HasValue)
             {
@@ -250,6 +192,11 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
         if (!game || !game.Interiors || !game.Interiors.Inside || game.paused) return;
         if (game.Interiors.Interior == null || game.Interiors.Interior.buildingId != "cafeteria") return;
         if (game.Interiors.Interior.NearExit(game.player.position)) return;
+
+        // One prompt at a time: when the ordering system owns the current position it
+        // draws its own prompt, so this legacy one must stay silent.
+        var ordering = GetComponent<CafeteriaOrdering>();
+        if (ordering != null && ordering.HandlesCurrentSpot()) return;
 
         var spot = CurrentSpot();
         if (!spot.HasValue) return;

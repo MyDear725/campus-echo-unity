@@ -192,6 +192,9 @@ public static class CafeteriaInteriorBuilder
     [MenuItem("Campus/Interiors/Build Cafeteria First and Second Floor")]
     public static void Build()
     {
+        seatAnchorPos.Clear();
+        seatAnchorRot.Clear();
+
         LoadMaterials();
 
         var scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
@@ -270,6 +273,10 @@ public static class CafeteriaInteriorBuilder
         // 8. Interior presentation: dedicated SSAO renderer, ACES volume, reflection
         //    probe and the runtime presentation switch, all persisted as real assets.
         BuildPresentation(rootObj.transform, sceneRoot);
+
+        // 9. Ordering system: anchors are placed at the existing serving window, the
+        //    tray-return counter and the dining hall, so the flow uses the real plan.
+        BuildOrdering(rootObj.transform, sceneRoot);
         InteriorLabelStairFix.ConfigureLabels(rootObj.transform, 3);
         InteriorLabelStairFix.ConfigureCafeteriaRails(rootObj.transform);
 
@@ -310,6 +317,95 @@ public static class CafeteriaInteriorBuilder
         pres.interiorFarClip = 70f;
         pres.interiorShadowDistance = 46f;
         pres.interiorCascades = 4;
+
+        UnityEditor.EditorUtility.SetDirty(sceneRoot);
+    }
+
+
+    // Wires the cafeteria ordering flow to real anchors in the plan:
+    //   order   -> the 1F serving window (打菜选餐区)
+    //   collect -> a collection counter next to that window
+    //   return  -> the 1F tray-return counter
+    //   seat    -> the centre of the dining hall (representative seat anchor)
+    // The anchors are scene objects so a rebuild re-creates them and the component
+    // keeps referencing the right places.
+    // Wires the ordering flow to the real counters on all three floors. The anchors are
+    // scene objects created here, so regenerating the cafeteria re-creates them and the
+    // component keeps pointing at the right places.
+    //
+    // Positions match the counters built by BuildFoodServingArea / BuildTrayReturnArea /
+    // BuildWaterBarIsland, and the same coordinates the old interaction spots used.
+    static void BuildOrdering(Transform rootTransform, InteriorSceneRoot sceneRoot)
+    {
+        Transform Anchor(string name, Vector3 pos)
+        {
+            var t = rootTransform.Find(name);
+            if (t) { t.position = pos; return t; }
+            var go = new GameObject(name);
+            go.transform.SetParent(rootTransform, false);
+            go.transform.position = pos;
+            return go.transform;
+        }
+
+        // floor base heights: 1F 0, 2F 4.3, 3F 8.6
+        float[] fy = { 0f, 4.3f, 8.6f };
+
+        var order = new System.Collections.Generic.List<Transform>();
+        var collect = new System.Collections.Generic.List<Transform>();
+        var ret = new System.Collections.Generic.List<Transform>();
+        var seat = new System.Collections.Generic.List<Transform>();
+
+        // Tags an ordering anchor with the shop whose menu it opens.
+        Transform OrderAnchor(string name, Vector3 pos, CafeteriaShop shop)
+        {
+            var t = Anchor(name, pos);
+            var c = t.GetComponent<CafeteriaCounter>();
+            if (!c) c = t.gameObject.AddComponent<CafeteriaCounter>();
+            c.shop = shop;
+            return t;
+        }
+
+        // 1F and 2F: main serving counter (restaurant menu) + the drink bar (water bar menu).
+        order.Add(OrderAnchor("OrderSpot_Serving_1F", new Vector3(-4.0f, fy[0] + 0.5f, 10.0f), CafeteriaShop.Restaurant));
+        order.Add(OrderAnchor("OrderSpot_WaterBar_1F", new Vector3(-0.5f, fy[0] + 0.5f, -1.0f), CafeteriaShop.WaterBar));
+        order.Add(OrderAnchor("OrderSpot_Serving_2F", new Vector3(-4.0f, fy[1] + 0.5f, 10.0f), CafeteriaShop.Restaurant));
+        order.Add(OrderAnchor("OrderSpot_WaterBar_2F", new Vector3(-0.5f, fy[1] + 0.5f, -1.0f), CafeteriaShop.WaterBar));
+        // 3F: speciality counter plus the fruit supermarket on the north side.
+        order.Add(OrderAnchor("OrderSpot_Serving_3F", new Vector3(10.0f, fy[2] + 0.5f, 8.5f), CafeteriaShop.Restaurant));
+        order.Add(OrderAnchor("OrderSpot_Fruit_3F", new Vector3(-3.8f, fy[2] + 0.5f, 13.4f), CafeteriaShop.FruitStall));
+
+        collect.Add(Anchor("CollectSpot_1F", new Vector3(-4.0f, fy[0] + 0.5f, 8.2f)));
+        collect.Add(Anchor("CollectSpot_2F", new Vector3(-4.0f, fy[1] + 0.5f, 8.2f)));
+        collect.Add(Anchor("CollectSpot_3F", new Vector3(10.0f, fy[2] + 0.5f, 6.6f)));
+        // Pickup points next to the water bars and the fruit supermarket, so an order is
+        // collected where it was bought.
+        collect.Add(Anchor("CollectSpot_WaterBar_1F", new Vector3(2.2f, fy[0] + 0.5f, 0.2f)));
+        collect.Add(Anchor("CollectSpot_WaterBar_2F", new Vector3(2.2f, fy[1] + 0.5f, 0.2f)));
+        collect.Add(Anchor("CollectSpot_Fruit_3F", new Vector3(-3.8f, fy[2] + 0.5f, 12.0f)));
+
+        ret.Add(Anchor("ReturnSpot_1F", new Vector3(12.0f, fy[0] + 0.5f, 4.0f)));
+        ret.Add(Anchor("ReturnSpot_2F", new Vector3(12.0f, fy[1] + 0.5f, 4.0f)));
+        ret.Add(Anchor("ReturnSpot_3F", new Vector3(12.0f, fy[2] + 0.5f, 1.2f)));
+
+        // Seats come from the chairs the dining builder actually created, on every floor,
+        // so the sitting position always lines up with real furniture.
+        for (int i = 0; i < seatAnchorPos.Count; i++)
+        {
+            var a = Anchor("SeatSpot_" + i.ToString("D3"), seatAnchorPos[i]);
+            a.rotation = seatAnchorRot[i];
+            seat.Add(a);
+        }
+        Debug.Log($"[Cafeteria] seat anchors from real chairs: {seat.Count}");
+
+        var ordering = rootTransform.GetComponent<CafeteriaOrdering>();
+        if (!ordering) ordering = rootTransform.gameObject.AddComponent<CafeteriaOrdering>();
+        ordering.orderSpots = order.ToArray();
+        ordering.collectSpots = collect.ToArray();
+        ordering.returnSpots = ret.ToArray();
+        ordering.seatSpots = seat.ToArray();
+
+        if (!rootTransform.GetComponent<CafeteriaOrderingUI>())
+            rootTransform.gameObject.AddComponent<CafeteriaOrderingUI>();
 
         UnityEditor.EditorUtility.SetDirty(sceneRoot);
     }
@@ -924,6 +1020,12 @@ public static class CafeteriaInteriorBuilder
         }
     }
 
+    // Every chair built for the cafeteria records its seat anchor: standing position and
+    // the yaw that faces the table. The ordering system consumes this list, so seats match
+    // the furniture actually in the scene instead of hand-written guesses.
+    static readonly System.Collections.Generic.List<Vector3> seatAnchorPos = new System.Collections.Generic.List<Vector3>();
+    static readonly System.Collections.Generic.List<Quaternion> seatAnchorRot = new System.Collections.Generic.List<Quaternion>();
+
     static void BuildTableSet(Transform parent, Vector3 center, int tableIndex, string prefix)
     {
         var tRoot = new GameObject("TableSet_" + tableIndex).transform;
@@ -967,7 +1069,9 @@ public static class CafeteriaInteriorBuilder
         for (int p = 0; p < chairPairs; p++)
         {
             float cx = startX + p * spacing;
+            seatTableTarget = center;
             BuildCafeteriaChair(tRoot, center + new Vector3(cx, 0, 0.65f), 0f, chairMat, "N" + p);
+            seatTableTarget = center;
             BuildCafeteriaChair(tRoot, center + new Vector3(cx, 0, -0.65f), 180f, chairMat, "S" + p);
         }
     }
@@ -1011,7 +1115,23 @@ public static class CafeteriaInteriorBuilder
         }
         InteriorGeometry.Tube(ch, "Stretcher", new Vector3(-seatW * 0.40f, 0.16f, 0f),
             new Vector3(seatW * 0.40f, 0.16f, 0f), 0.013f, matMetalMatteBlack);
+
+        // Record the seat: the chair's footprint, turned toward the table it serves.
+        Vector3 seatPos = new Vector3(floorPos.x, floorPos.y, floorPos.z);
+        Quaternion seatRot = ch.rotation;
+        if (seatTableTarget.HasValue)
+        {
+            Vector3 t = seatTableTarget.Value;
+            Vector3 dir = new Vector3(t.x - seatPos.x, 0f, t.z - seatPos.z);
+            if (dir.sqrMagnitude > 0.0001f)
+                seatRot = Quaternion.LookRotation(dir.normalized, Vector3.up);
+        }
+        seatAnchorPos.Add(seatPos);
+        seatAnchorRot.Add(seatRot);
     }
+
+    // Set just before a chair is created so its anchor faces the table it belongs to.
+    static Vector3? seatTableTarget;
 
     // H. Modern Greenery Planter Partitions
     static void BuildGreeneryPartitions(Transform parent, float baseY, string prefix)
