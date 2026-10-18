@@ -7,7 +7,7 @@ Add a male/female character choice to the game-start flow and replace the curren
 ## Verified facts
 
 - Active project root: `D:/大学竞赛/unity游戏/campus-echo-unity-main-full`.
-- The project is a Git repository on `main` at commit `438c8b98`.
+- The project is a Git repository on `main`; the approved design is committed at `ba318f18`.
 - The current player model is `Assets/Characters/CampusTraveler.fbx` (about 3.1 MB). Although the FBX contains avatar metadata, `CharacterImport.cs` deliberately imports it as Legacy Animation.
 - `CampusGame` directly drives an `Animation` component with named clips such as `Idle`, `Walk`, `Run`, `Jump`, and `Fall`, and also expects facial blend shapes when present.
 - The model is referenced directly as an FBX prefab instance in the three campus scenes and is also loaded by `CampusBuilder.cs`; replacing it safely requires an adapter or coordinated scene/builder changes, not a blind file overwrite.
@@ -29,11 +29,13 @@ Add a male/female character choice to the game-start flow and replace the curren
 - 2026-10-18: The player chooses male or female before the first game start. The choice is persisted across launches, and the pause menu will provide a way to change it later.
 - 2026-10-18: Use two same-style characters from the free Hodaart `Low Poly Character Collection 3` package, subject to a compatibility trial in Unity 6000.3.26f1 before permanent integration.
 - 2026-10-18: Keep the existing player movement root, collision, camera target, travel state, and quest state unchanged; switch only the visual character and its animation driver.
+- 2026-10-18: The user reviewed the written design and approved proceeding to implementation planning.
 
 ## Changed files
 
 - `PROJECT_STATE.md` — created as durable handoff context.
 - `docs/superpowers/specs/2026-10-18-player-gender-selection-design.md` — approved design covering asset selection, architecture, UI flow, persistence, compatibility gates, validation, and rollback.
+- `docs/superpowers/plans/2026-10-18-player-gender-selection.md` — task-by-task TDD implementation plan with exact interfaces, commands, commits, compatibility gate, and runtime QA.
 
 ## Validation performed
 
@@ -44,11 +46,12 @@ Add a male/female character choice to the game-start flow and replace the curren
 - Located the exact start/continue panel, reset action, save keys, and automated character checks in `CampusGame.cs`.
 - Completed the design self-review for placeholders, contradictions, scope, and ambiguity. The final spec fixes the save key/value mapping, QA default, qualifying-model criteria, airborne animation behavior, and old-model fallback.
 - The approved design and this durable state were committed together using the user-specified repository-local Git identity.
+- Self-reviewed the implementation plan for design coverage, placeholder text, interface/type consistency, safe handling of existing user changes, and staged-file scope.
 
 ## Next steps
 
-- User review of the written design specification.
-- After written-spec approval, create an implementation plan.
+- Choose either subagent-driven or inline plan execution.
+- Begin with the Asset Store import/Unity 6000.3.26f1 compatibility gate; obtain approval of the exact young-adult male/female prefab pair before runtime integration.
 
 ## Git identity resolution
 
