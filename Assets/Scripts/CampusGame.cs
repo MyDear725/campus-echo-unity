@@ -31,7 +31,8 @@ public class CampusGame : MonoBehaviour {
   if(!qa){started=PlayerPrefs.GetInt("CampusUnityStarted",0)==1;collected=PlayerPrefs.GetInt("CampusUnityMemories",0)&7;complete=started&&collected==7&&PlayerPrefs.GetInt("CampusUnityComplete",0)==1;}
   if(!started){collected=0;complete=false;}
   for(int i=0;i<memories.Length;i++)memories[i].SetActive((collected&(1<<i))==0);
-  if(interfaceFont==null)interfaceFont=Font.CreateDynamicFontFromOSFont("Microsoft YaHei",20);
+  if(interfaceFont==null)interfaceFont=Resources.Load<Font>("CampusFont");
+  if(interfaceFont==null)interfaceFont=Font.CreateDynamicFontFromOSFont(new string[]{"Arial Unicode MS","Hiragino Sans GB","STHeiti Medium","Microsoft YaHei","SimHei"},20);
   BuildMap();if(pixelStudy&&!qa)Teleport(new Vector3(65,.23f,-72));ApplyCursor();if(qa){StartCoroutine(QA());StartCoroutine(QATimeout());}
  }
  void ApplyCursor(){bool free=paused||Automated||UiBlocking;Cursor.lockState=free?CursorLockMode.None:CursorLockMode.Locked;Cursor.visible=free;}
@@ -124,7 +125,8 @@ public class CampusGame : MonoBehaviour {
  int Count(){return (collected&1)+((collected>>1)&1)+((collected>>2)&1);}
  void OnGUI(){
   if(pixelStudy)followCamera.GetComponent<CampusPixelView>()?.DrawBackground();
-  GUI.skin.font=interfaceFont;
+  if(interfaceFont==null)interfaceFont=Resources.Load<Font>("CampusFont");
+  GUI.skin.font=interfaceFont;GUI.skin.button.font=interfaceFont;GUI.skin.box.font=interfaceFont;GUI.skin.label.font=interfaceFont;
   if(title==null){title=new GUIStyle(GUI.skin.label){font=interfaceFont,fontSize=26,fontStyle=FontStyle.Bold};body=new GUIStyle(GUI.skin.label){font=interfaceFont,fontSize=17,wordWrap=true};small=new GUIStyle(body){fontSize=14};}
   float scale=Mathf.Clamp(Screen.height/900f,.7f,1.5f);GUI.matrix=Matrix4x4.Scale(Vector3.one*scale);float w=Screen.width/scale,h=Screen.height/scale;
   bool indoors=Interiors&&Interiors.Inside;

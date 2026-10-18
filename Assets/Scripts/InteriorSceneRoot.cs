@@ -27,6 +27,11 @@ public class InteriorSceneRoot : MonoBehaviour
     public Transform[] exits;
     public InteriorConnection[] connections=Array.Empty<InteriorConnection>();
     [Min(.5f)] public float exitRadius=2.4f;
+    [Tooltip("Optional. Exit i is bound to the entrance whose EntranceId is " +
+             "exitEntranceIds[i]; leaving through it returns to THAT doorway outside. " +
+             "Keep the array aligned with exits. Leave an entry empty (or omit the " +
+             "array) to fall back to the entrance the player came in through.")]
+    public string[] exitEntranceIds;
     public float fallRecoveryHeight=-10;
     public bool isPlaceholder=true;
     public bool showExitMarkers=true;
@@ -49,13 +54,41 @@ public class InteriorSceneRoot : MonoBehaviour
 
     public Transform FindSpawn(string id)=>spawnPoints?.FirstOrDefault(p=>p!=null&&p.id==id)?.anchor;
     public InteriorConnection NearbyConnection(Vector3 position)=>connections?.Where(c=>c!=null&&c.IsNear(position)).OrderBy(c=>(c.anchor.position-position).sqrMagnitude).FirstOrDefault();
-    public bool NearExit(Vector3 position)=>exits!=null&&exits.Any(p=>p&&p.gameObject.activeInHierarchy&&Mathf.Abs(p.position.y-position.y)<2&&Vector2.Distance(new Vector2(p.position.x,p.position.z),new Vector2(position.x,position.z))<=exitRadius);
+
+    // The exit the player is standing at, or null. NearExit() delegates to this so the
+    // prompt, the E key and the return position all describe the same doorway.
+    public Transform NearestExit(Vector3 position)
+    {
+        if(exits==null)return null;
+        Transform best=null;float bestSqr=float.MaxValue;
+        foreach(var e in exits)
+        {
+            if(!e||!e.gameObject.activeInHierarchy)continue;
+            if(Mathf.Abs(e.position.y-position.y)>=2)continue;
+            float sqr=(new Vector2(e.position.x,e.position.z)-new Vector2(position.x,position.z)).sqrMagnitude;
+            if(sqr>exitRadius*exitRadius)continue;
+            if(sqr<bestSqr){bestSqr=sqr;best=e;}
+        }
+        return best;
+    }
+
+    // The EntranceId bound to an exit, or null when the exit has no binding.
+    public string ExitEntranceId(Transform exit)
+    {
+        if(exit==null||exits==null||exitEntranceIds==null)return null;
+        int i=Array.IndexOf(exits,exit);
+        if(i<0||i>=exitEntranceIds.Length)return null;
+        return string.IsNullOrWhiteSpace(exitEntranceIds[i])?null:exitEntranceIds[i];
+    }
+
+    public bool NearExit(Vector3 position)=>NearestExit(position)!=null;
     public string ValidateContract(string expectedId,string spawnId) {
         if(buildingId!=expectedId)return "室内建筑 ID 与入口配置不一致";
         if(!FindSpawn(spawnId))return "室内缺少出生点："+spawnId;
         if(spawnPoints.Count(p=>p!=null&&p.id==spawnId)!=1)return "室内出生点 ID 重复："+spawnId;
         if(exits==null||!exits.Any(e=>e&&e.gameObject.activeInHierarchy))return "室内未设置可用出口";
         if(FindSpawn(spawnId).gameObject.scene!=gameObject.scene||exits.Where(e=>e).Any(e=>e.gameObject.scene!=gameObject.scene))return "出生点或出口不属于当前室内场景";
+        if(exitEntranceIds!=null&&exitEntranceIds.Length>exits.Length)return "出口绑定数组 exitEntranceIds 比 exits 长";
         return null;
     }
     void OnDrawGizmos() {

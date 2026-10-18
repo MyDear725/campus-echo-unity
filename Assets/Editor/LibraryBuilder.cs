@@ -92,7 +92,12 @@ public static class LibraryBuilder
         if(!rear){rear=ScriptableObject.CreateInstance<BuildingEntranceDefinition>();AssetDatabase.CreateAsset(rear,rearPath);}
         rear.buildingId="library";rear.entranceId="library-rear";rear.displayName="图书馆 · 后门";rear.category=CampusBuildingCategory.Library;rear.mapFeatureId=77917;
         rear.approachMapPosition=new Vector3(84,.23f,92);rear.returnMapPosition=new Vector3(85.4f,.23f,92);rear.enterYaw=90;
-        rear.interiorScenePath=entry.interiorScenePath;rear.spawnId=entry.spawnId;EditorUtility.SetDirty(rear);
+        rear.interiorScenePath=entry.interiorScenePath;
+        // The rear door is on the NORTH side of the campus building, so entering it must
+        // use the interior's north spawn point; the front door keeps "main". Copying
+        // entry.spawnId here used to silently reset the rear door to "main", which put
+        // the player at the opposite end of the interior.
+        entry.spawnId="main";rear.spawnId="north";EditorUtility.SetDirty(rear);EditorUtility.SetDirty(entry);
         var travel=game.GetComponent<BuildingInteriorTravel>();
         travel.entrances=travel.entrances.Where(e=>e&&e.EntranceId!="library-rear").Concat(new[]{rear}).ToArray();EditorUtility.SetDirty(travel);
         if(!game.GetComponent<LibraryPreview>())game.gameObject.AddComponent<LibraryPreview>();
