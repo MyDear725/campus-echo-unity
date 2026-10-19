@@ -11,7 +11,7 @@ using UnityEngine.Rendering;
 // existing reflected campus root. No browser exporter or external model is needed.
 public static class DormitoryBuilder
 {
-    const string Folder = "Assets/DormitoryRevision";
+    static string Folder = "Assets/DormitoryRevision";
     const string Scene = "Assets/Scenes/CampusLiving.unity";
     const string Group = "宿舍 · 参考照片外立面";
     const int Floors = 8;
@@ -165,6 +165,12 @@ public static class DormitoryBuilder
         public Vector3 At(float x,float y,float depth)=>a+u*x+Vector3.up*y+n*depth;
     }
 
+    // Reuse the detailed facade without rebuilding or changing the old campus.
+    public static void BuildMappedDorm(CampusFeature feature,Transform holder,Vector2 entrance,string outputFolder){
+        string oldFolder=Folder;Folder=outputFolder;bool had=Entries.TryGetValue(feature.id,out var oldEntry);Entries[feature.id]=entrance;
+        try{Directory.CreateDirectory(Folder+"/Meshes");Directory.CreateDirectory(Folder+"/Materials");AssetDatabase.Refresh();MakeMaterials();BuildDorm(feature,holder);}
+        finally{Folder=oldFolder;if(had)Entries[feature.id]=oldEntry;else Entries.Remove(feature.id);}
+    }
     static void BuildDorm(CampusFeature f,Transform holder)
     {
         batches=materials.Keys.ToDictionary(k=>k,k=>new Geometry());

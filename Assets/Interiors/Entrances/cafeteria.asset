@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: cafeteria
   m_EditorClassIdentifier: Assembly-CSharp::BuildingEntranceDefinition
   buildingId: cafeteria
+  entranceId: 
   displayName: "\u7B2C\u516D\u98DF\u5802"
   category: 2
   mapFeatureId: 77943
-  approachMapPosition: {x: 180, y: 0.23, z: 8}
-  returnMapPosition: {x: 178.6, y: 0.23, z: 8}
-  enterYaw: -90
+  approachMapPosition: {x: 222.8, y: 3.73, z: 10}
+  returnMapPosition: {x: 218, y: 3.1399999, z: 10}
+  enterYaw: 270
   interactionRadius: 2.5
   interiorScenePath: Assets/Interiors/Scenes/cafeteria.unity
   spawnId: main

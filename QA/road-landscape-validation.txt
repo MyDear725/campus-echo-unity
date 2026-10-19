@@ -1,0 +1,6 @@
+PASS: 24 road routes and uninterrupted eight-node landscape tour; north-low south-high grade; straight covered bridge flights both directions, aligned cafeteria front; dorm north LG to south 1F and reverse, correct exterior exits.
+
+PASS: 15 doorway prompts and E entry/exit round trips; library front/rear share one scene and return to their own doors; duplicate-input guards; paused input; original return points; campus visibility; one camera/listener; floor/wall collisions; fall recovery; outdoor shortcut lockout; missing scene and invalid spawn rollback; retry after failure; lifecycle hooks.
+
+Eight eye-level landscape screenshots inspected. Build: road-landscape-release-build.log, exit 0.
+LOD trees and 48 m mesh chunks reduce unnecessary drawing. No full-campus FPS benchmark is claimed.

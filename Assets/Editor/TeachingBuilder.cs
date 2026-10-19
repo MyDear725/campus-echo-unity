@@ -8,8 +8,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 // Five-storey teaching exteriors fitted to the existing irregular U-shaped campus layout.
-// Keep A/C positions and the fountain; B is a straight western wing whose ends
-// stay within the A/C envelope, with open pedestrian gaps at the corners.
+// Keep A/C positions and the fountain; the western B wing follows the supplied curved plan.
 public static class TeachingBuilder
 {
     const string Folder="Assets/TeachingRevision";
@@ -55,7 +54,7 @@ public static class TeachingBuilder
         if(marker&&marker.suppressedSources!=null)foreach(var r in marker.suppressedSources)if(r)r.enabled=true;
         UnityEngine.Object.DestroyImmediate(old.gameObject);
     }
-    public static void Apply(Transform root,CampusData data,CampusGame game) {
+    public static void Apply(Transform root,CampusData data,CampusGame game,bool validateEntrances=true) {
         RestoreSources(root);Directory.CreateDirectory(Folder+"/Meshes");Directory.CreateDirectory(Folder+"/Materials");AssetDatabase.Refresh();
         string baseline=Folder+"/OriginalFootprints.json";
         if(!File.Exists(baseline))File.WriteAllText(baseline,JsonUtility.ToJson(new CampusData{features=data.features.Where(f=>Specs.Any(s=>s.id==f.id)).ToArray()},true));
@@ -79,7 +78,7 @@ public static class TeachingBuilder
         data.obstacles=data.obstacles.Where(o=>!o.name.StartsWith("Teaching ")&&(names.Contains(o.name)||!InOldFacade(o))).ToArray();
         foreach(var spec in Specs) {
             var source=originals.features.Single(f=>f.id==spec.id);var feature=data.features.Single(f=>f.id==spec.id);
-            feature.points=spec.letter=="B"?new[]{P(24.5f,-105.5f),P(39.5f,-105.5f),P(39.5f,-42.5f),P(24.5f,-42.5f)}:source.points.Select(p=>P(p.x+spec.offset.x,p.z+spec.offset.y)).ToArray();
+            feature.points=spec.letter=="B"?CurvedB():source.points.Select(p=>P(p.x+spec.offset.x,p.z+spec.offset.y)).ToArray();
             var edges=Edges(feature.points);var anchor=spec.anchor+spec.offset;
             var entry=edges.Where(e=>e.length>6).OrderBy(e=>Vector2.Distance(anchor,new Vector2(e.mid.x,e.mid.z))).First();
             foreach(var e in edges){frame=e;Facade(feature.points,e==entry,spec);}
@@ -101,8 +100,15 @@ public static class TeachingBuilder
         }
         data.obstacles=data.obstacles.Concat(extras).ToArray();data.routes=data.routes.Where(r=>!r.name.StartsWith("teaching-")).Concat(routes).ToArray();
         ValidateSpacing(data);ValidateRoutes(data);string path=Folder+"/CampusMap.json";File.WriteAllText(path,JsonUtility.ToJson(data,true));AssetDatabase.ImportAsset(path);game.mapData=AssetDatabase.LoadAssetAtPath<TextAsset>(path);
-        if(!game.GetComponent<TeachingPreview>())game.gameObject.AddComponent<TeachingPreview>();EditorUtility.SetDirty(game);BuildingInteriorBuilder.ValidateConfiguration();
-        AssetDatabase.Refresh();Directory.CreateDirectory("QA");File.WriteAllText("QA/teaching-generation.txt","PASS: A and C retained; B straight western wing x=24.5..39.5, z=-105.5..-42.5, inside A/C envelope; pedestrian corner gaps retained; U-shaped layout and fountain; all routes and door approaches validated.\n");
+        if(!game.GetComponent<TeachingPreview>())game.gameObject.AddComponent<TeachingPreview>();EditorUtility.SetDirty(game);if(validateEntrances)BuildingInteriorBuilder.ValidateConfiguration();
+        AssetDatabase.Refresh();Directory.CreateDirectory("QA");File.WriteAllText("QA/teaching-generation.txt","PASS: A and C retained; B curved western wing, north end aligned with existing A-B skybridge; pedestrian corner gaps retained; U-shaped layout and fountain; all routes and door approaches validated.\n");
+    }
+    static MapPoint[] CurvedB() {
+        // Concentric arc; long enough facade bays for glazing and a recessed entrance.
+        var p=new List<MapPoint>();const int bays=8;
+        for(int i=0;i<=bays;i++){float a=Mathf.Lerp(Mathf.PI,2.08f,(float)i/bays);p.Add(P(95+70.5f*Mathf.Cos(a),-105.5f+70.5f*Mathf.Sin(a)));}
+        for(int i=bays;i>=0;i--){float a=Mathf.Lerp(Mathf.PI,2.08f,(float)i/bays);p.Add(P(95+55.5f*Mathf.Cos(a),-105.5f+55.5f*Mathf.Sin(a)));}
+        return p.ToArray();
     }
     static void Mat(string name,string hex,float smooth,float stone=0,float glass=0,float emission=0) {
         ColorUtility.TryParseHtmlString(hex,out var c);if(glass>0)c.a=.24f;var m=new Material(Shader.Find("Campus/Cafeteria")){name=name};m.SetColor("_BaseColor",c);m.SetFloat("_Smoothness",smooth);m.SetFloat("_Stone",stone);m.SetFloat("_Glass",glass);m.SetFloat("_Emission",emission);

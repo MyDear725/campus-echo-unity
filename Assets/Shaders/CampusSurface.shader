@@ -31,12 +31,12 @@ Shader "Campus/Surface" {
     half4 c=SAMPLE_TEXTURE2D(_BaseMap,sampler_BaseMap,i.uv)*_BaseColor*i.color;clip(c.a-_Cutoff);
     float3 view=normalize(GetWorldSpaceViewDir(i.world));
     float3 n=normalize(i.normal);if(dot(n,view)<0)n=-n;
-    if(_Water>.5)n=normalize(n+float3(sin(i.world.x*1.4+_Time.y)*.13,0,cos(i.world.z*1.1+_Time.y*.8)*.13));
+    if(_Water>.5){float2 p=i.world.xz;float t=_Time.y*.55;float a=sin(dot(p,float2(.63,.48))+t),b=cos(dot(p,float2(-.35,.81))-t*.73);float detail=sin(dot(p,float2(2.3,-1.7))+t*1.2);n=normalize(n+float3(a*.028+b*.018,0,b*.024+detail*.008));}
     Light l=GetMainLight(TransformWorldToShadowCoord(i.world));
     half3 ambient=lerp(half3(.15,.17,.15),half3(.37,.42,.46),n.y*.5+.5);
     half3 lit=c.rgb*(max(SampleSH(n),ambient)+l.color*saturate(dot(n,l.direction))*(.22+.78*l.shadowAttenuation));
     lit+=l.color*pow(saturate(dot(n,normalize(view+l.direction))),lerp(12,180,_Smoothness))*_Smoothness*.3*l.shadowAttenuation;
-    if(_Water>.5){float fresnel=pow(1-saturate(dot(n,view)),3);lit=lerp(lit,half3(.47,.66,.76),fresnel*.7);}
+    if(_Water>.5){float fresnel=pow(1-saturate(dot(n,view)),4);float3 reflection=reflect(-view,n);half3 sky=lerp(half3(.26,.39,.39),half3(.63,.73,.79),saturate(reflection.y*1.6+.1));lit=lerp(lit,sky,.18+fresnel*.56);}
     // The terrain is one large plane: evaluate fog per pixel, not at its distant corners.
     float fogDistance=distance(GetCameraPositionWS(),i.world)*.0012;
     return half4(lerp(lit,unity_FogColor.rgb,1-exp(-fogDistance*fogDistance)),c.a);

@@ -27,6 +27,7 @@ public class BuildingInteriorTravel : MonoBehaviour
     int originalPlayerLayer;
     Vector3 fallbackOutsidePosition;
     float fade;
+    BuildingEntranceDefinition exteriorDestination;
     CameraClearFlags outsideClearFlags;
     Color outsideBackground;
 
@@ -67,6 +68,8 @@ public class BuildingInteriorTravel : MonoBehaviour
     }
     public bool TryExit() {
         if(State!=TravelState.Inside||game.paused||!Interior||!Interior.NearExit(game.player.position))return false;
+        var exitId=Interior.ExteriorExitAt(game.player.position);
+        exteriorDestination=entrances.FirstOrDefault(e=>e&&e.EntranceId==exitId&&e.buildingId==Current.buildingId)??Current;
         State=TravelState.Leaving;StartCoroutine(Leave());return true;
     }
     void Fail(string reason){LastError=reason;game.Notify("暂时无法进入："+reason+"。你仍在校园中。");Debug.LogWarning("Interior transition: "+reason);}
@@ -154,7 +157,7 @@ public class BuildingInteriorTravel : MonoBehaviour
     }
     IEnumerator Leave() {
         yield return new WaitForSecondsRealtime(.2f);
-        var previous=Current;
+        var previous=exteriorDestination?exteriorDestination:Current;exteriorDestination=null;
         try{Interior.onPlayerLeaving.Invoke();}catch(Exception e){Debug.LogException(e);}
         IndoorController.enabled=false;game.player.gameObject.layer=originalPlayerLayer;
         SceneManager.SetActiveScene(campusScene);

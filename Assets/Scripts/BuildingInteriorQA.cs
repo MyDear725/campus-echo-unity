@@ -30,6 +30,7 @@ public class BuildingInteriorQA : MonoBehaviour
         Require(Vector3.Distance(libraryDoors[0].returnMapPosition,libraryDoors[1].returnMapPosition)>25,"Library door return points are not on opposite sides");
         game.Teleport(new Vector3(3,.23f,194));Require(travel.NearbyEntrance()==null,"Door prompt appeared far from entrance");
         foreach(var entry in travel.entrances) {
+            Debug.Log("ENTRANCE_QA: "+entry.EntranceId);
             game.SetTravelPose(game.MapToWorld(entry.approachMapPosition),entry.enterYaw,12);
             Require(travel.NearbyEntrance()==entry,"Wrong entry prompt: "+entry.buildingId);
             game.paused=true;Require(!travel.TryEnter(entry),"Entered while paused");game.paused=false;
@@ -41,19 +42,40 @@ public class BuildingInteriorQA : MonoBehaviour
             Require(FindObjectsByType<Camera>(FindObjectsSortMode.None).Length==1&&FindObjectsByType<AudioListener>(FindObjectsSortMode.None).Length==1,"Duplicate player camera/listener");
             var spawn=travel.Interior.FindSpawn(entry.spawnId);Require(Vector3.Distance(game.player.position,spawn.position)<.1f,"Wrong spawn");
             var at=game.player.position;game.VisitCafeteria();game.VisitDormitory();game.Teleport(Vector3.one*100);Require(Vector3.Distance(at,game.player.position)<.01f,"Outdoor shortcut escaped interior");
-            Require(!travel.TryExit(),"Exit activated from across room");
+            // Imported interiors spawn just inside the door. Walk clear of its
+            // interaction radius before testing that distant exits are rejected.
+            for(int i=0;i<15&&travel.Interior.NearExit(game.player.position);i++)travel.MoveCharacter(spawn.forward*.2f);
+            Require(!travel.Interior.NearExit(game.player.position),"Cannot walk clear of entrance: "+entry.buildingId);
+            Require(!travel.TryExit(),"Exit activated from across room: "+entry.buildingId);
+            if(entry.buildingId=="library") {
+                var lift=FindFirstObjectByType<LibraryIndoorInteractions>();Require(lift!=null,"Library interactions missing");
+                var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
+                for(int floor=2;floor<=4;floor++) {
+                    typeof(LibraryIndoorInteractions).GetMethod("OpenLift",flags).Invoke(lift,null);Require(game.UiCursorActive,"Lift did not release cursor");
+                    typeof(LibraryIndoorInteractions).GetMethod("ChooseFloor",flags).Invoke(lift,new object[]{floor});
+                    Require(!game.UiCursorActive&&Mathf.Abs(game.player.position.y-((floor-1)*4.3f+.06f))<.05f,"Lift arrival or cursor restore failed");
+                    Require(Physics.Raycast(game.player.position+Vector3.up*.25f,Vector3.down,1),"Lift arrival has no floor");
+                }
+                travel.IndoorController.enabled=false;game.SetTravelPose(spawn.position,spawn.eulerAngles.y);travel.IndoorController.enabled=true;Physics.SyncTransforms();
+            }
+            if(entry.buildingId=="cafeteria"||entry.buildingId=="library") {
+                var position=camera.transform.position;var rotation=camera.transform.rotation;
+                camera.transform.position=entry.buildingId=="cafeteria"?new Vector3(11,2.5f,-12):new Vector3(0,2.5f,-11);
+                camera.transform.LookAt(new Vector3(0,2,3));DormitoryPreview.SaveCamera(camera,Path.Combine(folder,entry.buildingId+"-updated.png"));
+                camera.transform.SetPositionAndRotation(position,rotation);
+            }
             // Capsule falls onto floor and is stopped by a wall (real interior colliders).
-            for(int i=0;i<30;i++)travel.MoveCharacter(Vector3.down*.1f);Require(game.player.position.y>-.05f&&game.player.position.y<.15f,"Indoor floor collision failed");
-            Require(Physics.Raycast(game.player.position+Vector3.up*.9f,Vector3.right,out var wall,80,Physics.DefaultRaycastLayers),"No interior boundary to the right");
+            for(int i=0;i<30;i++)travel.MoveCharacter(Vector3.down*.1f);Require(game.player.position.y>spawn.position.y-.15f&&game.player.position.y<spawn.position.y+.1f,"Indoor floor collision failed");
+            Require(Physics.Raycast(game.player.position+Vector3.up*1.4f,Vector3.right,out var wall,80,Physics.DefaultRaycastLayers),"No interior boundary at standing height: "+entry.EntranceId);
             float wallX=wall.point.x;
             for(int i=0;i<Mathf.CeilToInt((wall.distance+3)/.2f);i++)travel.MoveCharacter(Vector3.right*.2f);
-            Require(game.player.position.x<wallX-.15f,"Walked through interior wall");
+            Require(game.player.position.x<wallX-.15f,"Walked through interior wall: "+entry.EntranceId);
             travel.IndoorController.enabled=false;game.SetTravelPose(new Vector3(0,-20,0),0);travel.IndoorController.enabled=true;yield return null;yield return null;
             Require(Vector3.Distance(game.player.position,spawn.position)<.1f,"Fall recovery failed");
             if(entry.buildingId=="cafeteria") {
                 yield return new WaitForSecondsRealtime(.3f);DormitoryPreview.SaveCamera(camera,Path.Combine(folder,"placeholder.png"));
             }
-            var exit=travel.Interior.exits.First(e=>e);travel.IndoorController.enabled=false;game.SetTravelPose(exit.position,180);travel.IndoorController.enabled=true;Physics.SyncTransforms();
+            var mappedExit=travel.Interior.exteriorExits.FirstOrDefault(e=>e!=null&&e.entranceId==entry.EntranceId);var exit=mappedExit?.anchor?mappedExit.anchor:travel.Interior.exits.First(e=>e);travel.IndoorController.enabled=false;game.SetTravelPose(exit.position,180);travel.IndoorController.enabled=true;Physics.SyncTransforms();
             Require(travel.InteractionPrompt.Contains("返回"),"Return prompt missing");Require(game.Interact(),"Return E dispatcher failed");Require(!travel.TryExit(),"Duplicate exit accepted");yield return WaitUntilSettled();
             Require(!travel.Inside&&SceneManager.sceneCount==1&&SceneManager.GetActiveScene()==campus,"Interior not unloaded");
             Require(Vector3.Distance(game.player.position,game.MapToWorld(entry.returnMapPosition))<.02f,"Wrong return position");

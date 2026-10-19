@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: dormitory-2
   m_EditorClassIdentifier: Assembly-CSharp::BuildingEntranceDefinition
   buildingId: dormitory-2
+  entranceId: 
   displayName: "\u7B2C\u4E8C\u5B66\u751F\u516C\u5BD3"
   category: 1
   mapFeatureId: 77933
-  approachMapPosition: {x: 232, y: 0.23, z: -121}
-  returnMapPosition: {x: 232, y: 0.23, z: -119.6}
+  approachMapPosition: {x: 232, y: 0.29, z: -121.8}
+  returnMapPosition: {x: 232, y: 0.29, z: -120.2}
   enterYaw: 180
   interactionRadius: 2.5
   interiorScenePath: Assets/Interiors/Scenes/dormitory-2.unity

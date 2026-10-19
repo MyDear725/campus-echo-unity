@@ -44,5 +44,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Interiors/Scenes/dormitory-6.unity
     guid: 905e72677b850b045905fc0074adce1f
+  - enabled: 1
+    path: Assets/CampusPlanRevision/Dormitory7.unity
+    guid: 00000000000000000000000000000000
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

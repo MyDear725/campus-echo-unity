@@ -20,11 +20,15 @@ using UnityEngine.Events;
 
 // Keep exactly one of these in each interior scene. Artists own the remaining
 // hierarchy; no CampusGame, player, camera or AudioListener should be duplicated.
+[Serializable] public class InteriorExteriorExit { public Transform anchor; public string entranceId; }
+
 public class InteriorSceneRoot : MonoBehaviour
 {
     public string buildingId;
     public InteriorSpawnPoint[] spawnPoints;
     public Transform[] exits;
+    public InteriorExteriorExit[] exteriorExits=Array.Empty<InteriorExteriorExit>();
+    public string ExteriorExitAt(Vector3 p)=>exteriorExits?.Where(e=>e!=null&&e.anchor&&Mathf.Abs(e.anchor.position.y-p.y)<1.5f&&Vector2.Distance(new Vector2(p.x,p.z),new Vector2(e.anchor.position.x,e.anchor.position.z))<=exitRadius).OrderBy(e=>(e.anchor.position-p).sqrMagnitude).FirstOrDefault()?.entranceId;
     public InteriorConnection[] connections=Array.Empty<InteriorConnection>();
     [Min(.5f)] public float exitRadius=2.4f;
     public float fallRecoveryHeight=-10;

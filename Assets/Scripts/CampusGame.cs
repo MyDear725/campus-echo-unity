@@ -12,8 +12,11 @@ public class CampusGame : MonoBehaviour {
  public GameObject[] memories;
  public bool paused=true;
  public bool pixelStudy;
+ public CampusOutdoorTraversal Outdoor {get;private set;}
  public BuildingInteriorTravel Interiors {get;private set;}
  public bool Automated {get;private set;}
+ public bool UiCursorActive {get;private set;}
+ int uiCursorChangedFrame=-1;
  public bool ExteriorShortcutsAllowed=>Interiors==null||(!Interiors.Inside&&!Interiors.Busy);
  public float mapXSign=1;
  public Vector3 MapToWorld(Vector3 point)=>new Vector3(point.x*mapXSign,point.y,point.z);
@@ -23,7 +26,8 @@ public class CampusGame : MonoBehaviour {
  float messageUntil=10; Animation animationPlayer; SkinnedMeshRenderer face; string motion=""; GUIStyle title,body,small; Texture2D minimap;
  void Awake(){
   data=JsonUtility.FromJson<CampusData>(mapData.text);qa=Environment.GetCommandLineArgs().Contains("-campusQA");
-  Interiors=GetComponent<BuildingInteriorTravel>();Automated=qa||Environment.GetCommandLineArgs().Contains("-entranceQA")||Environment.GetCommandLineArgs().Contains("-teachingCQA")||Environment.GetCommandLineArgs().Contains("-teachingABQA")||Environment.GetCommandLineArgs().Contains("-skybridgeQA");
+  Interiors=GetComponent<BuildingInteriorTravel>();Automated=qa||Environment.GetCommandLineArgs().Contains("-campusPlanQA")||Environment.GetCommandLineArgs().Contains("-gymInteriorQA")||Environment.GetCommandLineArgs().Contains("-entranceQA")||Environment.GetCommandLineArgs().Contains("-teachingCQA")||Environment.GetCommandLineArgs().Contains("-teachingABQA")||Environment.GetCommandLineArgs().Contains("-skybridgeQA");
+  Outdoor=GetComponent<CampusOutdoorTraversal>();
   Application.targetFrameRate=60;
   animationPlayer=player.GetComponentInChildren<Animation>();face=player.GetComponentInChildren<SkinnedMeshRenderer>();
   foreach(var actor in new[]{player,guide})foreach(var skin in actor.GetComponentsInChildren<SkinnedMeshRenderer>())skin.updateWhenOffscreen=true;
@@ -33,10 +37,14 @@ public class CampusGame : MonoBehaviour {
   if(interfaceFont==null)interfaceFont=Font.CreateDynamicFontFromOSFont("Microsoft YaHei",20);
   BuildMap();if(pixelStudy&&!qa)Teleport(new Vector3(65,.23f,-72));ApplyCursor();if(qa){StartCoroutine(QA());StartCoroutine(QATimeout());}
  }
- void ApplyCursor(){Cursor.lockState=paused||Automated?CursorLockMode.None:CursorLockMode.Locked;Cursor.visible=paused||Automated;}
+ public void SetUiCursor(bool active){UiCursorActive=active;uiCursorChangedFrame=Time.frameCount;ApplyCursor();}
+ void ApplyCursor(){bool free=paused||Automated||UiCursorActive;Cursor.lockState=free?CursorLockMode.None:CursorLockMode.Locked;Cursor.visible=free;}
  void OnApplicationFocus(bool focus){if(!focus&&!Automated){paused=true;ApplyCursor();}}
  void Update(){
   if(!Automated){
+   // Modal interior menus own movement, mouse look and Escape until closed.
+   // Also consume the closing frame so Escape cannot pause the game as well.
+   if(UiCursorActive||uiCursorChangedFrame==Time.frameCount){Animate("Idle",0);return;}
    if(Input.GetKeyDown(KeyCode.Escape)){paused=!paused;ApplyCursor();}
    if(paused){Animate("Idle",0);return;}
    if(Interiors&&Interiors.Busy){Animate("Idle",0);return;}
@@ -51,6 +59,7 @@ public class CampusGame : MonoBehaviour {
    var movement=(player.right*input.x+player.forward*input.y)*speed*Mathf.Min(Time.deltaTime,.06f);
    if(grounded&&Input.GetKeyDown(KeyCode.Space)){vertical=6.5f;grounded=false;}
    if(Interiors&&Interiors.Inside)MoveIndoor(movement,Mathf.Min(Time.deltaTime,.06f));
+   else if(Outdoor){var flags=Outdoor.Move(movement,Mathf.Min(Time.deltaTime,.06f),ref vertical,false);grounded=(flags&CollisionFlags.Below)!=0;}
    else {player.position=MapToWorld(CampusCollision.Move(WorldToMap(before),WorldToMap(movement),data.obstacles));
     if(!grounded){vertical-=18*Time.deltaTime;var p=player.position;p.y+=vertical*Time.deltaTime;if(p.y<=.23f){p.y=.23f;grounded=true;vertical=0;}player.position=p;}}
    float actual=Vector2.Distance(new Vector2(before.x,before.z),new Vector2(player.position.x,player.position.z))/Mathf.Max(.001f,Time.deltaTime);
@@ -58,7 +67,7 @@ public class CampusGame : MonoBehaviour {
    if(ExteriorShortcutsAllowed){
     if(Input.GetKeyDown(KeyCode.R))Teleport(new Vector3(3,.23f,194));
     if(Input.GetKeyDown(KeyCode.T)){yaw=targetYaw=180;pitch=targetPitch=18;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(new Vector3(65,.23f,-72));Say("教学区：ABC 教学楼与喷泉广场。");}
-    if(Input.GetKeyDown(KeyCode.L)){yaw=targetYaw=180;pitch=targetPitch=18;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(new Vector3(175.14f,.23f,14));Say("生活区西1门：沿西侧主路向北，可到恩苑和公寓中庭。");}}
+    if(Input.GetKeyDown(KeyCode.L)){yaw=targetYaw=180;pitch=targetPitch=18;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(Outdoor?new Vector3(209,.23f,38):new Vector3(175.14f,.23f,14));Say("生活区：沿主路向北下坡，可到七舍和公寓花园。");}}
    if(Input.GetKeyDown(KeyCode.E))Interact();
   }
   if(face!=null){for(int i=0;i<face.sharedMesh.blendShapeCount;i++){string n=face.sharedMesh.GetBlendShapeName(i);if(n.Contains("Blink"))face.SetBlendShapeWeight(i,Mathf.Pow(Mathf.Max(0,Mathf.Cos(Time.time*1.8f)),35)*100);else if(n.Contains("Smile"))face.SetBlendShapeWeight(i,complete?65:10);}}
@@ -84,12 +93,12 @@ public class CampusGame : MonoBehaviour {
  void LateUpdate(){if(!qa)UpdateCamera();}
  void UpdateCamera(){
   Vector3 pivot=player.position+Vector3.up*1.5f,back=Quaternion.Euler(pitch,yaw,0)*Vector3.back;
-  float d=distance;int mask=Interiors&&Interiors.Inside?Physics.DefaultRaycastLayers:1<<8;if(Physics.SphereCast(pivot,.2f,back,out RaycastHit hit,d,mask,QueryTriggerInteraction.Ignore))d=Mathf.Max(.6f,hit.distance-.15f);
+  float d=distance;int mask=Interiors&&Interiors.Inside?Physics.DefaultRaycastLayers:(1<<8)|(Outdoor?((1<<9)|(1<<10)):0);if(Physics.SphereCast(pivot,.2f,back,out RaycastHit hit,d,mask,QueryTriggerInteraction.Ignore))d=Mathf.Max(.6f,hit.distance-.15f);
   followCamera.transform.position=pivot+back*d;followCamera.transform.rotation=Quaternion.LookRotation(pivot-followCamera.transform.position);
  }
- public void Teleport(Vector3 position){if(!ExteriorShortcutsAllowed)return;player.position=MapToWorld(position);vertical=0;grounded=true;UpdateCamera();}
+ public void Teleport(Vector3 position){if(!ExteriorShortcutsAllowed)return;if(Outdoor)position.y=CampusPlanTerrain.Height(position.x,position.z);player.position=MapToWorld(position);vertical=0;grounded=true;UpdateCamera();}
  public void VisitDormitory(){if(!ExteriorShortcutsAllowed)return;yaw=targetYaw=180;pitch=targetPitch=12;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(new Vector3(245,.23f,-68));Say("宿舍花园：靠近公寓入口，按 E 进入。");}
- public void VisitCafeteria(){if(!ExteriorShortcutsAllowed)return;yaw=targetYaw=270;pitch=targetPitch=8;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(new Vector3(174.5f,.23f,8));Say("学生食堂：向正门走近，按 E 进入。");}
+ public void VisitCafeteria(){if(!ExteriorShortcutsAllowed)return;yaw=targetYaw=270;pitch=targetPitch=8;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(Outdoor?new Vector3(218,3.08f,10):new Vector3(174.5f,.23f,8));Say("学生食堂：向正门走近，按 E 进入。");}
  public bool IsMapWalkable(Vector3 position)=>!CampusCollision.Blocked(position.x,position.z,data.obstacles);
  // Shared travel API uses world coordinates indoors and resets movement/camera state.
  public void SetTravelPose(Vector3 worldPosition,float heading,float elevation=12){player.position=worldPosition;yaw=targetYaw=heading;pitch=targetPitch=elevation;player.rotation=Quaternion.Euler(0,yaw,0);vertical=0;grounded=true;mapOpen=false;Animate("Idle",0);UpdateCamera();}

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d48b6766ecbeb834d824bf8fc868ea02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingEntranceDefinition
+  buildingId: dormitory-7
+  entranceId: dormitory-7-south
+  displayName: "\u4E03\u820D \xB7 1F \u5357\u95E8"
+  category: 1
+  mapFeatureId: 2304982
+  approachMapPosition: {x: 252.5, y: 3.16, z: -27}
+  returnMapPosition: {x: 252.5, y: 3.16, z: -25.5}
+  enterYaw: 180
+  interactionRadius: 2.4
+  interiorScenePath: Assets/CampusPlanRevision/Dormitory7.unity
+  spawnId: upper-south

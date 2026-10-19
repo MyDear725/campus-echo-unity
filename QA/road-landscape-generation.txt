@@ -1,0 +1,5 @@
+Eight connected landscape nodes; metre-scale modules.
+Trees (LOD instances): 178
+Furniture collision volumes: 53
+Bridge deck=6.5m; north dorm7 LG=.23m, south1F=3.08m.
+Main traffic routes retained. Gym route paved for pedestrian priority. West entrance sidewalk and gym jogging ribbon appended to shared route data.

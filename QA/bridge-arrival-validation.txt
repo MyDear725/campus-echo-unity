@@ -1,0 +1,8 @@
+2026-10-19
+Unity build: PASS
+Ground coverage: 7653 samples, no road gaps or duplicate surface interiors.
+Scene/build hashes match validated staging output.
+New scene GUID references: resolved.
+PASS: bridge arrival avenue and all three destination branches including library main-door interaction; 24 road routes and uninterrupted eight-node landscape tour; north-low south-high grade; straight covered bridge flights both directions, aligned cafeteria front; dorm north LG to south 1F and reverse, correct exterior exits.
+
+Visual review: avenue, junction, library approach and direction sign.

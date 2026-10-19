@@ -1,0 +1,3 @@
+Surface patches: 37118; clipped overlapping patches: 10168; visible pieces: 66099.
+Single flush paving height: terrain collider + 0.065 m. Shared terrain triangle subdivision. Mitered living-road corners, open junction borders, teaching B/C spurs join x=74. Living west route joins south ring at z=78.
+Bridge canopy raised 1.2 m, unchanged 6.5 m deck and straight stairs.
