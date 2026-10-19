@@ -4635,6 +4635,225 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 29388541}
   m_Mesh: {fileID: 4300000, guid: f681f374045ff22449343b4cc0b3caef, type: 2}
+--- !u!1 &29808279
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 29808280}
+  - component: {fileID: 29808281}
+  m_Layer: 0
+  m_Name: Selectable UMA Avatar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &29808280
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 29808279}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1898035872}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &29808281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 29808279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcffb0a198605474c8a4d1c67c1515fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UMA_Core::UMA.CharacterSystem.DynamicCharacterAvatar
+  reuseGeneratedMeshes: 0
+  reuseGeneratedTextures: 0
+  inheritGeneratorQuality: 1
+  inheritGeneratorReusePolicy: 0
+  renderers: []
+  defaultRendererAsset: {fileID: 0}
+  userInformation: 
+  alwaysAdjustBounds: 0
+  rawAvatar: 0
+  disableAnimation: 0
+  raceChanged: 0
+  hideRenderers: 0
+  currentLODLevel: 0
+  OverrideTpose: {fileID: 0}
+  atlasResolutionScale: 1
+  ForceRebindAnimator: 0
+  isMeshDirty: 0
+  isShapeDirty: 0
+  isTextureDirty: 0
+  isAtlasDirty: 0
+  needsMaterialClear: 0
+  markNotReadable: 0
+  markDynamic: 0
+  force32bit: 0
+  animationController: {fileID: 9100000, guid: 7b2325c148834db0b13bb8f7dbce1542, type: 2}
+  CharacterCreated:
+    m_PersistentCalls:
+      m_Calls: []
+  CharacterDestroyed:
+    m_PersistentCalls:
+      m_Calls: []
+  CharacterUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  CharacterBeforeUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  CharacterBeforeDnaUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  CharacterDnaUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  CharacterBegun:
+    m_PersistentCalls:
+      m_Calls: []
+  AnimatorStateSaved:
+    m_PersistentCalls:
+      m_Calls: []
+  AnimatorStateRestored:
+    m_PersistentCalls:
+      m_Calls: []
+  PreUpdateUMABody:
+    m_PersistentCalls:
+      m_Calls: []
+  AtlasUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  umaRoot: {fileID: 0}
+  _umaRecipe:
+    raceData: {fileID: 0}
+    recipeName: 
+    texturePaintStageState: 
+    dnaInstanceCollection:
+      dnaInstances: []
+    slotDataList: []
+    sharedColors: []
+  animator: {fileID: 0}
+  KeepAvatar: 0
+  characterHeight: 2
+  characterRadius: 0.25
+  characterMass: 50
+  serializedRecipe: {fileID: 0}
+  umaAdditionalRecipes: []
+  useNPCBuilds: 0
+  DelayUnload: 2
+  BundleCheck: 1
+  UnpackPrefabOnBuild: 1
+  KeepAnimatorController: 1
+  RecreateAnimatorOnRaceChange: 1
+  initializeAnimatorWhenAdded: 0
+  applyRootMotion: 0
+  animatePhysics: 0
+  animatorUpdateMode: 0
+  animatorCullingMode: 2
+  animatorFireEvents: 1
+  RecipeUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  WardrobeAdded:
+    m_PersistentCalls:
+      m_Calls: []
+  WardrobeRemoved:
+    m_PersistentCalls:
+      m_Calls: []
+  CharacterStart:
+    m_PersistentCalls:
+      m_Calls: []
+  BuildCharacterBegun:
+    m_PersistentCalls:
+      m_Calls: []
+  SlotsHidden:
+    m_PersistentCalls:
+      m_Calls: []
+  WardrobeSuppressed:
+    m_PersistentCalls:
+      m_Calls: []
+  hide: 0
+  leanHiding: 0
+  loadBlendShapes: 0
+  loadOnlyUsedBlendshapes: 1
+  loadBlendshapeNormals: 1
+  loadBlendshapeTangents: 1
+  loadAllFrames: 1
+  forceKeepBlendshapes: []
+  keepAvatar: 0
+  keepPredefinedDNA: 0
+  activeRace:
+    name: 
+  defaultChangeRaceOptions: 8
+  cacheCurrentState: 1
+  rebuildSkeleton: 1
+  alwaysRebuildSkeleton: 0
+  forceRebindAnimator: 0
+  preloadWardrobeRecipes:
+    loadDefaultRecipes: 1
+    recipes: []
+  raceAnimationControllers:
+    defaultAnimationController: {fileID: 0}
+    animators: []
+    dynamicallyAddFromResources: 0
+    resourcesFolderPath: 
+  characterColors:
+    _colors: []
+  predefinedDNA:
+    PreloadValues: []
+  loadPathType: 0
+  loadPath: 
+  loadFilename: 
+  loadString: 
+  loadFileOnStart: 0
+  forceSlotMaterials: 0
+  AtlasResolutionScale: 1
+  defaultLoadOptions: 31
+  savePathType: 0
+  savePath: 
+  saveFilename: 
+  makeUniqueFilename: 0
+  ensureSharedColors: 0
+  defaultSaveOptions: 15
+  BoundsOffset: {x: 0, y: 0, z: 0}
+  visualizeRendererBounds: 0
+  editorTimeGeneration: 1
+  showPlaceholder: 1
+  previewModel: 0
+  customModel: {fileID: 0}
+  customRotation: {x: 0, y: 0, z: 0}
+  previewColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  _buildCharacterEnabled: 1
+  nextBuildSlotsOnly: 0
+  lastPresetScreenshot:
+    cameraPosition: {x: 0, y: 0, z: 0}
+    cameraRotation: {x: 0, y: 0, z: 0, w: 1}
+    orthographic: 0
+    sceneSize: 0
+    projectionCrop:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+  debugVertexes: 1
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &30123029
 GameObject:
   m_ObjectHideFlags: 0
@@ -133718,6 +133937,7 @@ MonoBehaviour:
   mapData: {fileID: 4900000, guid: 5dde8f2c0b2cf874bb4d3c7142d48179, type: 3}
   player: {fileID: 1898035872}
   guide: {fileID: 395599121}
+  guideCharacterCatalog: {fileID: 11400000, guid: a0eba76fa7cffc64987c731248035fde, type: 2}
   followCamera: {fileID: 1819892801}
   interfaceFont: {fileID: 0}
   memories:
@@ -133725,6 +133945,9 @@ MonoBehaviour:
   - {fileID: 1630506310}
   - {fileID: 1227222731}
   paused: 1
+  pixelStudy: 0
+  UiBlocking: 0
+  mapXSign: 1
 --- !u!4 &899048284
 Transform:
   m_ObjectHideFlags: 0
@@ -163745,6 +163968,63 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1111190665}
   m_Mesh: {fileID: 4300000, guid: f30608fdc5da9d24b9085ba15cf5f2f7, type: 2}
+--- !u!1001 &1111435328
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6782112333398131213, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
+      propertyPath: m_Name
+      value: "UMA_GLIB \xB7 Character Generation"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
 --- !u!1 &1113103977
 GameObject:
   m_ObjectHideFlags: 0
@@ -273151,6 +273431,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1898035872}
+  - component: {fileID: 1898035873}
   m_Layer: 0
   m_Name: "Player \xB7 \u6821\u56ED\u65C5\u4EBA"
   m_TagString: Untagged
@@ -273172,8 +273453,24 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2072082458}
+  - {fileID: 29808280}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1898035873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898035871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38ff37d923bf5af4384435578487705f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCharacterSelector
+  catalog: {fileID: 11400000, guid: a0eba76fa7cffc64987c731248035fde, type: 2}
+  avatar: {fileID: 29808281}
+  fallbackVisual: {fileID: 2072082459}
 --- !u!1 &1898130626
 GameObject:
   m_ObjectHideFlags: 0
@@ -297861,6 +298158,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b0d955b4539069a40bf40bde390d9857, type: 3}
   m_PrefabInstance: {fileID: 2072082457}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2072082459 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b0d955b4539069a40bf40bde390d9857, type: 3}
+  m_PrefabInstance: {fileID: 2072082457}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2072130466
 GameObject:
   m_ObjectHideFlags: 0
@@ -309015,3 +309317,4 @@ SceneRoots:
   - {fileID: 1630506313}
   - {fileID: 1227222734}
   - {fileID: 899048284}
+  - {fileID: 1111435328}
