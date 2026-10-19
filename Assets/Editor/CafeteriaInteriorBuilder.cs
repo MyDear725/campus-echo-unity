@@ -322,80 +322,124 @@ public static class CafeteriaInteriorBuilder
     }
 
 
-    // Wires the cafeteria ordering flow to real anchors in the plan:
-    //   order   -> the 1F serving window (打菜选餐区)
-    //   collect -> a collection counter next to that window
-    //   return  -> the 1F tray-return counter
-    //   seat    -> the centre of the dining hall (representative seat anchor)
-    // The anchors are scene objects so a rebuild re-creates them and the component
-    // keeps referencing the right places.
-    // Wires the ordering flow to the real counters on all three floors. The anchors are
-    // scene objects created here, so regenerating the cafeteria re-creates them and the
-    // component keeps pointing at the right places.
+    // Wires every selling point to its own anchors.
     //
-    // Positions match the counters built by BuildFoodServingArea / BuildTrayReturnArea /
-    // BuildWaterBarIsland, and the same coordinates the old interaction spots used.
+    // Each real counter in the plan becomes ONE order anchor tagged with a unique
+    // CafeteriaShop id (CafeteriaCounter.shop). Each anchor gets its own pickup point at
+    // its own counter, so a meal is collected where it was bought and never at another
+    // stall. Names follow the stable rule:
+    //     Order_<shopKey>      -> stands in front of the counter
+    //     Collect_<shopKey>    -> its pickup point
+    // The cafeteria component finds these by the CafeteriaCounter marker on the player's
+    // own floor, not by name, so renaming an object cannot re-route a counter.
+    static readonly Vector3[] StallSignPositions =
+    {
+        new Vector3(-10.0f, 3.2f, 12.0f),
+        new Vector3(-4.5f, 3.2f, 12.0f),
+        new Vector3(1.0f, 3.2f, 12.0f),
+        new Vector3(3.5f, 3.2f, 5.5f)
+    };
+
     static void BuildOrdering(Transform rootTransform, InteriorSceneRoot sceneRoot)
     {
+        // floor base heights: 1F 0, 2F 4.3, 3F 8.6
+        float[] fy = { 0f, 4.3f, 8.6f };
+
+        // Remove anchors from earlier layouts so the scene never keeps two copies of one
+        // counter (which is what let several menus compete for the same E press).
+        var stale = new System.Collections.Generic.List<Transform>();
+        foreach (var t in rootTransform.GetComponentsInChildren<Transform>(true))
+        {
+            string n = t.name;
+            if (n.StartsWith("OrderSpot_") || n.StartsWith("Order_") ||
+                n.StartsWith("CollectSpot_") || n.StartsWith("Collect_") ||
+                n.StartsWith("ReturnSpot_") || n.StartsWith("Return_"))
+                stale.Add(t);
+        }
+        foreach (var t in stale) UnityEngine.Object.DestroyImmediate(t.gameObject);
+
         Transform Anchor(string name, Vector3 pos)
         {
-            var t = rootTransform.Find(name);
-            if (t) { t.position = pos; return t; }
             var go = new GameObject(name);
             go.transform.SetParent(rootTransform, false);
             go.transform.position = pos;
             return go.transform;
         }
 
-        // floor base heights: 1F 0, 2F 4.3, 3F 8.6
-        float[] fy = { 0f, 4.3f, 8.6f };
-
         var order = new System.Collections.Generic.List<Transform>();
         var collect = new System.Collections.Generic.List<Transform>();
         var ret = new System.Collections.Generic.List<Transform>();
         var seat = new System.Collections.Generic.List<Transform>();
 
-        // Tags an ordering anchor with the shop whose menu it opens.
-        Transform OrderAnchor(string name, Vector3 pos, CafeteriaShop shop)
+        // Perimeter seating walk-in points are fine; every shop's stand point sits one
+        // metre in front of its own counter so a player can only reach one at a time.
+        foreach (var def in CafeteriaShops.All)
         {
-            var t = Anchor(name, pos);
-            var c = t.GetComponent<CafeteriaCounter>();
-            if (!c) c = t.gameObject.AddComponent<CafeteriaCounter>();
-            c.shop = shop;
-            return t;
+            Vector3 stand;
+            Vector3 pickup;
+            Vector3 counterFront;
+            switch (def.id)
+            {
+                case CafeteriaShop.Starter1F:
+                    counterFront = StallSignPositions[0] + new Vector3(0, 0, -1.7f); break;
+                case CafeteriaShop.Wok1F:
+                    counterFront = StallSignPositions[1] + new Vector3(0, 0, -1.7f); break;
+                case CafeteriaShop.Noodle1F:
+                    counterFront = StallSignPositions[2] + new Vector3(0, 0, -1.7f); break;
+                case CafeteriaShop.Steamed1F:
+                    // Vertical arm at X = 3.5, customer corridor on its west side.
+                    counterFront = new Vector3(3.5f - 1.6f, 0, 5.5f); break;
+                case CafeteriaShop.WaterBar1F:
+                    // Island at (-0.5, -1): customers stand on its south side.
+                    counterFront = new Vector3(-0.5f, 0, -1.0f - 2.5f); break;
+                case CafeteriaShop.Sichuan2F:
+                    counterFront = StallSignPositions[0] + new Vector3(0, 0, -1.7f); break;
+                case CafeteriaShop.Claypot2F:
+                    counterFront = StallSignPositions[1] + new Vector3(0, 0, -1.7f); break;
+                case CafeteriaShop.Teppan2F:
+                    counterFront = StallSignPositions[2] + new Vector3(0, 0, -1.7f); break;
+                case CafeteriaShop.Pastry2F:
+                    counterFront = new Vector3(3.5f - 1.6f, 0, 5.5f); break;
+                case CafeteriaShop.Soup3F:
+                    // 3F straight line at X = 11.5, sign 1 is at Z = 4.5; western customer side.
+                    counterFront = new Vector3(11.5f - 1.7f, 0, 4.5f); break;
+                case CafeteriaShop.HotDish3F:
+                    counterFront = new Vector3(11.5f - 1.7f, 0, 8.5f); break;
+                case CafeteriaShop.Roast3F:
+                    counterFront = new Vector3(11.5f - 1.7f, 0, 12.5f); break;
+                case CafeteriaShop.FruitStall3F:
+                    // Adjoining the 3F produce racks / island aisle.
+                    counterFront = new Vector3(-1.5f, 0, 11.5f - 2.2f); break;
+                default:
+                    counterFront = new Vector3(0, 0, 10); break;
+            }
+
+            float y = fy[def.floor - 1];
+            stand = new Vector3(counterFront.x, y, counterFront.z);
+            pickup = stand;
+
+            string key = def.id.ToString().ToLowerInvariant();
+            var orderAnchor = Anchor("Order_" + key, stand + Vector3.up * 0.5f);
+            var marker = orderAnchor.gameObject.AddComponent<CafeteriaCounter>();
+            marker.shop = def.id;
+
+            collect.Add(Anchor("Collect_" + key, pickup + Vector3.up * 0.5f));
+            order.Add(orderAnchor);
         }
 
-        // 1F and 2F: main serving counter (restaurant menu) + the drink bar (water bar menu).
-        order.Add(OrderAnchor("OrderSpot_Serving_1F", new Vector3(-4.0f, fy[0] + 0.5f, 10.0f), CafeteriaShop.Restaurant));
-        order.Add(OrderAnchor("OrderSpot_WaterBar_1F", new Vector3(-0.5f, fy[0] + 0.5f, -1.0f), CafeteriaShop.WaterBar));
-        order.Add(OrderAnchor("OrderSpot_Serving_2F", new Vector3(-4.0f, fy[1] + 0.5f, 10.0f), CafeteriaShop.Restaurant));
-        order.Add(OrderAnchor("OrderSpot_WaterBar_2F", new Vector3(-0.5f, fy[1] + 0.5f, -1.0f), CafeteriaShop.WaterBar));
-        // 3F: speciality counter plus the fruit supermarket on the north side.
-        order.Add(OrderAnchor("OrderSpot_Serving_3F", new Vector3(10.0f, fy[2] + 0.5f, 8.5f), CafeteriaShop.Restaurant));
-        order.Add(OrderAnchor("OrderSpot_Fruit_3F", new Vector3(-3.8f, fy[2] + 0.5f, 13.4f), CafeteriaShop.FruitStall));
+        // One tray-return counter per floor, beside that floor's dining hall.
+        ret.Add(Anchor("Return_1f", new Vector3(12.0f, fy[0] + 0.5f, 4.0f)));
+        ret.Add(Anchor("Return_2f", new Vector3(12.0f, fy[1] + 0.5f, 4.0f)));
+        ret.Add(Anchor("Return_3f", new Vector3(12.0f, fy[2] + 0.5f, 1.2f)));
 
-        collect.Add(Anchor("CollectSpot_1F", new Vector3(-4.0f, fy[0] + 0.5f, 8.2f)));
-        collect.Add(Anchor("CollectSpot_2F", new Vector3(-4.0f, fy[1] + 0.5f, 8.2f)));
-        collect.Add(Anchor("CollectSpot_3F", new Vector3(10.0f, fy[2] + 0.5f, 6.6f)));
-        // Pickup points next to the water bars and the fruit supermarket, so an order is
-        // collected where it was bought.
-        collect.Add(Anchor("CollectSpot_WaterBar_1F", new Vector3(2.2f, fy[0] + 0.5f, 0.2f)));
-        collect.Add(Anchor("CollectSpot_WaterBar_2F", new Vector3(2.2f, fy[1] + 0.5f, 0.2f)));
-        collect.Add(Anchor("CollectSpot_Fruit_3F", new Vector3(-3.8f, fy[2] + 0.5f, 12.0f)));
-
-        ret.Add(Anchor("ReturnSpot_1F", new Vector3(12.0f, fy[0] + 0.5f, 4.0f)));
-        ret.Add(Anchor("ReturnSpot_2F", new Vector3(12.0f, fy[1] + 0.5f, 4.0f)));
-        ret.Add(Anchor("ReturnSpot_3F", new Vector3(12.0f, fy[2] + 0.5f, 1.2f)));
-
-        // Seats come from the chairs the dining builder actually created, on every floor,
-        // so the sitting position always lines up with real furniture.
+        // Seats come from the chairs the dining builder actually created, on every floor.
         for (int i = 0; i < seatAnchorPos.Count; i++)
         {
             var a = Anchor("SeatSpot_" + i.ToString("D3"), seatAnchorPos[i]);
             a.rotation = seatAnchorRot[i];
             seat.Add(a);
         }
-        Debug.Log($"[Cafeteria] seat anchors from real chairs: {seat.Count}");
+        Debug.Log($"[Cafeteria] shops={order.Count} collect={collect.Count} return={ret.Count} seats={seat.Count}");
 
         var ordering = rootTransform.GetComponent<CafeteriaOrdering>();
         if (!ordering) ordering = rootTransform.gameObject.AddComponent<CafeteriaOrdering>();
@@ -404,8 +448,8 @@ public static class CafeteriaInteriorBuilder
         ordering.returnSpots = ret.ToArray();
         ordering.seatSpots = seat.ToArray();
 
-        if (!rootTransform.GetComponent<CafeteriaOrderingUI>())
-            rootTransform.gameObject.AddComponent<CafeteriaOrderingUI>();
+        var ui = rootTransform.GetComponent<CafeteriaOrderingUI>();
+        if (!ui) ui = rootTransform.gameObject.AddComponent<CafeteriaOrderingUI>();
 
         UnityEditor.EditorUtility.SetDirty(sceneRoot);
     }

@@ -91,7 +91,11 @@ public class BuildingInteriorTravel : MonoBehaviour
         yield return new WaitForSecondsRealtime(.2f);
         var operation=BeginLoad(Current.interiorScenePath,out string error);
         if(operation==null){State=TravelState.Outside;Current=null;Fail(error??"场景加载未启动");yield break;}
-        while(!operation.isDone)yield return null;
+        // A load that never reports done must not leave the player stuck on a black
+        // screen forever: give up after a bounded wait and stay where they were.
+        float loadDeadline=Time.realtimeSinceStartup+45f;
+        while(!operation.isDone&&Time.realtimeSinceStartup<loadDeadline)yield return null;
+        if(!operation.isDone){State=TravelState.Outside;Current=null;Fail("室内场景加载超时");yield break;}
         loadedScene=SceneManager.GetSceneByPath(Current.interiorScenePath);
         var roots=loadedScene.IsValid()&&loadedScene.isLoaded?loadedScene.GetRootGameObjects().SelectMany(r=>r.GetComponentsInChildren<InteriorSceneRoot>(true)).ToArray():Array.Empty<InteriorSceneRoot>();
         error=roots.Length==1?roots[0].ValidateContract(Current.buildingId,Current.spawnId):"室内需要且只能有一个 InteriorSceneRoot";
@@ -150,7 +154,9 @@ public class BuildingInteriorTravel : MonoBehaviour
         if(IndoorController)IndoorController.enabled=false;
         var operation=BeginLoad(target.interiorScenePath,out string error);
         if(operation==null){if(IndoorController)IndoorController.enabled=true;State=TravelState.Inside;TransferFailed(error??"场景加载未启动");yield break;}
-        while(!operation.isDone)yield return null;
+        float transferDeadline=Time.realtimeSinceStartup+45f;
+        while(!operation.isDone&&Time.realtimeSinceStartup<transferDeadline)yield return null;
+        if(!operation.isDone){if(IndoorController)IndoorController.enabled=true;State=TravelState.Inside;TransferFailed("连廊目标场景加载超时");yield break;}
         var next=SceneManager.GetSceneByPath(target.interiorScenePath);
         error=ValidateArrival(next,target,spawnId,out var contract);
         if(error!=null){if(next.IsValid()&&next.isLoaded)yield return SceneManager.UnloadSceneAsync(next);SceneManager.SetActiveScene(loadedScene);if(IndoorController)IndoorController.enabled=true;State=TravelState.Inside;TransferFailed(error);yield break;}

@@ -25,3 +25,4 @@
 Thumbs.db
 
 # Preserve Assets, Packages, ProjectSettings and all .meta files.
+Builds/

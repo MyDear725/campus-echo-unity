@@ -2,229 +2,36 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Cafeteria ordering: daily menu, allowance balance, order lifecycle and persistence.
+// Cafeteria ordering controller.
 //
-// All money is stored as integer fen (1 yuan = 100 fen) so nothing drifts; the UI
-// formats to ¥x.xx only for display. The menu is cached by local date, so closing the
-// UI, leaving the building or restarting the game cannot re-roll the same day.
+// Money lives in CampusWallet, menus are rolled per shop per game day, and orders are a
+// list rather than a single current order, so a meal at one counter, a second meal at
+// another counter and a drink from the water bar all run independently.
 //
-// State flow: None -> Preparing -> ReadyToCollect -> Carrying -> Eating -> TrayToReturn -> Done
-public enum CafeteriaShop
-{
-    Restaurant = 0,   // 售餐窗口：菜品 + 饮品
-    WaterBar = 1,     // 水吧：现调饮品
-    FruitStall = 2    // 鲜果超市：水果与果切
-}
-
-// Marks an ordering anchor as belonging to one shop, so walking to the water bar opens
-// the water bar menu rather than the restaurant menu.
-public class CafeteriaCounter : MonoBehaviour
-{
-    public CafeteriaShop shop = CafeteriaShop.Restaurant;
-}
-
-// One shop's menu for one day. Every price is in fen and capped at ¥20 for the drink
-// and fruit shops (the restaurant keeps its own lower dish cap).
-[Serializable]
-public class ShopMenu
-{
-    public string date;
-    public List<string> names = new List<string>();
-    public List<int> fen = new List<int>();
-}
-
-// One purchased order. Several can be in flight at once (one per counter), each with
-// its own timer and progress.
-[Serializable]
-public class CafeteriaOrder
-{
-    public int id;
-    public int shop;                 // CafeteriaShop it was bought at
-    public List<string> items = new List<string>();
-    public List<int> quantities = new List<int>();
-    public List<int> unitFen = new List<int>();
-    public int totalFen;
-    public int state;                // CafeteriaOrderState
-    public long readyTicks;          // wall-clock preparation deadline
-    public float eatProgress;        // 0..1
-
-    public bool IsActive =>
-        state != (int)CafeteriaOrderState.None && state != (int)CafeteriaOrderState.Done;
-
-    // Water bar and fruit stall hand out items that are consumed on the spot, so they
-    // never produce a tray to return.
-    public bool NeedsTrayReturn => (CafeteriaShop)shop == CafeteriaShop.Restaurant;
-
-    public string ShopLabel
-    {
-        get
-        {
-            switch ((CafeteriaShop)shop)
-            {
-                case CafeteriaShop.WaterBar: return "水吧";
-                case CafeteriaShop.FruitStall: return "水果摊";
-                default: return "食堂";
-            }
-        }
-    }
-
-    public string ItemsSummary
-    {
-        get
-        {
-            var sb = new System.Text.StringBuilder();
-            for (int i = 0; i < items.Count; i++)
-            {
-                if (i > 0) sb.Append("、");
-                sb.Append(items[i]);
-                if (quantities[i] > 1) sb.Append("×").Append(quantities[i]);
-            }
-            return sb.ToString();
-        }
-    }
-}
-
-[Serializable]
-public class CafeteriaOrderingState
-{
-    public long balanceFen = 30000;
-    public string menuDate;
-    public List<string> dishNames = new List<string>();
-    public List<int> dishFen = new List<int>();
-    public List<string> drinkNames = new List<string>();
-    public List<int> drinkFen = new List<int>();
-
-    public int orderId;
-    public int state;                 // mirrors the carried order, kept for old saves
-    public List<CafeteriaOrder> orders = new List<CafeteriaOrder>();
-    public List<string> items = new List<string>();
-    public List<int> quantities = new List<int>();
-    public List<int> unitFen = new List<int>();
-    public int totalFen;
-    public long readyTicks;
-    public float eatProgress;
-    public bool carrying;
-
-    public ShopMenu waterBar = new ShopMenu();
-    public ShopMenu fruitStall = new ShopMenu();
-    public int orderShop;                 // CafeteriaShop the active order was bought at
-
-    public const int MaxDishFen = 1000;    // ¥10.00 per dish
-    public const int MaxDrinkFen = 2000;   // ¥20.00 per drink
-}
-
-public enum CafeteriaOrderState
-{
-    None = 0, Preparing = 1, ReadyToCollect = 2, Carrying = 3,
-    Eating = 4, TrayToReturn = 5, Done = 6
-}
-
-public static class CafeteriaMenu
-{
-    static readonly string[] DishPool =
-    {
-        "番茄炒蛋", "土豆炖鸡", "鱼香肉丝", "麻婆豆腐", "红烧排骨", "宫保鸡丁",
-        "清炒时蔬", "青椒肉丝", "番茄牛腩", "地三鲜", "酸菜鱼", "糖醋里脊",
-        "手撕包菜", "红烧茄子", "蒜蓉西兰花", "肉末蒸蛋", "干煸豆角", "家常豆腐"
-    };
-
-    static readonly string[] DrinkPool =
-    {
-        "豆浆", "柠檬水", "酸梅汤", "绿豆汤", "热牛奶", "茉莉绿茶", "冰红茶", "橙汁"
-    };
-
-    static readonly string[] WaterBarPool =
-    {
-        "珍珠奶茶", "生椰拿铁", "鲜榨橙汁", "柠檬气泡水", "冰美式", "抹茶拿铁",
-        "杨枝甘露", "桂花乌龙", "草莓奶昔", "冬瓜茶"
-    };
-
-    static readonly string[] FruitPool =
-    {
-        "鲜切西瓜", "草莓盒装", "蓝莓一盒", "阳光玫瑰", "香蕉一把", "砂糖橘",
-        "红心火龙果", "芒果切块", "麒麟瓜片", "圣女果盒"
-    };
-
-    // Rolls (or restores) the menu for today. Idempotent within one day.
-    public static void Ensure(CafeteriaOrderingState st, int dishCount, int drinkCount)
-    {
-        string today = DateTime.Now.ToString("yyyy-MM-dd");
-        if (st.menuDate == today && st.dishNames.Count > 0) return;
-
-        st.menuDate = today;
-        st.dishNames.Clear(); st.dishFen.Clear();
-        st.drinkNames.Clear(); st.drinkFen.Clear();
-
-        var dishes = new List<string>(DishPool);
-        Shuffle(dishes);
-        for (int i = 0; i < Mathf.Min(dishCount, dishes.Count); i++)
-        {
-            st.dishNames.Add(dishes[i]);
-            st.dishFen.Add(UnityEngine.Random.Range(480, CafeteriaOrderingState.MaxDishFen + 1));
-        }
-
-        var drinks = new List<string>(DrinkPool);
-        Shuffle(drinks);
-        for (int i = 0; i < Mathf.Min(drinkCount, drinks.Count); i++)
-        {
-            st.drinkNames.Add(drinks[i]);
-            st.drinkFen.Add(UnityEngine.Random.Range(200, CafeteriaOrderingState.MaxDrinkFen + 1));
-        }
-    }
-
-    // Rolls (or restores) the water bar / fruit stall menu for today.
-    public static void EnsureShop(CafeteriaOrderingState st, CafeteriaShop shop, int count)
-    {
-        ShopMenu menu = shop == CafeteriaShop.WaterBar ? st.waterBar
-                      : shop == CafeteriaShop.FruitStall ? st.fruitStall : null;
-        if (menu == null) return;
-
-        string today = DateTime.Now.ToString("yyyy-MM-dd");
-        if (menu.date == today && menu.names.Count > 0) return;
-
-        menu.date = today;
-        menu.names.Clear(); menu.fen.Clear();
-
-        string[] pool = shop == CafeteriaShop.WaterBar ? WaterBarPool : FruitPool;
-        var pick = new List<string>(pool);
-        Shuffle(pick);
-
-        for (int i = 0; i < Mathf.Min(count, pick.Count); i++)
-        {
-            menu.names.Add(pick[i]);
-            // Both shops are capped at ¥20.00 per item.
-            menu.fen.Add(UnityEngine.Random.Range(600, 2001));
-        }
-    }
-
-    static void Shuffle<T>(List<T> list)
-    {
-        for (int i = list.Count - 1; i > 0; i--)
-        {
-            int j = UnityEngine.Random.Range(0, i + 1);
-            (list[i], list[j]) = (list[j], list[i]);
-        }
-    }
-}
-
-// Runtime controller. All state access funnels through EnsureReady(), which loads the
-// save on first use, so neither play mode nor editor tools can ever see a null state.
+// Order flow
+//   meals : Preparing -> ReadyToCollect -> Carrying -> Eating -> TrayToReturn -> Done
+//   drink / fruit : Bought (instant, goods already in the inventory) -> Consumed
+//
+// E ownership: the counter the player stands at is resolved from the scene anchors
+// (CafeteriaCounter) on the player's own floor, nearest first. Only that counter's shop
+// answers the E key. Nothing is matched by name, index or a default shop.
 public class CafeteriaOrdering : MonoBehaviour
 {
-    [Header("Menu roll")]
-    public int dishCount = 8;
-    public int drinkCount = 4;
-    public int waterBarCount = 6;
-    public int fruitCount = 6;
-
-    [Header("Allowance")]
-    public int startingBalanceFen = 30000;
+    [Header("Menu")]
+    public int menuItemsPerShop = 6;
 
     [Header("Timings (seconds)")]
     public int prepareSeconds = 30;
     public int eatSeconds = 10;
 
-    [Header("Scene anchors (wired by the cafeteria builder, one per floor)")]
+    [Header("Interaction reach (metres)")]
+    public float orderReach = 3.6f;
+    public float collectReach = 2.6f;
+    public float returnReach = 2.6f;
+    public float seatReach = 2.4f;
+    public float floorTolerance = 1.0f;
+
+    [Header("Scene anchors (wired by the cafeteria builder)")]
     public Transform[] orderSpots;
     public Transform[] collectSpots;
     public Transform[] returnSpots;
@@ -236,56 +43,56 @@ public class CafeteriaOrdering : MonoBehaviour
     public static string PrefsKeyOverride;
     static string Key => string.IsNullOrEmpty(PrefsKeyOverride) ? PrefsKey : PrefsKeyOverride;
 
-    CafeteriaOrderingState st;
+    // ---------------------------------------------------------------- state
+    [Serializable]
+    class Persisted
+    {
+        public string menuDate;
+        public List<string> shops = new List<string>();          // shop keys
+        public List<ShopMenu> menus = new List<ShopMenu>();
+        public List<CafeteriaOrder> orders = new List<CafeteriaOrder>();
+        public int lastOrderId;
+    }
+
+    Persisted st;
     bool ready;
     CampusGame game;
-    BuildingInteriorTravel travel;
+    string gameDate = "";
+
+    // Basket belongs to the panel, not to a shop, so it is cleared whenever the shop
+    // being ordered from changes.
+    readonly List<string> cartNames = new List<string>();
+    readonly List<int> cartQty = new List<int>();
+    readonly List<int> cartFen = new List<int>();
+    readonly List<string> cartUnit = new List<string>();
 
     bool uiOpen;
-    int selected = -1;
+    CafeteriaShop activeShop = CafeteriaShop.Starter1F;
     bool seated;
     Vector3 preSeatPos;
     Quaternion preSeatRot;
     Transform currentSeat;
-    GameObject trayVisual;
+    string lastMessage = "";
+    int lastMessageSeq;
 
-    public CafeteriaOrderState State
-    {
-        get
-        {
-            EnsureReady();
-            var o = CarriedOrder;
-            return o != null ? (CafeteriaOrderState)o.state : CafeteriaOrderState.None;
-        }
-    }
-    public string BalanceText { get { EnsureReady(); return "生活费：¥" + (st.balanceFen / 100.0).ToString("F2"); } }
-    public long BalanceFen { get { EnsureReady(); return st.balanceFen; } }
-    public int OrderId { get { EnsureReady(); return st.orderId; } }
-    public float EatProgress { get { EnsureReady(); var o = CarriedOrder; return o != null ? o.eatProgress : 0f; } }
+    // ---------------------------------------------------------------- accessors
+    public bool UiOpen => uiOpen;
+    public bool Seated => seated;
+    public Transform CurrentSeat => currentSeat;
+    public CafeteriaShop ActiveShop => activeShop;
+    public CafeteriaShopDef ActiveDef => CafeteriaShops.Get(activeShop);
 
-    // Carrying a tray only applies to restaurant orders; drinks and fruit are consumed
-    // on the spot and never produce one.
-    public bool HasTray
+    public long BalanceFen { get { EnsureReady(); return CampusWallet.BalanceFen; } }
+    public string BalanceText { get { EnsureReady(); return CampusWallet.BalanceText; } }
+
+    public int OrderCount { get { EnsureReady(); return st.orders.Count; } }
+    public CafeteriaOrder OrderAt(int i)
     {
-        get
-        {
-            EnsureReady();
-            var o = CarriedOrder;
-            return o != null && o.NeedsTrayReturn &&
-                   (o.state == (int)CafeteriaOrderState.Carrying ||
-                    o.state == (int)CafeteriaOrderState.Eating ||
-                    o.state == (int)CafeteriaOrderState.TrayToReturn);
-        }
+        EnsureReady();
+        return i >= 0 && i < st.orders.Count ? st.orders[i] : null;
     }
-    public bool Seated { get { return seated; } }
-    public bool UiOpen { get { return uiOpen; } }
-    public Transform CurrentSeat { get { return currentSeat; } }
-    public GameObject TrayVisual { get { return trayVisual; } }
-    public int CartCount { get { EnsureReady(); return st.items.Count; } }
-    public int DishCount { get { EnsureReady(); return st.dishNames.Count; } }
-    public int DrinkCount { get { EnsureReady(); return st.drinkNames.Count; } }
-    // The order currently in the player's hands (carried / being eaten / awaiting tray).
-    // Only one can be held at a time; the others wait as ready-to-collect.
+
+    // The meal currently in the player's hands (only one at a time).
     public CafeteriaOrder CarriedOrder
     {
         get
@@ -299,491 +106,657 @@ public class CafeteriaOrdering : MonoBehaviour
         }
     }
 
-    public bool CanOrder { get { return CanOrderAt(CafeteriaShop.Restaurant); } }
-
-    // Each counter can host one unfinished order, so several can run at the same time.
-    public bool CanOrderAt(CafeteriaShop shop)
-    {
-        EnsureReady();
-        foreach (var o in st.orders)
-            if (o.shop == (int)shop && o.IsActive) return false;
-        return true;
-    }
-
-    // The countdown is authoritative through readyTicks (persisted, wall-clock based).
-    // Nothing used to move Preparing -> ReadyToCollect at runtime, so an order that had
-    // counted down to 00:00 stayed Preparing forever and could never be collected.
-    // Any ready-to-collect order the player is standing next to qualifies.
-    public bool CanCollect { get { EnsureReady(); Tick(); return CollectableOrderHere() != null; } }
-
-    // Promotes an order whose preparation window has elapsed. Idempotent, so calling it
-    // from every accessor is safe; the transition saves once and notifies once.
-    // Promotes every order whose preparation window has elapsed. Only the transitions
-    // that actually happen are saved, and each one is announced once.
-    public void Tick()
-    {
-        EnsureReady();
-        bool changed = false;
-        string announce = null;
-
-        long now = DateTime.Now.Ticks;
-        foreach (var o in st.orders)
-        {
-            if (o.state != (int)CafeteriaOrderState.Preparing) continue;
-            if (o.readyTicks <= 0 || now < o.readyTicks) continue;
-
-            o.state = (int)CafeteriaOrderState.ReadyToCollect;
-            changed = true;
-            if (announce == null) announce = o.ShopLabel + "的餐品已做好，请前往取餐处按 E 取餐";
-        }
-
-        if (changed)
-        {
-            Save();
-            if (announce != null) Notify(announce);
-        }
-    }
-
-    void Update() { Tick(); }
-
-    public string Format(int fen) { return "¥" + (fen / 100.0).ToString("F2"); }
-
-    public string OrderTotalText { get { EnsureReady(); return "合计：" + Format(CartTotal()); } }
-
-    public string StatusText
+    public bool HasTray
     {
         get
         {
-            EnsureReady();
             var o = CarriedOrder;
-            if (o == null)
-            {
-                // Nothing in hand: describe the most relevant pending order instead.
-                var ready = FirstReady();
-                if (ready != null) return ready.ShopLabel + "餐品已做好，请前往取餐处";
-                var prep = FirstPreparing();
-                if (prep != null) return prep.ShopLabel + LabelOf(prep);
-                return "";
-            }
-            return o.ShopLabel + LabelOf(o);
+            return o != null && o.NeedsTrayReturn;
         }
     }
 
-    public string DishName(int i) { EnsureReady(); return st.dishNames[i]; }
-    public int DishFen(int i) { EnsureReady(); return st.dishFen[i]; }
-    public string DrinkName(int i) { EnsureReady(); return st.drinkNames[i]; }
-    public int DrinkFen(int i) { EnsureReady(); return st.drinkFen[i]; }
-    public string CartDishName(int i) { EnsureReady(); return st.items.Count > i ? st.items[i] : ""; }
-    public int CartQty(int i) { EnsureReady(); return st.items.Count > i ? st.quantities[i] : 0; }
-    public int CartUnit(int i) { EnsureReady(); return st.items.Count > i ? st.unitFen[i] : 0; }
-
-    public int CartTotal()
-    {
-        EnsureReady();
-        int total = 0;
-        for (int i = 0; i < st.items.Count; i++) total += st.quantities[i] * st.unitFen[i];
-        return total;
-    }
-
-    // Paying is judged against the counter whose menu is open, not a global lock, so a
-    // player with a running order at the restaurant can still buy a drink elsewhere.
-    public bool CanPay
+    public CafeteriaOrderState State
     {
         get
         {
-            EnsureReady();
-            return CanOrderAt(ActiveShop) && st.items.Count > 0 && CartTotal() <= st.balanceFen;
+            var o = CarriedOrder;
+            return o != null ? (CafeteriaOrderState)o.state : CafeteriaOrderState.None;
         }
     }
 
-    void Awake() { EnsureReady(); }
-
-    // The ordering component lives in the additively-loaded interior scene, while
-    // CampusGame lives in the campus scene. Nothing calls SetGame at runtime, so the
-    // reference is resolved lazily; without this every proximity check saw a null
-    // player and the panel could never open.
-    CampusGame EnsureGame()
+    public float EatProgress
     {
-        if (!game) game = FindFirstObjectByType<CampusGame>();
-        return game;
+        get
+        {
+            var o = CarriedOrder;
+            return o != null ? o.eatProgress : 0f;
+        }
     }
+
+    public bool AwaitingTrayReturn => State == CafeteriaOrderState.TrayToReturn;
+
+    public bool CarriedNeedsSeat
+    {
+        get
+        {
+            var o = CarriedOrder;
+            return o != null && o.NeedsTrayReturn;
+        }
+    }
+
+    public static string FormatFen(int fen) { return CampusWallet.FormatYuan((long)fen); }
+    public static string FormatFen(long fen) { return CampusWallet.FormatYuan(fen); }
+
+    // ---------------------------------------------------------------- lifecycle
+    public static CafeteriaOrdering Ensure(CampusGame owner)
+    {
+        CampusGame g = owner != null ? owner : FindFirstObjectByType<CampusGame>();
+        if (g != null && g.Interiors != null && g.Interiors.Interior != null)
+        {
+            var inScene = g.Interiors.Interior.GetComponent<CafeteriaOrdering>();
+            if (inScene != null) return inScene;
+        }
+        var any = FindFirstObjectByType<CafeteriaOrdering>(FindObjectsInactive.Include);
+        return any;
+    }
+
+    void Awake()
+    {
+        game = FindFirstObjectByType<CampusGame>();
+        EnsureReady();
+    }
+
+    void OnEnable() { CampusSystemsRegistry.RegisterOrdering(this); }
+    void OnDisable() { CampusSystemsRegistry.UnregisterOrdering(this); }
 
     public void Init() { EnsureReady(); }
+
+    public void SetGame(CampusGame g) { if (g) game = g; }
+
+    public CampusGame Game
+    {
+        get
+        {
+            if (!game) game = FindFirstObjectByType<CampusGame>();
+            return game;
+        }
+    }
 
     void EnsureReady()
     {
         if (ready) return;
         ready = true;
-        st = new CafeteriaOrderingState();
+        st = new Persisted();
         Load();
-        if (st.waterBar == null) st.waterBar = new ShopMenu();
-        if (st.fruitStall == null) st.fruitStall = new ShopMenu();
-        CafeteriaMenu.Ensure(st, dishCount, drinkCount);
-        CafeteriaMenu.EnsureShop(st, CafeteriaShop.WaterBar, waterBarCount);
-        CafeteriaMenu.EnsureShop(st, CafeteriaShop.FruitStall, fruitCount);
-        Save();
+        RefreshMenusIfNeeded();
     }
 
-    // ---------------------------------------------------------------- persistence
-    [Serializable]
-    class Snapshot
+    string TodayGameDate()
     {
-        public long bal;
-        public string date;
-        public string[] dn; public int[] dp;
-        public string[] vn; public int[] vp;
-        public int oid, state, total;
-        public string[] iname; public int[] iq, iprice;
-        public long ready;
-        public float eat;
-        public bool carry;
-        public ShopMenu waterBar;
-        public ShopMenu fruitStall;
-        public int orderShop;                 // legacy single-order fields below
-        public List<CafeteriaOrder> orders;   // current format
+        var clock = GameClock.Ensure();
+        return clock != null ? clock.Now.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd");
     }
 
-    public void Save()
+    // Rolls every shop's menu when the game day changes, and only then. Opening a menu,
+    // re-entering the cafeteria or restarting the same day never re-rolls.
+    public void RefreshMenusIfNeeded()
+    {
+        string today = TodayGameDate();
+        if (gameDate == today && st.menuDate == today && st.menus.Count == CafeteriaShops.All.Length) return;
+
+        gameDate = today;
+        if (st.menuDate != today || st.shops.Count != CafeteriaShops.All.Length)
+        {
+            st.shops.Clear(); st.menus.Clear();
+            foreach (var def in CafeteriaShops.All)
+            {
+                var menu = new ShopMenu();
+                CafeteriaMenu.Roll(menu, def, today, menuItemsPerShop);
+                st.shops.Add(def.id.ToString().ToLowerInvariant());
+                st.menus.Add(menu);
+            }
+            st.menuDate = today;
+            Save();
+        }
+        else
+        {
+            // Same day: keep the stored menus, but guard against malformed data.
+            for (int i = 0; i < st.menus.Count; i++)
+                if (st.menus[i] == null || st.menus[i].names.Count == 0)
+                {
+                    var menu = new ShopMenu();
+                    CafeteriaMenu.Roll(menu, CafeteriaShops.All[i], today, menuItemsPerShop);
+                    st.menus[i] = menu;
+                }
+        }
+    }
+
+    public string MenuDate { get { EnsureReady(); return st.menuDate; } }
+
+    public ShopMenu MenuFor(CafeteriaShop shop)
     {
         EnsureReady();
-        var s = new Snapshot
-        {
-            bal = st.balanceFen, date = st.menuDate,
-            dn = st.dishNames.ToArray(), dp = st.dishFen.ToArray(),
-            vn = st.drinkNames.ToArray(), vp = st.drinkFen.ToArray(),
-            oid = st.orderId, state = st.state, total = st.totalFen,
-            iname = st.items.ToArray(), iq = st.quantities.ToArray(), iprice = st.unitFen.ToArray(),
-            ready = st.readyTicks, eat = st.eatProgress, carry = st.carrying,
-            waterBar = st.waterBar, fruitStall = st.fruitStall, orderShop = st.orderShop,
-            orders = st.orders
-        };
-        PlayerPrefs.SetString(Key, JsonUtility.ToJson(s));
-        PlayerPrefs.Save();
+        RefreshMenusIfNeeded();
+        int idx = Array.FindIndex(CafeteriaShops.All, d => d.id == shop);
+        return idx >= 0 && idx < st.menus.Count ? st.menus[idx] : null;
     }
 
-    public void Load()
+    // ---------------------------------------------------------------- menu accessors
+    public string ShopTitle
     {
-        if (!PlayerPrefs.HasKey(Key))
+        get
         {
-            st.balanceFen = startingBalanceFen;
-            return;
+            var def = ActiveDef;
+            return def != null ? def.PanelLabel : "食堂";
         }
-
-        var s = JsonUtility.FromJson<Snapshot>(PlayerPrefs.GetString(Key));
-        if (s == null) { st.balanceFen = startingBalanceFen; return; }
-
-        st.balanceFen = Mathf.Max(0, (int)s.bal);
-        st.menuDate = s.date ?? "";
-        st.dishNames = new List<string>(s.dn ?? new string[0]);
-        st.dishFen = new List<int>(s.dp ?? new int[0]);
-        st.drinkNames = new List<string>(s.vn ?? new string[0]);
-        st.drinkFen = new List<int>(s.vp ?? new int[0]);
-        st.orderId = s.oid;
-        st.state = s.state;
-        st.items = new List<string>(s.iname ?? new string[0]);
-        st.quantities = new List<int>(s.iq ?? new int[0]);
-        st.unitFen = new List<int>(s.iprice ?? new int[0]);
-        st.totalFen = s.total;
-        st.readyTicks = s.ready;
-        st.eatProgress = s.eat;
-        st.carrying = s.carry;
-        st.orders = s.orders ?? new List<CafeteriaOrder>();
-        for (int i = st.orders.Count - 1; i >= 0; i--)
-            if (st.orders[i] == null) st.orders.RemoveAt(i);
-
-        // Older saves stored a single order in flat fields; keep that order rather than
-        // dropping something the player paid for.
-        if (st.orders.Count == 0 && (s.state == (int)CafeteriaOrderState.Preparing ||
-                                     s.state == (int)CafeteriaOrderState.ReadyToCollect ||
-                                     s.state == (int)CafeteriaOrderState.Carrying ||
-                                     s.state == (int)CafeteriaOrderState.Eating ||
-                                     s.state == (int)CafeteriaOrderState.TrayToReturn))
-        {
-            var legacy = new CafeteriaOrder
-            {
-                id = s.oid, shop = s.orderShop, totalFen = s.total,
-                state = s.state, readyTicks = s.ready, eatProgress = s.eat
-            };
-            legacy.items = new List<string>(s.iname ?? new string[0]);
-            legacy.quantities = new List<int>(s.iq ?? new int[0]);
-            legacy.unitFen = new List<int>(s.iprice ?? new int[0]);
-            st.orders.Add(legacy);
-        }
-
-        st.waterBar = s.waterBar ?? new ShopMenu();
-        st.fruitStall = s.fruitStall ?? new ShopMenu();
-        st.orderShop = s.orderShop;
-        if (st.waterBar.names == null) st.waterBar.names = new List<string>();
-        if (st.waterBar.fen == null) st.waterBar.fen = new List<int>();
-        if (st.fruitStall.names == null) st.fruitStall.names = new List<string>();
-        if (st.fruitStall.fen == null) st.fruitStall.fen = new List<int>();
-
-        // Repairs per order. A seat cannot survive a reload, so an order that was being
-        // eaten resumes as being carried with its progress kept.
-        long nowTicks = DateTime.Now.Ticks;
-        foreach (var o in st.orders)
-        {
-            if (o.state == (int)CafeteriaOrderState.Eating)
-                o.state = o.eatProgress >= 1f
-                    ? (int)CafeteriaOrderState.TrayToReturn
-                    : (int)CafeteriaOrderState.Carrying;
-
-            if (o.state == (int)CafeteriaOrderState.Preparing &&
-                o.readyTicks > 0 && nowTicks >= o.readyTicks)
-                o.state = (int)CafeteriaOrderState.ReadyToCollect;
-        }
-
-        // Keep the legacy mirror roughly consistent for anything still reading it.
-        var mirror = CarriedOrder;
-        st.state = mirror != null ? mirror.state : (int)CafeteriaOrderState.None;
-        // A "done" order with no items is meaningless; treat it as finished cleanly.
-        if (st.state == (int)CafeteriaOrderState.Done && st.items.Count == 0)
-            st.state = (int)CafeteriaOrderState.None;
     }
+
+    public string ShopSubtitle
+    {
+        get
+        {
+            var def = ActiveDef;
+            if (def == null) return "";
+            switch (def.business)
+            {
+                case CafeteriaBusiness.Drink: return "现制饮品 · 只售饮品 · 确认后立即交付";
+                case CafeteriaBusiness.Fruit: return "鲜果按份售卖 · 确认后立即交付";
+                default: return "点餐 · 备餐完成后回到取餐点领取";
+            }
+        }
+    }
+
+    public int ShopItemCount { get { var m = MenuFor(activeShop); return m == null ? 0 : m.names.Count; } }
+    public string ShopItemName(int i) { var m = MenuFor(activeShop); return m != null && i < m.names.Count ? m.names[i] : ""; }
+    public int ShopItemFen(int i) { var m = MenuFor(activeShop); return m != null && i < m.fen.Count ? m.fen[i] : 0; }
+    public string ShopItemUnit(int i) { var m = MenuFor(activeShop); return m != null && i < m.units.Count ? m.units[i] : "份"; }
+
+    public bool IsInstantShop => ActiveDef != null && ActiveDef.business != CafeteriaBusiness.Meal;
 
     // ---------------------------------------------------------------- cart
-    public void CartAdd(string name, int unitFen)
+    public int CartCount => cartNames.Count;
+    public string CartName(int i) => i >= 0 && i < cartNames.Count ? cartNames[i] : "";
+    public int CartQty(int i) => i >= 0 && i < cartQty.Count ? cartQty[i] : 0;
+    public int CartUnitFen(int i) => i >= 0 && i < cartFen.Count ? cartFen[i] : 0;
+    public string CartUnit(int i) => i >= 0 && i < cartUnit.Count ? cartUnit[i] : "份";
+
+    public int CartTotalFen()
     {
-        EnsureReady();
-        if (!CanOrderAt(ActiveShop)) return;   // the open counter, not the restaurant
-        int i = st.items.IndexOf(name);
-        if (i >= 0) st.quantities[i]++;
-        else { st.items.Add(name); st.quantities.Add(1); st.unitFen.Add(unitFen); }
-        Save();
+        int total = 0;
+        for (int i = 0; i < cartNames.Count; i++) total += cartQty[i] * cartFen[i];
+        return total;
     }
+
+    public string OrderTotalText => "合计：" + FormatFen(CartTotalFen());
+
+    public int QtyInCart(string name)
+    {
+        int i = cartNames.IndexOf(name);
+        return i >= 0 ? cartQty[i] : 0;
+    }
+
+    public void CartAdd(string name, int unitFen, string unit)
+    {
+        int i = cartNames.IndexOf(name);
+        if (i >= 0) cartQty[i]++;
+        else { cartNames.Add(name); cartQty.Add(1); cartFen.Add(unitFen); cartUnit.Add(string.IsNullOrEmpty(unit) ? "份" : unit); }
+    }
+
+    public void CartAdd(int index) { CartAdd(ShopItemName(index), ShopItemFen(index), ShopItemUnit(index)); }
 
     public void CartChange(int index, int delta)
     {
-        EnsureReady();
-        if (!CanOrderAt(ActiveShop) || index < 0 || index >= st.items.Count) return;
-        st.quantities[index] += delta;
-        if (st.quantities[index] <= 0)
+        if (index < 0 || index >= cartNames.Count) return;
+        cartQty[index] += delta;
+        if (cartQty[index] <= 0)
         {
-            st.items.RemoveAt(index); st.quantities.RemoveAt(index); st.unitFen.RemoveAt(index);
+            cartNames.RemoveAt(index); cartQty.RemoveAt(index); cartFen.RemoveAt(index); cartUnit.RemoveAt(index);
         }
-        Save();
     }
 
     public void CartRemove(int index)
     {
-        EnsureReady();
-        if (!CanOrderAt(ActiveShop) || index < 0 || index >= st.items.Count) return;
-        st.items.RemoveAt(index); st.quantities.RemoveAt(index); st.unitFen.RemoveAt(index);
-        Save();
+        if (index < 0 || index >= cartNames.Count) return;
+        cartNames.RemoveAt(index); cartQty.RemoveAt(index); cartFen.RemoveAt(index); cartUnit.RemoveAt(index);
     }
 
-    // ---------------------------------------------------------------- actions
-    // Payment. The UI only enables the button when CanPay, so repeated clicks cannot
-    // double-charge; this also re-checks and refuses.
-    public bool TryPay()
+    public void CartClear()
+    {
+        cartNames.Clear(); cartQty.Clear(); cartFen.Clear(); cartUnit.Clear();
+    }
+
+    // ---------------------------------------------------------------- payment
+    public bool CanPay
+    {
+        get
+        {
+            if (cartNames.Count == 0) return false;
+            return CartTotalFen() <= BalanceFen;
+        }
+    }
+
+    public string PayBlockReason
+    {
+        get
+        {
+            if (cartNames.Count == 0) return "请先选择商品";
+            long total = CartTotalFen();
+            if (total > BalanceFen) return CampusWallet.ShortfallText(total);
+            return "";
+        }
+    }
+
+    // One atomic purchase. The balance is re-read here, so a double click that lands in
+    // the same frame cannot charge twice: the first call empties the basket.
+    public bool TryPay(out string message)
     {
         EnsureReady();
-        if (!CanPay) return false;
+        message = "";
+        if (cartNames.Count == 0) { message = "请先选择商品"; return false; }
 
-        int total = CartTotal();
+        int total = CartTotalFen();
+        if (total <= 0) { message = "订单金额无效"; return false; }
+        if (CampusWallet.BalanceFen < total) { message = CampusWallet.ShortfallText(total); return false; }
+        if (!CampusWallet.TrySpend(total)) { message = CampusWallet.ShortfallText(total); return false; }
 
-        // Balance and the new order are written in the same save so a crash can never
-        // leave the money gone without the order.
-        st.balanceFen -= total;
-
+        var def = ActiveDef ?? CafeteriaShops.All[0];
         var order = new CafeteriaOrder
         {
-            id = ++st.orderId,
-            shop = (int)ActiveShop,
+            id = ++st.lastOrderId,
+            shop = (int)def.id,
+            floor = def.floor,
+            shopName = def.shortName,
             totalFen = total,
-            state = (int)CafeteriaOrderState.Preparing,
-            readyTicks = DateTime.Now.AddSeconds(prepareSeconds).Ticks,
-            eatProgress = 0f
+            placedDate = st.menuDate,
+            eatProgress = 0f,
+            collected = false,
+            feedbackSeq = 0
         };
-        foreach (var it in st.items) order.items.Add(it);
-        foreach (var q in st.quantities) order.quantities.Add(q);
-        foreach (var u in st.unitFen) order.unitFen.Add(u);
+        for (int i = 0; i < cartNames.Count; i++)
+        {
+            order.items.Add(cartNames[i]);
+            order.quantities.Add(cartQty[i]);
+            order.unitFen.Add(cartFen[i]);
+            order.units.Add(cartUnit[i]);
+        }
+
+        if (def.business == CafeteriaBusiness.Meal)
+        {
+            order.state = (int)CafeteriaOrderState.Preparing;
+            order.readyTicks = DateTime.Now.AddSeconds(prepareSeconds).Ticks;
+            order.pickupAnchor = "Collect_" + def.id.ToString().ToLowerInvariant();
+        }
+        else
+        {
+            // Instant purchase: the goods enter the shared inventory right now and the
+            // order is recorded as bought and ready to be consumed. The charge happened
+            // above, after the affordability check, so the player either gets both the
+            // goods and the deduction or neither.
+            order.state = (int)CafeteriaOrderState.Bought;
+            order.readyTicks = DateTime.Now.Ticks;
+            order.pickupAnchor = "Collect_" + def.id.ToString().ToLowerInvariant();
+            for (int i = 0; i < cartNames.Count; i++) CampusInventory.Add(cartNames[i], cartQty[i]);
+        }
 
         st.orders.Add(order);
-
-        // The basket is empty again so another counter can be used right away.
-        st.items.Clear(); st.quantities.Clear(); st.unitFen.Clear();
-        st.totalFen = 0;
-
+        CartClear();
         Save();
+
+        if (def.business == CafeteriaBusiness.Meal)
+            message = "已下单：" + def.PanelLabel + " 共 " + FormatFen(total) + "，请稍候备餐（订单 #" + order.id + "）";
+        else
+            message = "购买成功：" + order.ItemsSummary + " 共 " + FormatFen(total) + "，已放入随身物品";
+
+        lastMessage = message;
+        lastMessageSeq = order.id;
         return true;
     }
 
-    // The ready order whose counter the player is standing at (floor-aware).
-    public CafeteriaOrder FirstReady()
+    public bool TryPay() { string ignored; return TryPay(out ignored); }
+
+    // ---------------------------------------------------------------- order progress
+    public void Tick()
     {
         EnsureReady();
+        RefreshMenusIfNeeded();
+        long now = DateTime.Now.Ticks;
+        bool changed = false;
+
         foreach (var o in st.orders)
-            if (o.state == (int)CafeteriaOrderState.ReadyToCollect) return o;
-        return null;
+        {
+            if (o.state != (int)CafeteriaOrderState.Preparing) continue;
+            if (o.readyTicks <= 0 || now < o.readyTicks) continue;
+            o.state = (int)CafeteriaOrderState.ReadyToCollect;
+            o.feedbackSeq++;
+            lastMessage = "【" + o.FloorShopLabel + "】餐品已做好，请到取餐点按 E 取餐";
+            lastMessageSeq = o.id;
+            changed = true;
+        }
+
+        if (changed) Save();
     }
 
-    public CafeteriaOrder FirstPreparing()
-    {
-        EnsureReady();
-        foreach (var o in st.orders)
-            if (o.state == (int)CafeteriaOrderState.Preparing) return o;
-        return null;
-    }
+    void Update() { Tick(); }
 
-    // Shared phrasing for one order's current step.
     public string LabelOf(CafeteriaOrder o)
     {
         if (o == null) return "";
         switch ((CafeteriaOrderState)o.state)
         {
             case CafeteriaOrderState.Preparing:
-                int remain = Mathf.CeilToInt((float)(new DateTime(o.readyTicks) - DateTime.Now).TotalSeconds);
-                remain = Mathf.Max(0, remain);
-                return "正在备餐 " + (remain / 60).ToString("00") + ":" + (remain % 60).ToString("00");
-            case CafeteriaOrderState.ReadyToCollect: return "已做好，请去取餐";
-            case CafeteriaOrderState.Carrying: return o.NeedsTrayReturn ? "已取餐，请找座位" : "已取餐，可直接享用";
-            case CafeteriaOrderState.Eating: return "正在享用";
-            case CafeteriaOrderState.TrayToReturn: return "用餐结束，请还餐盘";
+                long remain = o.readyTicks - DateTime.Now.Ticks;
+                int sec = Mathf.Max(0, Mathf.CeilToInt((float)(remain / (double)TimeSpan.TicksPerSecond)));
+                return "备餐中 " + (sec / 60).ToString("00") + ":" + (sec % 60).ToString("00");
+            case CafeteriaOrderState.ReadyToCollect: return "可取餐";
+            case CafeteriaOrderState.Carrying: return o.NeedsTrayReturn ? "已取餐 · 请找座位" : "已取餐";
+            case CafeteriaOrderState.Eating: return "用餐中";
+            case CafeteriaOrderState.TrayToReturn: return "用餐结束 · 请还餐盘";
+            case CafeteriaOrderState.Bought: return "已购买 · 可享用";
+            case CafeteriaOrderState.Consumed: return "已享用";
             default: return "";
         }
     }
 
-    // Orders shown in the corner panel, newest last.
-    public int OrderCount { get { EnsureReady(); return st.orders.Count; } }
-    public CafeteriaOrder OrderAt(int i)
+    // ---------------------------------------------------------------- anchors / shops
+    bool TryPlayerPos(out Vector3 p)
     {
-        EnsureReady();
-        return i >= 0 && i < st.orders.Count ? st.orders[i] : null;
-    }
-
-    // True when a counter of the given shop still has an unfinished order.
-    public bool ShopBusy(CafeteriaShop shop)
-    {
-        EnsureReady();
-        foreach (var o in st.orders)
-            if (o.shop == (int)shop && o.IsActive) return true;
+        if (TestPlayerPos.HasValue) { p = TestPlayerPos.Value; return true; }
+        var g = Game;
+        if (g && g.player) { p = g.player.position; return true; }
+        p = Vector3.zero;
         return false;
     }
 
+    static float Flat(Vector3 a, Vector3 b) => Vector2.Distance(new Vector2(a.x, a.z), new Vector2(b.x, b.z));
+
+    public bool SameFloor(Vector3 p, Vector3 anchor) => Mathf.Abs(p.y - anchor.y) <= floorTolerance;
+
+    // Anchor nearest to the player whose marker says it belongs to a shop. The marker,
+    // not the object name, decides which shop answers; each anchor has exactly one.
+    public Transform NearestOrderAnchor(Vector3 p, out CafeteriaShop shop, out float distance)
+    {
+        shop = CafeteriaShop.Starter1F;
+        distance = float.MaxValue;
+        Transform best = null;
+        if (orderSpots == null) return null;
+
+        for (int i = 0; i < orderSpots.Length; i++)
+        {
+            var a = orderSpots[i];
+            if (!a || !a.gameObject.activeInHierarchy) continue;
+            var marker = a.GetComponent<CafeteriaCounter>();
+            if (!marker) continue;
+            if (!SameFloor(p, a.position)) continue;
+
+            float d = Flat(p, a.position);
+            if (d > orderReach) continue;
+            if (d < distance) { distance = d; best = a; shop = marker.shop; }
+        }
+        return best;
+    }
+
+    public bool NearOrderSpot
+    {
+        get
+        {
+            if (!TryPlayerPos(out var p)) return false;
+            CafeteriaShop s; float d;
+            return NearestOrderAnchor(p, out s, out d) != null;
+        }
+    }
+
+    // Shop the player is standing at, or null when no counter is in reach.
+    public CafeteriaShop? ShopAtPlayer()
+    {
+        if (!TryPlayerPos(out var p)) return null;
+        CafeteriaShop s; float d;
+        var a = NearestOrderAnchor(p, out s, out d);
+        return a != null ? s : (CafeteriaShop?)null;
+    }
+
+    public CafeteriaShop NearestOrderShop() => ShopAtPlayer() ?? activeShop;
+
+    // Collect anchors are named Collect_<shopKey>; a fallback keeps older scenes working
+    // (a CollectSpot_<suffix> whose object/suffix contains the shop key).
+    public Transform CollectAnchorFor(CafeteriaShop shop, Vector3 p)
+    {
+        if (collectSpots == null) return null;
+        string key = shop.ToString().ToLowerInvariant();
+        Transform exact = null;
+        float exactSqr = float.MaxValue;
+
+        for (int i = 0; i < collectSpots.Length; i++)
+        {
+            var a = collectSpots[i];
+            if (a == null || !a.gameObject.activeInHierarchy) continue;
+            if (!SameFloor(p, a.position)) continue;
+
+            string an = a.name.ToLowerInvariant();
+            if (an == "collect_" + key)
+            {
+                float d0 = Flat(p, a.position);
+                if (d0 < exactSqr) { exactSqr = d0; exact = a; }
+            }
+        }
+        return exact;
+    }
+
+    // Nearest collect anchor of any kind, used only for prompts/debug.
+    public Transform NearestAnyCollectAnchor(Vector3 p)
+    {
+        if (collectSpots == null) return null;
+        Transform best = null; float bestD = float.MaxValue;
+        for (int i = 0; i < collectSpots.Length; i++)
+        {
+            var a = collectSpots[i];
+            if (!a || !a.gameObject.activeInHierarchy || !SameFloor(p, a.position)) continue;
+            float d = Flat(p, a.position);
+            if (d < bestD) { bestD = d; best = a; }
+        }
+        return best;
+    }
+
+    public bool NearReturnSpot
+    {
+        get
+        {
+            if (!TryPlayerPos(out var p) || returnSpots == null) return false;
+            for (int i = 0; i < returnSpots.Length; i++)
+            {
+                var a = returnSpots[i];
+                if (a && a.gameObject.activeInHierarchy && SameFloor(p, a.position) && Flat(p, a.position) <= returnReach) return true;
+            }
+            return false;
+        }
+    }
+
+    public Transform NearestSeatAnchor(float maxDistance = -1f)
+    {
+        if (!TryPlayerPos(out var p) || seatSpots == null) return null;
+        float reach = maxDistance > 0 ? maxDistance : seatReach;
+        Transform best = null; float bestD = reach;
+        for (int i = 0; i < seatSpots.Length; i++)
+        {
+            var a = seatSpots[i];
+            if (!a || !a.gameObject.activeInHierarchy || !SameFloor(p, a.position)) continue;
+            float d = Flat(p, a.position);
+            if (d < bestD) { bestD = d; best = a; }
+        }
+        return best;
+    }
+
+    public bool NearSeat => NearestSeatAnchor() != null;
+
+    // A ready order that belongs to the counter the player is standing at.
     public CafeteriaOrder CollectableOrderHere()
     {
-        EnsureReady();
-        var shop = NearestOrderShop();
-        // Exact counter match first, so a drink is picked up at the water bar and a meal
-        // at the serving window even when several orders are ready at once.
-        foreach (var o in st.orders)
-            if (o.state == (int)CafeteriaOrderState.ReadyToCollect && (CafeteriaShop)o.shop == shop)
-                return o;
+        if (!TryPlayerPos(out var p)) return null;
+        for (int i = 0; i < st.orders.Count; i++)
+        {
+            var o = st.orders[i];
+            if (o == null || o.state != (int)CafeteriaOrderState.ReadyToCollect) continue;
+            var anchor = CollectAnchorFor(o.Shop, p);
+            if (anchor != null && Flat(p, anchor.position) <= collectReach) return o;
+        }
         return null;
     }
 
-    public bool TryCollect()
+    public bool CanCollect { get { return CollectableOrderHere() != null; } }
+
+    // True when the player stands at a pickup counter that has an order (ready or still
+    // preparing), so the HUD and the E key can answer "here".
+    public bool NearCollectSpot
     {
-        EnsureReady();
+        get
+        {
+            if (!TryPlayerPos(out var p)) return false;
+            for (int i = 0; i < st.orders.Count; i++)
+            {
+                var o = st.orders[i];
+                if (o == null) continue;
+                if (o.state != (int)CafeteriaOrderState.ReadyToCollect && o.state != (int)CafeteriaOrderState.Preparing) continue;
+                var anchor = CollectAnchorFor(o.Shop, p);
+                if (anchor != null && Flat(p, anchor.position) <= collectReach) return true;
+            }
+            return false;
+        }
+    }
+
+    // Diagnostic for the automated run: where the player is and what each anchor reports.
+    public string DescribeCollectStateAtPlayer()
+    {
+        if (!TryPlayerPos(out var p)) return "no player";
+        var sb = new System.Text.StringBuilder();
+        sb.Append("p=").Append(p.ToString("F2")).Append(" anchors=").Append(collectSpots == null ? 0 : collectSpots.Length);
+        for (int i = 0; i < st.orders.Count; i++)
+        {
+            var o = st.orders[i];
+            sb.Append(" [").Append(o.id).Append(' ').Append(o.Shop).Append(" st=").Append(o.state).Append(']');
+        }
+        return sb.ToString();
+    }
+
+    // The preparing order whose pickup counter the player stands at, for the
+    // "还在准备中" answer instead of a silent no-op.
+    public CafeteriaOrder PreparingOrderHere()
+    {
+        if (!TryPlayerPos(out var p)) return null;
+        for (int i = 0; i < st.orders.Count; i++)
+        {
+            var o = st.orders[i];
+            if (o == null || o.state != (int)CafeteriaOrderState.Preparing) continue;
+            var anchor = CollectAnchorFor(o.Shop, p);
+            if (anchor != null && Flat(p, anchor.position) <= collectReach) return o;
+        }
+        return null;
+    }
+
+    // Hands over one order. Refused when another order is already in the player's hands,
+    // so a full tray never swallows an order and the ready one stays waiting.
+    public bool TryCollect(out string message)
+    {
+        message = "";
         var order = CollectableOrderHere();
-        if (order == null) return false;
-        if (CarriedOrder != null) return false;      // hands are full
+        if (order == null) { message = "这里没有可领取的订单"; return false; }
+        var held = CarriedOrder;
+        if (held != null)
+        {
+            message = "手里已有 " + held.FloorShopLabel + " 的餐品，请先用餐并归还餐盘";
+            return false;
+        }
 
         order.state = (int)CafeteriaOrderState.Carrying;
+        order.collected = true;
         Save();
+        message = "已取餐：" + order.FloorShopLabel + " · " + order.ItemsSummary;
         return true;
     }
 
-    public bool CanStartEating
-    {
-        get
-        {
-            EnsureReady();
-            var o = CarriedOrder;
-            return o != null && o.state == (int)CafeteriaOrderState.Carrying;
-        }
-    }
+    public bool TryCollect() { string ignored; return TryCollect(out ignored); }
 
-    // Drinks and fruit are consumed standing up; only a restaurant meal needs a seat.
-    public bool CarriedNeedsSeat
-    {
-        get
-        {
-            EnsureReady();
-            var o = CarriedOrder;
-            return o != null && o.NeedsTrayReturn;
-        }
-    }
-
-    // Sitting promotes only the carried order, and standing back up must not undo a
-    // finished meal.
-    public void SetEating(bool on)
-    {
-        EnsureReady();
-        var o = CarriedOrder;
-        if (o == null) return;
-
-        if (on)
-        {
-            if (o.state == (int)CafeteriaOrderState.Carrying)
-                o.state = (int)CafeteriaOrderState.Eating;
-        }
-        else if (o.state == (int)CafeteriaOrderState.Eating)
-        {
-            o.state = o.eatProgress >= 1f
-                ? (int)CafeteriaOrderState.TrayToReturn
-                : (int)CafeteriaOrderState.Carrying;
-        }
-        Save();
-    }
-
-    public void AddEatProgress(float delta)
-    {
-        EnsureReady();
-        var o = CarriedOrder;
-        if (o == null) return;
-
-        o.eatProgress = Mathf.Clamp01(o.eatProgress + delta);
-        if (o.eatProgress < 1f) { Save(); return; }
-
-        // Drinks and fruit are finished on the spot: no tray, so the order closes itself.
-        if (!o.NeedsTrayReturn)
-        {
-            o.state = (int)CafeteriaOrderState.Done;
-            st.orders.Remove(o);
-        }
-        else
-        {
-            o.state = (int)CafeteriaOrderState.TrayToReturn;
-        }
-        Save();
-    }
-
-    // True when the carried order finished eating but still owes a tray.
-    public bool AwaitingTrayReturn
-    {
-        get
-        {
-            EnsureReady();
-            var o = CarriedOrder;
-            return o != null && o.state == (int)CafeteriaOrderState.TrayToReturn;
-        }
-    }
+    public bool CanStartEating => State == CafeteriaOrderState.Carrying;
 
     public bool TryReturnTray()
     {
-        EnsureReady();
         var o = CarriedOrder;
-        if (o == null) return false;
-        if (o.state != (int)CafeteriaOrderState.TrayToReturn) return false;
+        if (o == null || o.state != (int)CafeteriaOrderState.TrayToReturn) return false;
         if (!o.NeedsTrayReturn) return false;
-
         st.orders.Remove(o);
         Save();
         return true;
+    }
+
+    public void SetEating(bool on)
+    {
+        var o = CarriedOrder;
+        if (o == null) return;
+        if (on)
+        {
+            if (o.state == (int)CafeteriaOrderState.Carrying) o.state = (int)CafeteriaOrderState.Eating;
+        }
+        else if (o.state == (int)CafeteriaOrderState.Eating)
+        {
+            o.state = o.eatProgress >= 1f ? (int)CafeteriaOrderState.TrayToReturn : (int)CafeteriaOrderState.Carrying;
+        }
+        Save();
+    }
+
+    // Eating advances every frame; the save is throttled so a meal does not write to
+    // disk 60 times a second. Standing up, finishing and quitting always force a save.
+    float eatSaveTimer;
+
+    public void AddEatProgress(float delta)
+    {
+        var o = CarriedOrder;
+        if (o == null) return;
+        o.eatProgress = Mathf.Clamp01(o.eatProgress + delta);
+
+        bool finished = o.eatProgress >= 1f && o.NeedsTrayReturn;
+        if (finished) o.state = (int)CafeteriaOrderState.TrayToReturn;
+
+        eatSaveTimer += Mathf.Max(0f, delta);
+        if (finished || eatSaveTimer >= 0.25f) { eatSaveTimer = 0f; Save(); }
+    }
+
+    // Instant goods (drinks, fruit) are consumed from the real inventory.
+    public bool ConsumeInstant(CafeteriaOrder order, out string message)
+    {
+        message = "";
+        if (order == null || order.state != (int)CafeteriaOrderState.Bought) { message = "该订单不可享用"; return false; }
+        for (int i = 0; i < order.items.Count; i++)
+        {
+            if (!CampusInventory.Consume(order.items[i], order.quantities[i]))
+            {
+                message = "物品已不在随身物品中";
+                return false;
+            }
+        }
+        order.state = (int)CafeteriaOrderState.Consumed;
+        st.orders.Remove(order);
+        Save();
+        message = "已享用：" + order.ItemsSummary;
+        return true;
+    }
+
+    public CafeteriaOrder InstantOrderHeld(CafeteriaShop shop)
+    {
+        EnsureReady();
+        foreach (var o in st.orders)
+            if (o.shop == (int)shop && o.state == (int)CafeteriaOrderState.Bought) return o;
+        return null;
     }
 
     // ---------------------------------------------------------------- seating
     public void BeginSeat(Transform seat, Vector3 sitPos, Quaternion sitRot)
     {
         seated = true; currentSeat = seat;
-        if (EnsureGame() && game.player)
+        var g = Game;
+        if (g && g.player)
         {
-            preSeatPos = game.player.position;
-            preSeatRot = game.player.rotation;
-            game.player.position = sitPos;
-            game.player.rotation = sitRot;
+            preSeatPos = g.player.position;
+            preSeatRot = g.player.rotation;
+            g.player.position = sitPos;
+            g.player.rotation = sitRot;
         }
     }
 
@@ -793,221 +766,153 @@ public class CafeteriaOrdering : MonoBehaviour
         return preSeatPos;
     }
 
-    // Standing pose recorded when the player sat down, so standing up returns to a spot
-    // that was already walkable.
-    public Quaternion LastStandRotation { get { return preSeatRot; } }
+    public Quaternion LastStandRotation => preSeatRot;
 
-    // ---------------------------------------------------------------- scene queries
-    // When set, proximity checks use this position instead of the live player. Used by
-    // the editor verification to prove per-floor gating without entering play mode.
-    [NonSerialized] public Vector3? TestPlayerPos;
-
-    bool Near(Transform anchor, float radius)
+    // ---------------------------------------------------------------- E ownership
+    // True when the ordering system should answer the E key at the player's position.
+    public bool HandlesCurrentSpot()
     {
-        if (!anchor) return false;
-
-        Vector3 p;
-        if (TestPlayerPos.HasValue) p = TestPlayerPos.Value;
-        else if (EnsureGame() && game.player) p = game.player.position;
-        else return false;
-
-        return Vector2.Distance(new Vector2(p.x, p.z), new Vector2(anchor.position.x, anchor.position.z)) <= radius
-            && Mathf.Abs(p.y - anchor.position.y) < 2.0f;
+        var g = Game;
+        if (!g || g.Interiors == null || !g.Interiors.Inside) return false;
+        var interior = g.Interiors.Interior;
+        if (!interior || interior.buildingId != "cafeteria") return false;
+        if (uiOpen) return true;
+        if (interior.NearExit(g.player.position)) return false;
+        return OwnsSpotAt(g.player.position);
     }
 
-    // World position of the closest pickup anchor on the player's floor, used by the
-    // automated run so it stands where the game says the pickup point is.
-    // Pickup anchor closest to a position, on the same floor. Pass a position that is
-    // already next to the intended counter so the nearest hit is the right one.
-    public Vector3? NearestCollectAnchorPos(Vector3 from)
-    {
-        EnsureReady();
-        if (collectSpots == null) return null;
-
-        Vector3 best = Vector3.zero;
-        float bestSqr = float.MaxValue;
-        for (int i = 0; i < collectSpots.Length; i++)
-        {
-            var a = collectSpots[i];
-            if (!a) continue;
-            if (Mathf.Abs(from.y - a.position.y) >= 2.0f) continue;
-            float sqr = (new Vector2(from.x, from.z) - new Vector2(a.position.x, a.position.z)).sqrMagnitude;
-            if (sqr < bestSqr) { bestSqr = sqr; best = a.position; }
-        }
-        return bestSqr == float.MaxValue ? (Vector3?)null : best;
-    }
-
-    bool NearAny(Transform[] anchors, float radius)
-    {
-        if (anchors == null) return false;
-        for (int i = 0; i < anchors.Length; i++)
-            if (Near(anchors[i], radius)) return true;
-        return false;
-    }
-
-    // The counters are long, so the radius is generous; the height window inside Near()
-    // is what keeps floors apart.
-    public bool NearOrderSpot { get { return NearAny(orderSpots, 3.6f); } }
-    public bool NearCollectSpot { get { return NearAny(collectSpots, 2.6f); } }
-    public bool NearReturnSpot { get { return NearAny(returnSpots, 2.6f); } }
-    public bool NearSeat { get { return NearAny(seatSpots, 2.4f); } }
-
-    // Seat anchor closest to the player on this floor, used when sitting down.
-    // Nearest seat on the player's own floor within reach. Returns null when nothing
-    // valid is close, so callers never seat the player in mid-air.
-    public Transform NearestSeatAnchor(float maxDistance = 2.6f)
-    {
-        if (!TryPlayerPos(out var p) || seatSpots == null) return null;
-
-        Transform best = null;
-        float bestSqr = maxDistance * maxDistance;
-        for (int i = 0; i < seatSpots.Length; i++)
-        {
-            var a = seatSpots[i];
-            if (!a) continue;
-            if (Mathf.Abs(p.y - a.position.y) >= 2.0f) continue;   // other floor
-            float sqr = (new Vector2(p.x, p.z) - new Vector2(a.position.x, a.position.z)).sqrMagnitude;
-            if (sqr < bestSqr) { bestSqr = sqr; best = a; }
-        }
-        return best;
-    }
-
-    // True when this system should answer the E key at the player's current position.
-    // Pose-only check: does an ordering action apply at this position? Independent of
-    // scene/game references so it can be verified directly.
     public bool OwnsSpotAt(Vector3 p)
     {
         EnsureReady();
         var saved = TestPlayerPos;
         TestPlayerPos = p;
+        CafeteriaShop s; float d;
         bool owns =
-            (NearReturnSpot && HasTray && EatProgress >= 1f) ||
-            (NearCollectSpot && CanCollect) ||
-            (NearSeat && State == CafeteriaOrderState.Carrying) ||
-            NearOrderSpot;
+            (NearReturnSpot && AwaitingTrayReturn) ||
+            CanCollect ||
+            (NearestSeatAnchor() != null && State == CafeteriaOrderState.Carrying) ||
+            NearestOrderAnchor(p, out s, out d) != null ||
+            HeldInstantHere() != null;
         TestPlayerPos = saved;
         return owns;
     }
 
-    bool TryPlayerPos(out Vector3 p)
+    CafeteriaOrder HeldInstantHere()
     {
-        if (TestPlayerPos.HasValue) { p = TestPlayerPos.Value; return true; }
-        if (EnsureGame() && game.player) { p = game.player.position; return true; }
-        p = Vector3.zero; return false;
+        if (!TryPlayerPos(out var p)) return null;
+        CafeteriaShop s; float d;
+        var anchor = NearestOrderAnchor(p, out s, out d);
+        if (!anchor) return null;
+        return InstantOrderHeld(s);
     }
 
-    // Which counter the player is standing at. Used both to decide that E opens the
-    // panel and to pick which shop's menu to show.
-    public CafeteriaShop NearestOrderShop()
+    // ---------------------------------------------------------------- UI plumbing
+    public void OpenPanel(CafeteriaShop shop)
     {
-        EnsureReady();
-        if (!TryPlayerPos(out var p) || orderSpots == null) return CafeteriaShop.Restaurant;
+        activeShop = shop;
+        CartClear();
+        RefreshMenusIfNeeded();
+        uiOpen = true;
+        var g = Game;
+        if (g) g.SetUiCursor(true);
+    }
 
-        Transform best = null; float bestSqr = float.MaxValue;
-        for (int i = 0; i < orderSpots.Length; i++)
+    public void ClosePanel()
+    {
+        if (!uiOpen) return;
+        uiOpen = false;
+        var g = Game;
+        if (g) g.SetUiCursor(false);
+    }
+
+    public void SetUi(bool open) { if (open) uiOpen = true; else ClosePanel(); }
+
+    public void Notify(string msg)
+    {
+        lastMessage = msg;
+        var g = Game;
+        if (g) g.Notify(msg);
+    }
+
+    public string LastMessage => lastMessage;
+
+    // ---------------------------------------------------------------- persistence
+    public void Save()
+    {
+        st.menus ??= new List<ShopMenu>();
+        st.orders ??= new List<CafeteriaOrder>();
+        PlayerPrefs.SetString(Key, JsonUtility.ToJson(st));
+        PlayerPrefs.Save();
+    }
+
+    public void Load()
+    {
+        // A fresh profile starts with the configured allowance, recorded once in the wallet.
+        st = new Persisted();
+        string raw = PlayerPrefs.GetString(Key, "");
+        if (string.IsNullOrEmpty(raw))
         {
-            var a = orderSpots[i];
-            if (!a) continue;
-            if (Mathf.Abs(p.y - a.position.y) >= 2.0f) continue;
-            float sqr = (new Vector2(p.x, p.z) - new Vector2(a.position.x, a.position.z)).sqrMagnitude;
-            if (sqr > 3.6f * 3.6f) continue;
-            if (sqr < bestSqr) { bestSqr = sqr; best = a; }
+            if (!PlayerPrefs.HasKey(CampusWallet.KeyOverride ?? CampusWallet.Key))
+                CampusWallet.SetForTest(CampusWallet.DefaultStartingFen);
+            return;
         }
-        if (!best) return CafeteriaShop.Restaurant;
-        var counter = best.GetComponent<CafeteriaCounter>();
-        return counter ? counter.shop : CafeteriaShop.Restaurant;
-    }
 
-    // Shop whose menu the open panel is showing.
-    public CafeteriaShop ActiveShop { get; private set; } = CafeteriaShop.Restaurant;
+        Persisted loaded = null;
+        try { loaded = JsonUtility.FromJson<Persisted>(raw); }
+        catch (Exception e) { Debug.LogWarning("[CafeteriaOrdering] save unreadable: " + e.Message); }
+        if (loaded == null) return;
 
-    public void SetActiveShop(CafeteriaShop shop) { ActiveShop = shop; }
+        st = loaded;
+        st.menus ??= new List<ShopMenu>();
+        st.orders ??= new List<CafeteriaOrder>();
+        st.shops ??= new List<string>();
 
-    // ---- menu accessors for the water bar / fruit stall (single list each) ----
-    ShopMenu ActiveMenu =>
-        ActiveShop == CafeteriaShop.WaterBar ? st.waterBar
-        : ActiveShop == CafeteriaShop.FruitStall ? st.fruitStall : null;
-
-    public int ShopItemCount { get { EnsureReady(); var m = ActiveMenu; return m == null ? 0 : m.names.Count; } }
-    public string ShopItemName(int i) { EnsureReady(); var m = ActiveMenu; return m != null && i < m.names.Count ? m.names[i] : ""; }
-    public int ShopItemFen(int i) { EnsureReady(); var m = ActiveMenu; return m != null && i < m.fen.Count ? m.fen[i] : 0; }
-
-    public string ShopTitle
-    {
-        get
+        // Repair orders written by older builds.
+        for (int i = st.orders.Count - 1; i >= 0; i--)
         {
-            switch (ActiveShop)
-            {
-                case CafeteriaShop.WaterBar: return "水吧菜单";
-                case CafeteriaShop.FruitStall: return "鲜果超市";
-                default: return "今日食堂菜单";
-            }
+            var o = st.orders[i];
+            if (o == null) { st.orders.RemoveAt(i); continue; }
+            if (o.items == null) o.items = new List<string>();
+            if (o.quantities == null) o.quantities = new List<int>();
+            if (o.unitFen == null) o.unitFen = new List<int>();
+            if (o.units == null) o.units = new List<string>();
+            while (o.units.Count < o.items.Count) o.units.Add("份");
+            if (o.floor <= 0) o.floor = CafeteriaShops.Get(o.Shop)?.floor ?? 1;
+            if (o.state == (int)CafeteriaOrderState.Eating) { o.state = (int)CafeteriaOrderState.Carrying; o.eatProgress = 0f; }
         }
+
+        // Orders that were already finished, or that lost their goods, are dropped.
+        st.orders.RemoveAll(o => o.state == (int)CafeteriaOrderState.Done || o.state == (int)CafeteriaOrderState.Consumed);
     }
-
-    // Pose probes for verification: does an anchor of this kind cover a position?
-    public bool NearOrderAt(Vector3 p) { var s = TestPlayerPos; TestPlayerPos = p; var r = NearOrderSpot; TestPlayerPos = s; return r; }
-    public bool NearCollectAt(Vector3 p) { var s = TestPlayerPos; TestPlayerPos = p; var r = NearCollectSpot; TestPlayerPos = s; return r; }
-    public bool NearReturnAt(Vector3 p) { var s = TestPlayerPos; TestPlayerPos = p; var r = NearReturnSpot; TestPlayerPos = s; return r; }
-    public bool NearSeatAt(Vector3 p) { var s = TestPlayerPos; TestPlayerPos = p; var r = NearSeat; TestPlayerPos = s; return r; }
-    public int SeatAnchorCount { get { EnsureReady(); return seatSpots == null ? 0 : seatSpots.Length; } }
-
-    // Test helper: which shop a counter position maps to.
-    public CafeteriaShop NearestOrderShopAtForTest(Vector3 p)
-    {
-        var saved = TestPlayerPos;
-        TestPlayerPos = p;
-        var shop = NearestOrderShop();
-        TestPlayerPos = saved;
-        return shop;
-    }
-
-    public bool HandlesCurrentSpot()
-    {
-        EnsureReady();
-        if (!EnsureGame() || !game.Interiors || !game.Interiors.Inside) return false;
-        var interior = game.Interiors.Interior;
-        if (!interior || interior.buildingId != "cafeteria") return false;
-        if (interior.NearExit(game.player.position)) return false;
-        if (game.paused || uiOpen) return true;
-        return OwnsSpotAt(game.player.position);
-    }
-
-    public void Notify(string msg) { if (EnsureGame()) game.Notify(msg); }
-    public void SetUi(bool open) { uiOpen = open; if (EnsureGame()) game.SetUiCursor(open); }
-
-    public void SetUiForTest(bool open) { uiOpen = open; }
-    public void SetGame(CampusGame g) { game = g; }
-    public CampusGame Game { get { return EnsureGame(); } }
 
     // ---------------------------------------------------------------- test hooks
-    public string MenuDateForTest() { EnsureReady(); return st.menuDate; }
-    public void SetMenuDateForTest(string d) { EnsureReady(); st.menuDate = d; Save(); }
-    public void RefreshMenuForTest() { EnsureReady(); st.menuDate = ""; CafeteriaMenu.Ensure(st, dishCount, drinkCount); Save(); }
-    public void ForceReadyForTest() { EnsureReady(); st.readyTicks = DateTime.Now.Ticks; st.state = (int)CafeteriaOrderState.ReadyToCollect; Save(); }
-    public void SetReadyInPastForTest(int secondsAgo)
+    [NonSerialized] public Vector3? TestPlayerPos;
+
+    public void SetPlayerPosForTest(Vector3 p) { TestPlayerPos = p; }
+    public void ClearPlayerPosForTest() { TestPlayerPos = null; }
+    public void SetBalanceForTest(long fen) { CampusWallet.SetForTest(fen); }
+    public int MenuItemCountFor(CafeteriaShop shop) { var m = MenuFor(shop); return m == null ? 0 : m.names.Count; }
+    public string MenuItemNameFor(CafeteriaShop shop, int i) { var m = MenuFor(shop); return m != null && i < m.names.Count ? m.names[i] : ""; }
+    public int MenuItemFenFor(CafeteriaShop shop, int i) { var m = MenuFor(shop); return m != null && i < m.fen.Count ? m.fen[i] : 0; }
+    public void ForceReadyForTest(int orderId)
     {
-        EnsureReady();
-        st.readyTicks = DateTime.Now.AddSeconds(-secondsAgo).Ticks;
         foreach (var o in st.orders)
-            if (o.state == (int)CafeteriaOrderState.Preparing)
+            if (o.id == orderId && o.state == (int)CafeteriaOrderState.Preparing)
             {
-                o.readyTicks = st.readyTicks;
+                o.readyTicks = DateTime.Now.Ticks - 1;
                 o.state = (int)CafeteriaOrderState.ReadyToCollect;
             }
         Save();
     }
+    public List<CafeteriaOrder> OrdersForTest() => st.orders;
+    public void ClearOrdersForTest() { st.orders.Clear(); }
+    public void ClearCartForTest() { CartClear(); }
+    public void SetOrdersForTest(int orderId) { st.lastOrderId = orderId; }
+    public int LastOrderId => st.lastOrderId;
+}
 
-    public void SetBalanceForTest(long fen) { EnsureReady(); st.balanceFen = Mathf.Max(0, (int)fen); Save(); }
-    // Reset to a clean, orderable state without touching balance or menus.
-    public void ForceIdleForTest()
-    {
-        EnsureReady();
-        st.state = (int)CafeteriaOrderState.None;
-        st.items.Clear(); st.quantities.Clear(); st.unitFen.Clear();
-        st.totalFen = 0; st.eatProgress = 0f; st.carrying = false;
-        Save();
-    }
-
-    public void CartClearForTest() { EnsureReady(); st.items.Clear(); st.quantities.Clear(); st.unitFen.Clear(); Save(); }
+public enum CafeteriaOrderState
+{
+    None = 0, Preparing = 1, ReadyToCollect = 2, Carrying = 3,
+    Eating = 4, TrayToReturn = 5, Done = 6, Bought = 7, Consumed = 8
 }

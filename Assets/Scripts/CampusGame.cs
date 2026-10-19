@@ -26,7 +26,7 @@ public class CampusGame : MonoBehaviour {
  float messageUntil=10; Animation animationPlayer; SkinnedMeshRenderer face; string motion=""; GUIStyle title,body,small; Texture2D minimap;
  void Awake(){
   data=JsonUtility.FromJson<CampusData>(mapData.text);qa=Environment.GetCommandLineArgs().Contains("-campusQA");
-  Interiors=GetComponent<BuildingInteriorTravel>();Automated=qa||Environment.GetCommandLineArgs().Contains("-entranceQA")||Environment.GetCommandLineArgs().Contains("-teachingCQA")||Environment.GetCommandLineArgs().Contains("-teachingABQA")||Environment.GetCommandLineArgs().Contains("-skybridgeQA");
+  Interiors=GetComponent<BuildingInteriorTravel>();Automated=qa||Environment.GetCommandLineArgs().Contains("-entranceQA")||Environment.GetCommandLineArgs().Contains("-overlayRenderQA")||Environment.GetCommandLineArgs().Contains("-teachingCQA")||Environment.GetCommandLineArgs().Contains("-teachingABQA")||Environment.GetCommandLineArgs().Contains("-skybridgeQA");
   Application.targetFrameRate=60;
   animationPlayer=player.GetComponentInChildren<Animation>();face=player.GetComponentInChildren<SkinnedMeshRenderer>();
   foreach(var actor in new[]{player,guide})foreach(var skin in actor.GetComponentsInChildren<SkinnedMeshRenderer>())skin.updateWhenOffscreen=true;
@@ -37,12 +37,14 @@ public class CampusGame : MonoBehaviour {
   if(interfaceFont==null)interfaceFont=Font.CreateDynamicFontFromOSFont(new string[]{"Arial Unicode MS","Hiragino Sans GB","STHeiti Medium","Microsoft YaHei","SimHei"},20);
   BuildMap();if(pixelStudy&&!qa)Teleport(new Vector3(65,.23f,-72));ApplyCursor();if(qa){StartCoroutine(QA());StartCoroutine(QATimeout());}
  }
- void ApplyCursor(){bool free=paused||Automated||UiBlocking;Cursor.lockState=free?CursorLockMode.None:CursorLockMode.Locked;Cursor.visible=free;}
+ void ApplyCursor(){bool free=paused||Automated||UiBlocking||Seated;Cursor.lockState=free?CursorLockMode.None:CursorLockMode.Locked;Cursor.visible=free;}
+ public void RefreshCursorState(){ApplyCursor();}
  // Called by an interior UI to release/recapture the mouse without pausing the game.
  public void SetUiCursor(bool free){UiBlocking=free;ApplyCursor();}
  void OnApplicationFocus(bool focus){if(!focus&&!Automated){paused=true;ApplyCursor();}}
  void Update(){
   if(!Automated){
+   if(CampusOverlayHub.InputConsumedFrame==Time.frameCount)return;
    // An interior UI owns input while it is open: no pause toggle, no movement.
    if(UiBlocking){Animate("Idle",0);return;}
    if(Input.GetKeyDown(KeyCode.Escape)){paused=!paused;ApplyCursor();}
@@ -68,7 +70,8 @@ public class CampusGame : MonoBehaviour {
    if(ExteriorShortcutsAllowed){
     if(Input.GetKeyDown(KeyCode.R))Teleport(new Vector3(3,.23f,194));
     if(Input.GetKeyDown(KeyCode.T)){yaw=targetYaw=180;pitch=targetPitch=18;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(new Vector3(65,.23f,-72));Say("教学区：ABC 教学楼与喷泉广场。");}
-    if(Input.GetKeyDown(KeyCode.L)){yaw=targetYaw=180;pitch=targetPitch=18;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(new Vector3(175.14f,.23f,14));Say("生活区西1门：沿西侧主路向北，可到恩苑和公寓中庭。");}}
+    if(Input.GetKeyDown(KeyCode.L)){yaw=targetYaw=180;pitch=targetPitch=18;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(new Vector3(175.14f,.23f,14));Say("生活区西1门：沿西侧主路向北，可到恩苑和公寓中庭。");}
+    if(Input.GetKeyDown(KeyCode.G)){yaw=targetYaw=270;pitch=targetPitch=8;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(new Vector3(44.6f,.23f,92));Say("图书馆：向正门走近，按 E 进入。");}}
    if(Input.GetKeyDown(KeyCode.E))Interact();
   }
   if(face!=null){for(int i=0;i<face.sharedMesh.blendShapeCount;i++){string n=face.sharedMesh.GetBlendShapeName(i);if(n.Contains("Blink"))face.SetBlendShapeWeight(i,Mathf.Pow(Mathf.Max(0,Mathf.Cos(Time.time*1.8f)),35)*100);else if(n.Contains("Smile"))face.SetBlendShapeWeight(i,complete?65:10);}}
@@ -100,6 +103,8 @@ public class CampusGame : MonoBehaviour {
  public void Teleport(Vector3 position){if(!ExteriorShortcutsAllowed)return;player.position=MapToWorld(position);vertical=0;grounded=true;UpdateCamera();}
  public void VisitDormitory(){if(!ExteriorShortcutsAllowed)return;yaw=targetYaw=180;pitch=targetPitch=12;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(new Vector3(245,.23f,-68));Say("宿舍花园：靠近公寓入口，按 E 进入。");}
  public void VisitCafeteria(){if(!ExteriorShortcutsAllowed)return;yaw=targetYaw=270;pitch=targetPitch=8;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(new Vector3(174.5f,.23f,8));Say("学生食堂：向正门走近，按 E 进入。");}
+ // G jumps straight to the library front door, facing the entrance so E works immediately.
+ public void VisitLibrary(){if(!ExteriorShortcutsAllowed)return;yaw=targetYaw=270;pitch=targetPitch=8;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(new Vector3(44.6f,.23f,92));Say("图书馆：向正门走近，按 E 进入。");}
  public bool IsMapWalkable(Vector3 position)=>!CampusCollision.Blocked(position.x,position.z,data.obstacles);
  // Shared travel API uses world coordinates indoors and resets movement/camera state.
  // Turn the follow camera to a heading without moving the player. Used so sitting down
@@ -113,9 +118,12 @@ public class CampusGame : MonoBehaviour {
   if(animationPlayer[state]!=null){animationPlayer[state].speed=(state=="Walk"||state=="Run")?Mathf.Clamp(speed/(state=="Run"?10:5.4f),.35f,1.3f)*(backwards?-1:1):1;}
  }
  public bool Interact(){
+  // One dispatcher, one action per press. Inside the cafeteria the ordering system is
+  // offered the press first; only the single counter/menu the player stands at answers
+  // it, and when it does, nothing else (exit, doors, NPCs) runs on the same press.
   if(Interiors&&Interiors.Inside&&Interiors.Interior&&Interiors.Interior.buildingId=="cafeteria"){
-    var ordering=Interiors.Interior.GetComponent<CafeteriaOrdering>();
-    if(ordering&&ordering.HandlesCurrentSpot())return false;   // the ordering UI handles E
+    var ordering=CampusSystemsRegistry.FindOrdering();
+    if(ordering){var ui=ordering.GetComponent<CafeteriaOrderingUI>();if(ui&&ui.InteractOnce())return true;}
   }
   if(Interiors&&Interiors.TryInteract())return true;
   if(Vector3.Distance(player.position,guide.position)<4){
@@ -137,20 +145,17 @@ public class CampusGame : MonoBehaviour {
  void OnGUI(){
   if(pixelStudy)followCamera.GetComponent<CampusPixelView>()?.DrawBackground();
   if(interfaceFont==null)interfaceFont=Resources.Load<Font>("CampusFont");
-  GUI.skin.font=interfaceFont;GUI.skin.button.font=interfaceFont;GUI.skin.box.font=interfaceFont;GUI.skin.label.font=interfaceFont;
-  if(title==null){title=new GUIStyle(GUI.skin.label){font=interfaceFont,fontSize=26,fontStyle=FontStyle.Bold};body=new GUIStyle(GUI.skin.label){font=interfaceFont,fontSize=17,wordWrap=true};small=new GUIStyle(body){fontSize=14};}
+  GUI.skin.font=interfaceFont;if(GUI.skin.button!=null)GUI.skin.button.font=interfaceFont;if(GUI.skin.box!=null)GUI.skin.box.font=interfaceFont;if(GUI.skin.label!=null)GUI.skin.label.font=interfaceFont;
+  if(title==null||title.font!=interfaceFont){title=new GUIStyle(GUI.skin.label){font=interfaceFont,fontSize=26,fontStyle=FontStyle.Bold};body=new GUIStyle(GUI.skin.label){font=interfaceFont,fontSize=17,wordWrap=true};small=new GUIStyle(body){fontSize=14,font=interfaceFont};}
   float scale=Mathf.Clamp(Screen.height/900f,.7f,1.5f);GUI.matrix=Matrix4x4.Scale(Vector3.one*scale);float w=Screen.width/scale,h=Screen.height/scale;
   bool indoors=Interiors&&Interiors.Inside;
   GUI.Box(new Rect(20,20,350,125),"");GUI.Label(new Rect(38,32,320,36),pixelStudy?"风起 · 校园  /  像素试作":"风起 · 校园  /  UNITY",title);GUI.Label(new Rect(38,73,315,65),indoors?Interiors.Current.displayName+"\n"+(Interiors.Interior.isPlaceholder?"室内场景待制作 · 靠近出口按 E 返回":"室内探索 · 靠近出口按 E 返回"):"大连理工大学 · 开发区校区\n"+(complete?"探索完成 · 自由漫游":started?"校园记忆  "+Count()+" / 3":"前往书韵广场，与小岚交谈"),body);
   if(pixelStudy)GUI.Label(new Rect(24,h-65,w-48,26),"T 返回教学广场    F6 切换像素大小（标准 / 粗 / 细 / 原生分辨率）",small);
-  GUI.Label(new Rect(24,h-37,w-48,30),indoors?"WASD 移动    鼠标转向    Shift 奔跑    空格跳跃    E 出口交互    ESC 暂停":"WASD 移动    鼠标转向    Shift 奔跑    空格跳跃    E 交互 / 进入建筑    M 地图    L 生活区    B 宿舍    F 食堂    ESC 暂停",small);
+  GUI.Label(new Rect(24,h-37,w-48,30),indoors?"WASD 移动    鼠标转向    Shift 奔跑    空格跳跃    E 出口交互    ESC 暂停":"WASD 移动    鼠标转向    Shift 奔跑    空格跳跃    E 交互 / 进入建筑    M 地图    T 教学    L 生活区    B 宿舍    F 食堂    G 图书馆    R 南门    ESC 暂停",small);
   if(Time.time<messageUntil){GUI.Box(new Rect(w*.5f-330,h-130,660,72),"");GUI.Label(new Rect(w*.5f-312,h-119,624,60),message,body);}
-  bool near=Vector3.Distance(player.position,guide.position)<4||memories.Any(m=>m.activeSelf&&Vector3.Distance(player.position,m.transform.position)<4);
-  string doorPrompt=Interiors?Interiors.InteractionPrompt:"";
-  if(!paused&&!string.IsNullOrEmpty(doorPrompt)){GUI.Box(new Rect(w*.5f-190,h*.68f,380,48),"");GUI.Label(new Rect(w*.5f-180,h*.68f+8,360,40),doorPrompt,new GUIStyle(body){alignment=TextAnchor.MiddleCenter});}
-  else if(near&&!paused&&!indoors)GUI.Label(new Rect(w*.5f-75,h*.64f,180,35),"[ E ]  交谈 / 收集",body);
+  // The contextual "[ E ] ..." prompt is drawn once, by CampusHud.
   if(mapOpen){float s=Mathf.Min(h-190,620);var r=new Rect(w-s-25,25,s,s*.692f);GUI.DrawTexture(r,minimap);foreach(var spot in data.spots)Dot(r,spot.x,spot.z,new Color(1,.76f,.3f));Dot(r,20,109,Color.cyan);Dot(r,player.position.x*mapXSign,player.position.z,Color.white);GUI.Label(new Rect(r.x,r.yMax+8,s,35),"北 ↑   白：你   蓝：小岚   金：记忆",small);}
-  if(paused&&(!qa||pixelStudy)){GUI.Box(new Rect(w/2-230,h/2-135,460,265),"");GUI.Label(new Rect(w/2-185,h/2-113,400,40),"校园漫游已准备就绪",title);GUI.Label(new Rect(w/2-185,h/2-60,370,65),"点击开始后，鼠标控制视角。\n按 ESC 可暂停并释放鼠标。",body);if(GUI.Button(new Rect(w/2-175,h/2+18,350,44),"开始 / 继续探索")){paused=false;ApplyCursor();}if(!indoors&&GUI.Button(new Rect(w/2-175,h/2+72,350,30),"重置探索任务")){started=false;complete=false;collected=0;foreach(var m in memories)m.SetActive(true);Save();}}
+  if(paused&&(!qa||pixelStudy)){GUI.Box(new Rect(w/2-230,h/2-135,460,300),"");GUI.Label(new Rect(w/2-185,h/2-113,400,40),"校园漫游已准备就绪",title);GUI.Label(new Rect(w/2-185,h/2-60,370,65),"点击开始后，鼠标控制视角。\n按 ESC 可暂停并释放鼠标。",body);if(GUI.Button(new Rect(w/2-175,h/2+18,350,44),"开始 / 继续探索")){paused=false;ApplyCursor();}if(!indoors&&GUI.Button(new Rect(w/2-175,h/2+72,350,30),"重置探索任务")){started=false;complete=false;collected=0;foreach(var m in memories)m.SetActive(true);Save();}if(GUI.Button(new Rect(w/2-175,h/2+112,350,30),"退出游戏")){Save();Application.Quit();}}
  }
  void Dot(Rect r,float x,float z,Color color){var old=GUI.color;GUI.color=color;GUI.DrawTexture(new Rect(r.x+(x+290)/600*r.width-3,r.y+(z+180)/415*r.height-3,6,6),Texture2D.whiteTexture);GUI.color=old;}
  void BuildMap(){
