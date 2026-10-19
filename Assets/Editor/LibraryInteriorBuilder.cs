@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEngine.Rendering.Universal;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using System.Collections.Generic;
 using UnityEngine.Rendering;
 
 // Builds the three-floor library INTERIOR (图书馆室内) in Assets/Interiors/Scenes/library.unity.
@@ -40,6 +41,13 @@ public static class LibraryInteriorBuilder
     const float SlabY2 = 4.225f, SlabY3 = 8.525f, SlabY4 = 12.825f;
 
     // Ground level of storey f (0-based): 0 -> Y1, 1 -> Y2, ...
+    static string AreaName(int floor, string area)
+    {
+        if (area == "A") return "圆厅自习区";
+        if (area == "B") return "阅览区";
+        return "自习桌区";
+    }
+
     static float FloorY(int f) => f == 0 ? Y1 : f == 1 ? Y2 : f == 2 ? Y3 : Y4;
 
     // Chinese name of a 1-based storey number, for signage.
@@ -860,9 +868,131 @@ public static class LibraryInteriorBuilder
         InteriorLabelStairFix.ConfigureLabels(rootObj.transform, 4);
         LibraryHallWindows.Configure(rootObj.transform);
 
+        BuildSeatsAndVending(rootObj.transform);
+
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);
         Debug.Log("LIBRARY_BUILD_COMPLETE: built 1F lobby and 2F/3F/4F reading halls for 图书馆");
+    }
+
+    // Registers every chair as a numbered reservable seat and binds the two existing
+    // vending machines, so the phone, the in-world interaction and the save all agree.
+    static void BuildSeatsAndVending(Transform interiorRoot)
+    {
+        // Stable, human-readable ids: floor + area + running index within that area.
+        var perArea = new System.Collections.Generic.Dictionary<string, int>();
+
+        // Keep only the three reservable floors that actually have chairs.
+        builtSeats.Sort((a, b) =>
+            a.floor != b.floor ? a.floor.CompareTo(b.floor)
+            : a.area != b.area ? string.CompareOrdinal(a.area, b.area)
+            : a.sitPos.z != b.sitPos.z ? a.sitPos.z.CompareTo(b.sitPos.z)
+            : a.sitPos.x.CompareTo(b.sitPos.x));
+
+        var kept = new System.Collections.Generic.List<LibrarySeat>();
+        foreach (var seat in builtSeats)
+        {
+            if (seat.floor < 1 || seat.floor > 3) continue;
+            string key = seat.floor + "-" + seat.area;
+            int n;
+            perArea.TryGetValue(key, out n);
+            n++;
+            perArea[key] = n;
+            seat.id = $"{seat.floor}F-{seat.area}-{n:D3}";
+            kept.Add(seat);
+        }
+
+        // Rebuild the holder from scratch. Editing components on a reused object left
+        // duplicate registries behind, which Unity then reported as "references runtime
+        // script in scene file".
+        var old = interiorRoot.Find("LibrarySeats");
+        if (old) UnityEngine.Object.DestroyImmediate(old.gameObject);
+        // Also clear any stray holder created in an earlier build.
+        for (int i = interiorRoot.childCount - 1; i >= 0; i--)
+        {
+            var c = interiorRoot.GetChild(i);
+            if (c.name.StartsWith("LibrarySeats")) UnityEngine.Object.DestroyImmediate(c.gameObject);
+        }
+
+        var go2 = new GameObject("LibrarySeats");
+        go2.transform.SetParent(interiorRoot, false);
+        var holder = go2.transform;
+
+        var reg = holder.gameObject.AddComponent<LibrarySeatRegistry>();
+        UnityEditor.EditorUtility.SetDirty(reg);
+        UnityEditor.EditorUtility.SetDirty(holder.gameObject);
+        UnityEditor.EditorUtility.SetDirty(holder);
+
+        foreach (var seat in kept)
+        {
+            var go = new GameObject(seat.id);
+            go.transform.SetParent(holder, false);
+            go.transform.position = seat.sitPos;
+            go.transform.rotation = seat.facing;
+            var marker = go.AddComponent<LibrarySeatPart>();
+            marker.seatId = seat.id;
+            marker.floor = seat.floor;
+            marker.area = seat.area;
+            marker.areaName = seat.areaName;
+            marker.standOffset = seat.standPos - seat.sitPos;
+        }
+
+        // Bind the machines that already exist in the 1F hall.
+        var vendingGo = interiorRoot.Find("VendingMachines");
+        if (!vendingGo)
+        {
+            var go = new GameObject("VendingMachines");
+            go.transform.SetParent(interiorRoot, false);
+            vendingGo = go.transform;
+        }
+        var vms = vendingGo.gameObject.GetComponents<VendingMachineUI>();
+        for (int i = 1; i < vms.Length; i++) UnityEngine.Object.DestroyImmediate(vms[i]);
+        var vm = vms.Length > 0 ? vms[0] : vendingGo.gameObject.AddComponent<VendingMachineUI>();
+
+        Transform FindOrMake(string name, Vector3 pos)
+        {
+            var t = interiorRoot.Find(name);
+            if (t) { t.position = pos; return t; }
+            var go = new GameObject(name);
+            go.transform.SetParent(interiorRoot, false);
+            go.transform.position = pos;
+            return go.transform;
+        }
+        vm.drinksMachine = FindOrMake("VendingAnchor_Drinks", new Vector3(-4.0f, Y1, -15.35f));
+        vm.snacksMachine = FindOrMake("VendingAnchor_Snacks", new Vector3(4.0f, Y1, -15.35f));
+
+        // Scene-side singletons used by the phone and the seat interaction.
+        var sits = interiorRoot.GetComponents<LibrarySeatInteraction>();
+        for (int i = 1; i < sits.Length; i++) UnityEngine.Object.DestroyImmediate(sits[i]);
+        if (sits.Length == 0) interiorRoot.gameObject.AddComponent<LibrarySeatInteraction>();
+        var boot = holder.gameObject.AddComponent<LibrarySeatBootstrap>();
+        UnityEditor.EditorUtility.SetDirty(boot);
+
+        // Serialise the phone into the library scene: runtime-created panels did not
+        // appear on screen, while scene-hosted panels (the cafeteria one) render fine.
+        var phones = interiorRoot.GetComponents<PhoneUI>();
+        for (int i = 1; i < phones.Length; i++) UnityEngine.Object.DestroyImmediate(phones[i]);
+        if (phones.Length == 0)
+        {
+            var ph = interiorRoot.gameObject.AddComponent<PhoneUI>();
+            UnityEditor.EditorUtility.SetDirty(ph);
+        }
+
+        // Serialise the systems host into the library scene so the phone and the clock
+        // exist even when the bootstrap does not run (e.g. entering the library directly).
+        var hosts = interiorRoot.GetComponents<CampusSystemsHost>();
+        for (int i = 1; i < hosts.Length; i++) UnityEngine.Object.DestroyImmediate(hosts[i]);
+        if (hosts.Length == 0) interiorRoot.gameObject.AddComponent<CampusSystemsHost>();
+
+        Debug.Log($"[Library] reservable seats: {kept.Count}  " +
+                  $"1F={countOn(kept, 1)} 2F={countOn(kept, 2)} 3F={countOn(kept, 3)}");
+    }
+
+    static int countOn(System.Collections.Generic.List<LibrarySeat> list, int floor)
+    {
+        int n = 0;
+        foreach (var s in list) if (s.floor == floor) n++;
+        return n;
     }
 
     // ================================================================ 1F
@@ -1056,15 +1186,19 @@ public static class LibraryInteriorBuilder
     // storey number only goes into object names and label text.
     static void BuildUpperFloor(Transform floorRoot, float baseY, int floor)
     {
+        currentBuildFloor = floor;
+        currentSeatArea = "A";
         // The restroom is set INTO the north wall (Z = +16), not opposite the stair.
         // You walk north across the hall and find it against the far wall.
         BuildRestrooms(floorRoot, baseY, floor + "F", new Vector2(8.0f, 12.1f), 6.6f, 7.2f);
 
         BuildUpperFloorDressing(floorRoot, baseY, floor);
+        currentSeatArea = "A";
         BuildRoundStudyHall(floorRoot, baseY, floor);
         BuildGreatDoor(floorRoot, baseY, floor);
         BuildUpperFloorLobby(floorRoot, baseY, floor);
         if (floor == 2 || floor == 3) BuildWestCorridor(floorRoot, baseY, floor);   // 2F + 3F
+        currentSeatArea = "B";
         BuildUpperReadingArea(floorRoot, baseY, floor);
         if (floor == 2 || floor == 3) LibraryUpperHallLandscape.Build(floorRoot, baseY, floor);
     }
@@ -1124,6 +1258,7 @@ public static class LibraryInteriorBuilder
     //     r 15.0          外墙：朝外落地玻璃，靠建筑一侧实墙
     static void BuildRoundStudyHall(Transform floorRoot, float baseY, int floor)
     {
+        currentSeatArea = "A";
         string tag = floor + "F_";
         var root = new GameObject(tag + "Round_Study_Hall").transform;
         root.SetParent(floorRoot, false);
@@ -2359,23 +2494,76 @@ public static class LibraryInteriorBuilder
         }
     }
 
+    // Potted plant with a real trunk and branch structure. Foliage is built from several
+    // flattened spheres clustered along branch tips, so the plant reads as a plant rather
+    // than a pile of green balls. Scale 1.0 = about 1.9 m tall.
     static void BuildPotPlant(Transform parent, Vector3 center, float scale)
     {
         var root = new GameObject("PotPlant").transform;
         root.SetParent(parent, false);
+        root.localPosition = center;
 
-        MakeCylinder(root, "Pot", center + new Vector3(0, 0.35f * scale, 0), new Vector3(0.85f * scale, 0.35f * scale, 0.85f * scale), matPlantPot);
-        MakeCylinder(root, "Pot_Rim", center + new Vector3(0, 0.71f * scale, 0), new Vector3(0.92f * scale, 0.04f * scale, 0.92f * scale), matWoodDarkWalnut, false);
-        MakeCylinder(root, "Trunk", center + new Vector3(0, 1.05f * scale, 0), new Vector3(0.14f * scale, 0.45f * scale, 0.14f * scale), matWoodDarkWalnut, false);
+        float potH = 0.42f * scale;
+        float potW = 0.72f * scale;
 
-        var rng = new System.Random(Mathf.RoundToInt(center.x * 31f + center.z * 17f) + 7);
-        for (int i = 0; i < 7; i++)
+        // Planter: tapered pot with a lighter rim, using the shared stone/wood palette.
+        MakeCylinder(root, "Pot", new Vector3(0, potH * 0.5f, 0), new Vector3(potW, potH * 0.5f, potW), matPlantPot);
+        MakeCylinder(root, "Pot_Rim", new Vector3(0, potH - 0.02f * scale, 0),
+            new Vector3(potW + 0.10f * scale, 0.025f * scale, potW + 0.10f * scale), matWoodDarkWalnut, false);
+        MakeCylinder(root, "Pot_Soil", new Vector3(0, potH - 0.05f * scale, 0),
+            new Vector3(potW - 0.10f * scale, 0.02f * scale, potW - 0.10f * scale), matPlantPot, false);
+
+        // Trunk: main stem plus three primary branches built from tubes.
+        Vector3 trunkTop = new Vector3(0, potH + 0.95f * scale, 0);
+        InteriorGeometry.Tube(root, "Trunk", new Vector3(0, potH - 0.05f * scale, 0),
+            trunkTop, 0.035f * scale, matWoodDarkWalnut);
+
+        var rng = new System.Random(Mathf.RoundToInt(Mathf.Abs(center.x) * 31f + Mathf.Abs(center.z) * 17f) + 7);
+        var tips = new List<Vector3> { trunkTop };
+
+        int branchCount = 3;
+        for (int i = 0; i < branchCount; i++)
+        {
+            float a = i * (Mathf.PI * 2f / branchCount) + (float)rng.NextDouble() * 0.8f;
+            float reach = (0.34f + (float)rng.NextDouble() * 0.14f) * scale;
+            float rise = (0.42f + (float)rng.NextDouble() * 0.16f) * scale;
+            var mid = new Vector3(Mathf.Cos(a) * reach * 0.45f, potH + 0.55f * scale, Mathf.Sin(a) * reach * 0.45f);
+            var tip = new Vector3(Mathf.Cos(a) * reach, potH + 0.55f * scale + rise, Mathf.Sin(a) * reach);
+
+            InteriorGeometry.Tube(root, "Branch_" + i,
+                new Vector3(Mathf.Cos(a) * 0.06f * scale, potH + 0.42f * scale, Mathf.Sin(a) * 0.06f * scale), mid,
+                0.020f * scale, matWoodDarkWalnut);
+            InteriorGeometry.Tube(root, "Branch_" + i + "_b", mid, tip, 0.014f * scale, matWoodDarkWalnut);
+            tips.Add(tip);
+        }
+
+        // Foliage clusters sit on the branch tips: a core blob plus two smaller lobes, so
+        // each cluster has silhouette instead of one flat sphere.
+        foreach (var tip in tips)
+        {
+            float crown = 0.52f * scale;
+            MakeSphere(root, "Leaf_Cluster", tip + new Vector3(0, crown * 0.28f, 0),
+                new Vector3(crown * 2.1f, crown * 1.5f, crown * 2.1f), matPlantFoliage, false);
+
+            for (int i = 0; i < 3; i++)
+            {
+                float a = (float)rng.NextDouble() * Mathf.PI * 2f;
+                float d = (0.45f + (float)rng.NextDouble() * 0.35f) * crown;
+                float h = ((float)rng.NextDouble() - 0.4f) * crown * 0.9f;
+                MakeSphere(root, "Leaf_Cluster_Lobe",
+                    tip + new Vector3(Mathf.Cos(a) * d, crown * 0.30f + h, Mathf.Sin(a) * d),
+                    new Vector3(crown * 1.5f, crown * 1.05f, crown * 1.5f), matShrubLight, false);
+            }
+        }
+
+        // A few fallen leaves on the pot soil.
+        for (int i = 0; i < 4; i++)
         {
             float a = (float)rng.NextDouble() * Mathf.PI * 2f;
-            float r = (float)rng.NextDouble() * 0.5f * scale;
-            float h = 1.35f * scale + (float)rng.NextDouble() * 0.6f * scale;
-            MakeSphere(root, "Leaf_" + i, center + new Vector3(Mathf.Cos(a) * r, h, Mathf.Sin(a) * r),
-                new Vector3(0.62f, 0.5f, 0.62f) * scale, matPlantFoliage, false);
+            float d = (float)rng.NextDouble() * potW * 0.35f;
+            MakeSphere(root, "Soil_Leaf",
+                new Vector3(Mathf.Cos(a) * d, potH - 0.03f * scale, Mathf.Sin(a) * d),
+                new Vector3(0.10f * scale, 0.012f * scale, 0.10f * scale), matPlantFoliage, false);
         }
     }
 
@@ -2398,12 +2586,32 @@ public static class LibraryInteriorBuilder
     // A single chair, sized off the 1.8 m character: 0.45 m seat height, 0.46 m seat
     // width, backrest rising to 1.02 m. Four tapered metal legs and a slightly reclined
     // back read far better than a stack of cubes.
+    // Chairs registered while the library is built become the reservable seat list.
+    static readonly System.Collections.Generic.List<LibrarySeat> builtSeats = new System.Collections.Generic.List<LibrarySeat>();
+    static int currentBuildFloor = 1;
+    static string currentSeatArea = "A";
+
     static void BuildChair(Transform parent, Vector3 localPos, float rotY, Material mat)
     {
         var ch = new GameObject("Chair").transform;
         ch.SetParent(parent, false);
         ch.localPosition = localPos;
         ch.localRotation = Quaternion.Euler(0, rotY, 0);
+
+        // Record the seat: world position is the chair footprint, and the body faces the
+        // same way the chair does (chairs are built turned toward their table).
+        Vector3 world = ch.TransformPoint(Vector3.zero);
+        Quaternion facing = ch.rotation;
+        Vector3 back = facing * Vector3.forward;   // chair back direction
+        builtSeats.Add(new LibrarySeat
+        {
+            floor = currentBuildFloor,
+            area = currentSeatArea,
+            areaName = AreaName(currentBuildFloor, currentSeatArea),
+            sitPos = new Vector3(world.x, world.y, world.z),
+            standPos = new Vector3(world.x - back.x * 0.75f, world.y, world.z - back.z * 0.75f),
+            facing = facing
+        });
 
         const float seatH = 0.45f, seatW = 0.46f, seatD = 0.44f;
 
