@@ -1,0 +1,132 @@
+using UnityEngine;
+
+namespace UMA
+{
+	/// <summary>
+	/// Packed recipe which uses JSON text serialization for storage.
+	/// Class is marked partial so the developer can implement their own properties in UMATextRecipe without
+	/// changing the distribution code.
+	/// </summary>
+	public partial class UMATextRecipe : UMAPackedRecipeBase, IUMAIndexOptions
+	{
+		/// <summary>
+		/// Complete text of recipe.
+		/// </summary>
+		public string recipeString="";
+        /// <summary>
+        /// If true, the recipe will not be removed from the index, and will always have the keep flag set.
+        /// </summary>
+        public bool forceKeep = false;  
+        public bool labelLocalFiles = false;
+        public bool LabelLocalFiles { get { return labelLocalFiles; } set { labelLocalFiles = value; } }
+        public bool ForceKeep { get { return forceKeep; } set { forceKeep = value; } }
+
+		[Tooltip("When true, this will not be automatically added to the index when all items are scanned.")]
+        public bool noAutoAdd = false;
+        public bool NoAutoAdd { get { return noAutoAdd; } set { noAutoAdd = value; } }  
+
+        [System.NonSerialized] private string parsedRecipeText;
+        [System.NonSerialized] private UMAPackRecipe parsedRecipe;
+
+        protected override UMAPackRecipe PackedLoadForUnpack()
+        {
+            // Unknown derived formats retain their PackedLoad override and legacy behavior.
+            // Cache only version 3's read-only unpack path. This contains names/numbers,
+            // not loaded assets, so it cannot pin Addressables or generated resources.
+            var type = GetType();
+            if (type != typeof(UMATextRecipe) && type != typeof(UMA.CharacterSystem.UMAWardrobeRecipe))
+                return PackedLoad();
+            if (!ReferenceEquals(parsedRecipeText, recipeString) || parsedRecipe == null)
+            {
+                parsedRecipe = string.IsNullOrEmpty(recipeString) ? null : JsonUtility.FromJson<UMAPackRecipe>(recipeString);
+                parsedRecipeText = recipeString;
+            }
+            // Resolving a missing race can depend on the current index/compatibleRaces.
+            // Leave that uncommon path uncached rather than retain a stale resolution.
+            if (parsedRecipe == null || parsedRecipe.version != 3 || string.IsNullOrEmpty(parsedRecipe.race))
+                return PackedLoad();
+            return parsedRecipe.CopyHeaderForUnpack();
+        }
+
+
+        /// <summary>
+        /// Deserialize recipeString data into packed recipe.
+        /// </summary>
+        /// <returns>The packed recipe.</returns>
+        /// <param name="context">Context.</param>
+        public override UMAPackedRecipeBase.UMAPackRecipe PackedLoad()
+		{
+			if ((recipeString == null) || (recipeString.Length == 0))
+			{
+				return new UMAPackRecipe();
+			}
+            var rcpe = JsonUtility.FromJson<UMAPackRecipe>(recipeString);
+            try
+            {
+				if (string.IsNullOrEmpty(rcpe.race))
+				{
+					for (int i = 0; i < compatibleRaces.Count; i++)
+					{
+						string s = this.compatibleRaces[i];
+						if (UMAAssetIndexer.Instance.HasAsset<RaceData>(s))
+						{
+							rcpe.race = s;
+							break;
+						}
+					}
+				}
+			}
+			catch (UMAResourceNotFoundException e)
+			{
+				Debug.LogError($"UMAResourceNotFoundException on recipe {umaRecipe.raceData.raceName} file {umaRecipe.raceData.name}: {e.Message}");
+			}
+            return rcpe;
+        }
+
+        /// <summary>
+        /// Serialize recipeString data into packed recipe.
+        /// </summary>
+        /// <param name="packedRecipe">Packed recipe.</param>
+        /// <param name="context">Context.</param>
+        public override void PackedSave(UMAPackedRecipeBase.UMAPackRecipe packedRecipe)
+		{
+			recipeString = JsonUtility.ToJson(packedRecipe);
+		}
+
+		public override string GetInfo()
+		{
+			return string.Format(this.name+" "+this.GetType().ToString() + ", internal storage string Length {0}", recipeString.Length);
+		}
+
+		public override byte[] GetBytes()
+		{
+			return System.Text.Encoding.UTF8.GetBytes (recipeString);
+		}
+		public override void  SetBytes(byte[] data)
+		{
+			recipeString = System.Text.Encoding.UTF8.GetString(data); 	
+		}
+
+		public UMAData.UMARecipe GetUMARecipe()
+		{
+			return GetCachedRecipe();
+		}
+
+		public OverlayColorData[] SharedColors
+		{
+			get
+			{
+				var recipe = GetCachedRecipe();
+				return recipe.sharedColors;
+			}
+		}
+
+#if UNITY_EDITOR
+		[UnityEditor.MenuItem("Assets/Create/UMA/Core/Text Recipe")]
+		public static void CreateTextRecipeAsset()
+		{
+			UMA.CustomAssetUtility.CreateAsset<UMATextRecipe>();
+		}
+		#endif
+	}
+}

@@ -1,0 +1,415 @@
+﻿using UnityEngine;
+using System.Collections.Generic;
+using System.IO;
+using System;
+
+namespace UMA
+{
+	/// <summary>
+	/// Utility class for avatar setup definitions.
+	/// </summary>
+	[PreferBinarySerialization]
+	[System.Serializable]
+	public class UmaTPose : ScriptableObject 
+	{
+		[NonSerialized]
+		public SkeletonBone[] boneInfo;
+		[NonSerialized]
+		public HumanBone[] humanInfo;
+		[NonSerialized]
+		public float armStretch;
+		[NonSerialized]
+		public float feetSpacing;
+		[NonSerialized]
+		public float legStretch;
+		[NonSerialized]
+		public float lowerArmTwist;
+		[NonSerialized]
+		public float lowerLegTwist;
+		[NonSerialized]
+		public float upperArmTwist;
+		[NonSerialized]
+		public float upperLegTwist;
+		[NonSerialized]
+		public bool extendedInfo;
+
+		[SerializeField]
+        public bool mapJaw = true;
+
+		[HideInInspector]
+		public byte[] serializedChunk;
+
+		[Serializable]
+		public class SerializableHumanPose
+		{
+			public Vector3 bodyPosition = Vector3.zero;
+			public Quaternion bodyRotation = Quaternion.identity;
+			public float[] muscles = Array.Empty<float>();
+
+			public void FromHumanPose(HumanPose pose)
+			{
+				bodyPosition = pose.bodyPosition;
+				bodyRotation = pose.bodyRotation;
+				if (pose.muscles != null)
+				{
+					muscles = (float[])pose.muscles.Clone();
+				}
+				else
+				{
+					muscles = Array.Empty<float>();
+				}
+			}
+
+			public HumanPose ToHumanPose()
+			{
+				var pose = new HumanPose();
+				pose.bodyPosition = bodyPosition;
+				pose.bodyRotation = bodyRotation;
+				pose.muscles = muscles != null ? (float[])muscles.Clone() : Array.Empty<float>();
+				return pose;
+			}
+		}
+
+		public void ExtractHumanPoseFromAnimator(Animator animator)
+		{
+			ExtractHumanPose(animator);
+		}
+
+		[SerializeField]
+		private SerializableHumanPose humanPoseData = new SerializableHumanPose();
+		[SerializeField]
+		private bool hasExtractedHumanPose = false;
+
+		/// <summary>
+		/// Serialize into the binary format used for Mecanim avatars.
+		/// </summary>
+		public void Serialize()
+		{
+			if (humanInfo == null)
+            {
+                humanInfo = new HumanBone[0];
+            }
+
+            if (boneInfo == null)
+            {
+                boneInfo = new SkeletonBone[0];
+            }
+
+            var ms = new MemoryStream();
+			var bn = new BinaryWriter(ms);
+			bn.Write(boneInfo.Length);
+            for (int i = 0; i < boneInfo.Length; i++)
+			{
+                SkeletonBone bi = boneInfo[i];
+                Serialize(bn, bi);
+			}
+			bn.Write(humanInfo.Length);
+            for (int i = 0; i < humanInfo.Length; i++)
+			{
+                HumanBone hi = humanInfo[i];
+                Serialize(bn, hi);
+			}
+			if (extendedInfo)
+			{
+				bn.Write(armStretch);
+				bn.Write(feetSpacing);
+				bn.Write(legStretch);
+				bn.Write(lowerArmTwist);
+				bn.Write(lowerLegTwist);
+				bn.Write(upperArmTwist);
+				bn.Write(upperLegTwist);
+			}
+			serializedChunk = ms.ToArray();
+			EnsureHumanPoseDefault();
+		}
+
+		/// <summary>
+		/// Deserialize from the binary format used by Mecanim avatars.
+		/// </summary>
+		public void DeSerialize()
+		{
+			if (boneInfo == null)
+			{
+				var ms = new MemoryStream(serializedChunk);
+				var br = new BinaryReader(ms);
+				int count = br.ReadInt32();
+				boneInfo = new SkeletonBone[count];
+				for (int i = 0; i < count; i++)
+				{
+					boneInfo[i] = DeSerializeSkeletonBone(br);
+				}
+				count = br.ReadInt32();
+				humanInfo = new HumanBone[count];
+				for (int i = 0; i < count; i++)
+				{
+					humanInfo[i] = DeSerializeHumanBone(br);
+				}
+				if (br.PeekChar() >= 0)
+				{
+					extendedInfo = true;
+					armStretch = br.ReadSingle();
+					feetSpacing = br.ReadSingle();
+					legStretch = br.ReadSingle();
+					lowerArmTwist = br.ReadSingle();
+					lowerLegTwist = br.ReadSingle();
+					upperArmTwist = br.ReadSingle();
+					upperLegTwist = br.ReadSingle();
+				}
+			EnsureHumanPoseDefault();
+			}
+		}
+
+
+		public UmaTPose Clone()
+        {
+			UmaTPose tp = new UmaTPose();
+			tp.armStretch = armStretch;
+			tp.feetSpacing = feetSpacing;
+			tp.legStretch = legStretch;
+			tp.lowerArmTwist = lowerArmTwist;
+			tp.lowerLegTwist = lowerLegTwist;
+			tp.upperArmTwist = upperArmTwist;
+			tp.upperLegTwist = upperLegTwist;
+			tp.extendedInfo = extendedInfo;
+			tp.boneInfo = (SkeletonBone[]) boneInfo.Clone();
+			tp.humanInfo = (HumanBone[])humanInfo.Clone();
+			tp.serializedChunk = (byte[])serializedChunk.Clone();
+			tp.mapJaw = mapJaw;
+            if (humanPoseData != null)
+			{
+				tp.humanPoseData = new SerializableHumanPose();
+				tp.humanPoseData.bodyPosition = humanPoseData.bodyPosition;
+				tp.humanPoseData.bodyRotation = humanPoseData.bodyRotation;
+				tp.humanPoseData.muscles = humanPoseData.muscles != null ? (float[])humanPoseData.muscles.Clone() : Array.Empty<float>();
+			}
+			return tp;
+        }
+
+		public HumanPose GetHumanPose()
+		{
+			EnsureHumanPoseDefault();
+			return humanPoseData.ToHumanPose();
+		}
+
+		public bool HasExtractedHumanPose()
+		{
+			return hasExtractedHumanPose;
+		}
+
+		public void SetHumanPose(HumanPose pose)
+		{
+			if (humanPoseData == null)
+			{
+				humanPoseData = new SerializableHumanPose();
+			}
+			humanPoseData.FromHumanPose(pose);
+			hasExtractedHumanPose = true;
+			EnsureHumanPoseDefault();
+		}
+
+		private void EnsureHumanPoseDefault()
+		{
+			if (humanPoseData == null)
+			{
+				humanPoseData = new SerializableHumanPose();
+				hasExtractedHumanPose = false;
+			}
+			if (humanPoseData.muscles == null || humanPoseData.muscles.Length != HumanTrait.MuscleCount)
+			{
+				humanPoseData.bodyPosition = Vector3.zero;
+				humanPoseData.bodyRotation = Quaternion.identity;
+				humanPoseData.muscles = new float[HumanTrait.MuscleCount];
+				hasExtractedHumanPose = false;
+			}
+		}
+
+		private SkeletonBone DeSerializeSkeletonBone(BinaryReader br)
+		{
+			var res = new SkeletonBone();
+			res.name = br.ReadString();
+			res.position = DeserializeVector3(br);
+			res.rotation = DeSerializeQuaternion(br);
+			res.scale = DeserializeVector3(br);
+			br.ReadInt32();
+			return res;
+		}
+
+		private Quaternion DeSerializeQuaternion(BinaryReader br)
+		{
+			var res = new Quaternion();
+			res.x = br.ReadSingle();
+			res.y = br.ReadSingle();
+			res.z = br.ReadSingle();
+			res.w = br.ReadSingle();
+			return res;
+		}
+
+		private HumanBone DeSerializeHumanBone(BinaryReader br)
+		{
+			var res = new HumanBone();
+			res.boneName = br.ReadString();
+			res.humanName = br.ReadString();
+			res.limit = DeSerializeHumanLimit(br);
+			return res;
+		}
+
+		private HumanLimit DeSerializeHumanLimit(BinaryReader br)
+		{
+			var res = new HumanLimit();
+			res.axisLength = br.ReadSingle();
+			res.center = DeserializeVector3(br);
+			res.max = DeserializeVector3(br);
+			res.min = DeserializeVector3(br);
+			res.useDefaultValues = br.ReadBoolean();
+			return res;
+		}
+
+		private Vector3 DeserializeVector3(BinaryReader br)
+		{
+			var res = new Vector3();
+			res.x = br.ReadSingle();
+			res.y = br.ReadSingle();
+			res.z = br.ReadSingle();
+			return res;
+		}
+
+		private void Serialize(BinaryWriter bn, HumanBone value)
+		{
+			bn.Write(value.boneName);
+			bn.Write(value.humanName);
+			Serialize(bn, value.limit);
+		}
+
+		private void Serialize(BinaryWriter bn, HumanLimit value)
+		{
+			bn.Write(value.axisLength);
+			Serialize(bn,value.center);
+			Serialize(bn,value.max);
+			Serialize(bn,value.min);
+			bn.Write(value.useDefaultValues);
+		}
+
+		private void Serialize(BinaryWriter bn, SkeletonBone bone)
+		{
+			bn.Write(bone.name);
+			Serialize(bn, bone.position);
+			Serialize(bn, bone.rotation);
+			Serialize(bn, bone.scale);
+			bn.Write((int)1);
+		}
+
+		private void Serialize(BinaryWriter bn, Quaternion value)
+		{
+			bn.Write(value.x);
+			bn.Write(value.y);
+			bn.Write(value.z);
+			bn.Write(value.w);
+		}
+
+		private void Serialize(BinaryWriter bn, Vector3 value)
+		{
+			bn.Write(value.x);
+			bn.Write(value.y);
+			bn.Write(value.z);
+		}
+
+		/// <summary>
+		/// Reads from Mecanim human description.
+		/// </summary>
+		/// <param name="description">Human description.</param>
+		public void ReadFromHumanDescription(HumanDescription description)
+		{
+			humanInfo = description.human;
+			boneInfo = description.skeleton;
+			armStretch = description.armStretch;
+			feetSpacing = description.feetSpacing;
+			legStretch = description.legStretch;
+			lowerArmTwist = description.lowerArmTwist;
+			lowerLegTwist = description.lowerLegTwist;
+			upperArmTwist = description.upperArmTwist;
+			upperLegTwist = description.upperLegTwist;
+			extendedInfo = true;
+
+			Serialize();
+			EnsureHumanPoseDefault();
+			boneInfo = null;
+			humanInfo = null;
+		}
+
+		/// <summary>
+		/// Recursively create from animator's transform hierarchy.
+		/// </summary>
+		/// <param name="rootAnimator">Animator.</param>
+		public void ReadFromTransform(Animator rootAnimator)
+		{
+			var boneInfoList = new List<SkeletonBone>();
+			AddRecursively(boneInfoList, rootAnimator.transform);
+			boneInfo = boneInfoList.ToArray();
+			var humanInfoList = new List<HumanBone>();
+			ExtractHumanInfo(rootAnimator, humanInfoList);
+			humanInfo = humanInfoList.ToArray();
+			ExtractHumanPose(rootAnimator);
+			Serialize();
+		}
+
+		private void ExtractHumanPose(Animator animator)
+		{
+			if (animator == null || animator.avatar == null || !animator.avatar.isHuman)
+			{
+				EnsureHumanPoseDefault();
+				return;
+			}
+
+			var handler = new HumanPoseHandler(animator.avatar, animator.transform);
+			try
+			{
+				var pose = new HumanPose();
+				handler.GetHumanPose(ref pose);
+				SetHumanPose(pose);
+			}
+			finally
+			{
+				handler.Dispose();
+			}
+		}
+		
+		private void ExtractHumanInfo(Animator animator, List<HumanBone> humanInfoList)
+		{
+			for (int i = 0; i < HumanTrait.BoneCount; i++)
+			{
+				var boneTransform = animator.GetBoneTransform((HumanBodyBones)i);
+				if (boneTransform != null)
+				{
+					humanInfoList.Add(new HumanBone() { boneName = boneTransform.name, humanName = HumanTrait.BoneName[i], limit = new HumanLimit() { useDefaultValues = true } });
+				}
+			}
+		}
+
+		private void AddRecursively(List<SkeletonBone> boneInfoList, Transform root)
+		{
+			boneInfoList.Add(new SkeletonBone() { name = root.name, position = root.localPosition, rotation = root.localRotation, scale = root.localScale});
+			for (int i = 0; i < root.childCount; i++)
+			{
+				AddRecursively(boneInfoList, root.GetChild(i));
+			}
+		}
+
+        public string BoneNameFromHumanName(string humanName)
+        {
+            if (humanInfo == null)
+            {
+                return "";
+            }
+
+            for (int i = 0; i < humanInfo.Length; i++)
+            {
+                HumanBone humanBone = humanInfo[i];
+                if (humanBone.humanName == humanName)
+                {
+                    return humanBone.boneName;
+                }
+            }
+            return "";
+        }
+	}
+}

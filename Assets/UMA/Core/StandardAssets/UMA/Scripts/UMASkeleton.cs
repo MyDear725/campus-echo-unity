@@ -1,0 +1,1064 @@
+using System;
+using System.Collections.Generic;
+//using System.Diagnostics;
+using UnityEngine;
+
+namespace UMA
+{
+	/// <summary>
+	/// Class links UMA's bone data with Unity's transform hierarchy.
+	/// </summary>
+	[Serializable]
+	public class UMASkeleton
+	{
+		/// <summary>
+		/// Internal class for storing bone and transform information.
+		/// </summary>
+		[Serializable]
+		public class BoneData
+		{
+			public int boneNameHash;
+			public int parentBoneNameHash;
+			public Transform boneTransform;
+			public UMATransform umaTransform;
+			public Quaternion rotation;
+			public Vector3 position;
+			public Vector3 scale;
+			public int accessedFrame;
+		}
+
+		public IEnumerable<int> BoneHashes { get { return GetBoneHashes(); } }
+
+		//DynamicUMADna:: DynamicUMADnaConverterCustomizer Editor interface needs to have an array of bone names
+		public string[] BoneNames { get { return GetBoneNames(); } }
+
+		protected bool updating;
+		protected int frame;
+		/// <value>The hash for the root bone of the skeleton.</value>
+		public int rootBoneHash { get; protected set; }
+		/// <value>The bone count.</value>
+		public virtual int boneCount { get { return boneHashData.Count; } }
+
+		public bool isUpdating { get { return updating; } }
+
+		private Dictionary<int, BoneData> boneHashDataLookup;
+        private string ignoreTag;
+#if UNITY_EDITOR || UNITY_ENABLE_CHECKS
+        private bool hierarchyHasCollisions;
+#endif
+
+#if UNITY_EDITOR
+		// Dictionary backup to support code reload
+		private List<BoneData> boneHashDataBackup = new List<BoneData>();
+#endif
+
+		public Dictionary<int, BoneData> boneHashData
+		{
+			get
+			{
+				if (boneHashDataLookup == null)
+				{
+					boneHashDataLookup = new Dictionary<int, BoneData>();
+#if UNITY_EDITOR
+                    for (int i = 0; i < boneHashDataBackup.Count; i++)
+					{
+                        BoneData tData = boneHashDataBackup[i];
+                        boneHashDataLookup.Add(tData.boneNameHash, tData);
+					}
+#endif
+				}
+
+				return boneHashDataLookup;
+			}
+
+			set
+			{
+				boneHashDataLookup = value;
+#if UNITY_EDITOR
+				boneHashDataBackup = new List<BoneData>(value.Values);
+#endif
+			}
+		}
+
+
+		/// <summary>
+		/// Initializes a new UMASkeleton from a transform hierarchy.
+		/// </summary>
+		/// <param name="rootBone">Root transform.</param>
+		public UMASkeleton(Transform rootBone)
+		{
+			rootBoneHash = UMAUtils.StringToHash(rootBone.name);
+			ignoreTag = UMASettings.GetValidatedIgnoreTag(rootBone.gameObject);
+			this.boneHashData = new Dictionary<int, BoneData>();
+			BeginSkeletonUpdate();
+			AddBonesRecursive(rootBone);
+            // AddBonesRecursive already detects hash/name collisions while constructing
+            // the dictionary. Do not walk every valid crowd skeleton a second time or
+            // allocate a List for every bone just to repeat the same validation.
+#if UNITY_EDITOR || UNITY_ENABLE_CHECKS
+            if (hierarchyHasCollisions)
+            {
+                ValidateHierarchy(rootBone, ignoreTag);
+                ValidateBoneDictionary(rootBone);
+            }
+#endif
+			EndSkeletonUpdate();
+		}
+
+		protected UMASkeleton()
+		{
+		}
+
+        // The hierarchy was already validated by the source build. Bind known bone
+        // indices without rediscovering names, hashes, tags and rest transforms.
+        internal static UMASkeleton FromNPCBones(int rootHash, BoneData[] definitions, int[] indices, Transform[] transforms)
+        {
+            var result = new UMASkeleton { rootBoneHash = rootHash };
+            var data = new Dictionary<int, BoneData>(definitions.Length);
+            for (int i = 0; i < definitions.Length; i++)
+            {
+                var source = definitions[i];
+                data.Add(source.boneNameHash, new BoneData { boneNameHash = source.boneNameHash,
+                    parentBoneNameHash = source.parentBoneNameHash, boneTransform = transforms[indices[i]],
+                    umaTransform = source.umaTransform.Duplicate(), position = source.position,
+                    rotation = source.rotation, scale = source.scale });
+            }
+            result.boneHashData = data;
+            return result;
+        }
+
+		/// <summary>
+		/// Marks the skeleton as being updated.
+		/// </summary>
+		public virtual void BeginSkeletonUpdate()
+		{
+			frame++;
+			if (frame < 0)
+            {
+                frame = 0;
+            }
+
+            updating = true;
+		}
+
+		/// <summary>
+		/// Marks the skeleton update as complete.
+		/// </summary>
+		public virtual void EndSkeletonUpdate()
+		{
+			foreach (var bd in boneHashData.Values)
+			{
+				if (bd != null && bd.boneTransform != null)
+				{
+					bd.rotation = bd.boneTransform.localRotation;
+					bd.position = bd.boneTransform.localPosition;
+					bd.scale = bd.boneTransform.localScale;
+				}
+			}
+			updating = false;
+		}
+
+		public virtual void SetAnimatedBone(int nameHash)
+		{
+			// The default MeshCombiner is ignoring the animated bones, virtual method added to share common interface.
+		}
+
+		public virtual void SetAnimatedBoneHierachy(int nameHash)
+		{
+			// The default MeshCombiner is ignoring the animated bones, virtual method added to share common interface.
+		}
+
+		public virtual void ClearAnimatedBoneHierachy(int nameHash, bool recursive)
+		{
+			// The default MeshCombiner is ignoring the animated bones, virtual method added to share common interface.
+		}
+
+		private void AddBonesRecursive(Transform transform)
+		{
+			if (transform == null) return;
+
+			if (!string.IsNullOrEmpty(ignoreTag) && transform.CompareTag(ignoreTag))
+			{
+				return;
+			}
+
+			var hash = UMAUtils.StringToHash(transform.name);
+			var parentHash = transform.parent != null ? UMAUtils.StringToHash(transform.parent.name) : 0;
+			var data = new BoneData
+			{
+				parentBoneNameHash = parentHash,
+				boneNameHash = hash,
+				accessedFrame = frame,
+				boneTransform = transform,
+				umaTransform = new UMATransform(transform, hash, parentHash)
+			};
+
+			if (!boneHashData.ContainsKey(hash))
+			{
+				boneHashData.Add(hash, data);
+#if UNITY_EDITOR
+				boneHashDataBackup.Add(data);
+#endif
+			}
+			else
+			{
+				if (Debug.isDebugBuild)
+                    Debug.LogError("AddBonesRecursive: " + transform.name + " already exists in the dictionary! Consider renaming those bones. For example, `Items` under each hand bone can become `LeftItems` and `RightItems`.");
+#if UNITY_EDITOR || UNITY_ENABLE_CHECKS
+                hierarchyHasCollisions = true;
+#endif
+			}
+
+			for (int i = 0; i < transform.childCount; i++)
+			{
+				AddBonesRecursive(transform.GetChild(i));
+			}
+		}
+
+		protected virtual BoneData GetBone(int nameHash)
+		{
+			BoneData data = null;
+			boneHashData.TryGetValue(nameHash, out data);
+			return data;
+		}
+
+		public virtual bool HasBone(string boneName)
+		{
+			int nameHash = UMAUtils.StringToHash(boneName);
+			return HasBone(nameHash);
+		}
+
+
+		/// <summary>
+		/// Does this skeleton contains bone with specified name hash?
+		/// </summary>
+		/// <returns><c>true</c> if this instance has bone the specified name hash; otherwise, <c>false</c>.</returns>
+		/// <param name="nameHash">Name hash.</param>
+		public virtual bool HasBone(int nameHash)
+		{
+			return boneHashData.ContainsKey(nameHash);
+		}
+
+		/// <summary>
+		/// Check if the bone exists and is valid.
+		/// </summary>
+		/// <param name="nameHash">the namehash of the bone to check</param>
+		/// <returns>true if the bone exists and is valid</returns>
+		public virtual bool BoneExists(int nameHash)
+		{
+			BoneData db;
+			if (boneHashData.TryGetValue(nameHash, out db))
+			{
+				return db.boneTransform != null;
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// Adds the transform into the skeleton.
+		/// </summary>
+		/// <param name="parentHash">Hash of parent transform name.</param>
+		/// <param name="hash">Hash of transform name.</param>
+		/// <param name="transform">Transform.</param>
+		public virtual void AddBone(int parentHash, int hash, Transform transform)
+		{
+			BoneData newBone = new BoneData()
+			{
+				accessedFrame = frame,
+				parentBoneNameHash = parentHash,
+				boneNameHash = hash,
+				boneTransform = transform,
+				umaTransform = new UMATransform(transform, hash, parentHash),
+			};
+
+			if (!boneHashData.ContainsKey(hash))
+			{
+				boneHashData.Add(hash, newBone);
+#if UNITY_EDITOR
+				boneHashDataBackup.Add(newBone);
+#endif
+			}
+			else
+			{
+				if (Debug.isDebugBuild)
+                {
+                    Debug.LogError("AddBone: " + transform.name + " already exists in the dictionary! Consider renaming those bones. For example, `Items` under each hand bone can become `LeftItems` and `RightItems`.");
+                }
+            }
+		}
+
+		/// <summary>
+		/// Adds the transform into the skeleton.
+		/// </summary>
+		/// <param name="transform">Transform.</param>
+		public virtual void AddBone(UMATransform transform)
+		{
+			var go = new GameObject(transform.name);
+			go.AddComponent<UMAGeneratedBone>();
+			BoneData newBone = new BoneData()
+			{
+				accessedFrame = -1,
+				parentBoneNameHash = transform.parent,
+				boneNameHash = transform.hash,
+				boneTransform = go.transform,
+				umaTransform = transform.Duplicate(),
+			};
+
+			if (!boneHashData.ContainsKey(transform.hash))
+			{
+				boneHashData.Add(transform.hash, newBone);
+#if UNITY_EDITOR
+				boneHashDataBackup.Add(newBone);
+#endif
+			}
+			else
+			{
+				if (Debug.isDebugBuild)
+                {
+                    Debug.LogError("AddBone: " + transform.name + " already exists in the dictionary! Consider renaming those bones. For example, `Items` under each hand bone can become `LeftItems` and `RightItems`.");
+                }
+            }
+		}
+
+		/// <summary>
+		/// Removes the bone with the given name hash.
+		/// </summary>
+		/// <param name="nameHash">Name hash.</param>
+		public virtual void RemoveBone(int nameHash)
+		{
+			BoneData bd = GetBone(nameHash);
+			if (bd != null)
+			{
+				boneHashData.Remove(nameHash);
+#if UNITY_EDITOR
+				boneHashDataBackup.Remove(bd);
+#endif
+			}
+		}
+
+		/// <summary>
+		/// Tries to find bone transform in skeleton.
+		/// </summary>
+		/// <returns><c>true</c>, if transform was found, <c>false</c> otherwise.</returns>
+		/// <param name="nameHash">Name hash.</param>
+		/// <param name="boneTransform">Bone transform.</param>
+		/// <param name="transformDirty">Transform is dirty.</param>
+		/// <param name="parentBoneNameHash">Name hash of parent bone.</param>
+		public virtual bool TryGetBoneTransform(int nameHash, out Transform boneTransform, out bool transformDirty, out int parentBoneNameHash)
+		{
+			BoneData res;
+			if (boneHashData.TryGetValue(nameHash, out res))
+			{
+				transformDirty = res.accessedFrame != frame;
+				res.accessedFrame = frame;
+				boneTransform = res.boneTransform;
+				parentBoneNameHash = res.parentBoneNameHash;
+				return true;
+			}
+			transformDirty = false;
+			boneTransform = null;
+			parentBoneNameHash = 0;
+			return false;
+		}
+
+		/// <summary>
+		/// Gets the transform for a bone in the skeleton.
+		/// </summary>
+		/// <returns>The transform or null, if not found.</returns>
+		/// <param name="nameHash">Name hash.</param>
+		public virtual Transform GetBoneTransform(int nameHash)
+		{
+			BoneData res;
+			if (boneHashData.TryGetValue(nameHash, out res))
+			{
+				res.accessedFrame = frame;
+				return res.boneTransform;
+			}
+			return null;
+		}
+
+		/// <summary>
+		/// Returns true if the bone has a Transform GameObject created.
+		/// </summary>
+		public virtual bool HasBoneTransform(int nameHash)
+		{
+			BoneData res;
+			if (boneHashData.TryGetValue(nameHash, out res))
+			{
+				return res.boneTransform != null;
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// Ensures the bone has a Transform GameObject created.
+		/// Base implementation creates a GameObject and sets it up from the cache.
+		/// </summary>
+		public virtual void EnsureBoneTransform(int nameHash)
+		{
+			BoneData res;
+			if (boneHashData.TryGetValue(nameHash, out res) && res.boneTransform == null)
+			{
+				var go = new GameObject(res.umaTransform.name);
+				res.boneTransform = go.transform;
+			}
+		}
+
+		/// <summary>
+		/// Gets the transform for a bone in the skeleton using the bone name.
+		/// </summary>
+		/// <param name="boneName"></param>
+		/// <returns></returns>
+        public virtual Transform GetBoneTransform(string boneName)
+        {
+			int nameHash = UMAUtils.StringToHash(boneName);
+			return GetBoneTransform(nameHash);
+        }
+
+		public Transform GetRootTransform()
+		{
+			return GetBoneTransform(rootBoneHash);
+        }
+
+		public Transform GetGlobalTransform()
+		{
+			var global = GetBoneTransform("Global");
+			if (global == null)
+			{
+                Transform root = GetRootTransform();
+				if (root != null)
+				{
+					return root.childCount > 0 ? root.GetChild(0) : root;
+                }
+            }
+            else
+            {
+                return global;
+            }
+            return null;
+        }
+        /// <summary>
+        /// Gets the game object for a transform in the skeleton.
+        /// </summary>
+        /// <returns>The game object or null, if not found.</returns>
+        /// <param name="nameHash">Name hash.</param>
+        public virtual GameObject GetBoneGameObject(int nameHash)
+		{
+			BoneData res;
+			if (boneHashData.TryGetValue(nameHash, out res))
+			{
+				res.accessedFrame = frame;
+				if (res.boneTransform == null)
+				{
+					return null;
+				}
+				return res.boneTransform.gameObject;
+			}
+			return null;
+		}
+
+		/// <summary>
+		/// Get the game object for a bone in the skeleton using the bone name.
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public virtual GameObject GetBoneGameObject(string name)
+		{
+            int nameHash = UMAUtils.StringToHash(name);
+			return GetBoneGameObject(nameHash);
+        }
+
+
+		public List<KeyValuePair<int,string>> GetBoneHashNames()
+        {
+			List<KeyValuePair<int, string>> bhn = new List<KeyValuePair<int, string>>();
+
+			foreach (KeyValuePair<int,BoneData> kp in boneHashData)
+            {
+				int Hash = kp.Key;
+				string Name = kp.Value.boneTransform.gameObject.name;
+				KeyValuePair<int, string> kvp = new KeyValuePair<int, string>(Hash, Name);
+				bhn.Add(kvp);
+            }
+			return bhn;
+		}
+
+		protected virtual IEnumerable<int> GetBoneHashes()
+		{
+			foreach (int hash in boneHashData.Keys)
+			{
+				yield return hash;
+			}
+		}
+		//DynamicUMADna:: a method to return a string of bonenames for use in editor intefaces
+		private string[] GetBoneNames()
+		{
+			string[] boneNames = new string[boneHashData.Count];
+			int index = 0;
+			foreach (KeyValuePair<int, BoneData> kp in boneHashData)
+			{
+				boneNames[index] = kp.Value.boneTransform.gameObject.name;
+				index++;
+			}
+			return boneNames;
+		}
+
+		public bool isValid()
+        {
+			if (rootBoneHash == 0) return false;
+			return true;
+        }
+
+        public virtual void Set(int nameHash, Vector3 position, Vector3 scale, Quaternion rotation)
+		{
+			BoneData db;
+			if (boneHashData.TryGetValue(nameHash, out db))
+			{
+				db.accessedFrame = frame;
+				db.boneTransform.localPosition = position;
+				db.boneTransform.localRotation = rotation;
+				db.boneTransform.localScale = scale;
+				db.umaTransform.rotation = rotation;
+				db.umaTransform.position = position;
+				db.umaTransform.scale = scale;
+			}
+			else
+			{
+				throw new Exception("Bone not found.");
+			}
+		}
+
+		/// <summary>
+		/// Sets the position of a bone.
+		/// This method silently fails if the bone doesn't exist! (Desired behaviour in DNA converters due to LOD/Occlusion)
+		/// </summary>
+		/// <param name="nameHash">Name hash.</param>
+		/// <param name="position">Position.</param>
+		public virtual void SetPosition(int nameHash, Vector3 position)
+		{
+			BoneData db;
+			if (boneHashData.TryGetValue(nameHash, out db))
+			{
+				db.accessedFrame = frame;
+				db.boneTransform.localPosition = position;
+			}
+		}
+
+		/// <summary>
+		/// Sets the position of a bone relative to it's old position.
+		/// This method silently fails if the bone doesn't exist! (Desired behaviour in DNA converters due to LOD/Occlusion)
+		/// </summary>
+		/// <param name="nameHash">Name hash.</param>
+		/// <param name="delta">Position delta.</param>
+		/// <param name="weight">Optionally set how much to apply the new position</param>
+		public virtual void SetPositionRelative(int nameHash, Vector3 delta, float weight = 1f)
+		{
+			BoneData db;
+			if (boneHashData.TryGetValue(nameHash, out db))
+			{
+				db.accessedFrame = frame;
+				db.boneTransform.localPosition = db.boneTransform.localPosition + delta * weight;
+			}
+		}
+
+		/// <summary>
+		/// Sets the scale of a bone.
+		/// This method silently fails if the bone doesn't exist! (Desired behaviour in DNA converters due to LOD/Occlusion)
+		/// </summary>
+		/// <param name="nameHash">Name hash.</param>
+		/// <param name="scale">Scale.</param>
+		public virtual void SetScale(int nameHash, Vector3 scale)
+		{
+			BoneData db;
+			if (boneHashData.TryGetValue(nameHash, out db))
+			{
+				db.accessedFrame = frame;
+				db.boneTransform.localScale = scale;
+			}
+		}
+
+		/// <summary>
+		/// DynamicUMADnaConverterBahaviour:: Sets the scale of a bone relatively.
+		/// This method silently fails if the bone doesn't exist! (Desired behaviour in DNA converters due to LOD/Occlusion)
+		/// </summary>
+		/// <param name="nameHash">Name hash.</param>
+		/// <param name="scale">Scale.</param>
+		/// <param name="weight">Optionally set how much to apply the new scale</param>
+		public virtual void SetScaleRelative(int nameHash, Vector3 scale, float weight = 1f)
+		{
+			BoneData db;
+			if (boneHashData.TryGetValue(nameHash, out db))
+			{
+				db.accessedFrame = frame;
+				scale.Scale(db.boneTransform.localScale);
+				db.boneTransform.localScale = Vector3.Lerp(db.boneTransform.localScale, scale, weight);
+			}
+		}
+
+		/// <summary>
+		/// Sets the rotation of a bone.
+		/// This method silently fails if the bone doesn't exist! (Desired behaviour in DNA converters due to LOD/Occlusion)
+		/// </summary>
+		/// <param name="nameHash">Name hash.</param>
+		/// <param name="rotation">Rotation.</param>
+		public virtual void SetRotation(int nameHash, Quaternion rotation)
+		{
+			BoneData db;
+			if (boneHashData.TryGetValue(nameHash, out db))
+			{
+				db.accessedFrame = frame;
+				db.boneTransform.localRotation = rotation;
+			}
+		}
+
+		/// <summary>
+		/// DynamicUMADnaConverterBahaviour:: Sets the rotation of a bone relative to its initial rotation.
+		/// This method silently fails if the bone doesn't exist! (Desired behaviour in DNA converters due to LOD/Occlusion)
+		/// </summary>
+		/// <param name="nameHash">Name hash.</param>
+		/// <param name="rotation">Rotation.</param>
+		/// <param name="weight">Weight.</param>
+		public virtual void SetRotationRelative(int nameHash, Quaternion rotation, float weight /*, bool hasAnimator = true*/)
+		{
+			BoneData db;
+			if (boneHashData.TryGetValue(nameHash, out db))
+			{
+				db.accessedFrame = frame;
+				Quaternion fullRotation = db.boneTransform.localRotation * rotation;
+				db.boneTransform.localRotation = Quaternion.Slerp(db.boneTransform.localRotation, fullRotation, weight);
+			}
+		}
+
+		/// <summary>
+		/// Lerp the specified bone toward a new position, rotation, and scale.
+		/// This method silently fails if the bone doesn't exist! (Desired behaviour in DNA converters due to LOD/Occlusion)
+		/// </summary>
+		/// <param name="nameHash">Name hash.</param>
+		/// <param name="position">Position.</param>
+		/// <param name="scale">Scale.</param>
+		/// <param name="rotation">Rotation.</param>
+		/// <param name="weight">Weight.</param>
+		public virtual void Lerp(int nameHash, Vector3 position, Vector3 scale, Quaternion rotation, float weight)
+		{
+			BoneData db;
+			if (boneHashData.TryGetValue(nameHash, out db))
+			{
+				db.accessedFrame = frame;
+				db.boneTransform.localPosition = Vector3.Lerp(db.boneTransform.localPosition, position, weight);
+				db.boneTransform.localRotation = Quaternion.Slerp(db.boneTransform.localRotation, db.boneTransform.localRotation, weight);
+				db.boneTransform.localScale = Vector3.Lerp(db.boneTransform.localScale, scale, weight);
+			}
+		}
+
+		/// <summary>
+		/// Lerp the specified bone toward a new position, rotation, and scale.
+		/// This method silently fails if the bone doesn't exist! (Desired behaviour in DNA converters due to LOD/Occlusion)
+		/// </summary>
+		/// <param name="nameHash">Name hash.</param>
+		/// <param name="position">Position.</param>
+		/// <param name="scale">Scale.</param>
+		/// <param name="rotation">Rotation.</param>
+		/// <param name="weight">Weight.</param>
+		public virtual void Morph(int nameHash, Vector3 position, Vector3 scale, Quaternion rotation, float weight)
+		{
+			BoneData db;
+			if (boneHashData.TryGetValue(nameHash, out db))
+			{
+				db.accessedFrame = frame;
+				db.boneTransform.localPosition += position * weight;
+				Quaternion fullRotation = db.boneTransform.localRotation * rotation;
+				db.boneTransform.localRotation = Quaternion.SlerpUnclamped(db.boneTransform.localRotation, fullRotation, weight);
+				var fullScale = scale;
+				fullScale.Scale(db.boneTransform.localScale);
+				db.boneTransform.localScale = Vector3.LerpUnclamped(db.boneTransform.localScale, fullScale, weight);
+			}
+		}
+
+		/// <summary>
+		/// Reset the specified transform to the pre-dna state.
+		/// </summary>
+		/// <param name="nameHash">Name hash.</param>
+		public virtual bool Reset(int nameHash)
+		{
+			BoneData db;
+			if (boneHashData.TryGetValue(nameHash, out db) && (db.boneTransform != null))
+			{
+				db.accessedFrame = frame;
+				db.boneTransform.localPosition = db.umaTransform.position;
+				db.boneTransform.localRotation = db.umaTransform.rotation;
+				db.boneTransform.localScale = db.umaTransform.scale;
+
+				return true;
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Reset all transforms to the pre-dna state.
+		/// </summary>
+		public virtual void ResetAll()
+		{
+			foreach (BoneData db in boneHashData.Values)
+			{
+				if (db.boneTransform != null)
+				{
+					db.accessedFrame = frame;
+					db.boneTransform.localPosition = db.umaTransform.position;
+					db.boneTransform.localRotation = db.umaTransform.rotation;
+					db.boneTransform.localScale = db.umaTransform.scale;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Restore the specified transform to the post-dna state.
+		/// </summary>
+		/// <param name="nameHash">Name hash.</param>
+		public virtual bool Restore(int nameHash)
+		{
+			BoneData db;
+			if (boneHashData.TryGetValue(nameHash, out db) && (db.boneTransform != null))
+			{
+				db.accessedFrame = frame;
+				db.boneTransform.localPosition = db.position;
+				db.boneTransform.localRotation = db.rotation;
+				db.boneTransform.localScale = db.scale;
+
+				return true;
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Restore all transforms to the post-dna state.
+		/// </summary>
+		public virtual void RestoreAll()
+		{
+			foreach (BoneData db in boneHashData.Values)
+			{
+				if (db.boneTransform != null)
+				{
+					db.accessedFrame = frame;
+					db.boneTransform.localPosition = db.position;
+					db.boneTransform.localRotation = db.rotation;
+					db.boneTransform.localScale = db.scale;
+				}
+			}
+		}
+		/// <summary>
+		/// Gets the position of a bone.
+		/// </summary>
+		/// <returns>The position.</returns>
+		/// <param name="nameHash">Name hash.</param>
+		public virtual Vector3 GetPosition(int nameHash)
+		{
+			BoneData db;
+			if (boneHashData.TryGetValue(nameHash, out db))
+			{
+				db.accessedFrame = frame;
+				return db.boneTransform.localPosition;
+			}
+			else
+			{
+				return Vector3.zero;
+			}
+		}
+
+		/// <summary>
+		/// Gets the position of a bone.
+		/// </summary>
+		/// <returns>The position.</returns>
+		/// <param name="nameHash">Name hash.</param>
+		public virtual Vector3 GetRelativePosition(int nameHash)
+		{
+			BoneData db;
+			if (boneHashData.TryGetValue(nameHash, out db))
+			{
+				db.accessedFrame = frame;
+				return boneHashData[rootBoneHash].boneTransform.parent.parent.worldToLocalMatrix.MultiplyPoint(db.boneTransform.position);
+			}
+			return Vector3.zero;
+		}
+
+		
+
+
+		/// <summary>
+		/// Gets the scale of a bone.
+		/// </summary>
+		/// <returns>The scale.</returns>
+		/// <param name="nameHash">Name hash.</param>
+		public virtual Vector3 GetScale(int nameHash)
+		{
+			BoneData db;
+			if (boneHashData.TryGetValue(nameHash, out db))
+			{
+				db.accessedFrame = frame;
+				return db.boneTransform.localScale;
+			}
+			return Vector3.one;
+		}
+
+		/// <summary>
+		/// Gets the rotation of a bone.
+		/// </summary>
+		/// <returns>The rotation.</returns>
+		/// <param name="nameHash">Name hash.</param>
+		public virtual Quaternion GetRotation(int nameHash)
+		{
+			BoneData db;
+			if (boneHashData.TryGetValue(nameHash, out db))
+			{
+				db.accessedFrame = frame;
+				return db.boneTransform.localRotation;
+			}
+			else
+			{
+				return Quaternion.identity;
+			}
+		}
+
+		public static int StringToHash(string name) { return UMAUtils.StringToHash(name); }
+
+		public virtual Transform[] HashesToTransforms(int[] boneNameHashes)
+		{
+			var res = new Transform[boneNameHashes.Length];
+			Transform fallback = GetGlobalTransform() ?? GetRootTransform();
+#if UNITY_EDITOR || UNITY_ENABLE_CHECKS 			
+			bool reported = false;
+#endif
+			for (int i = 0; i < boneNameHashes.Length; i++)
+			{
+				BoneData bd;
+				if (!boneHashData.TryGetValue(boneNameHashes[i], out bd) || bd == null || bd.boneTransform == null)
+				{
+#if UNITY_EDITOR || UNITY_ENABLE_CHECKS 
+					if (!reported && Debug.isDebugBuild)
+					{
+						Debug.LogError($"[UMA] Missing bone hash {boneNameHashes[i]} in UMASkeleton. " +
+									   "This is usually caused by using an ignore tag that hides parts of the rig, or duplicate bone names. " +
+									   "Verify the UMA Project Settings Ignore Tag is valid and that bone names are unique.");
+						reported = true;
+					}
+#endif
+					res[i] = fallback;
+				}
+				else
+				{
+					res[i] = bd.boneTransform;
+				}
+			}
+			return res;
+		}
+
+		public virtual Transform[] HashesToTransforms(List<int> boneNameHashes)
+		{
+			var res = new Transform[boneNameHashes.Count];
+			Transform fallback = GetGlobalTransform() ?? GetRootTransform();
+#if UNITY_EDITOR || UNITY_ENABLE_CHECKS 
+			bool reported = false;
+#endif
+			for (int i = 0; i < boneNameHashes.Count; i++)
+			{
+				BoneData bd;
+				if (!boneHashData.TryGetValue(boneNameHashes[i], out bd) || bd == null || bd.boneTransform == null)
+				{
+#if UNITY_EDITOR || UNITY_ENABLE_CHECKS 
+					if (!reported && Debug.isDebugBuild)
+					{
+						Debug.LogError($"[UMA] Missing bone hash {boneNameHashes[i]} in UMASkeleton. " +
+									   "Check ignore tag and duplicate bone names.");
+						reported = true;
+					}
+#endif
+					res[i] = fallback;
+				}
+				else
+				{
+					res[i] = bd.boneTransform;
+				}
+			}
+			return res;
+		}
+
+		/// <summary>
+		/// Ensures the bone exists in the skeleton.
+		/// </summary>
+		/// <param name="umaTransform">UMA transform.</param>
+		public virtual void EnsureBone(UMATransform umaTransform)
+		{
+			if (boneHashData.ContainsKey(umaTransform.hash) == false)
+            {
+                AddBone(umaTransform);
+            }
+        }
+
+		/// <summary>
+		/// Ensures all bones are properly initialized and parented.
+		/// </summary>
+		public virtual void EnsureBoneHierarchy()
+		{
+			foreach (var entry in boneHashData.Values)
+			{
+				if (entry.accessedFrame == -1)
+				{
+					if (boneHashData.ContainsKey(entry.umaTransform.parent))
+					{
+						entry.boneTransform.parent = boneHashData[entry.umaTransform.parent].boneTransform;
+						entry.boneTransform.localPosition = entry.umaTransform.position;
+						entry.boneTransform.localRotation = entry.umaTransform.rotation;
+						entry.boneTransform.localScale = entry.umaTransform.scale;
+						entry.accessedFrame = frame;
+					}
+					else
+					{
+						if (Debug.isDebugBuild)
+                        {
+                            Debug.LogError("EnsureBoneHierarchy: " + entry.umaTransform.name + " parent not found in dictionary!");
+                        }
+                    }
+				}
+			}
+		}
+
+		public virtual Quaternion GetTPoseCorrectedRotation(int nameHash, Quaternion tPoseRotation)
+		{
+			return boneHashData[nameHash].boneTransform.localRotation;
+		}
+
+        public virtual int GetParentBoneHash(int hash)
+        {
+            return boneHashData.TryGetValue(hash, out var bone) ? bone.parentBoneNameHash : 0;
+        }
+
+        internal virtual UMATransform GetBoneDefinition(int hash)
+        {
+            return boneHashData.TryGetValue(hash, out var bone) ? bone.umaTransform?.Duplicate() : null;
+        }
+
+        // Use virtual storage operations: the bone-baking skeleton has its own table.
+        internal virtual void AdoptBone(Transform bone)
+        {
+            int hash = UMAUtils.StringToHash(bone.name);
+            int parentHash = bone.parent != null ? UMAUtils.StringToHash(bone.parent.name) : 0;
+            if (!HasBone(hash)) AddBone(parentHash, hash, bone);
+            var data = GetBone(hash);
+            data.boneTransform = bone;
+            data.parentBoneNameHash = parentHash;
+            data.accessedFrame = frame;
+            data.position = bone.localPosition;
+            data.rotation = bone.localRotation;
+            data.scale = bone.localScale;
+        }
+
+        internal void ReplaceBone(UMASavedItem usi)
+        {
+			ReplaceBoneRecursively(usi.Object);
+        }
+
+		internal void ReplaceBoneRecursively(Transform transform)
+		{
+            AdoptBone(transform);
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                ReplaceBoneRecursively(transform.GetChild(i));
+            }
+        }
+
+#if UNITY_EDITOR || UNITY_ENABLE_CHECKS 
+// Editor/dev-only: detect name collisions and ignored subtrees
+private void ValidateHierarchy(Transform root, string ignoreTag)
+{
+    if (root == null) return;
+
+    var byName = new Dictionary<string, List<Transform>>(256);
+    int total = 0, ignored = 0;
+
+    void Collect(Transform t)
+    {
+        if (t == null) return;
+        if (!string.IsNullOrEmpty(ignoreTag) && t.CompareTag(ignoreTag))
+        {
+            ignored++;
+            return;
+        }
+        total++;
+        if (!byName.TryGetValue(t.name, out var list)) { list = new List<Transform>(2); byName.Add(t.name, list); }
+        list.Add(t);
+        for (int i = 0; i < t.childCount; i++) Collect(t.GetChild(i));
+    }
+
+    Collect(root);
+
+	var dups = new List<KeyValuePair<string, List<Transform>>>();
+	foreach (var kvp in byName)
+	{
+		if (kvp.Value.Count > 1)
+		{
+			dups.Add(kvp);
+		}
+	}
+    if (dups.Count > 0)
+    {
+        var msg = new System.Text.StringBuilder();
+        msg.AppendLine("[UMA] UMASkeleton detected duplicate bone names. UMA requires unique transform names across the skeleton. Rename duplicates (e.g., LeftItems/RightItems).");
+        foreach (var kvp in dups)
+        {
+            msg.AppendLine($"  Name '{kvp.Key}' occurs {kvp.Value.Count} times:");
+            foreach (var t in kvp.Value)
+                msg.AppendLine($"    - {GetTransformPath(t)}");
+        }
+        if (!string.IsNullOrEmpty(ignoreTag))
+            msg.AppendLine($"Note: Transforms tagged '{ignoreTag}' (and their children) are skipped.");
+
+        if (Debug.isDebugBuild) Debug.LogError(msg.ToString());
+    }
+    else
+    {
+        // Optional info in debug
+        if (Debug.isDebugBuild && ignored > 0)
+            Debug.Log($"[UMA] UMASkeleton: {ignored} transforms skipped due to ignore tag '{ignoreTag}'. Consider if that�s intended.");
+    }
+}
+
+// Editor/dev-only: verify boneHashData matches collected transforms (minus ignored)
+private void ValidateBoneDictionary(Transform root)
+{
+    // Build expected set from dictionary
+    var dictCount = boneHashData.Count;
+
+    // Spot-check for null transforms in dictionary
+	var nullEntries = new List<KeyValuePair<int, BoneData>>();
+	foreach (var kvp in boneHashData)
+	{
+		if (kvp.Value == null || kvp.Value.boneTransform == null)
+		{
+			nullEntries.Add(kvp);
+		}
+	}
+    if (nullEntries.Count > 0 && Debug.isDebugBuild)
+    {
+        var msg = new System.Text.StringBuilder();
+        msg.AppendLine("[UMA] UMASkeleton: Found entries with null boneTransform:");
+        foreach (var kvp in nullEntries)
+            msg.AppendLine($"  Hash: {kvp.Key}");
+        Debug.LogError(msg.ToString());
+    }
+}
+
+private static string GetTransformPath(Transform t)
+{
+    if (t == null) return "<null>";
+    var stack = new Stack<string>();
+    while (t != null)
+    {
+        stack.Push(t.name);
+        t = t.parent;
+    }
+    return string.Join("/", stack.ToArray());
+}
+#endif
+    }
+}

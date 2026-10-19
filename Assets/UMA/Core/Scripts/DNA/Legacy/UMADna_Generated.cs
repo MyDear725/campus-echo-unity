@@ -1,0 +1,89 @@
+// UMA Auto genered code, DO NOT MODIFY!!!
+// All changes to this file will be destroyed without warning or confirmation!
+// Use double { to escape a single curly bracket
+//
+// template junk executed per UMADna derived sub class, the accumulated content is available through the {0:ID} tag
+//
+//#TEMPLATE GetNames UmaDna_GetNames_Fragment.cs.txt
+//#TEMPLATE GetType UmaDna_GetType_Fragment.cs.txt
+//#TEMPLATE GetTypes UmaDna_GetTypes_Fragment.cs.txt
+//#TEMPLATE Load UmaDna_Load_Fragment.cs.txt
+//#TEMPLATE Save UmaDna_Save_Fragment.cs.txt
+//
+
+namespace UMA
+{
+
+	public abstract partial class UMADna
+	{
+		public static string[] GetNames(System.Type dnaType)
+		{
+            if ( dnaType == typeof(DynamicUMADna) )
+            {
+                return DynamicUMADna.GetNames();
+            }
+            return new string[0];
+		}
+
+		public static System.Type GetType(System.String className)
+		{
+            if ( "DynamicUMADna" == className )
+            {
+                return typeof(DynamicUMADna);
+            }
+
+			if ( "UMADnaInstance" == className)
+            {
+				return typeof(UMADnaInstance);
+            }
+
+            return null;
+		}
+
+		public static System.Type[] GetTypes()
+		{
+			return new System.Type[]
+			{
+				typeof(DynamicUMADna),
+			};
+		}
+
+		public static UMADnaBase LoadInstance(System.Type dnaType, System.String data, RaceData race)
+		{
+			if ( dnaType == typeof(UMADnaInstance) )
+			{	
+				var dnaInstance = UMADnaInstance.LoadInstance(data);
+				if (dnaInstance != null && race != null)
+				{
+					dnaInstance.DNAInstances.Initialize(race.DNACollection);
+				}
+                return dnaInstance;
+            }
+            if ( dnaType == typeof(DynamicUMADna))
+            {
+                return DynamicUMADna.LoadInstance(data);
+            }
+
+            return null;
+		}
+
+		public static System.String SaveInstance(UMADnaBase instance)
+		{
+			System.Type dnaType = instance.GetType();
+
+			if (dnaType == typeof(UMADnaInstance))
+			{
+				return UMADnaInstance.SaveInstance(instance as UMADnaInstance);
+            }
+
+            if ( dnaType == typeof(DynamicUMADna))
+            {
+                return DynamicUMADna.SaveInstance(instance as DynamicUMADna);
+            }
+
+            return null;
+		}
+
+	}
+
+}

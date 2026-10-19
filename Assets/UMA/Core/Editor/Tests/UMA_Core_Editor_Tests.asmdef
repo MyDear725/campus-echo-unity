@@ -1,0 +1,34 @@
+{
+    "name": "UMA_Core_Editor_Tests",
+    "rootNamespace": "",
+    "references": [
+        "UMA_Core",
+        "UMA_Core_Editor",
+        "UMA_Editor",
+        "GUID:270a2b1433f4413fbe3998444ae4eedb",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS",
+        "UMA_TEST_FRAMEWORK"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.test-framework",
+            "expression": "1.0.0",
+            "define": "UMA_TEST_FRAMEWORK"
+        }
+    ],
+    "noEngineReferences": false
+}
