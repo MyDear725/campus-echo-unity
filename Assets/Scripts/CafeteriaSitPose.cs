@@ -51,20 +51,32 @@ public class CafeteriaSitPose : MonoBehaviour
         weight = Mathf.MoveTowards(weight, active ? 1f : 0f, Time.deltaTime * 6f);
         if (weight <= 0f) return;
 
-        Fold(thighL, thighAngle);
-        Fold(thighR, thighAngle);
-        Fold(shinL, shinAngle);
-        Fold(shinR, shinAngle);
-        if (spine) Fold(spine, spineAngle);
+        // Thighs swing forward about the character's right axis; shins swing back by the
+        // same amount so the lower leg ends up vertical.
+        Vector3 right = transform.right;
+        FoldWorld(thighL, thighAngle, right);
+        FoldWorld(thighR, thighAngle, right);
+        FoldWorld(shinL, -thighAngle - shinAngle, right);
+        FoldWorld(shinR, -thighAngle - shinAngle, right);
+        if (spine) FoldWorld(spine, spineAngle, right);
     }
 
-    // Read the animated rotation first, then ease toward the seated target. At weight 1
-    // the target is applied exactly.
+    // The rig's bones carry heavily rotated local axes (Thigh_L reads ~180 deg about Y
+    // and Z), so an absolute local Euler folds the leg in the wrong direction. Rotating
+    // about a world-space axis instead is independent of how the rig was authored.
+    void FoldWorld(Transform bone, float degrees, Vector3 worldAxis)
+    {
+        if (!bone) return;
+        var animated = bone.rotation;
+        var target = Quaternion.AngleAxis(degrees, worldAxis) * animated;
+        bone.rotation = Quaternion.Slerp(animated, target, weight);
+    }
+
     void Fold(Transform bone, float degrees)
     {
         if (!bone) return;
-        var animated = bone.localRotation;
-        var target = Quaternion.Euler(degrees, 0f, 0f);
-        bone.localRotation = Quaternion.Slerp(animated, target, weight);
+        var animated = bone.rotation;
+        var target = Quaternion.AngleAxis(degrees, transform.right) * animated;
+        bone.rotation = Quaternion.Slerp(animated, target, weight);
     }
 }

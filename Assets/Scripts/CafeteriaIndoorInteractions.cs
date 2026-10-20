@@ -157,11 +157,10 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            // The ordering system owns the serving window, the tray return and the seat
-            // while a flow is active; let it answer first so one press is one action.
-            var ordering = GetComponent<CafeteriaOrdering>();
-            if (ordering != null && ordering.HandlesCurrentSpot())
-                return;
+            // CampusGame is the single E dispatcher. It either hands the press to the
+            // ordering system (which then owns this frame) or to us; it never does both,
+            // so no spot can fire together with a counter, exit or seat action.
+            if (CampusOverlayHub.InputConsumedFrame == Time.frameCount) return;
 
             var spot = CurrentSpot();
             if (spot.HasValue)
@@ -193,10 +192,10 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
         if (game.Interiors.Interior == null || game.Interiors.Interior.buildingId != "cafeteria") return;
         if (game.Interiors.Interior.NearExit(game.player.position)) return;
 
-        // One prompt at a time: when the ordering system owns the current position it
-        // draws its own prompt, so this legacy one must stay silent.
-        var ordering = GetComponent<CafeteriaOrdering>();
-        if (ordering != null && ordering.HandlesCurrentSpot()) return;
+        // One prompt at a time: when a counter, pickup point, seat or tray return is in
+        // reach, CampusHud already draws that prompt, so this legacy one stays silent.
+        var ordering = CampusSystemsRegistry.FindOrdering();
+        if (ordering != null && ordering.OwnsSpotAt(game.player.position)) return;
 
         var spot = CurrentSpot();
         if (!spot.HasValue) return;

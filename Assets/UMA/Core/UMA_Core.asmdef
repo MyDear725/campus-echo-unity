@@ -1,0 +1,23 @@
+{
+    "name": "UMA_Core",
+    "rootNamespace": "",
+    "references": [
+        "Unity.Timeline",
+        "UnityEngine.UI",
+        "Unity.Burst",
+        "Unity.Collections",
+        "Unity.Jobs",
+        "Unity.Mathematics",
+        "Unity.Collections.BurstCompatibilityGen",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

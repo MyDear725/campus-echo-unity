@@ -1,0 +1,1 @@
+PASS: preference mapping; preset catalog; invalid-choice fallback; root transform preserved; selection UI contract; installer exists.

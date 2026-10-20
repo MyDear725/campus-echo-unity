@@ -1,0 +1,1 @@
+PASS: existing outdoor map retained; UMA selection installed; all entrance scene paths exist; Windows build succeeded.

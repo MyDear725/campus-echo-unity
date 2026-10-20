@@ -75,7 +75,7 @@ public class BuildingInteriorQA : MonoBehaviour
             if(entry.buildingId=="cafeteria") {
                 yield return new WaitForSecondsRealtime(.3f);DormitoryPreview.SaveCamera(camera,Path.Combine(folder,"placeholder.png"));
             }
-            var mappedExit=travel.Interior.exteriorExits.FirstOrDefault(e=>e!=null&&e.entranceId==entry.EntranceId);var exit=mappedExit?.anchor?mappedExit.anchor:travel.Interior.exits.First(e=>e);travel.IndoorController.enabled=false;game.SetTravelPose(exit.position,180);travel.IndoorController.enabled=true;Physics.SyncTransforms();
+            var mappedExit=travel.Interior.exteriorExits.FirstOrDefault(e=>e!=null&&e.entranceId==entry.EntranceId);var exit=mappedExit?.anchor?mappedExit.anchor:travel.Interior.exits.FirstOrDefault(e=>e&&travel.Interior.ExitEntranceId(e)==entry.EntranceId)??travel.Interior.exits.First(e=>e);travel.IndoorController.enabled=false;game.SetTravelPose(exit.position,180);travel.IndoorController.enabled=true;Physics.SyncTransforms();
             Require(travel.InteractionPrompt.Contains("返回"),"Return prompt missing");Require(game.Interact(),"Return E dispatcher failed");Require(!travel.TryExit(),"Duplicate exit accepted");yield return WaitUntilSettled();
             Require(!travel.Inside&&SceneManager.sceneCount==1&&SceneManager.GetActiveScene()==campus,"Interior not unloaded");
             Require(Vector3.Distance(game.player.position,game.MapToWorld(entry.returnMapPosition))<.02f,"Wrong return position");
@@ -83,6 +83,20 @@ public class BuildingInteriorQA : MonoBehaviour
             Require(campus.GetRootGameObjects().First(r=>r.name=="开发区校区 · 校园环境").activeSelf,"Campus did not reactivate");
         }
         Require(entered==travel.entrances.Length&&exited==travel.entrances.Length,"Lifecycle callbacks missing");
+        // Verify both library doors with the remote array bindings, alongside the
+        // existing structured exit bindings used by the seventh dormitory.
+        foreach(var sourceId in new[]{"library","library-rear"}) {
+            var source=travel.entrances.First(e=>e&&e.EntranceId==sourceId);
+            var target=travel.entrances.First(e=>e&&e.EntranceId==(sourceId=="library"?"library-rear":"library"));
+            game.SetTravelPose(game.MapToWorld(source.approachMapPosition),source.enterYaw);
+            Require(travel.TryEnter(source),"Library cross-door entry rejected");yield return WaitUntilSettled();
+            Require(travel.Inside,"Library cross-door scene not loaded");
+            var door=travel.Interior.exits.First(e=>e&&travel.Interior.ExitEntranceId(e)==target.EntranceId);
+            travel.IndoorController.enabled=false;game.SetTravelPose(door.position,180);travel.IndoorController.enabled=true;Physics.SyncTransforms();
+            Require(travel.TryExit(),"Library cross-door exit rejected");yield return WaitUntilSettled();
+            Require(Vector3.Distance(game.player.position,game.MapToWorld(target.returnMapPosition))<.02f,"Library cross-door returned to wrong exterior door");
+            Debug.Log("LIBRARY_CROSS_DOOR_PASS: "+sourceId+" -> "+target.EntranceId);
+        }
         var sample=travel.entrances.First(e=>e.buildingId=="cafeteria");game.SetTravelPose(game.MapToWorld(sample.approachMapPosition),sample.enterYaw);
         string path=sample.interiorScenePath;sample.interiorScenePath="Assets/Interiors/Scenes/does-not-exist.unity";
         Require(!travel.TryEnter(sample)&&!travel.Busy&&!travel.Inside,"Missing-scene failure did not recover");sample.interiorScenePath=path;

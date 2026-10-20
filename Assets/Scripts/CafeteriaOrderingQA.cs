@@ -61,7 +61,7 @@ public class CafeteriaOrderingQA : MonoBehaviour
         CafeteriaOrdering.PrefsKeyOverride = "CafeteriaOrdering__QA";
         PlayerPrefs.DeleteKey("CafeteriaOrdering__QA");
         ordering.SetBalanceForTest(30000);
-        ordering.prepareSeconds = 4;
+        ordering.prepareSeconds = 6;
         ordering.eatSeconds = 6;
 
         // ---- 1. stand at the 2F counter and press E -> panel ----
@@ -69,31 +69,31 @@ public class CafeteriaOrderingQA : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.6f);
         bool opened = ui.InteractOnce();
         yield return new WaitForSecondsRealtime(0.6f);
-        Log(log, $"openPanel={opened} uiOpen={ordering.UiOpen} title={ordering.ShopTitle} dishes={ordering.DishCount}");
+        Log(log, $"openPanel={opened} uiOpen={ordering.UiOpen} title={ordering.ShopTitle} items={ordering.ShopItemCount}");
         Shot("01_panel.png");
 
         // ---- 2. pick food and pay ----
-        ordering.CartAdd(ordering.DishName(0), ordering.DishFen(0));
-        ordering.CartAdd(ordering.DishName(1), ordering.DishFen(1));
+        ordering.CartAdd(0);
+        ordering.CartAdd(1);
         long before = ordering.BalanceFen;
-        int total = ordering.CartTotal();
+        int total = ordering.CartTotalFen();
         bool paid = ordering.TryPay();
-        ordering.SetUiForTest(false);
+        ordering.ClosePanel();
         yield return new WaitForSecondsRealtime(0.5f);
-        Log(log, $"paid={paid} before={before} after={ordering.BalanceFen} total={total} state={ordering.State} status={ordering.StatusText}");
+        Log(log, $"paid={paid} before={before} after={ordering.BalanceFen} total={total} state={ordering.State} status={ordering.LastMessage}");
         Shot("02_paid_countdown.png");
 
         // ---- 2b. order a drink at the 2F water bar while the meal is still preparing ----
-        ordering.SetActiveShop(CafeteriaShop.WaterBar);
-        MovePlayer(game, new Vector3(-0.5f, 4.8f, 1.4f), 180f);
+        MovePlayer(game, new Vector3(-0.5f, 4.8f, -3.5f), 180f);
         yield return new WaitForSecondsRealtime(0.4f);
         bool openedWb = ui.InteractOnce();
         yield return new WaitForSecondsRealtime(0.3f);
-        ordering.CartAdd(ordering.ShopItemName(0), ordering.ShopItemFen(0));
+        int instantBefore = ordering.OrderCount;
+        ordering.CartAdd(0);
         bool paidWb = ordering.TryPay();
-        ordering.SetUiForTest(false);
+        ordering.ClosePanel();
         yield return new WaitForSecondsRealtime(0.4f);
-        Log(log, $"waterBarOpen={openedWb} waterBarPaid={paidWb} orders={ordering.OrderCount} " +
+        Log(log, $"waterBarOpen={openedWb} waterBarPaid={paidWb} mealOrdersIntact={ordering.OrderCount == instantBefore} orders={ordering.OrderCount} " +
                  $"shops=" + DescribeOrders(ordering));
         Shot("02b_two_orders.png");
 
@@ -104,54 +104,16 @@ public class CafeteriaOrderingQA : MonoBehaviour
         // ---- 3. wait for the REAL countdown, then collect with E ----
         float waited = 0f;
         while (!ordering.CanCollect && waited < 15f) { waited += Time.unscaledDeltaTime; yield return null; }
-        Log(log, $"countdown ended after {waited:F1}s state={ordering.State} canCollect={ordering.CanCollect} status={ordering.StatusText}");
+        Log(log, $"countdown ended after {waited:F1}s state={ordering.State} canCollect={ordering.CanCollect} status={ordering.LastMessage}");
         Shot("03_ready_to_collect.png");
 
 
-        // ---- 3b. collect and consume the drink at the water bar: no tray, closes itself ----
-        // Wait until the drink is actually ready before walking over.
-        float dw = 0f;
-        while (FindShopOrder(ordering, CafeteriaShop.WaterBar) != null &&
-               FindShopOrder(ordering, CafeteriaShop.WaterBar).state == (int)CafeteriaOrderState.Preparing &&
-               dw < 15f)
-        { dw += Time.unscaledDeltaTime; yield return null; }
-        Log(log, "drink ready after " + dw.ToString("F1") + "s");
+        // ---- 3b. the drink was delivered instantly; there is nothing to pick up and no
+        // tray. The meal order must be untouched by that purchase.
+        Log(log, $"drinkInstant inventory={CampusInventory.Summary()} orders=" + DescribeOrders(ordering));
 
-        // Walk to the water bar first, then ask the game where its pickup is.
-        MovePlayer(game, new Vector3(-0.5f, 4.8f, 1.4f), 180f);
-        yield return new WaitForSecondsRealtime(0.4f);
-        var wbPick = ordering.NearestCollectAnchorPos(new Vector3(-0.5f, 4.8f, 1.4f));
-        Vector3 wbStand = wbPick.HasValue
-            ? new Vector3(wbPick.Value.x, 4.8f, wbPick.Value.z + 0.9f)
-            : new Vector3(-0.5f, 4.8f, 1.4f);
-        MovePlayer(game, wbStand, 180f);
-        yield return new WaitForSecondsRealtime(0.4f);
-        yield return new WaitForSecondsRealtime(0.5f);
-        Log(log, $"playerActual={game.player.position}");
-        Log(log, $"DIAG shop={ordering.NearestOrderShop()} nearOrder={ordering.NearOrderSpot} " +
-                 $"nearCollect={ordering.NearCollectSpot} canCollect={ordering.CanCollect} " +
-                 $"uiOpen={ordering.UiOpen} state={ordering.State} orders=" + DescribeOrders(ordering));
-        bool gotDrink = ui.InteractOnce();
-        yield return new WaitForSecondsRealtime(0.3f);
-        if (!gotDrink) Log(log, "drinkCollect BLOCKED: " + ui.LastInteractBlock);
-        Log(log, $"drinkCollect={gotDrink} state={ordering.State} needsSeat={ordering.CarriedNeedsSeat} " +
-                 $"hasTray={ordering.HasTray} orders={ordering.OrderCount}");
-        Shot("03b_drink_collected.png");
-
-        bool drank = ui.InteractOnce();
-        if (!drank) Log(log, "drinkConsume BLOCKED: " + (ui.LastInteractBlock ?? "state " + ordering.State));
-        yield return new WaitForSecondsRealtime(0.3f);
-        Log(log, $"drinkConsumed={drank} awaitingTray={ordering.AwaitingTrayReturn} " +
-                 $"orders={ordering.OrderCount} shops=" + DescribeOrders(ordering));
-        Shot("03c_drink_done.png");
-
-        // back to the serving counter to pick the meal up
-        yield return new WaitForSecondsRealtime(0.4f);
-        var mealPick = ordering.NearestCollectAnchorPos(new Vector3(-4f, 4.8f, 8.2f));
-        Vector3 mealStand = mealPick.HasValue
-            ? new Vector3(mealPick.Value.x, 4.8f, mealPick.Value.z + 0.9f)
-            : new Vector3(-4f, 4.8f, 9.1f);
-        MovePlayer(game, mealStand, 0f);
+        // back to the serving counter to pick the meal up at ITS OWN pickup point
+        MovePlayer(game, new Vector3(-4.5f, 4.8f, 10.3f), 0f);
         yield return new WaitForSecondsRealtime(0.5f);
         bool collected = ui.InteractOnce();
         yield return new WaitForSecondsRealtime(0.4f);
@@ -175,7 +137,7 @@ public class CafeteriaOrderingQA : MonoBehaviour
         // ---- 5. eat part way, stand up, sit again and finish ----
         yield return new WaitForSecondsRealtime(2f);
         float partial = ordering.EatProgress;
-        ui.StandUpNow();
+        ui.StandUpForTest();
         yield return new WaitForSecondsRealtime(0.4f);
         Log(log, $"midStandUp progress={ordering.EatProgress:F2} state={ordering.State} seated={ordering.Seated}");
 
@@ -193,7 +155,7 @@ public class CafeteriaOrderingQA : MonoBehaviour
         Shot("07_meal_done.png");
 
         // ---- 6. stand up; must stay TrayToReturn ----
-        ui.StandUpNow();
+        ui.StandUpForTest();
         yield return new WaitForSecondsRealtime(0.5f);
         Log(log, $"afterStandUp state={ordering.State} seated={ordering.Seated} carrying={ordering.HasTray}");
         Shot("08_stood_up_tray.png");
@@ -207,7 +169,7 @@ public class CafeteriaOrderingQA : MonoBehaviour
         Shot("09_returned.png");
 
         // ---- 8. can order again ----
-        Log(log, $"canOrderAgain={ordering.CanOrder}");
+        Log(log, $"canOrderAgain={ordering.ShopAtPlayer() != null || ordering.NearReturnSpot}");
 
         File.WriteAllText(Path.Combine(Dir, "log.txt"), log.ToString());
         File.WriteAllText(Path.Combine(Dir, "progress.txt"), "DONE\n");
@@ -236,16 +198,16 @@ public class CafeteriaOrderingQA : MonoBehaviour
             var x = o.OrderAt(i);
             if (x == null) continue;
             if (sb.Length > 0) sb.Append(" | ");
-            sb.Append(x.ShopLabel).Append(":").Append((CafeteriaOrderState)x.state);
+            sb.Append(x.FloorShopLabel).Append(":").Append((CafeteriaOrderState)x.state);
         }
         return sb.ToString();
     }
 
     static Transform NearestSeatTo(CafeteriaOrdering o, Vector3 near)
     {
-        o.TestPlayerPos = near;
+        o.SetPlayerPosForTest(near);
         var t = o.NearestSeatAnchor(50f);
-        o.TestPlayerPos = null;
+        o.ClearPlayerPosForTest();
         return t;
     }
 

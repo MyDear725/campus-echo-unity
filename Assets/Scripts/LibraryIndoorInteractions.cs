@@ -231,6 +231,11 @@ public class LibraryIndoorInteractions : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
+            // Seats and vending machines own E when the player stands at them, so a
+            // single press never also fires a generic library spot.
+            var seatUI = LibrarySeatInteraction.Instance;
+            if (seatUI && seatUI.HandlesCurrentE()) return;
+
             var spot = NearbySpot();
             if (!spot.HasValue) return;
             if (spot.Value.id.StartsWith("elevator")) { OpenLift(); return; }
