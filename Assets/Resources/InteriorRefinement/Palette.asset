@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2ff9b5f182def3438431112aef81f64, type: 3}
+  m_Name: Palette
+  m_EditorClassIdentifier: Assembly-CSharp::InteriorRefinementPalette
+  floor: {fileID: 2100000, guid: 3c9a758aa6ee54e42bd5572252ce5adf, type: 2}
+  terrazzo: {fileID: 2100000, guid: 95eb111c61152d74ba5c33a5d3c4266c, type: 2}
+  plaster: {fileID: 2100000, guid: 550e5b0e8f6572246bf3de03c1ed7d23, type: 2}
+  ceiling: {fileID: 2100000, guid: 0a192f14b4ce76c43875d6c0b2637ba4, type: 2}
+  oak: {fileID: 2100000, guid: 19c8493303cb58a47a3f815c4f644aea, type: 2}
+  walnut: {fileID: 2100000, guid: 0096361b0de592c41a312eb15b75d6f2, type: 2}
+  graphite: {fileID: 2100000, guid: 932ae1bee2195904c9cd1a9c7ca0e35f, type: 2}
+  steel: {fileID: 2100000, guid: 82becdad6e49b294cb36eeb5731faea9, type: 2}
+  brass: {fileID: 2100000, guid: 856c67c8cdd64c445856f9ce162f6653, type: 2}
+  teal: {fileID: 2100000, guid: 1f68f50680c2acf4593b441546807542, type: 2}
+  sage: {fileID: 2100000, guid: 67edac083dbe4664da876c79563f408e, type: 2}
+  fabric: {fileID: 2100000, guid: d0f4ebaef0051bb468f5a2fb4b0c5bc9, type: 2}
+  linen: {fileID: 2100000, guid: 5e24fc0f0355bcb45b9f85bdea045ca0, type: 2}
+  light: {fileID: 2100000, guid: 4673de80a2f96d74cb835b1498a510d4, type: 2}
+  soil: {fileID: 2100000, guid: 4b1210b5f1c0cd243a5f39e1375ea2e3, type: 2}
+  leaf: {fileID: 2100000, guid: 45229c05aac208a4fb4a511f50cb52ce, type: 2}
+  glass: {fileID: 2100000, guid: 083f016395d26944aa4d689a877c8610, type: 2}
+  font: {fileID: 12800000, guid: 9ce761ac8989648218fd5612b9e09755, type: 3}

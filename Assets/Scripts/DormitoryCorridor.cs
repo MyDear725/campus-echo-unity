@@ -174,6 +174,7 @@ public sealed class DormitoryCorridor : MonoBehaviour
         }
         roomInterior=gameObject.AddComponent<DormitoryRoomInterior>();
         roomInterior.Initialize(this,game,corridorVisual,roomDoors);
+        DormitoryInteriorRefinement.Hall(corridorVisual,layout);
         RefreshFloor();
     }
     void Wall(Transform parent,float x,float z,float width,Material plaster,Material lower)

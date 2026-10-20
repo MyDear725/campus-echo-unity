@@ -27,7 +27,8 @@ public sealed class CampusWelcomeStory : MonoBehaviour
     int line, choice=-1;
     bool response, closing;
     Vector3 guideHome;
-    GUIStyle textStyle, speakerStyle, buttonStyle;
+    GUIStyle textStyle, speakerStyle, buttonStyle, metaStyle, keyStyle, choiceStyle, primaryStyle, avatarStyle, chapterStyle;
+    Font styledFont;
 
     public void Initialize(CampusGame campus)
     {
@@ -59,6 +60,12 @@ public sealed class CampusWelcomeStory : MonoBehaviour
         if(DialogueOpen)
         {
             if(Input.GetKeyDown(KeyCode.Escape)){CampusOverlayHub.ConsumeInput();CloseDialogue();}
+            else if(!closing&&!response&&line==Data.stages[StageIndex].lines.Length-1)
+            {
+                for(int i=0;i<Mathf.Min(9,Data.stages[StageIndex].choices.Length);i++)
+                    if(Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha1+i))){Choose(i);break;}
+            }
+            else if(Input.GetKeyDown(KeyCode.Space)||Input.GetKeyDown(KeyCode.Return))Advance();
             return;
         }
         if(game.paused||game.Automated)return;
@@ -148,30 +155,77 @@ public sealed class CampusWelcomeStory : MonoBehaviour
     }
     void OnDisable(){if(DialogueOpen&&game){DialogueOpen=false;game.SetUiCursor(previousUi);}}
     void OnDestroy(){if(game&&game.guide)game.guide.position=guideHome;}
+    void Choose(int index){CampusOverlayHub.ConsumeInput();choice=index;response=true;}
+    void Advance()
+    {
+        CampusOverlayHub.ConsumeInput();
+        if(closing)CompleteDialogue();else if(response)closing=true;else line++;
+    }
+    void Styles()
+    {
+        if(textStyle!=null&&styledFont==game.interfaceFont)return;
+        styledFont=game.interfaceFont;
+        textStyle=CampusStoryStyle.Label(styledFont,22,CampusStoryStyle.Paper);
+        speakerStyle=CampusStoryStyle.Label(styledFont,24,CampusStoryStyle.Paper,true);
+        metaStyle=CampusStoryStyle.Label(styledFont,13,CampusStoryStyle.Muted);
+        keyStyle=CampusStoryStyle.Label(styledFont,12,CampusStoryStyle.Muted,false,TextAnchor.MiddleCenter);
+        buttonStyle=CampusStoryStyle.Label(styledFont,16,CampusStoryStyle.Paper,false,TextAnchor.MiddleCenter);
+        choiceStyle=CampusStoryStyle.Label(styledFont,17,CampusStoryStyle.Paper,false,TextAnchor.MiddleLeft);
+        primaryStyle=CampusStoryStyle.Label(styledFont,17,CampusStoryStyle.Ink,true,TextAnchor.MiddleCenter);
+        avatarStyle=CampusStoryStyle.Label(styledFont,24,CampusStoryStyle.Gold,true,TextAnchor.MiddleCenter);
+        chapterStyle=CampusStoryStyle.Label(styledFont,13,CampusStoryStyle.Ink,true,TextAnchor.MiddleCenter);
+    }
     void OnGUI()
     {
         if(!DialogueOpen||Data==null)return;
-        var oldMatrix=GUI.matrix;var oldColor=GUI.color;int oldDepth=GUI.depth;
-        float scale=Mathf.Clamp(Screen.height/900f,.65f,1.5f);GUI.matrix=Matrix4x4.Scale(Vector3.one*scale);GUI.depth=-40;
-        float w=Screen.width/scale,h=Screen.height/scale,pw=Mathf.Min(820,w-32),left=(w-pw)/2,top=h-390;
-        GUI.color=new Color(.06f,.10f,.09f,.98f);GUI.DrawTexture(new Rect(left,top,pw,320),Texture2D.whiteTexture);GUI.color=Color.white;
-        textStyle=new GUIStyle(GUI.skin.label){font=game.interfaceFont,fontSize=20,wordWrap=true,normal={textColor=new Color(.95f,.94f,.87f)}};
-        speakerStyle=new GUIStyle(textStyle){fontSize=17,normal={textColor=new Color(.86f,.76f,.53f)}};
-        buttonStyle=new GUIStyle(GUI.skin.button){font=game.interfaceFont,fontSize=17,wordWrap=true};
+        var oldMatrix=GUI.matrix;var oldColor=GUI.color;var oldContent=GUI.contentColor;int oldDepth=GUI.depth;
+        float scale=Mathf.Min(Screen.height/900f,Screen.width/1160f,1.5f);
+        GUI.matrix=Matrix4x4.Scale(Vector3.one*scale);GUI.depth=-40;GUI.color=GUI.contentColor=Color.white;
+        Styles();
         var stage=Data.stages[StageIndex];
-        GUI.Label(new Rect(left+24,top+16,pw-48,30),stage.speaker+"  ·  "+stage.place,speakerStyle);
         string content=closing?stage.closing:response?stage.replies[choice]:stage.lines[line];
-        GUI.Label(new Rect(left+24,top+62,pw-48,116),content,textStyle);
         bool choices=!closing&&!response&&line==stage.lines.Length-1;
+        float w=Screen.width/scale,h=Screen.height/scale,pw=Mathf.Min(1000,w-80),left=(w-pw)/2;
+        float textHeight=Mathf.Max(78,textStyle.CalcHeight(new GUIContent(content),pw-80));
+        float[] choiceHeights=new float[choices?stage.choices.Length:0];float optionsHeight=0;
+        for(int i=0;i<choiceHeights.Length;i++)
+        {choiceHeights[i]=Mathf.Max(48,choiceStyle.CalcHeight(new GUIContent(stage.choices[i]),pw-156)+22);optionsHeight+=choiceHeights[i]+10;}
+        float actionHeight=choices?optionsHeight:50;
+        float panelHeight=124+textHeight+24+actionHeight+57,top=h-panelHeight-42;
+        CampusStoryStyle.Fill(new Rect(0,0,w,h),new Color(.025f,.04f,.065f,.18f));
+        var panel=new Rect(left,top,pw,panelHeight);CampusStoryStyle.Panel(panel);
+        CampusStoryStyle.Round(new Rect(left+32,top-14,192,28),CampusStoryStyle.Gold);
+        GUI.Label(new Rect(left+42,top-14,172,28),"迎新故事  /  "+(StageIndex+1).ToString("00")+" — "+Data.stages.Length.ToString("00"),
+            chapterStyle);
+        CampusStoryStyle.Round(new Rect(left+32,top+35,48,48),new Color(.87f,.74f,.48f,.12f));
+        GUI.Label(new Rect(left+32,top+35,48,48),"岚",avatarStyle);
+        GUI.Label(new Rect(left+96,top+32,pw-340,34),stage.speaker,speakerStyle);
+        GUI.Label(new Rect(left+96,top+68,pw-340,25),stage.place+"   /   "+stage.title,metaStyle);
+        if(CampusStoryStyle.Button(new Rect(left+pw-144,top+36,112,36),"收起  ESC",buttonStyle)){CampusOverlayHub.ConsumeInput();CloseDialogue();}
+        CampusStoryStyle.Fill(new Rect(left+32,top+106,pw-64,1),CampusStoryStyle.Line);
+        GUI.Label(new Rect(left+40,top+124,pw-80,textHeight),content,textStyle);
+        float actionY=top+124+textHeight+24;
         if(choices)
         {
-            for(int i=0;i<stage.choices.Length;i++)if(GUI.Button(new Rect(left+24,top+188+i*49,pw-48,42),stage.choices[i],buttonStyle)){choice=i;response=true;}
+            for(int i=0;i<stage.choices.Length;i++)
+            {
+                var r=new Rect(left+32,actionY,pw-64,choiceHeights[i]);
+                bool clicked=CampusStoryStyle.Button(r,"",choiceStyle);
+                CampusStoryStyle.Key(new Rect(r.x+14,r.y+(r.height-26)/2,26,26),(i+1).ToString(),keyStyle);
+                GUI.Label(new Rect(r.x+56,r.y+10,r.width-104,r.height-20),stage.choices[i],choiceStyle);
+                GUI.Label(new Rect(r.xMax-34,r.y,18,r.height),"›",buttonStyle);
+                if(clicked)Choose(i);
+                actionY+=choiceHeights[i]+10;
+            }
         }
-        else if(GUI.Button(new Rect(left+24,top+233,pw-48,48),closing?(Finished?"结束对话":"记住了，出发吧"):"继续",buttonStyle))
+        else
         {
-            if(closing)CompleteDialogue();else if(response)closing=true;else line++;
+            string label=closing?(StageIndex==Data.stages.Length-1?"结束对话":"记住了，出发吧"):"继续对话   ›";
+            if(CampusStoryStyle.Button(new Rect(left+pw-252,actionY,220,50),label,primaryStyle,true))Advance();
         }
-        GUI.Label(new Rect(left+24,top+291,pw-48,23),"ESC 收起对话 · J 重新阅读",speakerStyle);
-        GUI.matrix=oldMatrix;GUI.color=oldColor;GUI.depth=oldDepth;
+        GUI.Label(new Rect(left+40,top+panelHeight-35,pw-80,21),choices?"选择你的回应  ·  点击选项或按数字键":"空格 / Enter 继续   ·   J 重新打开指引",metaStyle);
+        if(!choices)
+            for(int i=0;i<stage.lines.Length;i++)CampusStoryStyle.Round(new Rect(left+40+i*22,actionY+21,i==line&&!response&&!closing?14:6,6),i==line&&!response&&!closing?CampusStoryStyle.Gold:CampusStoryStyle.Line);
+        GUI.matrix=oldMatrix;GUI.color=oldColor;GUI.contentColor=oldContent;GUI.depth=oldDepth;
     }
 }

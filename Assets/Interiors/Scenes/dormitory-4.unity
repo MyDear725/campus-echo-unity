@@ -20,11 +20,11 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.65, g: 0.67, b: 0.7, a: 1}
-  m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
-  m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
+  m_AmbientSkyColor: {r: 0.62, g: 0.66, b: 0.69, a: 1}
+  m_AmbientEquatorColor: {r: 0.42, g: 0.44, b: 0.44, a: 1}
+  m_AmbientGroundColor: {r: 0.24, g: 0.25, b: 0.26, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 3
+  m_AmbientMode: 1
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
@@ -231,6 +231,55 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 12200272}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &131936748
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 131936749}
+  - component: {fileID: 131936750}
+  m_Layer: 0
+  m_Name: "Interior refinement \xB7 exposure"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &131936749
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131936748}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 135592668}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &131936750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131936748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.Volume
+  m_IsGlobal: 1
+  priority: 40
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 4acc46b5c979f8c4e890f515125d1c31, type: 2}
 --- !u!1 &135592666
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,6 +290,7 @@ GameObject:
   m_Component:
   - component: {fileID: 135592668}
   - component: {fileID: 135592667}
+  - component: {fileID: 135592669}
   m_Layer: 0
   m_Name: "InteriorRoot \xB7 \u7B2C\u56DB\u5B66\u751F\u516C\u5BD3"
   m_TagString: Untagged
@@ -266,9 +316,14 @@ MonoBehaviour:
     anchor: {fileID: 2112036291}
   exits:
   - {fileID: 1453281065}
+  exteriorExits: []
+  connections: []
   exitRadius: 2.4
+  exitEntranceIds: []
   fallRecoveryHeight: -10
   isPlaceholder: 1
+  showExitMarkers: 1
+  backgroundColor: {r: 0.18, g: 0.21, b: 0.24, a: 1}
   onPlayerEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -292,8 +347,27 @@ Transform:
   - {fileID: 1453281065}
   - {fileID: 1696094541}
   - {fileID: 1727344928}
+  - {fileID: 131936749}
+  - {fileID: 1958329059}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &135592669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 135592666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a21040a384ca4d08857f366441196c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteriorPresentation
+  rendererIndex: 4
+  exteriorRendererIndex: -1
+  interiorFarClip: 75
+  interiorShadowDistance: 36
+  interiorCascades: 4
 --- !u!1 &876152370
 GameObject:
   m_ObjectHideFlags: 0
@@ -964,8 +1038,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 12
   m_Type: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.85
+  m_Color: {r: 1, g: 0.97, b: 0.91, a: 1}
+  m_Intensity: 0.55
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1019,6 +1093,51 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!1 &1958329058
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1958329059}
+  - component: {fileID: 1958329060}
+  m_Layer: 0
+  m_Name: "Interior refinement \xB7 coordinated finishes"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1958329059
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1958329058}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 135592668}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1958329060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1958329058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86b0eaa50686cd34d97a6faef098c092, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteriorDetailKit
+  palette: {fileID: 11400000, guid: 16dfbd2385a79cc4d91a9ecdefddad0c, type: 2}
 --- !u!1 &2112036290
 GameObject:
   m_ObjectHideFlags: 0

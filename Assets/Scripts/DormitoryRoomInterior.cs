@@ -174,6 +174,7 @@ public sealed class DormitoryRoomInterior : MonoBehaviour
         BuildLoftDesk(bedroom, 1.8f,7.55f,wood,dark,trim,white,linen,quilt);
         BuildBalcony(bedroom,dark,trim);
         for(int i=0;i<3;i++)Box(bedroom,"Ceiling light",new Vector3(0,3.12f,2.7f+i*3f),new Vector3(.9f,.06f,.22f),white);
+        DormitoryInteriorRefinement.Bedroom(bedroom);
         bedroom.gameObject.SetActive(false);
     }
 

@@ -14,7 +14,7 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
     bool previousPaused;
     GUIStyle title, body, muted, button, selectedButton, section;
     Texture2D normalFill, hoverFill, activeFill;
-    readonly Color paper = new Color(.95f,.94f,.87f), sage = new Color(.74f,.84f,.76f);
+    readonly Color paper = CampusStoryStyle.Paper, sage = CampusStoryStyle.Muted;
     public void Initialize(CampusSemester owner) { semester=owner; CampusOverlayHub.Register(this); }
     void OnEnable() { if (semester) CampusOverlayHub.Register(this); }
     void OnDisable() { CampusOverlayHub.Unregister(this); }
@@ -80,8 +80,8 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
         section=new GUIStyle(body){fontSize=23,fontStyle=FontStyle.Bold};
         button=new GUIStyle(GUI.skin.button){font=font,fontSize=18,wordWrap=true,alignment=TextAnchor.MiddleLeft,padding=new RectOffset(14,14,9,9),margin=new RectOffset(0,0,4,7)};
         button.normal.textColor=paper; button.hover.textColor=Color.white; button.focused.textColor=Color.white;
-        selectedButton=new GUIStyle(button);selectedButton.normal.textColor=new Color(1,.86f,.57f);
-        normalFill=Swatch(new Color(.10f,.18f,.14f));hoverFill=Swatch(new Color(.17f,.27f,.21f));activeFill=Swatch(new Color(.23f,.33f,.25f));
+        selectedButton=new GUIStyle(button);selectedButton.normal.textColor=CampusStoryStyle.Gold;
+        normalFill=Swatch(CampusStoryStyle.Surface);hoverFill=Swatch(new Color(.19f,.25f,.30f));activeFill=Swatch(new Color(.22f,.28f,.32f));
         foreach(var style in new[]{button,selectedButton})
         {
             style.fixedHeight=0;style.stretchHeight=false;style.alignment=TextAnchor.MiddleLeft;
@@ -101,17 +101,23 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
         GUI.matrix=Matrix4x4.Scale(Vector3.one*scale);
         float w=Screen.width/scale,h=Screen.height/scale;
         var panel=new Rect((w-1100)/2,(h-780)/2,1100,780);
-        Fill(new Rect(0,0,w,h),new Color(.02f,.04f,.035f,.78f));
-        Fill(panel,new Color(.055f,.105f,.085f,1));
-        GUI.Label(new Rect(panel.x+28,panel.y+22,710,42),"我的第一个大学学期",title);
-        GUI.Label(new Rect(panel.x+28,panel.y+69,960,30),semester.Clock.DateTimeText+"  ·  "+semester.Clock.WeekText,muted);
+        Fill(new Rect(0,0,w,h),new Color(.025f,.04f,.065f,.64f));
+        CampusStoryStyle.Panel(panel);
+        GUI.Label(new Rect(panel.x+28,panel.y+18,710,20),"CAMPUS LIFE   /   学期手册",CampusStoryStyle.Label(semester.Game.interfaceFont,12,CampusStoryStyle.Gold));
+        GUI.Label(new Rect(panel.x+28,panel.y+44,710,42),"我的第一个大学学期",title);
+        GUI.Label(new Rect(panel.x+28,panel.y+88,960,25),semester.Clock.DateTimeText+"  ·  "+semester.Clock.WeekText,muted);
         if(GUI.Button(new Rect(panel.x+962,panel.y+24,110,42),"关闭  K",button))Close();
-        Fill(new Rect(panel.x+24,panel.y+112,1052,1),new Color(.32f,.43f,.35f));
+        Fill(new Rect(panel.x+24,panel.y+122,1052,1),CampusStoryStyle.Line);
         string[] ids={"today","study","growth","story","life"};string[] labels={"今日日程","学习与作业","成绩与奖励","故事与回忆","生活与设置"};
-        for(int i=0;i<ids.Length;i++)if(GUI.Button(new Rect(panel.x+24,panel.y+134+i*62,178,50),labels[i],page==ids[i]?selectedButton:button)){page=ids[i];scroll=Vector2.zero;selectedBeat=null;confirmAction=null;}
+        for(int i=0;i<ids.Length;i++){
+            var tab=new Rect(panel.x+24,panel.y+142+i*62,178,50);
+            if(GUI.Button(tab,labels[i],page==ids[i]?selectedButton:button)){page=ids[i];scroll=Vector2.zero;selectedBeat=null;confirmAction=null;}
+            if(page==ids[i])Fill(new Rect(tab.x,tab.y+12,3,26),CampusStoryStyle.Gold);
+        }
         GUI.Label(new Rect(panel.x+28,panel.y+492,168,110),"精力 "+semester.State.energy+" / 100\n"+CampusWallet.BalanceText,body);
         GUI.Label(new Rect(panel.x+28,panel.y+620,168,92),"K 学期手册\nP 手机预约\nE 到场交互",muted);
-        GUILayout.BeginArea(new Rect(panel.x+230,panel.y+132,842,520));
+        CampusStoryStyle.Round(new Rect(panel.x+218,panel.y+140,856,520),new Color(.12f,.16f,.20f,.40f));
+        GUILayout.BeginArea(new Rect(panel.x+240,panel.y+154,812,492));
         scroll=GUILayout.BeginScrollView(scroll,false,true);
         if(confirmAction!=null)DrawConfirmation();
         else switch(page)
@@ -123,7 +129,7 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
             case "life": Life();break;
         }
         GUILayout.EndScrollView();GUILayout.EndArea();
-        Fill(new Rect(panel.x+230,panel.y+675,842,1),new Color(.32f,.43f,.35f));
+        Fill(new Rect(panel.x+230,panel.y+675,842,1),CampusStoryStyle.Line);
         GUI.Label(new Rect(panel.x+230,panel.y+690,820,68),string.IsNullOrEmpty(semester.LastMessage)?"查看日程时暂停计时。到场后开始上课、学习或活动。":semester.LastMessage,muted);
     }
     static void Fill(Rect rect,Color color) { var old=GUI.color;GUI.color=color;GUI.DrawTexture(rect,Texture2D.whiteTexture);GUI.color=old; }

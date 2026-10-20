@@ -33,6 +33,7 @@ public class CampusGame : MonoBehaviour {
  void Awake(){
   data=JsonUtility.FromJson<CampusData>(mapData.text);qa=Environment.GetCommandLineArgs().Contains("-campusQA");bool femaleQa=Environment.GetCommandLineArgs().Contains("-femaleCharacterQA");
   Interiors=GetComponent<BuildingInteriorTravel>();Automated=qa||Environment.GetCommandLineArgs().Contains("-githubIntegrationQA")||Environment.GetCommandLineArgs().Contains("-overlayRenderQA")||Environment.GetCommandLineArgs().Contains("-cafeteriaQA")||Environment.GetCommandLineArgs().Contains("-allowanceQA")||Environment.GetCommandLineArgs().Contains("-phoneQA")||Environment.GetCommandLineArgs().Contains("-libDirectQA")||Environment.GetCommandLineArgs().Contains("-femaleCharacterQA")||Environment.GetCommandLineArgs().Contains("-campusPlanQA")||Environment.GetCommandLineArgs().Contains("-gymInteriorQA")||Environment.GetCommandLineArgs().Contains("-entranceQA")||Environment.GetCommandLineArgs().Contains("-teachingCQA")||Environment.GetCommandLineArgs().Contains("-teachingABQA")||Environment.GetCommandLineArgs().Contains("-skybridgeQA");
+  Automated=Automated||Environment.GetCommandLineArgs().Contains("-interiorRefinementQA");
   Outdoor=GetComponent<CampusOutdoorTraversal>();
   Application.targetFrameRate=60;
   characterSelector=player.GetComponent<PlayerCharacterSelector>();
@@ -198,12 +199,14 @@ public class CampusGame : MonoBehaviour {
   string heading=pixelStudy?"风起 · 校园  /  像素试作":"风起 · 校园  /  UNITY";
   string summary=Story!=null?Story.Heading+"\n"+Story.Objective:indoors?Interiors.Current.displayName+"\n"+(Interiors.Interior.isPlaceholder?"室内场景待制作 · 靠近出口按 E 返回":"室内探索 · 靠近出口按 E 返回"):"大连理工大学 · 开发区校区\n"+(complete?"探索完成 · 自由漫游":started?"校园记忆  "+Count()+" / 3":"前往书韵广场，与小岚交谈");
   if(CampusSemester.Instance&&Story!=null&&Story.Finished)summary=SemesterRules.Chapter(CampusSemester.Instance.Clock.DayIndex)+"\n"+CampusSemester.Instance.Objective;
-  float infoWidth=Mathf.Min(520f,Mathf.Max(220f,w-32f));float infoX=Mathf.Clamp(20f,0f,w-infoWidth);float contentWidth=infoWidth-36f;
-  body.wordWrap=true;float summaryHeight=Mathf.Min(body.CalcHeight(new GUIContent(summary),contentWidth),Mathf.Max(54f,h*.30f));float infoHeight=20f+36f+8f+summaryHeight+16f;
-  GUI.Box(new Rect(infoX,20,infoWidth,infoHeight),"");GUI.Label(new Rect(infoX+18,32,contentWidth,36),heading,title);GUI.Label(new Rect(infoX+18,73,contentWidth,summaryHeight),summary,body);
+  bool readingStory=Story!=null&&Story.DialogueOpen;
+  if(!readingStory){
+   var info=summary.Split(new[]{'\n'},2);
+   CampusStoryStyle.Guidance(interfaceFont,w,info[0],info.Length>1?info[1]:heading,Story!=null?Story.StageIndex:0,Story!=null&&!Story.Finished?Story.Data.stages.Length:0);
+  }
   if(pixelStudy)GUI.Label(new Rect(24,h-65,w-48,26),"T 返回教学广场    F6 切换像素大小（标准 / 粗 / 细 / 原生分辨率）",small);
-  GUI.Label(new Rect(24,h-37,w-48,30),indoors?"WASD 移动    鼠标转向    Shift 奔跑    空格跳跃    E 交互    K 学期手册    P 手机    J 剧情指引    ESC 暂停":"WASD 移动    鼠标转向    Shift 奔跑    空格跳跃    E 交互 / 进入建筑    M 地图    K 学期手册    P 手机    J 指引    T 教学    L 生活区    B 宿舍    F 食堂    G 图书馆    R 南门    ESC 暂停",small);
-  if(Time.time<messageUntil&&(Story==null||!Story.DialogueOpen)){GUI.Box(new Rect(w*.5f-330,h-130,660,72),"");GUI.Label(new Rect(w*.5f-312,h-119,624,60),message,body);}
+  if(!readingStory)GUI.Label(new Rect(24,h-37,w-48,30),indoors?"WASD 移动    鼠标转向    Shift 奔跑    空格跳跃    E 交互    K 学期手册    P 手机    J 剧情指引    ESC 暂停":"WASD 移动    鼠标转向    Shift 奔跑    空格跳跃    E 交互 / 进入建筑    M 地图    K 学期手册    P 手机    J 指引    T 教学    L 生活区    B 宿舍    F 食堂    G 图书馆    R 南门    ESC 暂停",small);
+  if(Time.time<messageUntil&&!readingStory){CampusStoryStyle.Panel(new Rect(w*.5f-330,h-140,660,76));GUI.Label(new Rect(w*.5f-306,h-126,612,52),message,CampusStoryStyle.Label(interfaceFont,17,CampusStoryStyle.Paper,false,TextAnchor.MiddleLeft));}
   // The contextual "[ E ] ..." prompt is drawn once, by CampusHud.
   if(mapOpen){float s=Mathf.Min(h-190,620);var r=new Rect(w-s-25,25,s,s*.692f);GUI.DrawTexture(r,minimap);if(Story==null)foreach(var spot in data.spots)Dot(r,spot.x,spot.z,new Color(1,.76f,.3f));if(guide!=null){var gp=WorldToMap(guide.position);Dot(r,gp.x,gp.z,Color.cyan);}Dot(r,player.position.x*mapXSign,player.position.z,Color.white);GUI.Label(new Rect(r.x,r.yMax+8,s,35),Story!=null?"北 ↑   白：你   蓝：小岚":"北 ↑   白：你   蓝：小岚   金：记忆",small);}
   if(paused&&(!qa||pixelStudy)){
