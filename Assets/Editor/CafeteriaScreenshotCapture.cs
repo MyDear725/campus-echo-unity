@@ -6,7 +6,7 @@ using UnityEngine;
 public static class CafeteriaScreenshotCapture
 {
     const string ScenePath = "Assets/Interiors/Scenes/cafeteria.unity";
-    const string OutDir = "/Users/iewuui/.gemini/antigravity/brain/7665079f-806f-4c2d-9b15-78238e9166db";
+    const string OutDir = "output/食堂截图";
 
     [MenuItem("Campus/Interiors/Capture Cafeteria Screenshots")]
     public static void CaptureAll()

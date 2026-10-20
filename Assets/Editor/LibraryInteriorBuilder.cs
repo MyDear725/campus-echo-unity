@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using UnityEditor;
+using UnityEngine.Rendering.Universal;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -47,6 +48,7 @@ public static class LibraryInteriorBuilder
 
     // ---- Material palette ----
     static Material matFloorTerrazzo, matFloorDarkBasalt, matFloorCarpet;
+    static Material matSofaOrange, matSofaSeatGrey, matStoolRed, matStoolYellow, matShrubLight, matFloorJoint;
     static Material matWallMicrocement, matWallDarkCharcoal, matWallAccentGreen, matCeilingWhite;
     static Material matWoodScandiOak, matWoodDarkWalnut, matWoodBirch;
     static Material matMarbleWhite, matStoneSlate;
@@ -61,7 +63,26 @@ public static class LibraryInteriorBuilder
 
     // ---------------------------------------------------------------- materials
 
-    static Material GetOrCreateMaterial(string name, Color baseColor, float metallic = 0f, float smoothness = 0.2f, Color? emission = null, bool transparent = false)
+    static Material GetOrCreateMaterial(string name, Color baseColor, float metallic = 0f, float smoothness = 0.2f,
+                                        Color? emission = null, bool transparent = false, string texturePath = null,
+                                        Vector2? tiling = null)
+    {
+        var result = GetOrCreateMaterialCore(name, baseColor, metallic, smoothness, emission, transparent);
+        if (!string.IsNullOrEmpty(texturePath))
+        {
+            var tex = AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath);
+            if (tex)
+            {
+                result.SetTexture("_BaseMap", tex);
+                var t = tiling ?? Vector2.one;
+                result.SetTextureScale("_BaseMap", t);
+            }
+        }
+        return result;
+    }
+
+    static Material GetOrCreateMaterialCore(string name, Color baseColor, float metallic, float smoothness,
+                                            Color? emission, bool transparent)
     {
         if (!Directory.Exists(MatDir))
         {
@@ -157,50 +178,61 @@ public static class LibraryInteriorBuilder
 
     static void LoadMaterials()
     {
-        matFloorTerrazzo = GetOrCreateMaterial("Mat_Lib_Floor_Terrazzo", new Color(0.80f, 0.78f, 0.75f), 0.02f, 0.32f);
+        matFloorTerrazzo = GetOrCreateMaterial("Mat_Lib_Floor_Terrazzo", new Color(0.855f, 0.845f, 0.825f), 0.02f, 0.34f, null, false, "Assets/Interiors/Textures/Library_Granite_Tile.png", new Vector2(16.6f, 13.3f));
         matFloorDarkBasalt = GetOrCreateMaterial("Mat_Lib_Floor_DarkBasalt", new Color(0.20f, 0.21f, 0.23f), 0.10f, 0.26f);
-        matFloorCarpet = GetOrCreateMaterial("Mat_Lib_Floor_Carpet", new Color(0.34f, 0.35f, 0.38f), 0.0f, 0.05f);
+        matFloorCarpet = GetOrCreateMaterial("Mat_Lib_Floor_Carpet", new Color(0.33f, 0.34f, 0.36f), 0.0f, 0.04f);
 
-        matWallMicrocement = GetOrCreateMaterial("Mat_Lib_Wall_Microcement", new Color(0.93f, 0.92f, 0.90f), 0.0f, 0.08f);
+        matWallMicrocement = GetOrCreateMaterial("Mat_Lib_Wall_Microcement", new Color(0.855f, 0.845f, 0.825f), 0.0f, 0.05f);
         matWallDarkCharcoal = GetOrCreateMaterial("Mat_Lib_Wall_DarkCharcoal", new Color(0.17f, 0.18f, 0.20f), 0.15f, 0.25f);
         matWallAccentGreen = GetOrCreateMaterial("Mat_Lib_Wall_AccentGreen", new Color(0.16f, 0.28f, 0.24f), 0.05f, 0.18f);
-        matCeilingWhite = GetOrCreateMaterial("Mat_Lib_Ceiling_White", new Color(0.95f, 0.95f, 0.95f), 0.0f, 0.05f);
+        matCeilingWhite = GetOrCreateMaterial("Mat_Lib_Ceiling_White", new Color(0.90f, 0.90f, 0.89f), 0.0f, 0.04f);
 
-        matWoodScandiOak = GetOrCreateMaterial("Mat_Lib_Wood_ScandiOak", new Color(0.80f, 0.69f, 0.53f), 0.0f, 0.32f);
+        matWoodScandiOak = GetOrCreateMaterial("Mat_Lib_Wood_ScandiOak", new Color(0.80f, 0.70f, 0.55f), 0.0f, 0.24f, null, false, "Assets/Interiors/Textures/Library_Oak_Grain.png", new Vector2(1f, 1f));
         matWoodDarkWalnut = GetOrCreateMaterial("Mat_Lib_Wood_DarkWalnut", new Color(0.28f, 0.22f, 0.18f), 0.0f, 0.35f);
-        matWoodBirch = GetOrCreateMaterial("Mat_Lib_Wood_Birch", new Color(0.87f, 0.80f, 0.69f), 0.0f, 0.28f);
+        matWoodBirch = GetOrCreateMaterial("Mat_Lib_Wood_Birch", new Color(0.84f, 0.78f, 0.68f), 0.0f, 0.22f, null, false, "Assets/Interiors/Textures/Library_Oak_Grain.png", new Vector2(1f, 1f));
 
-        matMarbleWhite = GetOrCreateMaterial("Mat_Lib_Marble_White", new Color(0.96f, 0.96f, 0.97f), 0.05f, 0.62f);
-        matStoneSlate = GetOrCreateMaterial("Mat_Lib_Stone_Slate", new Color(0.30f, 0.31f, 0.33f), 0.08f, 0.30f);
+        matMarbleWhite = GetOrCreateMaterial("Mat_Lib_Marble_White", new Color(0.80f, 0.80f, 0.805f), 0.02f, 0.30f);
+        matStoneSlate = GetOrCreateMaterial("Mat_Lib_Stone_Slate", new Color(0.46f, 0.47f, 0.48f), 0.04f, 0.16f, null, false, "Assets/Interiors/Textures/Library_Stone_Dado.png", new Vector2(6f, 1f));
 
-        matMetalStainless = GetOrCreateMaterial("Mat_Lib_Metal_Stainless", new Color(0.88f, 0.90f, 0.92f), 0.92f, 0.78f);
+        matMetalStainless = GetOrCreateMaterial("Mat_Lib_Metal_Stainless", new Color(0.72f, 0.74f, 0.76f), 0.85f, 0.62f);
         matMetalTitanium = GetOrCreateMaterial("Mat_Lib_Metal_Titanium", new Color(0.24f, 0.25f, 0.27f), 0.85f, 0.60f);
-        matMetalMatteBlack = GetOrCreateMaterial("Mat_Lib_Metal_MatteBlack", new Color(0.12f, 0.12f, 0.14f), 0.60f, 0.30f);
+        matMetalMatteBlack = GetOrCreateMaterial("Mat_Lib_Metal_MatteBlack", new Color(0.11f, 0.115f, 0.125f), 0.45f, 0.26f);
         matMetalBrass = GetOrCreateMaterial("Mat_Lib_Metal_Brass", new Color(0.72f, 0.58f, 0.30f), 0.88f, 0.66f);
 
-        matGlassUltra = GetOrCreateMaterial("Mat_Lib_Glass_Ultra", new Color(0.92f, 0.96f, 1.0f, 0.30f), 0.1f, 0.96f, null, true);
+        matGlassUltra = GetOrCreateMaterial("Mat_Lib_Glass_Ultra", new Color(0.88f, 0.93f, 0.97f, 0.16f), 0.05f, 0.94f, null, true);
         matGlassFrosted = GetOrCreateMaterial("Mat_Lib_Glass_Frosted", new Color(0.94f, 0.96f, 0.97f, 0.55f), 0.05f, 0.70f, null, true);
 
-        matChairCream = GetOrCreateMaterial("Mat_Lib_Chair_Cream", new Color(0.91f, 0.89f, 0.85f), 0.0f, 0.22f);
-        matChairSage = GetOrCreateMaterial("Mat_Lib_Chair_Sage", new Color(0.50f, 0.58f, 0.48f), 0.0f, 0.22f);
+        matChairCream = GetOrCreateMaterial("Mat_Lib_Chair_Cream", new Color(0.80f, 0.79f, 0.76f), 0.0f, 0.14f);
+        matChairSage = GetOrCreateMaterial("Mat_Lib_Chair_Sage", new Color(0.47f, 0.55f, 0.44f), 0.0f, 0.12f);
         matChairTerracotta = GetOrCreateMaterial("Mat_Lib_Chair_Terracotta", new Color(0.72f, 0.46f, 0.33f), 0.0f, 0.22f);
         matChairSlateBlue = GetOrCreateMaterial("Mat_Lib_Chair_SlateBlue", new Color(0.30f, 0.36f, 0.42f), 0.0f, 0.22f);
 
-        matLightWarmLED = GetOrCreateMaterial("Mat_Lib_Light_WarmLED", new Color(1.0f, 0.97f, 0.90f), 0f, 0.5f, new Color(1.0f, 0.95f, 0.85f) * 1.7f);
-        matLightCoolLED = GetOrCreateMaterial("Mat_Lib_Light_CoolLED", new Color(0.95f, 0.97f, 1.0f), 0f, 0.5f, new Color(0.88f, 0.94f, 1.0f) * 1.5f);
+        // Lobby seating accents (reference image: orange-backed sofa, grey seat,
+        // primary-coloured poufs).
+        matSofaOrange = GetOrCreateMaterial("Mat_Lib_Sofa_Orange", new Color(0.94f, 0.50f, 0.12f), 0.0f, 0.26f);
+        matSofaSeatGrey = GetOrCreateMaterial("Mat_Lib_Sofa_SeatGrey", new Color(0.25f, 0.26f, 0.28f), 0.0f, 0.22f);
+        matStoolRed = GetOrCreateMaterial("Mat_Lib_Stool_Red", new Color(0.78f, 0.17f, 0.14f), 0.0f, 0.28f);
+        matStoolYellow = GetOrCreateMaterial("Mat_Lib_Stool_Yellow", new Color(0.95f, 0.77f, 0.16f), 0.0f, 0.28f);
+        matShrubLight = GetOrCreateMaterial("Mat_Lib_Shrub_Light", new Color(0.36f, 0.52f, 0.24f), 0.0f, 0.18f);
+        // Near-black and almost fully matte so floor joints stay dark instead of
+        // catching a specular highlight and reading as pale grey.
+        matFloorJoint = GetOrCreateMaterial("Mat_Lib_Floor_Joint", new Color(0.13f, 0.13f, 0.135f), 0.0f, 0.06f);
+
+        matLightWarmLED = GetOrCreateMaterial("Mat_Lib_Light_WarmLED", new Color(1.0f, 0.97f, 0.90f), 0f, 0.5f, new Color(1.0f, 0.95f, 0.86f) * 1.15f);
+        matLightCoolLED = GetOrCreateMaterial("Mat_Lib_Light_CoolLED", new Color(0.95f, 0.97f, 1.0f), 0f, 0.5f, new Color(0.90f, 0.95f, 1.0f) * 1.05f);
         matSignBlackBox = GetOrCreateMaterial("Mat_Lib_Sign_BlackBox", new Color(0.13f, 0.14f, 0.16f), 0.35f, 0.40f);
 
-        matPlantFoliage = GetOrCreateMaterial("Mat_Lib_Plant_Foliage", new Color(0.24f, 0.48f, 0.22f), 0.0f, 0.20f);
-        matPlantPot = GetOrCreateMaterial("Mat_Lib_Plant_Pot", new Color(0.18f, 0.19f, 0.21f), 0.15f, 0.25f);
+        matPlantFoliage = GetOrCreateMaterial("Mat_Lib_Plant_Foliage", new Color(0.29f, 0.42f, 0.24f), 0.0f, 0.16f);
+        matPlantPot = GetOrCreateMaterial("Mat_Lib_Plant_Pot", new Color(0.30f, 0.30f, 0.29f), 0.05f, 0.18f);
 
-        matBook1 = GetOrCreateMaterial("Mat_Lib_Book_1", new Color(0.62f, 0.20f, 0.18f), 0f, 0.20f);
-        matBook2 = GetOrCreateMaterial("Mat_Lib_Book_2", new Color(0.20f, 0.32f, 0.52f), 0f, 0.20f);
-        matBook3 = GetOrCreateMaterial("Mat_Lib_Book_3", new Color(0.24f, 0.42f, 0.30f), 0f, 0.20f);
-        matBook4 = GetOrCreateMaterial("Mat_Lib_Book_4", new Color(0.78f, 0.66f, 0.34f), 0f, 0.20f);
-        matBook5 = GetOrCreateMaterial("Mat_Lib_Book_5", new Color(0.44f, 0.28f, 0.46f), 0f, 0.20f);
-        matBook6 = GetOrCreateMaterial("Mat_Lib_Book_6", new Color(0.80f, 0.78f, 0.74f), 0f, 0.20f);
+        matBook1 = GetOrCreateMaterial("Mat_Lib_Book_1", new Color(0.46f, 0.26f, 0.24f), 0f, 0.14f);
+        matBook2 = GetOrCreateMaterial("Mat_Lib_Book_2", new Color(0.26f, 0.33f, 0.44f), 0f, 0.14f);
+        matBook3 = GetOrCreateMaterial("Mat_Lib_Book_3", new Color(0.30f, 0.38f, 0.31f), 0f, 0.14f);
+        matBook4 = GetOrCreateMaterial("Mat_Lib_Book_4", new Color(0.62f, 0.55f, 0.37f), 0f, 0.14f);
+        matBook5 = GetOrCreateMaterial("Mat_Lib_Book_5", new Color(0.40f, 0.33f, 0.42f), 0f, 0.14f);
+        matBook6 = GetOrCreateMaterial("Mat_Lib_Book_6", new Color(0.70f, 0.68f, 0.63f), 0f, 0.14f);
 
-        matSofaFabric = GetOrCreateMaterial("Mat_Lib_Sofa_Fabric", new Color(0.38f, 0.40f, 0.44f), 0.0f, 0.15f);
+        matSofaFabric = GetOrCreateMaterial("Mat_Lib_Sofa_Fabric", new Color(0.44f, 0.47f, 0.45f), 0.0f, 0.10f);
         matRug = GetOrCreateMaterial("Mat_Lib_Rug", new Color(0.55f, 0.35f, 0.28f), 0.0f, 0.08f);
 
         // Optional exhibition artwork. The campus picture reuses the cafeteria facade texture if present.
@@ -359,11 +391,23 @@ public static class LibraryInteriorBuilder
         MakeBox(shell, "Wall_South_East", new Vector3(11.2f, TotalH * 0.5f, -HalfD), new Vector3(17.6f, TotalH, 0.3f), matWallMicrocement);
         MakeBox(shell, "Wall_South_DoorLintel", new Vector3(0, 3.0f + (TotalH - 3.0f) * 0.5f, -HalfD), new Vector3(4.8f, TotalH - 3.0f, 0.3f), matWallMicrocement);
 
-        // West wall (X = -20): reserved corridor opening to the information building at Z in [3.8, 8.2].
-        // Closed off with frosted glass for now; intentionally NOT connected.
+        // West wall (X = -20). The corridor behind it is entered from 2F and 3F only, so
+        // the wall is built in horizontal bands: solid everywhere except two 3 m doorway
+        // slots, one per storey. 1F and 4F stay sealed, so the player can never step out
+        // into empty space on those floors.
         MakeBox(shell, "Wall_West_North", new Vector3(-HalfW, TotalH * 0.5f, 12.1f), new Vector3(0.3f, TotalH, 7.8f), matWallMicrocement);
-        MakeBox(shell, "Wall_West_South", new Vector3(-HalfW, TotalH * 0.5f, -3.9f), new Vector3(0.3f, TotalH, 24.2f), matWallMicrocement);
-        MakeBox(shell, "Wall_West_DoorLintel", new Vector3(-HalfW, 3.5f + (TotalH - 3.5f) * 0.5f, 6.0f), new Vector3(0.3f, TotalH - 3.5f, 4.4f), matWallMicrocement);
+        MakeBox(shell, "Wall_West_South", new Vector3(-HalfW, TotalH * 0.5f, -6.1f), new Vector3(0.3f, TotalH, 19.8f), matWallMicrocement);
+
+        const float DoorH = 3.0f;
+        float d2b = Y2, d2t = Y2 + DoorH;      // 2F doorway: 4.3 .. 7.3
+        float d3b = Y3, d3t = Y3 + DoorH;      // 3F doorway: 8.6 .. 11.6
+
+        // Seals 1F, below the 2F doorway.
+        MakeBox(shell, "Wall_West_Door_Sill", new Vector3(-HalfW, d2b * 0.5f, 6.0f), new Vector3(0.3f, d2b, 4.4f), matWallMicrocement);
+        // Solid band between the 2F and 3F doorways.
+        MakeBox(shell, "Wall_West_Door_Mid", new Vector3(-HalfW, (d2t + d3b) * 0.5f, 6.0f), new Vector3(0.3f, d3b - d2t, 4.4f), matWallMicrocement);
+        // Seals everything above the 3F doorway, including 4F.
+        MakeBox(shell, "Wall_West_Door_Head", new Vector3(-HalfW, (d3t + TotalH) * 0.5f, 6.0f), new Vector3(0.3f, TotalH - d3t, 4.4f), matWallMicrocement);
 
         // East wall (X = +20). The round reading hall is a tower bolted onto this wall
         // at Z -3..3, and 2F/3F/4F each open into it through a 6m doorway. 1F stays
@@ -579,10 +623,12 @@ public static class LibraryInteriorBuilder
 
         // ---- Entry sign above the opening, facing the lobby ----
         var sign = MakeBox(root, "Sign_Stair_Entry",
-            new Vector3((StairX0 + StairX1) * 0.5f, baseY + 2.55f, StairZ1 - 0.02f),
-            new Vector3(5.6f, 0.56f, 0.07f), matSignBlackBox, false);
-        MakeBox(sign.transform, "Glow", new Vector3(0, 0, 0.03f), new Vector3(5.3f, 0.44f, 0.03f), matLightWarmLED, false);
-        MakeText(sign.transform, "▲ 楼梯 STAIRS · 上行至" + toName, new Vector3(0, 0, 0.05f), Quaternion.Euler(0, 180, 0), 26, 0.034f, Color.white);
+            new Vector3((StairX0 + StairX1) * 0.5f, baseY + 2.52f, StairZ1 - 0.02f),
+            new Vector3(3.6f, 0.44f, 0.07f), matSignBlackBox, false);
+        MakeBox(sign.transform, "Glow", new Vector3(0, 0, 0.035f), new Vector3(3.34f, 0.32f, 0.03f), matLightWarmLED, false);
+        // TextMesh faces +Z, which is the lobby side of this board: no yaw needed. It
+        // previously carried a 180 Y rotation and therefore read mirrored from the hall.
+        MakeText(sign.transform, "▲ 楼梯 STAIRS · 上行至" + toName, new Vector3(0, 0, 0.055f), Quaternion.identity, 24, 0.030f, Color.white);
     }
 
     // A sloped handrail following one flight, with newel posts at both ends.
@@ -700,6 +746,13 @@ public static class LibraryInteriorBuilder
 
         sceneRoot.exits = new Transform[] { exitSouth, exitNorth };
 
+        // Bind each interior exit to the campus doorway it belongs to. Leaving through
+        // Exit_South returns to the FRONT entrance ("library"), leaving through
+        // Exit_North returns to the REAR entrance ("library-rear"). The array is
+        // index-aligned with exits. Without this the player always came back to the
+        // door they had entered by, regardless of which door they left through.
+        sceneRoot.exitEntranceIds = new string[] { "library", "library-rear" };
+
         // Spawn anchors. Front-door spawn faces into the hall (+Z); rear-door spawn faces back (-Z).
         var spawnMain = EnsureChild(sceneRootTransform, "Spawn_main");
         spawnMain.localPosition = new Vector3(0f, 0.1f, -13.6f);
@@ -800,6 +853,13 @@ public static class LibraryInteriorBuilder
         BuildDoorsAndExits(rootObj.transform, multiRoot, sceneRoot);
         BuildLighting(multiRoot);
 
+        // Interior presentation: same treatment as the teaching buildings and the
+        // cafeteria — SSAO renderer, ACES volume, reflection probe, runtime switch.
+        BuildPresentation(rootObj.transform);
+        LibraryLightingBalance.Configure(rootObj.transform);
+        InteriorLabelStairFix.ConfigureLabels(rootObj.transform, 4);
+        LibraryHallWindows.Configure(rootObj.transform);
+
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);
         Debug.Log("LIBRARY_BUILD_COMPLETE: built 1F lobby and 2F/3F/4F reading halls for 图书馆");
@@ -809,6 +869,51 @@ public static class LibraryInteriorBuilder
 
     // Interior lighting for the furnished floors (1F and 2F). 3F is bare structure
     // and deliberately left unlit until its contents are specified.
+
+    // Library is 40 x 32 m over four storeys with a 30 m round hall bolted on, so the
+    // interior camera needs a longer far clip and a wider shadow reach than a classroom.
+    static void BuildPresentation(Transform sceneRootTransform)
+    {
+        // Clear any grey-box placeholder light before the presentation is wired, so the
+        // old flat wash cannot survive a rebuild.
+        foreach (var l in sceneRootTransform.GetComponentsInChildren<Light>(true))
+            if (l.name.StartsWith("Placeholder")) UnityEngine.Object.DestroyImmediate(l.gameObject);
+
+        int rendererIndex;
+        UniversalRendererData renderer;
+        rendererIndex = InteriorPresentationSetup.EnsureInteriorRenderer(0.20f, out renderer);
+
+        var profile = InteriorPresentationSetup.EnsureVolume(
+            "Assets/Interiors/LibraryInterior/InteriorVolume.asset",
+            postExposure: 0.22f, contrast: 6f, saturation: -3f,
+            bloomIntensity: 0.06f, bloomThreshold: 1.25f);
+
+        var volumeGo = sceneRootTransform.Find("图书馆 · 色调与柔和灯光");
+        GameObject vol = volumeGo ? volumeGo.gameObject : new GameObject("图书馆 · 色调与柔和灯光");
+        vol.transform.SetParent(sceneRootTransform, false);
+        var volume = vol.GetComponent<Volume>();
+        if (!volume) volume = vol.AddComponent<Volume>();
+        volume.isGlobal = true;
+        volume.priority = 20;
+        volume.sharedProfile = profile;
+
+        // One probe over the main hall and one inside the round hall, so the glass,
+        // stone floor and metal actually pick up the interior environment.
+        InteriorPresentationSetup.EnsureProbe(sceneRootTransform, "图书馆材质反射",
+            new Vector3(0f, 6.0f, 0f), new Vector3(42f, 18f, 34f), new Color(0.33f, 0.34f, 0.35f));
+        InteriorPresentationSetup.EnsureProbe(sceneRootTransform, "圆厅材质反射",
+            new Vector3(34.5f, 6.0f, 0f), new Vector3(32f, 18f, 32f), new Color(0.33f, 0.34f, 0.35f));
+
+        var pres = sceneRootTransform.GetComponent<InteriorPresentation>();
+        if (!pres) pres = sceneRootTransform.gameObject.AddComponent<InteriorPresentation>();
+        pres.rendererIndex = rendererIndex;
+        pres.interiorFarClip = 110f;      // must still see the far side of the round hall
+        pres.interiorShadowDistance = 55f;
+        pres.interiorCascades = 4;
+
+        UnityEditor.EditorUtility.SetDirty(sceneRootTransform.gameObject);
+    }
+
     static void BuildLighting(Transform parent)
     {
         var root = new GameObject("00_Interior_Lighting").transform;
@@ -818,13 +923,24 @@ public static class LibraryInteriorBuilder
         sunObj.transform.SetParent(root, false);
         var sun = sunObj.AddComponent<Light>();
         sun.type = LightType.Directional;
-        sun.color = new Color(1.0f, 0.98f, 0.94f);
-        sun.intensity = 1.05f;
+        sun.color = new Color(1.0f, 0.965f, 0.915f);
+        sun.intensity = 0.55f;
         sun.shadows = LightShadows.Soft;
-        sunObj.transform.rotation = Quaternion.Euler(55f, -35f, 0f);
+        sun.shadowStrength = 0.72f;
+        sun.shadowBias = 0.03f;
+        sun.shadowNormalBias = 0.35f;
+        sunObj.transform.rotation = Quaternion.Euler(48f, -32f, 0f);
 
+        // Ambient drives the whole interior, so it is the main cause of the washed-out
+        // white look. A lower, slightly warm ambient keeps wall, floor and desktop
+        // texture visible while the LED strips do the actual lighting work.
         RenderSettings.ambientMode = AmbientMode.Flat;
-        RenderSettings.ambientLight = new Color(0.76f, 0.77f, 0.78f);
+        RenderSettings.ambientLight = new Color(0.40f, 0.405f, 0.415f);
+
+        // A skybox behind the glass means the curtain walls look out onto daylight
+        // rather than flat grey, which was the biggest remaining "fake" tell.
+        var sky = AssetDatabase.LoadAssetAtPath<Material>("Assets/Settings/CampusSky.mat");
+        if (sky) { RenderSettings.skybox = sky; RenderSettings.fog = false; }
 
         // Recessed LED strips under every slab (1F..4F) and, on the upper storeys,
         // point lights so the concave glass cylinder is actually lit.
@@ -839,8 +955,13 @@ public static class LibraryInteriorBuilder
                 {
                     // Keep strips clear of the stair and lift core
                     if (x > 4.5f && x < 16.5f && z < -8.0f) continue;
-                    MakeBox(root, "Light_" + floor + "F_" + Mathf.RoundToInt(x) + "_" + Mathf.RoundToInt(z),
+                    var lamp = MakeBox(root, "Light_" + floor + "F_" + Mathf.RoundToInt(x) + "_" + Mathf.RoundToInt(z),
                         new Vector3(x, ceilingY, z), new Vector3(2.0f, 0.04f, 0.34f), strip, false);
+                    // Recessed strips must not cast shadows: they sit right under the slab
+                    // and their shadow map showed up as saw-tooth banding on the walls.
+                    var lampMr = lamp.GetComponent<MeshRenderer>();
+                    lampMr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                    lampMr.receiveShadows = false;
                 }
             }
         }
@@ -864,7 +985,7 @@ public static class LibraryInteriorBuilder
                 var pl = go.AddComponent<Light>();
                 pl.type = LightType.Point;
                 pl.range = 16f;
-                pl.intensity = 2.4f;
+                pl.intensity = 1.35f;
                 pl.color = new Color(1f, 0.98f, 0.94f);
                 pl.shadows = LightShadows.None;
             }
@@ -878,7 +999,7 @@ public static class LibraryInteriorBuilder
                 var pl = go.AddComponent<Light>();
                 pl.type = LightType.Point;
                 pl.range = 18f;
-                pl.intensity = 2.0f;
+                pl.intensity = 1.25f;
                 pl.color = new Color(1f, 0.98f, 0.95f);
                 pl.shadows = LightShadows.None;
             }
@@ -890,8 +1011,26 @@ public static class LibraryInteriorBuilder
     // door, the reserved west corridor, and the history gallery east of the lift.
     static void BuildFloor1(Transform floorRoot, float baseY)
     {
+        BuildLobbyFloorGraphics(floorRoot, baseY);
+        BuildLobbySkirting(floorRoot, baseY);
+        BuildLobbyWallPilasters(floorRoot, baseY);
+        BuildSecurityGates(floorRoot, baseY);
         BuildVendingMachines(floorRoot, baseY);
         BuildCampusSandTable(floorRoot, baseY);
+        BuildLobbyFlowerBed(floorRoot, baseY);
+
+        // The south-east corner is far from the main light strips; without this it
+        // reads as a dark pocket.
+        var bedLight = new GameObject("1F_Bed_Light");
+        bedLight.transform.SetParent(floorRoot, false);
+        bedLight.transform.localPosition = new Vector3(16.6f, baseY + 3.5f, -7.0f);
+        var bl = bedLight.AddComponent<Light>();
+        bl.type = LightType.Point;
+        bl.range = 10f;
+        bl.intensity = 1.15f;
+        bl.color = new Color(1f, 0.97f, 0.90f);
+        bl.shadows = LightShadows.None;
+        BuildLoungeCorner(floorRoot, baseY);
         BuildRestrooms(floorRoot, baseY, "1F", new Vector2(15.6f, 11.0f), 8.0f, 9.0f);
         BuildHistoryExhibition(floorRoot, baseY);
         BuildLobbyReception(floorRoot, baseY);
@@ -921,9 +1060,13 @@ public static class LibraryInteriorBuilder
         // You walk north across the hall and find it against the far wall.
         BuildRestrooms(floorRoot, baseY, floor + "F", new Vector2(8.0f, 12.1f), 6.6f, 7.2f);
 
+        BuildUpperFloorDressing(floorRoot, baseY, floor);
         BuildRoundStudyHall(floorRoot, baseY, floor);
         BuildGreatDoor(floorRoot, baseY, floor);
         BuildUpperFloorLobby(floorRoot, baseY, floor);
+        if (floor == 2 || floor == 3) BuildWestCorridor(floorRoot, baseY, floor);   // 2F + 3F
+        BuildUpperReadingArea(floorRoot, baseY, floor);
+        if (floor == 2 || floor == 3) LibraryUpperHallLandscape.Build(floorRoot, baseY, floor);
     }
 
     // The circular reading hall: a cylinder sitting outside the east wall, reached
@@ -1162,17 +1305,25 @@ public static class LibraryInteriorBuilder
             const float len = 2.2f, depth = 1.0f, topY = 0.75f;
 
             MakeBox(t, "Top", new Vector3(0, topY, 0), new Vector3(len, 0.05f, depth), matWoodScandiOak);
-            MakeBox(t, "Apron", new Vector3(0, topY - 0.09f, 0), new Vector3(len - 0.3f, 0.09f, depth - 0.3f), matWoodDarkWalnut, false);
+            MakeBox(t, "Apron", new Vector3(0, topY - 0.075f, 0), new Vector3(len - 0.22f, 0.075f, depth - 0.22f), matWoodDarkWalnut, false);
+            // Thin darker edge band so the top does not read as a flat card.
+            MakeBox(t, "Edge_Band", new Vector3(0, topY - 0.028f, 0), new Vector3(len - 0.005f, 0.012f, depth - 0.005f), matWoodDarkWalnut, false);
             MakeBox(t, "Leg_W", new Vector3(-len * 0.4f, topY * 0.5f, 0), new Vector3(0.09f, topY, depth * 0.82f), matMetalMatteBlack);
             MakeBox(t, "Leg_E", new Vector3(len * 0.4f, topY * 0.5f, 0), new Vector3(0.09f, topY, depth * 0.82f), matMetalMatteBlack);
 
-            // Two task lamps per table
+            // Slim task lamps: a thin stem with a small domed shade, scaled to the table
+            // rather than the old mushroom-shaped post.
             for (int k = 0; k < 2; k++)
             {
                 float lx = -len * 0.25f + k * len * 0.5f;
-                MakeBox(t, "Lamp_Arm_" + k, new Vector3(lx, topY + 0.2f, 0f), new Vector3(0.05f, 0.4f, 0.05f), matMetalBrass, false);
-                MakeBox(t, "Lamp_Shade_" + k, new Vector3(lx, topY + 0.42f, 0.06f), new Vector3(0.30f, 0.09f, 0.24f), matMetalMatteBlack, false);
-                MakeBox(t, "Lamp_Glow_" + k, new Vector3(lx, topY + 0.37f, 0.06f), new Vector3(0.26f, 0.02f, 0.20f), matLightWarmLED, false);
+                MakeCylinder(t, "Lamp_Base_" + k, new Vector3(lx, topY + 0.02f, 0.30f),
+                    new Vector3(0.11f, 0.012f, 0.11f), matMetalMatteBlack, false);
+                MakeCylinder(t, "Lamp_Stem_" + k, new Vector3(lx, topY + 0.19f, 0.30f),
+                    new Vector3(0.018f, 0.17f, 0.018f), matMetalMatteBlack, false);
+                MakeCylinder(t, "Lamp_Shade_" + k, new Vector3(lx, topY + 0.37f, 0.22f),
+                    new Vector3(0.16f, 0.045f, 0.16f), matMetalMatteBlack, false);
+                MakeCylinder(t, "Lamp_Glow_" + k, new Vector3(lx, topY + 0.335f, 0.22f),
+                    new Vector3(0.145f, 0.008f, 0.145f), matLightWarmLED, false);
             }
 
             MakeBox(t, "Power_Pillar", new Vector3(0, topY + 0.07f, 0), new Vector3(0.24f, 0.09f, 0.24f), matMetalStainless, false);
@@ -1207,16 +1358,24 @@ public static class LibraryInteriorBuilder
             // Local X = tangent (bay width), local Z = radial (shelf depth).
             bay.localRotation = RingRadial(a);
 
-            MakeBox(bay, "Back", new Vector3(0, shelfH * 0.5f, 0), new Vector3(width, shelfH, 0.06f), matWoodDarkWalnut, false);
-            MakeBox(bay, "Side_W", new Vector3(-width * 0.5f, shelfH * 0.5f, 0), new Vector3(0.05f, shelfH, 0.66f), matWoodDarkWalnut);
-            MakeBox(bay, "Side_E", new Vector3(width * 0.5f, shelfH * 0.5f, 0), new Vector3(0.05f, shelfH, 0.66f), matWoodDarkWalnut);
-            MakeBox(bay, "Top", new Vector3(0, shelfH, 0), new Vector3(width, 0.05f, 0.7f), matWoodScandiOak, false);
+            // Light oak end panels and back, with a dark metal frame edge: the combination
+            // the reference uses for the shelving.
+            MakeBox(bay, "Back", new Vector3(0, shelfH * 0.5f, 0), new Vector3(width, shelfH, 0.06f), matWoodBirch, false);
+            MakeBox(bay, "Side_W", new Vector3(-width * 0.5f, shelfH * 0.5f, 0), new Vector3(0.06f, shelfH, 0.66f), matWoodBirch);
+            MakeBox(bay, "Side_E", new Vector3(width * 0.5f, shelfH * 0.5f, 0), new Vector3(0.06f, shelfH, 0.66f), matWoodBirch);
+            MakeBox(bay, "Frame_Top", new Vector3(0, shelfH - 0.025f, 0), new Vector3(width + 0.02f, 0.05f, 0.70f), matMetalMatteBlack, false);
+            MakeBox(bay, "Frame_Base", new Vector3(0, 0.045f, 0), new Vector3(width, 0.09f, 0.66f), matMetalMatteBlack, false);
+            MakeBox(bay, "Top", new Vector3(0, shelfH, 0), new Vector3(width, 0.04f, 0.72f), matWoodBirch, false);
+            // End-panel trim caps in dark metal, tying the panels to the frame.
+            foreach (float sx in new[] { -1f, 1f })
+                MakeBox(bay, "Edge_Trim", new Vector3(sx * (width * 0.5f - 0.005f), shelfH * 0.5f, 0.33f),
+                    new Vector3(0.02f, shelfH, 0.02f), matMetalMatteBlack, false);
 
             var rng = new System.Random(i * 613 + 29);
             for (int s = 0; s <= 4; s++)
             {
                 float y = 0.20f + s * ((shelfH - 0.35f) / 4f);
-                MakeBox(bay, "Shelf_" + s, new Vector3(0, y, 0), new Vector3(width, 0.04f, 0.62f), matWoodScandiOak, s == 0);
+                MakeBox(bay, "Shelf_" + s, new Vector3(0, y, 0), new Vector3(width, 0.035f, 0.62f), matWoodBirch, s == 0);
             }
 
             // Spines on BOTH faces of every shelf.
@@ -1274,7 +1433,302 @@ public static class LibraryInteriorBuilder
         // Illuminated sign over the door, facing west into the hall
         var sign = MakeBox(root, "Sign_RoundHall", new Vector3(HalfW - 0.42f, baseY + 2.95f, 0), new Vector3(0.08f, 0.5f, 4.2f), matSignBlackBox, false);
         MakeBox(sign.transform, "Glow", new Vector3(-0.03f, 0, 0), new Vector3(0.03f, 0.4f, 3.9f), matLightWarmLED, false);
-        MakeText(sign.transform, "◀ 圆形自习厅 · ROUND READING HALL", new Vector3(-0.06f, 0, 0), Quaternion.Euler(0, 90, 0), 26, 0.032f, Color.white);
+        MakeText(sign.transform, "◀ 圆形自习厅 · ROUND READING HALL", new Vector3(0.06f, 0, 0), Quaternion.Euler(0, -90, 0), 26, 0.032f, Color.white);
+    }
+
+    // ---------------------------------------------------------------- upper-floor dressing
+    // Shared by 2F/3F/4F. Adds what the reference plan shows that the upper halls were
+    // missing: a stainless drinking fountain opposite the stair, granite floor joints
+    // with black edge trim, and the grey stone dado with its black capping and skirting.
+    // The east wall, its great door and the round study hall are deliberately untouched.
+
+    static void BuildUpperFloorDressing(Transform parent, float baseY, int floor)
+    {
+        BuildDrinkingFountain(parent, baseY, floor);
+        BuildUpperFloorFloorGraphics(parent, baseY, floor);
+        BuildUpperFloorDado(parent, baseY, floor);
+    }
+
+    // Multi-tap stainless drinking fountain against the north wall, roughly opposite
+    // the stair, as in the reference plan.
+    static void BuildDrinkingFountain(Transform parent, float baseY, int floor)
+    {
+        var root = new GameObject(floor + "F_Drinking_Fountain").transform;
+        root.SetParent(parent, false);
+
+        // Against the north wall (inner face Z = +15.85), west of the restroom door so
+        // the two do not crowd each other. The unit faces south into the hall.
+        Vector3 c = new Vector3(13.1f, baseY, 15.45f);
+
+        // Splash-back panel on the wall and the basin body standing out from it.
+        MakeBox(root, "Fountain_Panel", c + new Vector3(0f, 1.25f, 0.20f), new Vector3(1.60f, 2.05f, 0.08f), matStoneSlate, false);
+        MakeBox(root, "Fountain_Body", c + new Vector3(0f, 0.84f, 0f), new Vector3(1.48f, 0.60f, 0.44f), matMetalStainless);
+        MakeBox(root, "Fountain_Basin", c + new Vector3(0f, 1.16f, 0f), new Vector3(1.38f, 0.07f, 0.38f), matMetalStainless, false);
+
+        // Three taps, spouts pointing SOUTH (into the hall), not into the wall.
+        foreach (float ox in new[] { -0.48f, 0f, 0.48f })
+        {
+            MakeBox(root, "Tap_Base", c + new Vector3(ox, 1.33f, 0.10f), new Vector3(0.11f, 0.18f, 0.11f), matMetalMatteBlack, false);
+            MakeBox(root, "Tap_Spout", c + new Vector3(ox, 1.41f, -0.07f), new Vector3(0.05f, 0.05f, 0.24f), matMetalStainless, false);
+        }
+
+        // Drain grille across the basin front and a cup dispenser that sits IN the body.
+        MakeBox(root, "Fountain_Grille", c + new Vector3(0f, 1.12f, -0.19f), new Vector3(1.32f, 0.09f, 0.03f), matMetalMatteBlack, false);
+        MakeBox(root, "Cup_Dispenser", c + new Vector3(0.62f, 1.40f, 0.02f), new Vector3(0.22f, 0.30f, 0.16f), matMetalStainless, false);
+
+        // Plinth aligned with the body so nothing appears to float.
+        MakeBox(root, "Fountain_Base", c + new Vector3(0f, 0.07f, 0f), new Vector3(1.46f, 0.14f, 0.46f), matMetalMatteBlack, false);
+
+        // Label high on the splash-back, facing the hall.
+        var sign = MakeBox(root, "Fountain_Sign", c + new Vector3(0f, 2.06f, 0.15f), new Vector3(0.86f, 0.20f, 0.03f), matSignBlackBox, false);
+        MakeText(sign.transform, "饮水机", new Vector3(0f, 0f, -0.02f), Quaternion.Euler(0, 180, 0), 20, 0.020f, Color.white);
+    }
+
+    // Granite floor joints plus the black stone border running round the hall edge,
+    // matching the reference floor. Pure decals: no colliders, no walk impact.
+    static void BuildUpperFloorFloorGraphics(Transform parent, float baseY, int floor)
+    {
+        var root = new GameObject(floor + "F_Floor_Graphics").transform;
+        root.SetParent(parent, false);
+
+        const float y = 0.007f;
+
+        void Strip(string name, float cx, float cz, float sx, float sz, Material m)
+            => MakeBox(root, name, new Vector3(cx, baseY + y, cz), new Vector3(sx, 0.010f, sz), m, false);
+
+        // Black stone border band just inside the walls.
+        const float bandW = 0.45f;
+        float x0 = -HalfW + bandW * 0.5f, x1 = HalfW - bandW * 0.5f;
+        float z0 = -HalfD + bandW * 0.5f, z1 = HalfD - bandW * 0.5f;
+
+        Strip("Border_S", 0f, z0, HalfW * 2f - bandW * 2f, bandW, matFloorDarkBasalt);
+        Strip("Border_N", 0f, z1, HalfW * 2f - bandW * 2f, bandW, matFloorDarkBasalt);
+        Strip("Border_W", x0, 0f, bandW, HalfD * 2f - bandW * 2f, matFloorDarkBasalt);
+        Strip("Border_E", x1, 0f, bandW, HalfD * 2f - bandW * 2f, matFloorDarkBasalt);
+
+        // Thin joint grid across the open floor.
+        const float t = 0.028f;
+        for (float x = -16f; x <= 16f; x += 4f)
+            Strip("Joint_X_" + x, x, 0f, t, HalfD * 2f - bandW * 2f, matFloorJoint);
+        for (float z = -12f; z <= 12f; z += 4f)
+            Strip("Joint_Z_" + z, 0f, z, HalfW * 2f - bandW * 2f, t, matFloorJoint);
+    }
+
+    // Grey textured stone dado on the lower half of the perimeter walls, with a black
+    // capping line on top and black skirting at the floor, as in the reference.
+    static void BuildUpperFloorDado(Transform parent, float baseY, int floor)
+    {
+        var root = new GameObject(floor + "F_Dado").transform;
+        root.SetParent(parent, false);
+
+        const float dadoH = 1.10f;      // grey stone up to this height
+        const float capH = 0.05f;
+        const float skirtH = 0.12f;
+        const float thick = 0.03f;
+
+        float dadoY = baseY + skirtH + dadoH * 0.5f;
+        float capY = baseY + skirtH + dadoH + capH * 0.5f;
+        float skirtY = baseY + skirtH * 0.5f;
+
+        // Two segments per wall so the dado never runs across a doorway.
+        foreach (var (name, cx, cz, sx, sz) in new (string, float, float, float, float)[]
+        {
+            ("S_W", -11.2f, -HalfD + thick * 0.5f, 17.6f, thick),
+            ("S_E",  11.2f, -HalfD + thick * 0.5f, 17.6f, thick),
+            ("N_W", -11.1f,  HalfD - thick * 0.5f, 17.8f, thick),
+            ("N_E",  11.1f,  HalfD - thick * 0.5f, 17.8f, thick),
+            ("W_S", -HalfW + thick * 0.5f,  -6.05f, thick, 19.6f),
+            ("W_N", -HalfW + thick * 0.5f,  12.05f, thick, 7.6f),
+        })
+        {
+            MakeBox(root, "Dado_" + name, new Vector3(cx, dadoY, cz), new Vector3(sx, dadoH, sz), matStoneSlate, false);
+            MakeBox(root, "DadoCap_" + name, new Vector3(cx, capY, cz), new Vector3(sx, capH, sz + 0.01f), matMetalMatteBlack, false);
+            MakeBox(root, "Skirt_" + name, new Vector3(cx, skirtY, cz), new Vector3(sx, skirtH, sz + 0.01f), matMetalMatteBlack, false);
+        }
+    }
+
+    // ---------------------------------------------------------------- 2F west corridor
+
+    // The long corridor behind the west wall, built identically on 2F and 3F. The route
+    // is: come up the stair, walk north across the open hall, turn left, and pass through
+    // the doorway the shell leaves for that storey. Nothing is built in the hall itself
+    // to hide it: the doorway faces east while the corridor runs west, so from the stair
+    // you look at its edge and cannot see down it until you actually turn.
+    const float CorrZ0 = 3.8f, CorrZ1 = 8.2f, CorrXEnd = -38.0f, CorrHeight = 3.0f;
+
+    // Free-standing reading desks in the open part of the upper hall, west of the main
+    // north-south route so they never block the stair-to-restroom or stair-to-corridor
+    // walks. Each desk is a 1.8 m oak top on dark legs with four chairs.
+    static void BuildUpperReadingArea(Transform parent, float baseY, int floor)
+    {
+        var root = new GameObject(floor + "F_Reading_Area").transform;
+        root.SetParent(parent, false);
+
+        float[] xs = { -13.0f, -7.6f };
+        float[] zs = { -6.4f, -1.6f, 3.2f };
+
+        int n = 0;
+        foreach (float z in zs)
+        {
+            foreach (float x in xs)
+            {
+                BuildReadingDesk(root, new Vector3(x, baseY, z), 0f, n);
+                n++;
+            }
+        }
+    }
+
+    static void BuildReadingDesk(Transform parent, Vector3 pos, float rotY, int index)
+    {
+        var t = new GameObject("Reading_Desk_" + index).transform;
+        t.SetParent(parent, false);
+        t.localPosition = pos;
+        t.localRotation = Quaternion.Euler(0, rotY, 0);
+
+        const float len = 1.8f, depth = 0.9f, topY = 0.75f;
+
+        InteriorGeometry.RoundedBox(t, "Top", new Vector3(0, topY, 0), new Vector3(len, 0.05f, depth), 0.022f, matWoodScandiOak, true);
+        InteriorGeometry.RoundedBox(t, "Edge_Band", new Vector3(0, topY - 0.026f, 0),
+            new Vector3(len - 0.006f, 0.012f, depth - 0.006f), 0.006f, matWoodDarkWalnut, false);
+
+        // Round tube legs at each end, with a slim stretcher.
+        foreach (float sx in new[] { -1f, 1f })
+            foreach (float sz in new[] { -1f, 1f })
+                InteriorGeometry.Tube(t, "Leg",
+                    new Vector3(sx * (len * 0.42f), 0.01f, sz * (depth * 0.34f)),
+                    new Vector3(sx * (len * 0.42f), topY - 0.02f, sz * (depth * 0.34f)),
+                    0.022f, matMetalMatteBlack);
+        InteriorGeometry.Tube(t, "Stretcher", new Vector3(-len * 0.42f, 0.20f, 0f),
+            new Vector3(len * 0.42f, 0.20f, 0f), 0.015f, matMetalMatteBlack);
+
+        // Shared task lamp + a couple of books so the desks are not bare.
+        MakeCylinder(t, "Desk_Lamp_Base", new Vector3(0, topY + 0.02f, 0), new Vector3(0.10f, 0.012f, 0.10f), matMetalMatteBlack, false);
+        MakeCylinder(t, "Desk_Lamp_Stem", new Vector3(0, topY + 0.16f, 0), new Vector3(0.016f, 0.14f, 0.016f), matMetalMatteBlack, false);
+        MakeCylinder(t, "Desk_Lamp_Shade", new Vector3(0, topY + 0.31f, 0), new Vector3(0.13f, 0.04f, 0.13f), matMetalMatteBlack, false);
+        MakeCylinder(t, "Desk_Lamp_Glow", new Vector3(0, topY + 0.285f, 0), new Vector3(0.115f, 0.007f, 0.115f), matLightWarmLED, false);
+
+        var rng = new System.Random(index * 97 + 11);
+        Material[] books = { matBook1, matBook2, matBook3, matBook4, matBook5, matBook6 };
+        for (int b = 0; b < 2; b++)
+        {
+            float bx = -0.55f + b * 1.10f;
+            MakeBox(t, "Book_" + b, new Vector3(bx, topY + 0.035f, 0.18f),
+                new Vector3(0.20f, 0.035f, 0.15f), books[(index + b) % books.Length], false);
+        }
+
+        // Two chairs per long side, tucked in and facing the desk.
+        foreach (float sx in new[] { -0.45f, 0.45f })
+        {
+            BuildChair(t, new Vector3(sx, 0, depth * 0.5f + 0.40f), 0f, matChairSlateBlue);
+            BuildChair(t, new Vector3(sx, 0, -depth * 0.5f - 0.40f), 180f, matChairSage);
+        }
+    }
+
+    static void BuildWestCorridor(Transform parent, float baseY, int floor)
+    {
+        string pre = floor + "F_Corridor";
+        var root = new GameObject(pre).transform;
+        root.SetParent(parent, false);
+
+        float zc = (CorrZ0 + CorrZ1) * 0.5f;
+        float zw = CorrZ1 - CorrZ0;
+        float xInner = -HalfW + 0.15f;                  // inner face of the west wall
+        float xc = (xInner + CorrXEnd) * 0.5f;
+        float spanX = xInner - CorrXEnd;
+        float ceilY = baseY + CorrHeight;
+
+        // Floor and ceiling. The floor runs 0.35 m past the wall line so the doorway has
+        // no seam and no lip to catch the character controller on.
+        MakeBox(root, pre + "_Floor", new Vector3(xc, baseY - 0.10f, zc),
+            new Vector3(spanX + 0.35f, 0.20f, zw), matFloorTerrazzo);
+        MakeBox(root, pre + "_Ceiling", new Vector3(xc, ceilY + 0.10f, zc),
+            new Vector3(spanX + 0.35f, 0.20f, zw), matCeilingWhite, false);
+
+        // Side walls and the far end wall.
+        MakeBox(root, pre + "_Wall_N", new Vector3(xc, baseY + CorrHeight * 0.5f, CorrZ1 + 0.15f),
+            new Vector3(spanX + 0.35f, CorrHeight, 0.30f), matWallMicrocement);
+        MakeBox(root, pre + "_Wall_S", new Vector3(xc, baseY + CorrHeight * 0.5f, CorrZ0 - 0.15f),
+            new Vector3(spanX + 0.35f, CorrHeight, 0.30f), matWallMicrocement);
+        MakeBox(root, pre + "_Wall_W", new Vector3(CorrXEnd - 0.15f, baseY + CorrHeight * 0.5f, zc),
+            new Vector3(0.30f, CorrHeight, zw + 0.60f), matWallMicrocement);
+
+        // Grey stone dado with black capping and skirting, matching the hall.
+        const float dadoH = 1.10f, capH = 0.05f, skirtH = 0.12f;
+        foreach (var tag in new[] { "N", "S" })
+        {
+            float z = tag == "N" ? CorrZ1 - 0.015f : CorrZ0 + 0.015f;
+            MakeBox(root, pre + "_Dado_" + tag, new Vector3(xc, baseY + skirtH + dadoH * 0.5f, z),
+                new Vector3(spanX, dadoH, 0.03f), matStoneSlate, false);
+            MakeBox(root, pre + "_DadoCap_" + tag, new Vector3(xc, baseY + skirtH + dadoH + capH * 0.5f, z),
+                new Vector3(spanX, capH, 0.04f), matMetalMatteBlack, false);
+            MakeBox(root, pre + "_Skirt_" + tag, new Vector3(xc, baseY + skirtH * 0.5f, z),
+                new Vector3(spanX, skirtH, 0.04f), matMetalMatteBlack, false);
+        }
+
+        // Black stone floor edges, as in the hall.
+        foreach (var tag in new[] { "N", "S" })
+        {
+            float z = tag == "N" ? CorrZ1 - 0.225f : CorrZ0 + 0.225f;
+            MakeBox(root, pre + "_Edge_" + tag, new Vector3(xc, baseY + 0.007f, z),
+                new Vector3(spanX, 0.012f, 0.45f), matFloorDarkBasalt, false);
+        }
+
+        // Closed doors for rooms that are not built yet. They sit ON the wall face, so the
+        // wall behind them stays solid and nothing leads into empty space.
+        foreach (var x in new[] { -22.6f, -27.4f, -32.2f, -36.4f })
+            CorridorDoor(root, pre, x, CorrZ1 - 0.04f, -1f, baseY);
+        foreach (var x in new[] { -25.0f, -34.3f })
+            CorridorDoor(root, pre, x, CorrZ0 + 0.04f, 1f, baseY);
+
+        // Lighting: a ceiling strip plus a point light per bay.
+        for (int i = 0; i < 4; i++)
+        {
+            float x = -22.0f - i * 4.6f;
+            MakeBox(root, pre + "_Light_" + i, new Vector3(x, ceilY - 0.03f, zc),
+                new Vector3(1.8f, 0.06f, 0.32f), matLightWarmLED, false);
+
+            var lg = new GameObject(pre + "_Point_" + i);
+            lg.transform.SetParent(root, false);
+            lg.transform.localPosition = new Vector3(x, ceilY - 0.45f, zc);
+            var pl = lg.AddComponent<Light>();
+            pl.type = LightType.Point;
+            pl.range = 8.5f;
+            pl.intensity = 1.05f;
+            pl.color = new Color(1f, 0.96f, 0.90f);
+            pl.shadows = LightShadows.None;
+        }
+
+        // Bench against the north wall, clear of the last two door bays.
+        float benchX = CorrXEnd + 3.7f;
+        float benchZ = CorrZ1 - 0.4f;
+        MakeBox(root, pre + "_Bench", new Vector3(benchX, baseY + 0.44f, benchZ),
+            new Vector3(2.4f, 0.09f, 0.55f), matWoodScandiOak);
+        MakeBox(root, pre + "_BenchBase", new Vector3(benchX, baseY + 0.21f, benchZ),
+            new Vector3(2.2f, 0.42f, 0.16f), matMetalMatteBlack, false);
+        BuildPotPlant(root, new Vector3(CorrXEnd + 1.1f, baseY, CorrZ0 + 1.0f), 1.1f);
+
+        // Direction sign on the hall side of the doorway.
+        var sign = MakeBox(root, pre + "_Sign_Hall", new Vector3(-19.66f, baseY + 2.62f, zc),
+            new Vector3(0.05f, 0.46f, 2.8f), matSignBlackBox, false);
+        MakeText(sign.transform, "◀ 长走廊 · 阅览区", new Vector3(0.04f, 0f, 0f),
+            Quaternion.Euler(0, -90, 0), 22, 0.030f, Color.white);
+    }
+
+    static void CorridorDoor(Transform root, string pre, float x, float z, float facing, float baseY)
+    {
+        float f = facing;
+        MakeBox(root, pre + "_DoorFrame", new Vector3(x, baseY + 1.10f, z),
+            new Vector3(1.14f, 2.24f, 0.06f), matMetalMatteBlack, false);
+        MakeBox(root, pre + "_DoorLeaf", new Vector3(x, baseY + 1.06f, z + f * 0.05f),
+            new Vector3(0.96f, 2.10f, 0.05f), matWoodDarkWalnut, false);
+        MakeBox(root, pre + "_DoorPanelTop", new Vector3(x, baseY + 1.60f, z + f * 0.08f),
+            new Vector3(0.74f, 0.60f, 0.02f), matWoodDarkWalnut, false);
+        MakeBox(root, pre + "_DoorPanelBot", new Vector3(x, baseY + 0.70f, z + f * 0.08f),
+            new Vector3(0.74f, 0.80f, 0.02f), matWoodDarkWalnut, false);
+        MakeBox(root, pre + "_DoorHandle", new Vector3(x + 0.36f, baseY + 1.02f, z + f * 0.11f),
+            new Vector3(0.05f, 0.05f, 0.07f), matMetalBrass, false);
+        MakeBox(root, pre + "_DoorPlate", new Vector3(x, baseY + 2.44f, z + f * 0.03f),
+            new Vector3(0.34f, 0.16f, 0.03f), matSignBlackBox, false);
     }
 
     static void BuildUpperFloorLobby(Transform parent, float baseY, int floor)
@@ -1284,10 +1738,10 @@ public static class LibraryInteriorBuilder
 
         // Directory board near the stair exit
         var dir = MakeBox(root, floor + "F_Sign_Directory", new Vector3(4.6f, baseY + 2.4f, -10.6f), new Vector3(0.06f, 1.3f, 2.4f), matSignBlackBox, false);
-        MakeText(dir.transform, FloorName(floor) + " · " + floor + "F", new Vector3(-0.04f, 0.46f, 0), Quaternion.Euler(0, 90, 0), 26, 0.034f, new Color(1f, 0.9f, 0.6f));
-        MakeText(dir.transform, "← 卫生间", new Vector3(-0.04f, 0.14f, 0), Quaternion.Euler(0, 90, 0), 20, 0.024f, Color.white);
-        MakeText(dir.transform, "圆形自习厅 →", new Vector3(-0.04f, -0.12f, 0), Quaternion.Euler(0, 90, 0), 20, 0.024f, Color.white);
-        MakeText(dir.transform, "楼梯 / 电梯", new Vector3(-0.04f, -0.38f, 0), Quaternion.Euler(0, 90, 0), 20, 0.024f, Color.white);
+        MakeText(dir.transform, FloorName(floor) + " · " + floor + "F", new Vector3(0.04f, 0.46f, 0), Quaternion.Euler(0, -90, 0), 26, 0.034f, new Color(1f, 0.9f, 0.6f));
+        MakeText(dir.transform, "← 卫生间", new Vector3(0.04f, 0.14f, 0), Quaternion.Euler(0, -90, 0), 20, 0.024f, Color.white);
+        MakeText(dir.transform, "圆形自习厅 →", new Vector3(0.04f, -0.12f, 0), Quaternion.Euler(0, -90, 0), 20, 0.024f, Color.white);
+        MakeText(dir.transform, "楼梯 / 电梯", new Vector3(0.04f, -0.38f, 0), Quaternion.Euler(0, -90, 0), 20, 0.024f, Color.white);
 
         // Waiting bench and a plant just north of the lift lobby
         var bench = new GameObject("Bench").transform;
@@ -1304,6 +1758,295 @@ public static class LibraryInteriorBuilder
     // Two vending machines, one on each side of the south entrance door, standing
     // against the south wall just inside. The door opening is X [-2.4, 2.4], so the
     // machines sit at X = +/-4.0 and face north (+Z) into the lobby.
+    // ---------------------------------------------------------------- 1F lobby dressing
+    // Everything below is 1F only. 2F/3F/4F, the exterior and the building shell are
+    // untouched by these methods.
+
+    // The reference lobby floor is large grey terrazzo divided by thin dark lines.
+    // These are flat inlays a few millimetres above the slab (never z-fighting) with
+    // no collider at all, so they are pure decoration and cannot affect movement.
+    static void BuildLobbyFloorGraphics(Transform parent, float baseY)
+    {
+        var root = new GameObject("1F_Floor_Graphics").transform;
+        root.SetParent(parent, false);
+
+        const float t = 0.07f;
+        const float lift = 0.007f;
+
+        void Strip(string name, float cx, float cz, float sx, float sz)
+            => MakeBox(root, name, new Vector3(cx, baseY + lift, cz),
+                       new Vector3(sx, 0.012f, sz), matMetalMatteBlack, false);
+
+        void Rect(string tag, float x0, float x1, float z0, float z1)
+        {
+            float cx = (x0 + x1) * 0.5f, cz = (z0 + z1) * 0.5f;
+            float sx = x1 - x0, sz = z1 - z0;
+            Strip(tag + "_S", cx, z0, sx + t, t);
+            Strip(tag + "_N", cx, z1, sx + t, t);
+            Strip(tag + "_W", x0, cz, t, sz + t);
+            Strip(tag + "_E", x1, cz, t, sz + t);
+        }
+
+        // Two nested divisions across the open middle, plus the south-east bay
+        // outline that frames the flower bed and the lift core.
+        Rect("Joint_Outer", -13.0f, 13.0f, -10.0f, 11.0f);
+        Rect("Joint_Inner", -8.5f, 8.5f, -6.0f, 7.0f);
+        Rect("Joint_SE", 11.2f, 19.5f, -14.2f, -2.2f);
+    }
+
+    // Black skirting where the white wall meets the stone floor, split so it never
+    // floats inside a doorway.
+    static void BuildLobbySkirting(Transform parent, float baseY)
+    {
+        var root = new GameObject("1F_Skirting").transform;
+        root.SetParent(parent, false);
+
+        const float h = 0.13f, d = 0.05f;
+        float y = baseY + h * 0.5f;
+        Material m = matMetalMatteBlack;
+
+        // South wall (inner face Z = -15.85), main door X in [-2.4, 2.4]
+        MakeBox(root, "Skirt_S_W", new Vector3(-11.2f, y, -15.83f), new Vector3(17.6f, h, d), m, false);
+        MakeBox(root, "Skirt_S_E", new Vector3(11.2f, y, -15.83f), new Vector3(17.6f, h, d), m, false);
+        // North wall (inner face Z = +15.85), rear door X in [-2.2, 2.2]
+        MakeBox(root, "Skirt_N_W", new Vector3(-11.1f, y, 15.83f), new Vector3(17.8f, h, d), m, false);
+        MakeBox(root, "Skirt_N_E", new Vector3(11.1f, y, 15.83f), new Vector3(17.8f, h, d), m, false);
+        // West wall (X = -19.85), reserved corridor gap Z in [3.8, 8.2]
+        MakeBox(root, "Skirt_W_S", new Vector3(-19.83f, y, -6.03f), new Vector3(d, h, 19.65f), m, false);
+        MakeBox(root, "Skirt_W_N", new Vector3(-19.83f, y, 12.03f), new Vector3(d, h, 7.65f), m, false);
+        // East wall (X = +19.85); 1F has no east doorway
+        MakeBox(root, "Skirt_E", new Vector3(19.83f, y, 0f), new Vector3(d, h, 31.7f), m, false);
+    }
+
+    // White pilasters against the north and south walls. They give the room the white
+    // vertical rhythm of the reference while standing flush to the wall, so nothing at
+    // all is placed in the walking lines.
+    static void BuildLobbyWallPilasters(Transform parent, float baseY)
+    {
+        var root = new GameObject("1F_Wall_Pilasters").transform;
+        root.SetParent(parent, false);
+
+        const float w = 0.9f, d = 0.26f, h = 3.0f;
+        float y = baseY + h * 0.5f;
+
+        foreach (float x in new[] { -13.5f, -7.0f, 7.0f, 13.5f })
+        {
+            MakeBox(root, "Pilaster_S", new Vector3(x, y, -15.85f + d * 0.5f), new Vector3(w, h, d), matMarbleWhite);
+            MakeBox(root, "Pilaster_N", new Vector3(x, y, 15.85f - d * 0.5f), new Vector3(w, h, d), matMarbleWhite);
+        }
+    }
+
+    // Stainless-and-glass security gates just inside the main entrance, as in the
+    // reference. Two clear walking lanes stay open; only the pods have colliders.
+    static void BuildSecurityGates(Transform parent, float baseY)
+    {
+        var root = new GameObject("1F_Security_Gates").transform;
+        root.SetParent(parent, false);
+
+        // Pulled north of the front-door spawn point (Z = -13.6) and split into FOUR
+        // pods, so the middle lane lines up with the spawn and the player walks
+        // straight through instead of being stopped by a pod on arrival.
+        const float z = -11.80f;
+
+        foreach (float x in new[] { -5.40f, -1.80f, 1.80f, 5.40f })
+        {
+            MakeBox(root, "Gate_Pod", new Vector3(x, baseY + 0.58f, z),
+                new Vector3(0.46f, 1.16f, 1.30f), matMetalStainless);
+            MakeBox(root, "Gate_Top", new Vector3(x, baseY + 1.19f, z),
+                new Vector3(0.50f, 0.06f, 1.34f), matMetalMatteBlack, false);
+            MakeBox(root, "Gate_Led", new Vector3(x, baseY + 1.10f, z + 0.66f),
+                new Vector3(0.14f, 0.08f, 0.02f), matLightCoolLED, false);
+        }
+
+        foreach (float x in new[] { -6.30f, 6.30f })
+        {
+            MakeBox(root, "Gate_Screen", new Vector3(x, baseY + 0.62f, z),
+                new Vector3(0.06f, 1.24f, 1.30f), matGlassUltra);
+            MakeBox(root, "Gate_Screen_Post", new Vector3(x, baseY + 1.26f, z),
+                new Vector3(0.10f, 0.08f, 1.34f), matMetalMatteBlack, false);
+        }
+    }
+
+    // The big corner bed in the lower-right of the reference: a low dark-stone rim
+    // holding layered greenery with small red flowers along the outer edge. It sits in
+    // the south-east quadrant, east of the lift core and hard against the east wall, so
+    // the lift exit corridor (X 12..16) and the 1F history panel (Z ~ 0) both stay clear.
+    static void BuildLobbyFlowerBed(Transform parent, float baseY)
+    {
+        var root = new GameObject("1F_Flower_Bed").transform;
+        root.SetParent(parent, false);
+        root.localPosition = new Vector3(17.95f, baseY, -7.30f);
+
+        const float rx = 1.75f, rz = 2.90f;
+
+        // Low dark-stone kerb as a smooth flattened ellipse (one scaled cylinder), so
+        // the outline has no segment steps. MakeCylinder swaps in a convex MeshCollider,
+        // so it also blocks the player correctly instead of degenerating to a sphere.
+        MakeCylinder(root, "Bed_Kerb", new Vector3(0f, 0.15f, 0f),
+            new Vector3(rx * 2f, 0.15f, rz * 2f), matStoneSlate);
+
+        // Soil mound sitting just proud of the kerb.
+        MakeCylinder(root, "Bed_Soil", new Vector3(0f, 0.31f, 0f),
+            new Vector3((rx - 0.10f) * 2f, 0.04f, (rz - 0.10f) * 2f), matPlantPot);
+
+        // Layered planting: tall in the middle, falling away to low edge planting.
+        var rng = new System.Random(90210);
+        for (int i = 0; i < 42; i++)
+        {
+            float a = (float)rng.NextDouble() * Mathf.PI * 2f;
+            float rr = Mathf.Sqrt((float)rng.NextDouble()) * 0.84f;
+            float x = Mathf.Cos(a) * rr * rx;
+            float z = Mathf.Sin(a) * rr * rz;
+            float hgt = 0.55f + (1f - rr) * 0.85f + (float)rng.NextDouble() * 0.35f;
+            float wid = 0.42f + (float)rng.NextDouble() * 0.28f;
+
+            MakeSphere(root, "Shrub_" + i, new Vector3(x, 0.32f + hgt * 0.5f, z),
+                new Vector3(wid, hgt, wid) * 0.9f, matShrubLight);
+        }
+
+        // Small red flowers dotted around the rim.
+        for (int i = 0; i < 46; i++)
+        {
+            float a = i / 46f * Mathf.PI * 2f + 0.06f;
+            float j = 0.82f + (float)rng.NextDouble() * 0.12f;
+            float fy = 0.38f + (float)rng.NextDouble() * 0.05f;
+            MakeSphere(root, "Flower_" + i,
+                new Vector3(Mathf.Cos(a) * rx * j, fy, Mathf.Sin(a) * rz * j),
+                new Vector3(0.11f, 0.09f, 0.11f), matStoolRed);
+        }
+    }
+
+    // North-east lounge from the reference: an orange-backed crescent sofa, coloured
+    // poufs, a low table, the black-framed glass reading booth ("小黑屋") and a white
+    // self-service kiosk. It all sits between the north wall and the restroom's west
+    // wall, clear of the rear-door approach and of the restroom door.
+    static void BuildLoungeCorner(Transform parent, float baseY)
+    {
+        var root = new GameObject("1F_Lounge").transform;
+        root.SetParent(parent, false);
+        root.localPosition = new Vector3(0f, baseY, 0f);
+
+        MakeBox(root, "Lounge_Rug", new Vector3(4.80f, 0.006f, 9.90f),
+            new Vector3(4.40f, 0.012f, 3.20f), matRug, false);
+
+        // The sofa is held west so a 2m walking gap stays open between its east end
+        // and the booth's west wall.
+        BuildArcSofa(root, new Vector3(4.80f, 0f, 10.60f), 1.70f);
+        BuildCoffeeTable(root, new Vector3(4.80f, 0f, 8.85f));
+        BuildPouf(root, new Vector3(3.20f, 0f, 8.55f), matStoolRed);
+        BuildPouf(root, new Vector3(6.40f, 0f, 8.55f), matStoolYellow);
+        BuildReadingBooth(root, new Vector3(10.00f, 0f, 13.20f));
+        BuildInfoKiosk(root, new Vector3(10.80f, 0f, 8.60f), 250f);
+    }
+
+    // Crescent sofa: segments along a half ellipse so the back follows the room corner
+    // the way the reference does. Orange back, dark grey seat.
+    static void BuildArcSofa(Transform parent, Vector3 center, float radius)
+    {
+        var root = new GameObject("Sofa_Arc").transform;
+        root.SetParent(parent, false);
+        root.localPosition = center;
+
+        const int segs = 15;
+        const float a0 = -0.10f * Mathf.PI;
+        const float a1 = 1.10f * Mathf.PI;
+
+        for (int i = 0; i < segs; i++)
+        {
+            float t = i / (float)(segs - 1);
+            float a = Mathf.Lerp(a0, a1, t);
+            Vector3 dir = new Vector3(Mathf.Cos(a), 0f, Mathf.Sin(a));
+            Quaternion rot = Quaternion.LookRotation(dir);   // local +Z points outward
+
+            var seat = MakeBox(root, "Seat_" + i, dir * radius + new Vector3(0f, 0.44f, 0f),
+                new Vector3(0.62f, 0.16f, 0.82f), matSofaSeatGrey);
+            seat.transform.localRotation = rot;
+
+            var back = MakeBox(root, "Back_" + i, dir * (radius + 0.26f) + new Vector3(0f, 0.80f, 0f),
+                new Vector3(0.62f, 0.64f, 0.16f), matSofaOrange, false);
+            back.transform.localRotation = rot;
+
+            var bas = MakeBox(root, "Base_" + i, dir * radius + new Vector3(0f, 0.14f, 0f),
+                new Vector3(0.58f, 0.28f, 0.70f), matMetalMatteBlack, false);
+            bas.transform.localRotation = rot;
+        }
+    }
+
+    static void BuildPouf(Transform parent, Vector3 pos, Material mat)
+    {
+        var root = new GameObject("Pouf").transform;
+        root.SetParent(parent, false);
+        root.localPosition = pos;
+
+        MakeCylinder(root, "Pouf_Seat", new Vector3(0f, 0.23f, 0f), new Vector3(0.52f, 0.23f, 0.52f), mat);
+        MakeCylinder(root, "Pouf_Base", new Vector3(0f, 0.03f, 0f), new Vector3(0.40f, 0.03f, 0.40f), matMetalMatteBlack, false);
+    }
+
+    static void BuildCoffeeTable(Transform parent, Vector3 pos)
+    {
+        var root = new GameObject("Coffee_Table").transform;
+        root.SetParent(parent, false);
+        root.localPosition = pos;
+
+        MakeCylinder(root, "Table_Top", new Vector3(0f, 0.40f, 0f), new Vector3(1.05f, 0.04f, 1.05f), matWoodDarkWalnut);
+        MakeCylinder(root, "Table_Leg", new Vector3(0f, 0.19f, 0f), new Vector3(0.16f, 0.19f, 0.16f), matMetalMatteBlack, false);
+        MakeCylinder(root, "Table_Foot", new Vector3(0f, 0.02f, 0f), new Vector3(0.55f, 0.02f, 0.55f), matMetalMatteBlack, false);
+    }
+
+    // "小黑屋": black-framed glass reading booth with a clear doorway on the
+    // lobby-facing (west) side.
+    static void BuildReadingBooth(Transform parent, Vector3 pos)
+    {
+        var root = new GameObject("Reading_Booth").transform;
+        root.SetParent(parent, false);
+        root.localPosition = pos;
+
+        const float w = 3.00f, d = 3.00f, h = 2.60f;
+        float hx = w * 0.5f, hz = d * 0.5f;
+
+        MakeBox(root, "Booth_Plinth", new Vector3(0f, 0.04f, 0f), new Vector3(w, 0.08f, d), matFloorDarkBasalt);
+
+        foreach (float sx in new[] { -1f, 1f })
+            foreach (float sz in new[] { -1f, 1f })
+                MakeBox(root, "Booth_Post", new Vector3(sx * (hx - 0.07f), h * 0.5f, sz * (hz - 0.07f)),
+                    new Vector3(0.14f, h, 0.14f), matMetalMatteBlack);
+
+        MakeBox(root, "Booth_Head", new Vector3(0f, h - 0.07f, 0f), new Vector3(w, 0.14f, d), matMetalMatteBlack);
+        MakeBox(root, "Booth_Roof", new Vector3(0f, h + 0.03f, 0f), new Vector3(w - 0.10f, 0.06f, d - 0.10f), matWallDarkCharcoal, false);
+
+        MakeBox(root, "Booth_Glass_N", new Vector3(0f, h * 0.5f, hz - 0.05f), new Vector3(w - 0.24f, h - 0.24f, 0.05f), matGlassUltra);
+        MakeBox(root, "Booth_Glass_E", new Vector3(hx - 0.05f, h * 0.5f, 0f), new Vector3(0.05f, h - 0.24f, d - 0.24f), matGlassUltra);
+        MakeBox(root, "Booth_Glass_S", new Vector3(0f, h * 0.5f, -hz + 0.05f), new Vector3(w - 0.24f, h - 0.24f, 0.05f), matGlassUltra);
+
+        // West face: a clear doorway in the middle with glass either side.
+        const float doorW = 1.10f;
+        float sideLen = (d - 0.24f - doorW) * 0.5f;
+        float sideCz = (d - 0.24f) * 0.5f - sideLen * 0.5f;
+        MakeBox(root, "Booth_Glass_WN", new Vector3(-hx + 0.05f, h * 0.5f, sideCz), new Vector3(0.05f, h - 0.24f, sideLen), matGlassUltra);
+        MakeBox(root, "Booth_Glass_WS", new Vector3(-hx + 0.05f, h * 0.5f, -sideCz), new Vector3(0.05f, h - 0.24f, sideLen), matGlassUltra);
+        MakeBox(root, "Booth_Door_Head", new Vector3(-hx + 0.05f, h - 0.30f, 0f), new Vector3(0.10f, 0.10f, doorW), matMetalMatteBlack, false);
+
+        MakeBox(root, "Booth_Desk", new Vector3(0.55f, 0.76f, 0f), new Vector3(0.70f, 0.06f, 1.40f), matWoodScandiOak);
+        MakeBox(root, "Booth_Light", new Vector3(0f, h - 0.16f, 0f), new Vector3(w - 0.60f, 0.04f, d - 0.60f), matLightCoolLED, false);
+    }
+
+    static void BuildInfoKiosk(Transform parent, Vector3 pos, float yaw)
+    {
+        var root = new GameObject("Info_Kiosk").transform;
+        root.SetParent(parent, false);
+        root.localPosition = pos;
+        root.localRotation = Quaternion.Euler(0f, yaw, 0f);
+
+        MakeBox(root, "Kiosk_Base", new Vector3(0f, 0.03f, 0f), new Vector3(0.70f, 0.06f, 0.60f), matMetalStainless);
+        MakeBox(root, "Kiosk_Column", new Vector3(0f, 0.75f, 0f), new Vector3(0.34f, 1.44f, 0.26f), matMarbleWhite);
+
+        var panel = MakeBox(root, "Kiosk_Panel", new Vector3(0f, 1.36f, 0.05f), new Vector3(0.62f, 0.86f, 0.09f), matMarbleWhite, false);
+        panel.transform.localRotation = Quaternion.Euler(-14f, 0f, 0f);
+
+        var screen = MakeBox(root, "Kiosk_Screen", new Vector3(0f, 1.36f, 0.11f), new Vector3(0.52f, 0.72f, 0.03f), matLightCoolLED, false);
+        screen.transform.localRotation = Quaternion.Euler(-14f, 0f, 0f);
+    }
+
     static void BuildVendingMachines(Transform parent, float baseY)
     {
         var root = new GameObject("1F_Vending_Machines").transform;
@@ -1583,12 +2326,14 @@ public static class LibraryInteriorBuilder
         var root = new GameObject("1F_Greenery").transform;
         root.SetParent(parent, false);
 
-        // Clear of the sand-table plinth, whose north face is at Z = 5.5.
-        BuildPlanter(root, new Vector3(-7.0f, baseY, 7.4f), 3.4f, 0);
-        BuildPlanter(root, new Vector3(4.6f, baseY, 7.4f), 3.4f, 0);
-        BuildPlanter(root, new Vector3(-13.2f, baseY, -9.4f), 4.0f, 0);
-        BuildPotPlant(root, new Vector3(-13.4f, baseY, -5.0f), 1.5f);
-        BuildPotPlant(root, new Vector3(-7.2f, baseY, -11.0f), 1.2f);
+        // The two tall mid-lobby planters used to stand square in the north approach.
+        // The main planting is now the south-east bed, so only slim wall-side accents
+        // remain here and every walking line stays open.
+        BuildPlanter(root, new Vector3(-18.9f, baseY, 2.1f), 3.0f, 0);
+        BuildPlanter(root, new Vector3(-18.9f, baseY, -9.4f), 3.4f, 0);
+        BuildPotPlant(root, new Vector3(-13.4f, baseY, -10.6f), 1.3f);
+        BuildPotPlant(root, new Vector3(-3.2f, baseY, 14.8f), 1.5f);
+        BuildPotPlant(root, new Vector3(3.0f, baseY, 14.8f), 1.5f);
     }
 
     // ---------------------------------------------------------------- shared furniture
@@ -1650,7 +2395,9 @@ public static class LibraryInteriorBuilder
         MakeBox(root, "Leg_E", new Vector3(0.85f, 0.05f, 0), new Vector3(0.06f, 0.1f, 0.7f), matMetalMatteBlack, false);
     }
 
-    // A single chair, used by tables and carrels alike.
+    // A single chair, sized off the 1.8 m character: 0.45 m seat height, 0.46 m seat
+    // width, backrest rising to 1.02 m. Four tapered metal legs and a slightly reclined
+    // back read far better than a stack of cubes.
     static void BuildChair(Transform parent, Vector3 localPos, float rotY, Material mat)
     {
         var ch = new GameObject("Chair").transform;
@@ -1658,10 +2405,35 @@ public static class LibraryInteriorBuilder
         ch.localPosition = localPos;
         ch.localRotation = Quaternion.Euler(0, rotY, 0);
 
-        MakeBox(ch, "Seat", new Vector3(0, 0.45f, 0), new Vector3(0.46f, 0.06f, 0.46f), mat);
-        MakeBox(ch, "Back", new Vector3(0, 0.76f, 0.21f), new Vector3(0.44f, 0.52f, 0.05f), mat, false);
-        MakeBox(ch, "Seat_Post", new Vector3(0, 0.22f, 0), new Vector3(0.08f, 0.44f, 0.08f), matMetalMatteBlack, false);
-        MakeBox(ch, "Foot", new Vector3(0, 0.03f, 0), new Vector3(0.42f, 0.04f, 0.42f), matMetalMatteBlack, false);
+        const float seatH = 0.45f, seatW = 0.46f, seatD = 0.44f;
+
+        // Bevelled upholstered seat on a dark frame, two raked back panels and round legs.
+        InteriorGeometry.RoundedBox(ch, "Seat", new Vector3(0, seatH, 0),
+            new Vector3(seatW, 0.075f, seatD), 0.026f, mat, true);
+        InteriorGeometry.RoundedBox(ch, "Seat_Frame", new Vector3(0, seatH - 0.058f, 0),
+            new Vector3(seatW - 0.05f, 0.035f, seatD - 0.05f), 0.012f, matMetalMatteBlack, false);
+
+        var backLow = InteriorGeometry.RoundedBox(ch, "Back_Low",
+            new Vector3(0, seatH + 0.15f, seatD * 0.44f),
+            new Vector3(seatW * 0.96f, 0.22f, 0.055f), 0.018f, mat, false);
+        backLow.transform.localRotation = Quaternion.Euler(-5f, 0f, 0f);
+
+        var backHigh = InteriorGeometry.RoundedBox(ch, "Back_High",
+            new Vector3(0, seatH + 0.33f, seatD * 0.47f),
+            new Vector3(seatW * 0.90f, 0.16f, 0.05f), 0.016f, mat, false);
+        backHigh.transform.localRotation = Quaternion.Euler(-6f, 0f, 0f);
+
+        foreach (float sx in new[] { -1f, 1f })
+        {
+            InteriorGeometry.Tube(ch, "Leg_F", new Vector3(sx * seatW * 0.40f, 0.005f, seatD * 0.36f),
+                new Vector3(sx * seatW * 0.40f, seatH, seatD * 0.36f), 0.018f, matMetalMatteBlack);
+            InteriorGeometry.Tube(ch, "Leg_B", new Vector3(sx * seatW * 0.40f, 0.005f, -seatD * 0.36f),
+                new Vector3(sx * seatW * 0.40f, seatH, -seatD * 0.36f), 0.018f, matMetalMatteBlack);
+            InteriorGeometry.Tube(ch, "Back_Post", new Vector3(sx * seatW * 0.42f, seatH - 0.02f, seatD * 0.40f),
+                new Vector3(sx * seatW * 0.42f, seatH + 0.40f, seatD * 0.44f), 0.019f, matMetalMatteBlack);
+        }
+        InteriorGeometry.Tube(ch, "Stretcher", new Vector3(-seatW * 0.40f, 0.17f, 0f),
+            new Vector3(seatW * 0.40f, 0.17f, 0f), 0.013f, matMetalMatteBlack);
     }
 
 }

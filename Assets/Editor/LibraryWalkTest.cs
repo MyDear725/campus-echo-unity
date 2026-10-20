@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -101,6 +102,102 @@ public static class LibraryWalkTest
                 (29.5f,  0.0f, "3F: at the railed opening"),
             });
 
+        // Route G: the reworked south-east corner. Proves the gate lanes, the lobbys
+        // main axis, the new flower bed's surroundings and the restroom door are all
+        // physically reachable.
+        Walk(sb, "G: 1F spawn -> gate lane -> SE flower bed -> restroom door",
+            new Vector3(0f, 0.25f, -13.5f),
+            new (float x, float z, string label)[]
+            {
+                (0f,   -11.0f, "through the centre gate lane"),
+                (0f,    -4.0f, "open lobby south of the sand table"),
+                (10.0f, -4.0f, "east toward the bed"),
+                (14.6f, -3.4f, "north-west of the bed"),
+                (17.9f, -2.4f, "in front of the flower bed"),
+                (15.6f,  5.2f, "restroom door"),
+            });
+
+        // Route H: the reworked north-east lounge, plus the lift and stair approach.
+        Walk(sb, "H: 1F spawn -> lounge -> reading booth",
+            new Vector3(0f, 0.25f, -13.5f),
+            new (float x, float z, string label)[]
+            {
+                (0f,   -9.0f, "past the gates"),
+                (4.5f,   2.0f, "east of the sand table"),
+                (5.0f,   7.4f, "in front of the sofa"),
+                (8.0f,   9.5f, "between sofa and booth"),
+                (8.0f,  13.2f, "booth west side"),
+                (9.5f,  13.2f, "reading booth doorway"),
+            });
+
+        // Route I: the lift and stair approach stays clear of the new bed.
+        Walk(sb, "I: 1F spawn -> lift -> stair approach",
+            new Vector3(0f, 0.25f, -13.5f),
+            new (float x, float z, string label)[]
+            {
+                (0f,   -9.0f, "past the gates"),
+                (6.0f,  -7.4f, "clear of the stair head"),
+                (14.0f, -7.4f, "east toward the lift"),
+                (14.0f, -9.4f, "lift door"),
+                (8.2f,  -7.4f, "stair approach"),
+            });
+
+        // Routes J/K: on 2F and 3F, walk from the stair head across the hall to the new
+        // drinking fountain and the restroom door, then on to the corridor corner.
+        foreach (var (fl, y) in new[] { (2, 4.32f), (3, 8.62f) })
+        {
+            Walk(sb, fl + "F: stair head -> fountain -> restroom -> corridor corner",
+                new Vector3(6.8f, y + 0.1f, -9.6f),
+                new (float x, float z, string label)[]
+                {
+                    (6.8f,  -2.0f, fl + "F: north into the hall"),
+                    (11.0f,  4.0f, fl + "F: toward the north wall"),
+                    (14.2f, 13.6f, fl + "F: at the drinking fountain"),
+                    (14.2f,  8.4f, fl + "F: south of the restroom"),
+                    (9.0f,   8.4f, fl + "F: west along the restroom front"),
+                    (8.0f,   9.6f, fl + "F: restroom door"),
+                    (6.0f,   0.0f, fl + "F: back into the hall"),
+                    (-13.0f, 6.0f, fl + "F: corridor corner"),
+                });
+        }
+
+        // Route J: the 2F route the corridor exists for - up the stair, north across the
+        // open hall, left through the west doorway, the length of the corridor and back.
+        Walk(sb, "J: 2F stair head -> hall -> west corridor -> back to stair",
+            new Vector3(6.8f, 4.42f, -9.6f),
+            new (float x, float z, string label)[]
+            {
+                (6.8f,   0.0f, "2F: north into the hall"),
+                (-8.0f,  6.0f, "2F: left turn toward the west wall"),
+                (-18.0f, 6.0f, "2F: at the corridor doorway"),
+                (-26.0f, 6.0f, "2F: inside the corridor"),
+                (-36.0f, 6.0f, "2F: far end of the corridor"),
+                (-26.0f, 6.0f, "2F: walking back"),
+                (-18.0f, 6.0f, "2F: back at the doorway"),
+                (-6.0f,  2.0f, "2F: back in the hall"),
+                (6.8f,  -9.6f, "2F: back at the stair head"),
+            });
+
+        // Route K: the same corridor walk one storey up, so 3F is verified too.
+        Walk(sb, "K: 3F stair head -> hall -> west corridor -> back to stair",
+            new Vector3(6.8f, 8.72f, -9.6f),
+            new (float x, float z, string label)[]
+            {
+                (6.8f,   0.0f, "3F: north into the hall"),
+                (-8.0f,  6.0f, "3F: left turn toward the west wall"),
+                (-18.0f, 6.0f, "3F: at the corridor doorway"),
+                (-26.0f, 6.0f, "3F: inside the corridor"),
+                (-36.0f, 6.0f, "3F: far end of the corridor"),
+                (-26.0f, 6.0f, "3F: walking back"),
+                (-18.0f, 6.0f, "3F: back at the doorway"),
+                (-6.0f,  2.0f, "3F: back in the hall"),
+                (6.8f,  -9.6f, "3F: back at the stair head"),
+            });
+
+        CheckWestWallSealed(sb);
+        CheckExitBindings(sb);
+        CheckSpawns(sb);
+        CheckSpotSelection(sb);
         CheckSandTable(sb);
         CheckDoorBarriers(sb);
         CheckVoidAllRound(sb);
@@ -112,6 +209,31 @@ public static class LibraryWalkTest
         Debug.Log("WALKTEST_DONE");
     }
 
+
+    // The 2F corridor doorway is the only opening in the west wall. 1F, 3F and 4F must
+    // still be sealed there, otherwise the player could walk out into empty space.
+    static void CheckWestWallSealed(StringBuilder sb)
+    {
+        sb.AppendLine("=== WEST WALL: open on 2F only ===");
+        float[] floors = { 0f, 4.3f, 8.6f, 12.9f };
+        for (int i = 0; i < floors.Length; i++)
+        {
+            float y = floors[i] + 1.0f;
+            var origin = new Vector3(-18.0f, y, 6.0f);
+            var hits = Physics.RaycastAll(origin, Vector3.left, 6f,
+                Physics.AllLayers, QueryTriggerInteraction.Ignore);
+            System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+            bool open = i == 1 || i == 2;   // 2F and 3F both have the corridor
+            bool blocked = hits.Length > 0 && hits[0].distance < 3.0f;
+            bool ok = open ? !blocked : blocked;
+
+            string what = hits.Length > 0 ? $"'{hits[0].collider.gameObject.name}' at {hits[0].distance:F2}m" : "nothing";
+            sb.AppendLine($"  {(ok ? "OK  " : "FAIL")} {i + 1}F west wall at Z=6: " +
+                          $"{(open ? "should be OPEN" : "should be SEALED")} -> {what}");
+        }
+        sb.AppendLine();
+    }
     // Verifies each of the four lift stops has solid floor and room for the player
     // capsule, since ChooseFloor() simply repositions the player there.
     static void CheckLiftStops(StringBuilder sb)
@@ -152,6 +274,184 @@ public static class LibraryWalkTest
 
 
 
+
+    // Checks every spawn point declared on InteriorSceneRoot: it must sit on solid
+    // ground with room for the player capsule, and be on the correct side of the plan.
+    static void CheckSpawns(StringBuilder sb)
+    {
+        sb.AppendLine("=== LIBRARY SPAWN POINTS ===");
+        var root = Object.FindFirstObjectByType<InteriorSceneRoot>();
+        if (!root) { sb.AppendLine("  InteriorSceneRoot NOT FOUND"); return; }
+
+        if (root.spawnPoints == null || root.spawnPoints.Length == 0)
+        {
+            sb.AppendLine("  no spawn points declared");
+            return;
+        }
+
+        foreach (var sp in root.spawnPoints)
+        {
+            if (sp == null || sp.anchor == null)
+            {
+                sb.AppendLine($"  FAIL {sp?.id}: anchor is null");
+                continue;
+            }
+
+            Vector3 p = sp.anchor.position;
+
+            var down = Physics.RaycastAll(p + Vector3.up * 0.5f, Vector3.down, 5f,
+                Physics.AllLayers, QueryTriggerInteraction.Ignore);
+            System.Array.Sort(down, (a, b) => a.distance.CompareTo(b.distance));
+            string ground = down.Length > 0
+                ? $"{down[0].collider.gameObject.name} @Y={down[0].point.y:F2}"
+                : "NOTHING";
+
+            Vector3 lo = new Vector3(p.x, p.y + Radius, p.z);
+            Vector3 hi = new Vector3(p.x, p.y + Height - Radius, p.z);
+            int blocked = Physics.OverlapCapsule(lo, hi, Radius - 0.02f,
+                Physics.AllLayers, QueryTriggerInteraction.Ignore).Length;
+
+            bool onGround = down.Length > 0 && Mathf.Abs(down[0].point.y - p.y) < 0.6f;
+            bool ok = onGround && blocked == 0;
+
+            string side = p.z < -8f ? "south" : p.z > 8f ? "north" : "MIDDLE";
+            bool sideOk = (sp.id == "main" && side == "south") || (sp.id != "main" && side == "north");
+
+            sb.AppendLine($"  {(ok && sideOk ? "OK  " : "FAIL")} id='{sp.id}' at ({p.x:F1},{p.y:F2},{p.z:F1}) " +
+                          $"side={side}, ground={ground}, blocking colliders={blocked}");
+        }
+
+        sb.AppendLine($"  exits declared: {(root.exits == null ? 0 : root.exits.Length)}");
+        if (root.exits != null)
+            foreach (var e in root.exits)
+                sb.AppendLine($"    exit '{(e ? e.name : "null")}' at " +
+                              $"{(e ? $"({e.position.x:F1},{e.position.z:F1})" : "-")}");
+        sb.AppendLine();
+    }
+
+    // Verifies the interaction prompt and the E action cannot disagree: both call
+    // LibraryIndoorInteractions.PickSpot, and where ranges overlap the nearer spot wins.
+    static void CheckSpotSelection(StringBuilder sb)
+    {
+        sb.AppendLine("=== INTERACTION SPOT SELECTION ===");
+        sb.AppendLine("(both the prompt and the E action call the same selector)");
+
+        var reception = new Vector3(-10.5f, 1.0f, -3.6f);
+        var chute = new Vector3(-7.3f, 1.0f, -5.0f);
+        const float receptionR = 3.0f, chuteR = 2.2f;
+
+        int overlapSamples = 0, wrong = 0;
+        for (int i = 0; i <= 12; i++)
+        {
+            Vector3 p = Vector3.Lerp(reception, chute, i / 12f);
+            p.y = 1.0f;
+
+            float dr = Vector2.Distance(new Vector2(p.x, p.z), new Vector2(reception.x, reception.z));
+            float dc = Vector2.Distance(new Vector2(p.x, p.z), new Vector2(chute.x, chute.z));
+            bool inR = dr <= receptionR, inC = dc <= chuteR;
+
+            string picked = LibraryIndoorInteractions.PickSpotId(p);
+
+            if (inR && inC)
+            {
+                overlapSamples++;
+                string expected = dr < dc ? "reception_1f" : dc < dr ? "return_chute_1f" : null;
+                bool ok = expected == null
+                    ? (picked == "reception_1f" || picked == "return_chute_1f")
+                    : picked == expected;
+                if (!ok) wrong++;
+                if (i % 3 == 0)
+                    sb.AppendLine($"    t={i / 12f:F2} (dr={dr:F2}, dc={dc:F2}) -> '{picked}'" +
+                                  $"{(ok ? "" : "  <-- WRONG (not the nearest)")}");
+            }
+        }
+
+        sb.AppendLine($"  overlap samples: {overlapSamples}, disagreements with nearest rule: {wrong}");
+
+        string far = LibraryIndoorInteractions.PickSpotId(new Vector3(0f, 1.0f, -6f));
+        string lift = LibraryIndoorInteractions.PickSpotId(new Vector3(14.0f, 1.0f, -11.4f));
+        sb.AppendLine($"  empty spot at (0,-6): '{(far ?? "null")}' (expected null)");
+        sb.AppendLine($"  at the 1F lift door : '{(lift ?? "null")}' (expected elevator_1f)");
+        sb.AppendLine();
+    }
+
+    // Verifies the exit -> entrance bindings for the four possible door combinations.
+    // Needs CampusLiving open (for the runtime entrance list) plus the library scene
+    // loaded additively (for the exit anchors), so it manages both scenes itself.
+    static void CheckExitBindings(StringBuilder sb)
+    {
+        sb.AppendLine("=== EXIT -> ENTRANCE BINDING (four combinations) ===");
+
+        // Remember what was open so the rest of the suite is unaffected.
+        string previous = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene().path;
+
+        var campus = EditorSceneManager.OpenScene("Assets/Scenes/CampusLiving.unity",
+            UnityEditor.SceneManagement.OpenSceneMode.Single);
+        var library = EditorSceneManager.OpenScene("Assets/Interiors/Scenes/library.unity",
+            UnityEditor.SceneManagement.OpenSceneMode.Additive);
+
+        var travel = Object.FindFirstObjectByType<BuildingInteriorTravel>();
+        var root = Object.FindFirstObjectByType<InteriorSceneRoot>();
+
+        if (travel == null || root == null)
+        {
+            sb.AppendLine("  FAIL: BuildingInteriorTravel or InteriorSceneRoot not found");
+        }
+        else
+        {
+            sb.AppendLine($"  travel.entrances = {travel.entrances.Length}, " +
+                          $"root.exits = {(root.exits == null ? 0 : root.exits.Length)}, " +
+                          $"bindings = {(root.exitEntranceIds == null ? 0 : root.exitEntranceIds.Length)}");
+
+            foreach (var exit in root.exits)
+            {
+                string boundId = root.ExitEntranceId(exit);
+                var bound = BuildingInteriorTravel.ResolveExitEntrance(
+                    exit, root.exits, root.exitEntranceIds, travel.entrances);
+
+                sb.AppendLine($"    exit '{exit.name}' -> bound '{(boundId ?? "null")}' -> " +
+                              $"entrance '{(bound ? bound.EntranceId : "null")}', " +
+                              $"return=({bound.returnMapPosition.x:F1},{bound.returnMapPosition.z:F1}), " +
+                              $"yaw={bound.enterYaw:F0}");
+            }
+
+            // The four combinations: leaving through S or N, having entered via front or rear.
+            var exitS = root.exits[0];
+            var exitN = root.exits.Length > 1 ? root.exits[1] : null;
+            var front = travel.entrances.FirstOrDefault(e => e && e.buildingId == "library" && e.EntranceId == "library");
+            var rear = travel.entrances.FirstOrDefault(e => e && e.buildingId == "library" && e.EntranceId == "library-rear");
+
+            var cases = new (string label, Transform exit, BuildingEntranceDefinition cameIn, string expect)[]
+            {
+                ("front in  -> front out", exitS, front, "library"),
+                ("front in  -> rear  out", exitN, front, "library-rear"),
+                ("rear  in  -> front out", exitS, rear,  "library"),
+                ("rear  in  -> rear  out", exitN, rear,  "library-rear"),
+            };
+
+            int ok = 0;
+            foreach (var (label, exit, cameIn, expect) in cases)
+            {
+                var resolved = BuildingInteriorTravel.ResolveExitEntrance(
+                    exit, root.exits, root.exitEntranceIds, travel.entrances);
+                // BuildingInteriorTravel falls back to the entrance used when the exit
+                // has no binding; the library binds both, so resolution is direct.
+                bool good = resolved && resolved.EntranceId == expect;
+                if (good) ok++;
+                sb.AppendLine($"    {(good ? "OK  " : "FAIL")} {label}: returns to '{(resolved ? resolved.EntranceId : "null")}' " +
+                              $"({(resolved ? resolved.returnMapPosition.x.ToString("F1") + "," + resolved.returnMapPosition.z.ToString("F1") : "-")})");
+            }
+
+            sb.AppendLine($"  -> {ok}/{cases.Length} combinations correct");
+        }
+
+        sb.AppendLine();
+
+        // Close the library scene and restore the single-scene state the rest uses.
+        EditorSceneManager.CloseScene(library, true);
+        EditorSceneManager.OpenScene(previous.Length > 0 ? previous
+            : "Assets/Interiors/Scenes/library.unity", UnityEditor.SceneManagement.OpenSceneMode.Single);
+    }
     // Confirms the campus sand table cannot be entered, including by jumping on it.
     // Rays are cast horizontally at two heights: knee height, and at the apex of a
     // jump (the jump gives about 1.2m, so a body there spans 1.2m to 3.0m).

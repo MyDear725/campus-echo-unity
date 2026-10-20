@@ -16,6 +16,8 @@ public class CampusGame : MonoBehaviour {
  public BuildingInteriorTravel Interiors {get;private set;}
  public bool Automated {get;private set;}
  public bool UiCursorActive {get;private set;}
+ public bool UiBlocking {get=>UiCursorActive;set=>SetUiCursor(value);}
+ public bool Seated;
  int uiCursorChangedFrame=-1;
  public bool ExteriorShortcutsAllowed=>Interiors==null||(!Interiors.Inside&&!Interiors.Busy);
  public float mapXSign=1;
@@ -34,7 +36,8 @@ public class CampusGame : MonoBehaviour {
   if(!qa){started=PlayerPrefs.GetInt("CampusUnityStarted",0)==1;collected=PlayerPrefs.GetInt("CampusUnityMemories",0)&7;complete=started&&collected==7&&PlayerPrefs.GetInt("CampusUnityComplete",0)==1;}
   if(!started){collected=0;complete=false;}
   for(int i=0;i<memories.Length;i++)memories[i].SetActive((collected&(1<<i))==0);
-  if(interfaceFont==null)interfaceFont=Font.CreateDynamicFontFromOSFont("Microsoft YaHei",20);
+  if(interfaceFont==null)interfaceFont=Resources.Load<Font>("CampusFont");
+  if(interfaceFont==null)interfaceFont=Font.CreateDynamicFontFromOSFont(new string[]{"Arial Unicode MS","Hiragino Sans GB","STHeiti Medium","Microsoft YaHei","SimHei"},20);
   BuildMap();if(pixelStudy&&!qa)Teleport(new Vector3(65,.23f,-72));ApplyCursor();if(qa){StartCoroutine(QA());StartCoroutine(QATimeout());}
  }
  public void SetUiCursor(bool active){UiCursorActive=active;uiCursorChangedFrame=Time.frameCount;ApplyCursor();}
@@ -47,6 +50,8 @@ public class CampusGame : MonoBehaviour {
    if(UiCursorActive||uiCursorChangedFrame==Time.frameCount){Animate("Idle",0);return;}
    if(Input.GetKeyDown(KeyCode.Escape)){paused=!paused;ApplyCursor();}
    if(paused){Animate("Idle",0);return;}
+   // Sitting: pause handles the toggle above, but no movement, gravity or yaw may run.
+   if(Seated){Animate("Idle",0);return;}
    if(Interiors&&Interiors.Busy){Animate("Idle",0);return;}
    if(Input.GetKeyDown(KeyCode.M)&&ExteriorShortcutsAllowed)mapOpen=!mapOpen;
    targetYaw=Mathf.Repeat(targetYaw+Input.GetAxisRaw("Mouse X")*2.3f,360);targetPitch=Mathf.Clamp(targetPitch-Input.GetAxisRaw("Mouse Y")*1.8f,-32,68);
@@ -101,6 +106,9 @@ public class CampusGame : MonoBehaviour {
  public void VisitCafeteria(){if(!ExteriorShortcutsAllowed)return;yaw=targetYaw=270;pitch=targetPitch=8;player.rotation=Quaternion.Euler(0,yaw,0);Teleport(Outdoor?new Vector3(218,3.08f,10):new Vector3(174.5f,.23f,8));Say("学生食堂：向正门走近，按 E 进入。");}
  public bool IsMapWalkable(Vector3 position)=>!CampusCollision.Blocked(position.x,position.z,data.obstacles);
  // Shared travel API uses world coordinates indoors and resets movement/camera state.
+ // Turn the follow camera to a heading without moving the player. Used so sitting down
+ // frames the table instead of keeping the pre-sit yaw.
+ public void AlignViewToSeat(float heading){yaw=targetYaw=heading;player.rotation=Quaternion.Euler(0,heading,0);UpdateCamera();}
  public void SetTravelPose(Vector3 worldPosition,float heading,float elevation=12){player.position=worldPosition;yaw=targetYaw=heading;pitch=targetPitch=elevation;player.rotation=Quaternion.Euler(0,yaw,0);vertical=0;grounded=true;mapOpen=false;Animate("Idle",0);UpdateCamera();}
  public void Notify(string text)=>Say(text);
  void Animate(string state,float speed,bool backwards=false){
@@ -109,6 +117,10 @@ public class CampusGame : MonoBehaviour {
   if(animationPlayer[state]!=null){animationPlayer[state].speed=(state=="Walk"||state=="Run")?Mathf.Clamp(speed/(state=="Run"?10:5.4f),.35f,1.3f)*(backwards?-1:1):1;}
  }
  public bool Interact(){
+  if(Interiors&&Interiors.Inside&&Interiors.Interior&&Interiors.Interior.buildingId=="cafeteria"){
+    var ordering=Interiors.Interior.GetComponent<CafeteriaOrdering>();
+    if(ordering&&ordering.HandlesCurrentSpot())return false;   // the ordering UI handles E
+  }
   if(Interiors&&Interiors.TryInteract())return true;
   if(Vector3.Distance(player.position,guide.position)<4){
    if(!started){started=true;Say("小岚：请在图书馆、涌泉湖畔和田径场寻找三枚校园记忆。");}
@@ -128,7 +140,8 @@ public class CampusGame : MonoBehaviour {
  int Count(){return (collected&1)+((collected>>1)&1)+((collected>>2)&1);}
  void OnGUI(){
   if(pixelStudy)followCamera.GetComponent<CampusPixelView>()?.DrawBackground();
-  GUI.skin.font=interfaceFont;
+  if(interfaceFont==null)interfaceFont=Resources.Load<Font>("CampusFont");
+  GUI.skin.font=interfaceFont;GUI.skin.button.font=interfaceFont;GUI.skin.box.font=interfaceFont;GUI.skin.label.font=interfaceFont;
   if(title==null){title=new GUIStyle(GUI.skin.label){font=interfaceFont,fontSize=26,fontStyle=FontStyle.Bold};body=new GUIStyle(GUI.skin.label){font=interfaceFont,fontSize=17,wordWrap=true};small=new GUIStyle(body){fontSize=14};}
   float scale=Mathf.Clamp(Screen.height/900f,.7f,1.5f);GUI.matrix=Matrix4x4.Scale(Vector3.one*scale);float w=Screen.width/scale,h=Screen.height/scale;
   bool indoors=Interiors&&Interiors.Inside;

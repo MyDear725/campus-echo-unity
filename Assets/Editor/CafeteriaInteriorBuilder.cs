@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using UnityEditor;
+using UnityEngine.Rendering.Universal;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -26,7 +27,25 @@ public static class CafeteriaInteriorBuilder
     static Material matFruitApple, matFruitOrange, matFruitBanana, matFruitWatermelon, matFruitMelon, matFruitGrape;
     static Material matPlantFoliage, matPlantPot;
 
-    static Material GetOrCreateMaterial(string name, Color baseColor, float metallic = 0f, float smoothness = 0.2f, Color? emission = null, bool transparent = false)
+    static Material GetOrCreateMaterial(string name, Color baseColor, float metallic = 0f, float smoothness = 0.2f,
+                                        Color? emission = null, bool transparent = false, string texturePath = null,
+                                        Vector2? tiling = null)
+    {
+        var mat = GetOrCreateMaterialCore(name, baseColor, metallic, smoothness, emission, transparent);
+        if (!string.IsNullOrEmpty(texturePath))
+        {
+            var tex = AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath);
+            if (tex)
+            {
+                mat.SetTexture("_BaseMap", tex);
+                mat.SetTextureScale("_BaseMap", tiling ?? Vector2.one);
+            }
+        }
+        return mat;
+    }
+
+    static Material GetOrCreateMaterialCore(string name, Color baseColor, float metallic, float smoothness,
+                                            Color? emission, bool transparent)
     {
         string dir = "Assets/Interiors/Materials/CafeteriaModern";
         if (!Directory.Exists(dir))
@@ -90,15 +109,15 @@ public static class CafeteriaInteriorBuilder
 
     static void LoadMaterials()
     {
-        matFloorTerrazzo = GetOrCreateMaterial("Mat_Floor_Terrazzo", new Color(0.76f, 0.74f, 0.71f), 0.02f, 0.35f);
+        matFloorTerrazzo = GetOrCreateMaterial("Mat_Floor_Terrazzo", new Color(0.84f, 0.835f, 0.82f), 0.02f, 0.32f, null, false, "Assets/Interiors/Textures/Library_Granite_Tile.png", new Vector2(15f, 13.3f));
         matFloorDarkBasalt = GetOrCreateMaterial("Mat_Floor_DarkBasalt", new Color(0.18f, 0.19f, 0.21f), 0.10f, 0.25f);
 
-        matWallMicrocement = GetOrCreateMaterial("Mat_Wall_Microcement", new Color(0.92f, 0.91f, 0.89f), 0.0f, 0.08f);
+        matWallMicrocement = GetOrCreateMaterial("Mat_Wall_Microcement", new Color(0.845f, 0.835f, 0.815f), 0.0f, 0.05f);
         matWallDarkCharcoal = GetOrCreateMaterial("Mat_Wall_DarkCharcoal", new Color(0.17f, 0.18f, 0.20f), 0.15f, 0.25f);
-        matCeilingWhite = GetOrCreateMaterial("Mat_Ceiling_White", new Color(0.95f, 0.95f, 0.95f), 0.0f, 0.05f);
+        matCeilingWhite = GetOrCreateMaterial("Mat_Ceiling_White", new Color(0.88f, 0.88f, 0.87f), 0.0f, 0.04f);
 
-        matWoodScandiOak = GetOrCreateMaterial("Mat_Wood_ScandiOak", new Color(0.81f, 0.71f, 0.56f), 0.0f, 0.32f);
-        matWoodDarkWalnut = GetOrCreateMaterial("Mat_Wood_DarkWalnut", new Color(0.28f, 0.22f, 0.18f), 0.0f, 0.35f);
+        matWoodScandiOak = GetOrCreateMaterial("Mat_Wood_ScandiOak", new Color(0.80f, 0.70f, 0.55f), 0.0f, 0.26f, null, false, "Assets/Interiors/Textures/Library_Oak_Grain.png", new Vector2(1f, 1f));
+        matWoodDarkWalnut = GetOrCreateMaterial("Mat_Wood_DarkWalnut", new Color(0.30f, 0.24f, 0.19f), 0.0f, 0.28f, null, false, "Assets/Interiors/Textures/Library_Oak_Grain.png", new Vector2(1f, 1f));
 
         matMarbleWhite = GetOrCreateMaterial("Mat_Marble_White", new Color(0.96f, 0.96f, 0.97f), 0.05f, 0.65f);
 
@@ -173,6 +192,9 @@ public static class CafeteriaInteriorBuilder
     [MenuItem("Campus/Interiors/Build Cafeteria First and Second Floor")]
     public static void Build()
     {
+        seatAnchorPos.Clear();
+        seatAnchorRot.Clear();
+
         LoadMaterials();
 
         var scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
@@ -248,9 +270,144 @@ public static class CafeteriaInteriorBuilder
         // 7. Lighting for all 3 floors
         BuildLighting(multiRoot);
 
+        // 8. Interior presentation: dedicated SSAO renderer, ACES volume, reflection
+        //    probe and the runtime presentation switch, all persisted as real assets.
+        BuildPresentation(rootObj.transform, sceneRoot);
+
+        // 9. Ordering system: anchors are placed at the existing serving window, the
+        //    tray-return counter and the dining hall, so the flow uses the real plan.
+        BuildOrdering(rootObj.transform, sceneRoot);
+        InteriorLabelStairFix.ConfigureLabels(rootObj.transform, 3);
+        InteriorLabelStairFix.ConfigureCafeteriaRails(rootObj.transform);
+
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);
         Debug.Log("CAFETERIA_MULTI_FLOOR_BUILD_COMPLETE: Built exact blueprint-matching 1F, 2F & 3F for 第六食堂");
+    }
+
+
+    // Cafeteria is 36 x 32 m over three storeys, so the interior camera only needs to
+    // see ~55 m; shadow distance is sized to cover a floor plus its furniture.
+    static void BuildPresentation(Transform rootTransform, InteriorSceneRoot sceneRoot)
+    {
+        int rendererIndex;
+        UniversalRendererData renderer;
+        rendererIndex = InteriorPresentationSetup.EnsureInteriorRenderer(0.22f, out renderer);
+
+        var profile = InteriorPresentationSetup.EnsureVolume(
+            "Assets/Interiors/CafeteriaInterior/InteriorVolume.asset",
+            postExposure: 0.42f, contrast: 5f, saturation: -3f,
+            bloomIntensity: 0.06f, bloomThreshold: 1.2f);
+
+        var volumeGo = rootTransform.Find("食堂 · 色调与柔和灯光");
+        GameObject vol = volumeGo ? volumeGo.gameObject : new GameObject("食堂 · 色调与柔和灯光");
+        vol.transform.SetParent(rootTransform, false);
+        var volume = vol.GetComponent<Volume>();
+        if (!volume) volume = vol.AddComponent<Volume>();
+        volume.isGlobal = true;
+        volume.priority = 20;
+        volume.sharedProfile = profile;
+
+        InteriorPresentationSetup.EnsureProbe(rootTransform, "食堂材质反射",
+            new Vector3(0f, 4.4f, 0f), new Vector3(38f, 14f, 34f), new Color(0.34f, 0.35f, 0.36f));
+
+        var pres = rootTransform.GetComponent<InteriorPresentation>();
+        if (!pres) pres = rootTransform.gameObject.AddComponent<InteriorPresentation>();
+        pres.rendererIndex = rendererIndex;
+        pres.interiorFarClip = 70f;
+        pres.interiorShadowDistance = 46f;
+        pres.interiorCascades = 4;
+
+        UnityEditor.EditorUtility.SetDirty(sceneRoot);
+    }
+
+
+    // Wires the cafeteria ordering flow to real anchors in the plan:
+    //   order   -> the 1F serving window (打菜选餐区)
+    //   collect -> a collection counter next to that window
+    //   return  -> the 1F tray-return counter
+    //   seat    -> the centre of the dining hall (representative seat anchor)
+    // The anchors are scene objects so a rebuild re-creates them and the component
+    // keeps referencing the right places.
+    // Wires the ordering flow to the real counters on all three floors. The anchors are
+    // scene objects created here, so regenerating the cafeteria re-creates them and the
+    // component keeps pointing at the right places.
+    //
+    // Positions match the counters built by BuildFoodServingArea / BuildTrayReturnArea /
+    // BuildWaterBarIsland, and the same coordinates the old interaction spots used.
+    static void BuildOrdering(Transform rootTransform, InteriorSceneRoot sceneRoot)
+    {
+        Transform Anchor(string name, Vector3 pos)
+        {
+            var t = rootTransform.Find(name);
+            if (t) { t.position = pos; return t; }
+            var go = new GameObject(name);
+            go.transform.SetParent(rootTransform, false);
+            go.transform.position = pos;
+            return go.transform;
+        }
+
+        // floor base heights: 1F 0, 2F 4.3, 3F 8.6
+        float[] fy = { 0f, 4.3f, 8.6f };
+
+        var order = new System.Collections.Generic.List<Transform>();
+        var collect = new System.Collections.Generic.List<Transform>();
+        var ret = new System.Collections.Generic.List<Transform>();
+        var seat = new System.Collections.Generic.List<Transform>();
+
+        // Tags an ordering anchor with the shop whose menu it opens.
+        Transform OrderAnchor(string name, Vector3 pos, CafeteriaShop shop)
+        {
+            var t = Anchor(name, pos);
+            var c = t.GetComponent<CafeteriaCounter>();
+            if (!c) c = t.gameObject.AddComponent<CafeteriaCounter>();
+            c.shop = shop;
+            return t;
+        }
+
+        // 1F and 2F: main serving counter (restaurant menu) + the drink bar (water bar menu).
+        order.Add(OrderAnchor("OrderSpot_Serving_1F", new Vector3(-4.0f, fy[0] + 0.5f, 10.0f), CafeteriaShop.Restaurant));
+        order.Add(OrderAnchor("OrderSpot_WaterBar_1F", new Vector3(-0.5f, fy[0] + 0.5f, -1.0f), CafeteriaShop.WaterBar));
+        order.Add(OrderAnchor("OrderSpot_Serving_2F", new Vector3(-4.0f, fy[1] + 0.5f, 10.0f), CafeteriaShop.Restaurant));
+        order.Add(OrderAnchor("OrderSpot_WaterBar_2F", new Vector3(-0.5f, fy[1] + 0.5f, -1.0f), CafeteriaShop.WaterBar));
+        // 3F: speciality counter plus the fruit supermarket on the north side.
+        order.Add(OrderAnchor("OrderSpot_Serving_3F", new Vector3(10.0f, fy[2] + 0.5f, 8.5f), CafeteriaShop.Restaurant));
+        order.Add(OrderAnchor("OrderSpot_Fruit_3F", new Vector3(-3.8f, fy[2] + 0.5f, 13.4f), CafeteriaShop.FruitStall));
+
+        collect.Add(Anchor("CollectSpot_1F", new Vector3(-4.0f, fy[0] + 0.5f, 8.2f)));
+        collect.Add(Anchor("CollectSpot_2F", new Vector3(-4.0f, fy[1] + 0.5f, 8.2f)));
+        collect.Add(Anchor("CollectSpot_3F", new Vector3(10.0f, fy[2] + 0.5f, 6.6f)));
+        // Pickup points next to the water bars and the fruit supermarket, so an order is
+        // collected where it was bought.
+        collect.Add(Anchor("CollectSpot_WaterBar_1F", new Vector3(2.2f, fy[0] + 0.5f, 0.2f)));
+        collect.Add(Anchor("CollectSpot_WaterBar_2F", new Vector3(2.2f, fy[1] + 0.5f, 0.2f)));
+        collect.Add(Anchor("CollectSpot_Fruit_3F", new Vector3(-3.8f, fy[2] + 0.5f, 12.0f)));
+
+        ret.Add(Anchor("ReturnSpot_1F", new Vector3(12.0f, fy[0] + 0.5f, 4.0f)));
+        ret.Add(Anchor("ReturnSpot_2F", new Vector3(12.0f, fy[1] + 0.5f, 4.0f)));
+        ret.Add(Anchor("ReturnSpot_3F", new Vector3(12.0f, fy[2] + 0.5f, 1.2f)));
+
+        // Seats come from the chairs the dining builder actually created, on every floor,
+        // so the sitting position always lines up with real furniture.
+        for (int i = 0; i < seatAnchorPos.Count; i++)
+        {
+            var a = Anchor("SeatSpot_" + i.ToString("D3"), seatAnchorPos[i]);
+            a.rotation = seatAnchorRot[i];
+            seat.Add(a);
+        }
+        Debug.Log($"[Cafeteria] seat anchors from real chairs: {seat.Count}");
+
+        var ordering = rootTransform.GetComponent<CafeteriaOrdering>();
+        if (!ordering) ordering = rootTransform.gameObject.AddComponent<CafeteriaOrdering>();
+        ordering.orderSpots = order.ToArray();
+        ordering.collectSpots = collect.ToArray();
+        ordering.returnSpots = ret.ToArray();
+        ordering.seatSpots = seat.ToArray();
+
+        if (!rootTransform.GetComponent<CafeteriaOrderingUI>())
+            rootTransform.gameObject.AddComponent<CafeteriaOrderingUI>();
+
+        UnityEditor.EditorUtility.SetDirty(sceneRoot);
     }
 
     static GameObject MakeBox(Transform parent, string name, Vector3 pos, Vector3 size, Material mat, bool collider = true)
@@ -863,6 +1020,12 @@ public static class CafeteriaInteriorBuilder
         }
     }
 
+    // Every chair built for the cafeteria records its seat anchor: standing position and
+    // the yaw that faces the table. The ordering system consumes this list, so seats match
+    // the furniture actually in the scene instead of hand-written guesses.
+    static readonly System.Collections.Generic.List<Vector3> seatAnchorPos = new System.Collections.Generic.List<Vector3>();
+    static readonly System.Collections.Generic.List<Quaternion> seatAnchorRot = new System.Collections.Generic.List<Quaternion>();
+
     static void BuildTableSet(Transform parent, Vector3 center, int tableIndex, string prefix)
     {
         var tRoot = new GameObject("TableSet_" + tableIndex).transform;
@@ -874,12 +1037,24 @@ public static class CafeteriaInteriorBuilder
         bool isSixSeater = (tableIndex % 4 == 1);
         float tableLen = isSixSeater ? 1.9f : 1.4f;
 
-        // Table Top
-        MakeBox(tRoot, "Table_Top", center + new Vector3(0, 0.75f, 0), new Vector3(tableLen, 0.05f, 0.8f), matWoodScandiOak);
+        // Table top: bevelled slab with a darker edge band and round tube legs, so the
+        // silhouette reads as furniture rather than a stack of cubes.
+        InteriorGeometry.RoundedBox(tRoot, "Table_Top", center + new Vector3(0, 0.75f, 0),
+            new Vector3(tableLen, 0.05f, 0.8f), 0.022f, matWoodScandiOak, true);
+        InteriorGeometry.RoundedBox(tRoot, "Table_Edge", center + new Vector3(0, 0.722f, 0),
+            new Vector3(tableLen - 0.01f, 0.012f, 0.79f), 0.006f, matWoodDarkWalnut, false);
 
-        // Matte black metal legs
-        MakeBox(tRoot, "Table_Leg_1", center + new Vector3(-tableLen * 0.4f, 0.35f, 0), new Vector3(0.06f, 0.70f, 0.65f), matMetalMatteBlack, false);
-        MakeBox(tRoot, "Table_Leg_2", center + new Vector3(tableLen * 0.4f, 0.35f, 0), new Vector3(0.06f, 0.70f, 0.65f), matMetalMatteBlack, false);
+        foreach (float sx in new[] { -1f, 1f })
+            foreach (float sz in new[] { -1f, 1f })
+            {
+                var a = center + new Vector3(sx * tableLen * 0.40f, 0.02f, sz * 0.28f);
+                var b = center + new Vector3(sx * tableLen * 0.40f, 0.72f, sz * 0.28f);
+                InteriorGeometry.Tube(tRoot, "Table_Leg", a, b, 0.024f, matMetalMatteBlack);
+            }
+        // Slim stretcher tying the legs together.
+        InteriorGeometry.Tube(tRoot, "Table_Stretcher",
+            center + new Vector3(-tableLen * 0.40f, 0.16f, 0f),
+            center + new Vector3(tableLen * 0.40f, 0.16f, 0f), 0.016f, matMetalMatteBlack);
 
         // Table Number Stand
         var numStand = MakeBox(tRoot, "Table_Num", center + new Vector3(-0.4f, 0.83f, 0), new Vector3(0.12f, 0.12f, 0.04f), matSignBlackBox, false);
@@ -894,19 +1069,69 @@ public static class CafeteriaInteriorBuilder
         for (int p = 0; p < chairPairs; p++)
         {
             float cx = startX + p * spacing;
-            // North seat
-            Vector3 nPos = center + new Vector3(cx, 0.44f, 0.65f);
-            MakeBox(tRoot, "Seat_N_" + p, nPos, new Vector3(0.42f, 0.05f, 0.42f), chairMat);
-            MakeBox(tRoot, "Back_N_" + p, nPos + new Vector3(0, 0.32f, 0.19f), new Vector3(0.40f, 0.30f, 0.04f), chairMat, false);
-            MakeBox(tRoot, "Leg_N_" + p, nPos - new Vector3(0, 0.22f, 0), new Vector3(0.04f, 0.42f, 0.04f), matMetalMatteBlack, false);
-
-            // South seat
-            Vector3 sPos = center + new Vector3(cx, 0.44f, -0.65f);
-            MakeBox(tRoot, "Seat_S_" + p, sPos, new Vector3(0.42f, 0.05f, 0.42f), chairMat);
-            MakeBox(tRoot, "Back_S_" + p, sPos + new Vector3(0, 0.32f, -0.19f), new Vector3(0.40f, 0.30f, 0.04f), chairMat, false);
-            MakeBox(tRoot, "Leg_S_" + p, sPos - new Vector3(0, 0.22f, 0), new Vector3(0.04f, 0.42f, 0.04f), matMetalMatteBlack, false);
+            seatTableTarget = center;
+            BuildCafeteriaChair(tRoot, center + new Vector3(cx, 0, 0.65f), 0f, chairMat, "N" + p);
+            seatTableTarget = center;
+            BuildCafeteriaChair(tRoot, center + new Vector3(cx, 0, -0.65f), 180f, chairMat, "S" + p);
         }
     }
+
+    // One dining chair: bevelled seat and back, four round tube legs, back uprights.
+    // The seat carries a collider so the player cannot walk through it.
+    static void BuildCafeteriaChair(Transform parent, Vector3 floorPos, float rotY, Material mat, string tag)
+    {
+        var ch = new GameObject("Chair_" + tag).transform;
+        ch.SetParent(parent, false);
+        ch.localPosition = floorPos;
+        ch.localRotation = Quaternion.Euler(0, rotY, 0);
+
+        const float seatH = 0.44f, seatW = 0.44f, seatD = 0.42f;
+
+        InteriorGeometry.RoundedBox(ch, "Seat", new Vector3(0, seatH, 0),
+            new Vector3(seatW, 0.06f, seatD), 0.024f, mat, true);
+        InteriorGeometry.RoundedBox(ch, "Seat_Frame", new Vector3(0, seatH - 0.05f, 0),
+            new Vector3(seatW - 0.05f, 0.035f, seatD - 0.05f), 0.012f, matMetalMatteBlack, false);
+
+        // Raked back made of two bevelled panels.
+        var backLow = InteriorGeometry.RoundedBox(ch, "Back_Low",
+            new Vector3(0, seatH + 0.13f, seatD * 0.40f),
+            new Vector3(seatW * 0.98f, 0.26f, 0.055f), 0.018f, mat, false);
+        backLow.transform.localRotation = Quaternion.Euler(-2f, 0f, 0f);
+
+        var backHigh = InteriorGeometry.RoundedBox(ch, "Back_High",
+            new Vector3(0, seatH + 0.30f, seatD * 0.42f),
+            new Vector3(seatW * 0.90f, 0.16f, 0.05f), 0.016f, mat, false);
+        backHigh.transform.localRotation = Quaternion.Euler(-2.5f, 0f, 0f);
+
+        foreach (float sx in new[] { -1f, 1f })
+        {
+            InteriorGeometry.Tube(ch, "Leg_F", new Vector3(sx * seatW * 0.40f, 0.005f, seatD * 0.36f),
+                new Vector3(sx * seatW * 0.40f, seatH, seatD * 0.36f), 0.018f, matMetalMatteBlack);
+            InteriorGeometry.Tube(ch, "Leg_B", new Vector3(sx * seatW * 0.40f, 0.005f, -seatD * 0.36f),
+                new Vector3(sx * seatW * 0.40f, seatH, -seatD * 0.36f), 0.018f, matMetalMatteBlack);
+            // Uprights rise from the rear legs and rake slightly back with the panels.
+            InteriorGeometry.Tube(ch, "Back_Post", new Vector3(sx * seatW * 0.42f, seatH - 0.02f, seatD * 0.40f),
+                new Vector3(sx * seatW * 0.42f, seatH + 0.40f, seatD * 0.44f), 0.019f, matMetalMatteBlack);
+        }
+        InteriorGeometry.Tube(ch, "Stretcher", new Vector3(-seatW * 0.40f, 0.16f, 0f),
+            new Vector3(seatW * 0.40f, 0.16f, 0f), 0.013f, matMetalMatteBlack);
+
+        // Record the seat: the chair's footprint, turned toward the table it serves.
+        Vector3 seatPos = new Vector3(floorPos.x, floorPos.y, floorPos.z);
+        Quaternion seatRot = ch.rotation;
+        if (seatTableTarget.HasValue)
+        {
+            Vector3 t = seatTableTarget.Value;
+            Vector3 dir = new Vector3(t.x - seatPos.x, 0f, t.z - seatPos.z);
+            if (dir.sqrMagnitude > 0.0001f)
+                seatRot = Quaternion.LookRotation(dir.normalized, Vector3.up);
+        }
+        seatAnchorPos.Add(seatPos);
+        seatAnchorRot.Add(seatRot);
+    }
+
+    // Set just before a chair is created so its anchor faces the table it belongs to.
+    static Vector3? seatTableTarget;
 
     // H. Modern Greenery Planter Partitions
     static void BuildGreeneryPartitions(Transform parent, float baseY, string prefix)
@@ -1339,6 +1564,14 @@ public static class CafeteriaInteriorBuilder
     // --- 6. Lighting for both 1F and 2F ---
     static void BuildLighting(Transform parent)
     {
+        // Remove anything left over from the grey-box pass before re-lighting, otherwise
+        // the old flat directional light keeps washing the room out. The placeholder was
+        // parented straight to the scene root, so sweep upward from the interior root too.
+        Transform top = parent;
+        while (top.parent != null) top = top.parent;
+        foreach (var l in top.GetComponentsInChildren<Light>(true))
+            if (l.name.StartsWith("Placeholder")) UnityEngine.Object.DestroyImmediate(l.gameObject);
+
         var root = new GameObject("00_Interior_Lighting").transform;
         root.SetParent(parent, false);
 
@@ -1346,38 +1579,70 @@ public static class CafeteriaInteriorBuilder
         sunObj.transform.SetParent(root, false);
         var sun = sunObj.AddComponent<Light>();
         sun.type = LightType.Directional;
-        sun.color = new Color(1.0f, 0.98f, 0.94f);
-        sun.intensity = 1.15f;
+        sun.color = new Color(1.0f, 0.965f, 0.915f);
+        sun.intensity = 0.62f;
         sun.shadows = LightShadows.Soft;
-        sunObj.transform.rotation = Quaternion.Euler(55f, -35f, 0f);
+        sun.shadowStrength = 0.7f;
+        sun.shadowBias = 0.03f;
+        sun.shadowNormalBias = 0.32f;
+        sunObj.transform.rotation = Quaternion.Euler(50f, -33f, 0f);
+        RenderSettings.sun = sun;
 
-        RenderSettings.ambientMode = AmbientMode.Flat;
-        RenderSettings.ambientLight = new Color(0.78f, 0.77f, 0.76f);
+        // Directional ambient with real vertical separation: bright ceiling bounce,
+        // mid walls, dark floor. Flat ambient at 0.78 was what made everything look
+        // like a white box.
+        RenderSettings.ambientMode = AmbientMode.Trilight;
+        RenderSettings.ambientSkyColor = new Color(0.66f, 0.68f, 0.69f);
+        RenderSettings.ambientEquatorColor = new Color(0.46f, 0.46f, 0.45f);
+        RenderSettings.ambientGroundColor = new Color(0.24f, 0.24f, 0.24f);
+        RenderSettings.fog = false;
 
-        // 1F Recessed LED ceiling lights (Y = 4.20m)
-        for (float x = -13.5f; x <= 14.5f; x += 5.5f)
+        // The storey slabs use the granite floor material on both faces, so from below
+        // they read as a black ceiling. Cap the underside of each slab with a pale
+        // ceiling finish so the rooms are not roofed in dark stone.
+        var ceilRoot = new GameObject("00_Ceiling_Finish").transform;
+        ceilRoot.SetParent(parent, false);
+        for (int f = 0; f < 3; f++)
         {
-            for (float z = -12f; z <= 12f; z += 5.2f)
-            {
-                MakeBox(root, "Light_1F_" + x + "_" + z, new Vector3(x, 4.18f, z), new Vector3(1.8f, 0.04f, 0.35f), matLightWarmLED, false);
-            }
+            float slabBottom = (f + 1) * 4.30f - 0.15f;   // underside of the slab above
+            MakeBox(ceilRoot, "Ceiling_" + (f + 1) + "F",
+                new Vector3(0, slabBottom - 0.02f, 3.6f),
+                new Vector3(36f, 0.03f, 24.8f), matCeilingWhite, false);
+            MakeBox(ceilRoot, "Ceiling_" + (f + 1) + "F_S",
+                new Vector3(-9f, slabBottom - 0.02f, -12.4f),
+                new Vector3(22f, 0.03f, 7.2f), matCeilingWhite, false);
         }
 
-        // 2F Recessed LED ceiling lights (Y = 8.55m)
-        for (float x = -13.5f; x <= 14.5f; x += 5.5f)
-        {
-            for (float z = -12f; z <= 12f; z += 5.2f)
-            {
-                MakeBox(root, "Light_2F_" + x + "_" + z, new Vector3(x, 8.52f, z), new Vector3(1.8f, 0.04f, 0.35f), matLightWarmLED, false);
-            }
-        }
+        string[] floorName = { "1F", "2F", "3F" };
+        float[] floorY = { 4.18f, 8.52f, 12.82f };
+        float[] baseY = { 0f, 4.30f, 8.60f };
 
-        // 3F Recessed LED ceiling lights (Y = 12.82m)
-        for (float x = -13.5f; x <= 14.5f; x += 5.5f)
+        for (int f = 0; f < 3; f++)
         {
-            for (float z = -12f; z <= 12f; z += 5.2f)
+            int n = 0;
+            for (float x = -13.5f; x <= 14.5f; x += 5.5f)
             {
-                MakeBox(root, "Light_3F_" + x + "_" + z, new Vector3(x, 12.82f, z), new Vector3(1.8f, 0.04f, 0.35f), matLightWarmLED, false);
+                for (float z = -12f; z <= 12f; z += 5.2f)
+                {
+                    // The emissive strip is only the fitting; the point light below it is
+                    // what actually lights the room.
+                    var lamp = MakeBox(root, "Light_" + floorName[f] + "_" + Mathf.RoundToInt(x) + "_" + Mathf.RoundToInt(z),
+                        new Vector3(x, floorY[f], z), new Vector3(1.8f, 0.04f, 0.35f), matLightWarmLED, false);
+                    var mr = lamp.GetComponent<MeshRenderer>();
+                    mr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                    mr.receiveShadows = false;
+
+                    var lg = new GameObject("Light_" + floorName[f] + "_Point_" + n);
+                    lg.transform.SetParent(root, false);
+                    lg.transform.localPosition = new Vector3(x, floorY[f] - 0.42f, z);
+                    var pl = lg.AddComponent<Light>();
+                    pl.type = LightType.Point;
+                    pl.range = 9.5f;
+                    pl.intensity = 3.1f;
+                    pl.color = new Color(1f, 0.955f, 0.895f);
+                    pl.shadows = LightShadows.None;     // SSAO + the sun carry the shading
+                    n++;
+                }
             }
         }
     }

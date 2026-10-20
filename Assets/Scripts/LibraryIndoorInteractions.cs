@@ -231,32 +231,19 @@ public class LibraryIndoorInteractions : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            var spot = CurrentSpot();
+            var spot = NearbySpot();
             if (!spot.HasValue) return;
             if (spot.Value.id.StartsWith("elevator")) { OpenLift(); return; }
             game.Notify(spot.Value.message);
         }
     }
 
-    InteractiveSpot? CurrentSpot()
+    // The one and only interaction-point selector. The on-screen prompt and the E-key
+    // action both go through this, so a spot can never be advertised and then a
+    // different one triggered. Where ranges overlap (e.g. the reception desk and the
+    // book-return chute), the CLOSEST eligible spot wins, decided by squared distance.
+    static InteractiveSpot? PickSpot(Vector3 p)
     {
-        if (!game || !game.player) return null;
-        Vector3 p = game.player.position;
-
-        foreach (var s in spots)
-        {
-            float dist = Vector2.Distance(new Vector2(p.x, p.z), new Vector2(s.position.x, s.position.z));
-            if (dist <= s.radius && Mathf.Abs(p.y - s.position.y) < s.Tolerance) return s;
-        }
-        return null;
-    }
-
-    // The spot nearest the player, used for both the prompt and the E-key action.
-    InteractiveSpot? NearestSpot()
-    {
-        if (!game || !game.player) return null;
-        Vector3 p = game.player.position;
-
         InteractiveSpot? best = null;
         float bestSqr = float.MaxValue;
 
@@ -270,6 +257,22 @@ public class LibraryIndoorInteractions : MonoBehaviour
         return best;
     }
 
+    // The spot the player is currently in, or null.
+    InteractiveSpot? NearbySpot()
+    {
+        if (!game || !game.player) return null;
+        return PickSpot(game.player.position);
+    }
+
+    // Test hook: the id of the spot that would be selected at a given position, so the
+    // prompt/action consistency can be asserted from the editor without entering play
+    // mode. Returns null when no spot is in range.
+    public static string PickSpotId(Vector3 playerPosition)
+    {
+        var s = PickSpot(playerPosition);
+        return s.HasValue ? s.Value.id : null;
+    }
+
     void OnGUI()
     {
         if (!InLibrary() || game.paused) return;
@@ -277,7 +280,7 @@ public class LibraryIndoorInteractions : MonoBehaviour
         if (game.Interiors.Interior.NearExit(game.player.position)) return;
         if (game.Interiors.Busy) return;
 
-        var spot = NearestSpot();
+        var spot = NearbySpot();
         if (!spot.HasValue) return;
 
         var matrix = GUI.matrix;

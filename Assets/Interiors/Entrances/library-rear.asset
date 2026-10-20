@@ -22,4 +22,4 @@ MonoBehaviour:
   enterYaw: 90
   interactionRadius: 2.5
   interiorScenePath: Assets/Interiors/Scenes/library.unity
-  spawnId: main
+  spawnId: north
