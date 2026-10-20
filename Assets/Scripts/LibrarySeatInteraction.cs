@@ -224,7 +224,10 @@ public class LibrarySeatInteraction : MonoBehaviour, ICampusOverlay
         else
         {
             if (GUI.Button(new Rect(box.x + 18f, box.y + 80f, w - 36f, 34f), "开始学习", btnStyle))
-                study.StartStudy();
+            {
+                var semester=CampusSemester.Instance;
+                if(semester&&semester.Ready)semester.UI.Open("study");else study.StartStudy();
+            }
         }
 
         if (GUI.Button(new Rect(box.x + 18f, box.y + h - 44f, (w - 48f) * 0.5f, 32f), "起身 (Q)", btnStyle))

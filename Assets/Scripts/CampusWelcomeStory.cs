@@ -13,7 +13,9 @@ using UnityEngine;
 // insufficient to complete the meal or library objectives.
 public sealed class CampusWelcomeStory : MonoBehaviour
 {
-    const string SaveKey="CampusWelcomeStoryV1";
+    public static string KeyOverride;
+    public static string ProgressKey => KeyOverride ?? "CampusWelcomeStoryV1";
+    static string SaveKey => ProgressKey;
     public WelcomeStoryData Data { get; private set; }
     public int StageIndex { get; private set; }
     public bool DialogueOpen { get; private set; }
@@ -37,6 +39,12 @@ public sealed class CampusWelcomeStory : MonoBehaviour
         foreach(var memory in game.memories)if(memory)memory.SetActive(false);
         game.Notify("迎新第一章："+Objective+"。按 J 查看当前指引。");
     }
+    public void ReloadProgress()
+    {
+        StageIndex=Mathf.Clamp(PlayerPrefs.GetInt(SaveKey,0),0,Data.stages.Length);
+        pending=!Finished&&PlayerPrefs.GetInt(SaveKey+"Pending",-1)==StageIndex;
+        dialogueDismissed=false;DialogueOpen=false;
+    }
     void PlaceGuideNearGate()
     {
         if(StageIndex!=0||!game.guide)return;
@@ -54,6 +62,7 @@ public sealed class CampusWelcomeStory : MonoBehaviour
             return;
         }
         if(game.paused||game.Automated)return;
+        if(Finished){if(Input.GetKeyDown(KeyCode.J)&&!game.UiBlocking)CampusSemester.Ensure().UI.Open("today");return;}
         if(Input.GetKeyDown(KeyCode.J)&&!game.UiBlocking)
         {
             if(pending&&!game.Seated)OpenDialogue();else game.Notify("小岚："+Objective);

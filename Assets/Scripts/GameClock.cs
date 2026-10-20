@@ -1,111 +1,88 @@
 using System;
+using System.Globalization;
 using UnityEngine;
 
-// Single in-game clock shared by the phone and the study UI.
-//
-// The project had no time system: the cafeteria only used wall-clock DateTime for its
-// countdowns. This clock advances on real time multiplied by an adjustable rate, so
-// studying can speed up the game day without touching Time.timeScale (which would also
-// speed up animation, physics and every UI timer).
+// The only calendar used by classes, reservations and the phone. Offline time never advances it.
 public class GameClock : MonoBehaviour
 {
     public static GameClock Instance;
-
-    [Header("Starting point")]
-    [Tooltip("Game time when a fresh profile starts.")]
-    public int startHour = 8;
-    public int startMinute = 0;
-
-    [Header("Rate")]
-    [Tooltip("Normal game-seconds per real second.")]
-    public float normalRate = 60f;      // 1 real minute = 1 game hour
-    [Tooltip("Multiplier applied while studying.")]
-    public float studyMultiplier = 5f;
-
-    // Absolute game time, in seconds since the profile began.
+    public static readonly DateTime SemesterStart = new DateTime(2026, 9, 1, 8, 0, 0);
+    public static readonly DateTime SemesterEnd = new DateTime(2027, 1, 17, 22, 0, 0);
+    public const string PrefsKey = "CampusGameClockV2";
+    public static string KeyOverride;
+    static string Key => KeyOverride ?? PrefsKey;
+    public int startHour = 8, startMinute;
+    public float normalRate = 5f, studyMultiplier = 5f;
     double gameSeconds;
-    bool loaded;
-
+    CampusGame game;
     public float CurrentMultiplier { get; private set; } = 1f;
     public bool Accelerated => CurrentMultiplier > 1.001f;
-
+    public event Action<DateTime> DayChanged;
+    public DateTime Now => SemesterStart.AddSeconds(gameSeconds);
+    public int DayIndex => (Now.Date - SemesterStart.Date).Days;
+    public int TeachingWeek => DayIndex / 7 + 1;
+    public string DateText => Now.ToString("yyyy年M月d日", CultureInfo.InvariantCulture);
+    public string TimeText => Now.ToString("HH:mm", CultureInfo.InvariantCulture);
+    public string WeekText => "星期" + "日一二三四五六"[(int)Now.DayOfWeek] + " · 第" + TeachingWeek + "周";
+    public string DateTimeText => DateText + " " + TimeText;
+    public double GameSeconds => gameSeconds;
+    public int EstimatedSaveKeyDay => DayIndex;
     public static GameClock Ensure()
     {
         if (Instance) return Instance;
         var go = new GameObject("GameClock");
         if (Application.isPlaying) DontDestroyOnLoad(go);
-        Instance = go.AddComponent<GameClock>();
-        return Instance;
+        return go.AddComponent<GameClock>();
     }
-
     void Awake()
     {
         if (Instance && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
         if (Application.isPlaying) DontDestroyOnLoad(gameObject);
-        Load();
+        // Serialized values from the old clock are deliberately superseded by the semester pace.
+        normalRate = 5f;
+        Reload();
     }
-
     void Update()
     {
         if (!Application.isPlaying) return;
-
-        // Pausing the game freezes the clock as well.
-        var game = FindFirstObjectByType<CampusGame>();
-        if (game && (game.paused || game.UiBlocking && false)) return;
-
-        gameSeconds += Time.unscaledDeltaTime * normalRate * CurrentMultiplier;
+        if (!game) game = FindFirstObjectByType<CampusGame>();
+        if (!game || game.paused || game.UiBlocking || (game.Interiors && game.Interiors.Busy)) return;
+        // Onboarding is untimed; the first morning starts after the player rests.
+        if (game.Story && !game.Story.Finished) return;
+        if (CampusSemester.Instance && CampusSemester.Instance.Restoring) return;
+        AdvanceSeconds(Time.unscaledDeltaTime * normalRate * CurrentMultiplier);
     }
-
-    // ---- rate control -------------------------------------------------------
-    // Applies the study multiplier once; repeated calls never stack.
-    public void SetStudyMode(bool on)
+    public void AdvanceMinutes(double minutes) { AdvanceSeconds(Math.Max(0, minutes) * 60); }
+    public void AdvanceSeconds(double seconds)
     {
-        CurrentMultiplier = on ? Mathf.Max(1f, studyMultiplier) : 1f;
+        if (double.IsNaN(seconds) || double.IsInfinity(seconds) || seconds <= 0) return;
+        double target = Math.Min(gameSeconds + seconds, (SemesterEnd - SemesterStart).TotalSeconds);
+        // Commit each midnight separately so a long action cannot skip daily snapshots or allowances.
+        while (Now.Date < SemesterStart.AddSeconds(target).Date)
+        {
+            gameSeconds = (Now.Date.AddDays(1) - SemesterStart).TotalSeconds;
+            DayChanged?.Invoke(Now);
+        }
+        gameSeconds = target;
     }
-
+    public void Restore(double seconds)
+    {
+        gameSeconds = double.IsNaN(seconds) || double.IsInfinity(seconds) ? 0 : Math.Max(0, Math.Min(seconds, (SemesterEnd - SemesterStart).TotalSeconds));
+        RestoreNormal();
+    }
+    public void SetStudyMode(bool on) { CurrentMultiplier = on ? Mathf.Max(1f, studyMultiplier) : 1f; }
     public void RestoreNormal() { CurrentMultiplier = 1f; }
-
-    // ---- display ------------------------------------------------------------
-    public DateTime Now
+    public void Reload()
     {
-        get
-        {
-            var start = DateTime.Today.AddHours(startHour).AddMinutes(startMinute);
-            return start.AddSeconds(gameSeconds);
-        }
+        double value;
+        Restore(double.TryParse(PlayerPrefs.GetString(Key, "0"), NumberStyles.Float, CultureInfo.InvariantCulture, out value) ? value : 0);
     }
-
-    public string DateText => Now.ToString("yyyy年M月d日");
-    public string TimeText => Now.ToString("HH:mm");
-    public string DateTimeText => DateText + " " + TimeText;
-
-    // Whole game-seconds elapsed, used to measure a study session accurately even when
-    // the rate changes mid-session.
-    public double GameSeconds => gameSeconds;
-
-    public int EstimatedSaveKeyDay => Now.DayOfYear;
-
-    // ---- persistence --------------------------------------------------------
-    public static string KeyOverride;
-    static string Key => KeyOverride ?? "CampusGameClockSeconds";
-
-    void Load()
-    {
-        if (loaded) return;
-        loaded = true;
-        if (PlayerPrefs.HasKey(Key))
-        {
-            double v;
-            if (double.TryParse(PlayerPrefs.GetString(Key), out v)) gameSeconds = Math.Max(0, v);
-        }
-    }
-
     public void Save()
     {
-        PlayerPrefs.SetString(Key, gameSeconds.ToString("F1"));
+        PlayerPrefs.SetString(Key, gameSeconds.ToString("R", CultureInfo.InvariantCulture));
         PlayerPrefs.Save();
     }
-
     void OnApplicationQuit() { Save(); }
+    void OnDestroy() { if (Instance == this) Instance = null; }
 }

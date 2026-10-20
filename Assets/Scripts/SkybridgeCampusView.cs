@@ -32,7 +32,7 @@ public sealed class SkybridgeCampusView:MonoBehaviour
         var rotation=Quaternion.FromToRotation(game.MapToWorld(route.sourceMapDirection),Vector3.right*route.side);
         var anchor=new Vector3(route.side*20,4.2f,19.4f);
         float end=GetComponent<InteriorSceneRoot>().connections.Single(c=>Mathf.Sign(c.anchor.position.x)==route.side).anchor.position.x+route.side*.75f;
-        var cut=new MaterialPropertyBlock();cut.SetVector("_ViewCutCenter",new Vector4((route.side*20+end)/2,5.9f,19.4f,1));cut.SetVector("_ViewCutSize",new Vector4(Mathf.Abs(end-route.side*20)/2+1,1.8f,1.85f,0));
+        var cut=new MaterialPropertyBlock();cut.SetFloat("_CampusOutdoorSurface",1);cut.SetVector("_ViewCutCenter",new Vector4((route.side*20+end)/2,5.9f,19.4f,1));cut.SetVector("_ViewCutSize",new Vector4(Mathf.Abs(end-route.side*20)/2+1,1.8f,1.85f,0));
         foreach(var filter in campus.GetComponentsInChildren<MeshFilter>(true)){
             var renderer=filter.GetComponent<MeshRenderer>();if(!filter.sharedMesh||!renderer||!renderer.enabled)continue;
             if(Vector3.Distance(renderer.bounds.ClosestPoint(source),source)>85)continue;

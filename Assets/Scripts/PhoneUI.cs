@@ -69,6 +69,7 @@ public class PhoneUI : MonoBehaviour, ICampusOverlay
         // A vending menu or the cafeteria panel owns input while it is open.
         if (!open && VendingMachineUI.AnyOpen) return;
         if (!open && CafePanelOpen()) return;
+        if (!open && game.UiBlocking) return;
 
         if (Input.GetKeyDown(KeyCode.P))
         {
@@ -81,6 +82,7 @@ public class PhoneUI : MonoBehaviour, ICampusOverlay
         // one press can never also toggle the pause menu.
         if (open && Input.GetKeyDown(KeyCode.Escape))
         {
+            CampusOverlayHub.ConsumeInput();
             if (page != Page.Home) { page = Page.Home; selected = null; }
             else Close();
         }
@@ -219,7 +221,9 @@ public class PhoneUI : MonoBehaviour, ICampusOverlay
         float y = c.y + 74f;
         if (AppButton(c, ref y, "图书馆预约", LiblaryBookingSummary())) return;
 
-        GUI.Label(new Rect(c.x, c.yMax - 30f, c.width, 24f), "更多应用敬请期待", small);
+        if (GUI.Button(new Rect(c.x,y+8,c.width,58),"课表与学期进度",btnStyle)) CampusSemester.Ensure().UI.Open("today");
+        if (GUI.Button(new Rect(c.x,y+74,c.width,58),"学习任务与作业",btnStyle)) CampusSemester.Ensure().UI.Open("study");
+        if (GUI.Button(new Rect(c.x,y+140,c.width,58),"校园故事与活动",btnStyle)) CampusSemester.Ensure().UI.Open("story");
     }
 
     string LiblaryBookingSummary()

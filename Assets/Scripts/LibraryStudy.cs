@@ -24,6 +24,8 @@ public class LibraryStudy : MonoBehaviour
     public bool Seated { get; private set; }
     public bool Studying { get; private set; }
     public LibrarySeat Seat => seat;
+    public Vector3 StandingPosition => standPos;
+    public Quaternion StandingRotation => standRot;
 
     double studyStartGameSeconds;
     public double StudyGameSeconds =>

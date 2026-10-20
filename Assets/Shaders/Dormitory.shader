@@ -1,5 +1,6 @@
 Shader "Campus/Dormitory" {
  Properties {
+  [HideInInspector] _CampusOutdoorSurface("Exterior lighting",Float)=0
   _BaseColor("Color",Color)=(1,1,1,1) _BaseMap("Texture",2D)="white"{}
   _Smoothness("Smoothness",Range(0,1))=.3 _Tile("Ceramic tile",Float)=0 _Glass("Glazing",Float)=0
   _Cutoff("Cutoff",Float)=0 _Cull("Cull",Float)=0
@@ -17,8 +18,9 @@ Shader "Campus/Dormitory" {
    #pragma multi_compile_fragment _ _SHADOWS_SOFT
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+   #include "CampusNightLighting.hlsl"
    CBUFFER_START(UnityPerMaterial)
-    float4 _BaseColor; float _Smoothness,_Tile,_Glass;
+    float4 _BaseColor; float _Smoothness,_Tile,_Glass,_CampusOutdoorSurface;
    CBUFFER_END
    struct A {float4 p:POSITION;float3 n:NORMAL;};
    struct V {float4 p:SV_POSITION;float3 w:TEXCOORD0;float3 n:TEXCOORD1;};
@@ -48,6 +50,7 @@ Shader "Campus/Dormitory" {
      sky=lerp(sky,float3(.85,.86,.82),cloud*.4);
      lit=lerp(lit,sky,.55+.35*fresnel);alpha=lerp(alpha,.8,fresnel);
     }
+    lit=CampusOutdoorLight(lit,c,n,i.w,_CampusOutdoorSurface);
     float fog=distance(GetCameraPositionWS(),i.w)*.0012;
     return half4(lerp(lit,unity_FogColor.rgb,1-exp(-fog*fog)),alpha);
    }

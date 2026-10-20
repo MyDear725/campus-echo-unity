@@ -269,6 +269,11 @@ public sealed class DormitoryCorridor : MonoBehaviour
         for(float t=.35f;t>0;t-=Time.unscaledDeltaTime){fade=Mathf.Clamp01(t/.35f);yield return null;}
         fade=0;Transitioning=false;game.SetUiCursor(restoringUi);
     }
+    public void RestoreFloor(int floor) { Floor=Mathf.Clamp(floor,1,layout.floors);RefreshFloor(); }
+    public IEnumerator RestoreRoom(int index)
+    {
+        if(roomInterior) yield return roomInterior.RestoreRoom(index);
+    }
     void OnDisable(){if(Transitioning&&game){Transitioning=false;fade=0;game.SetUiCursor(restoringUi);}}
     void OnDestroy(){foreach(var material in ownedMaterials)if(material)Destroy(material);foreach(var texture in ownedTextures)if(texture)Destroy(texture);}
     void OnGUI()

@@ -1,5 +1,6 @@
 Shader "Campus/TeachingInterior" {
  Properties {
+  [HideInInspector] _CampusOutdoorSurface("Exterior lighting",Float)=0
   _BaseColor("Color",Color)=(1,1,1,1) _BaseMap("Texture",2D)="white"{}
   _Wood("Wood grain",Float)=0 _Stone("Stone panels",Float)=0 _Emission("Emission",Float)=0
   _Smoothness("Smoothness",Range(0,1))=.3 _Metallic("Metallic",Range(0,1))=0
@@ -20,8 +21,9 @@ Shader "Campus/TeachingInterior" {
    #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+   #include "CampusNightLighting.hlsl"
    CBUFFER_START(UnityPerMaterial)
-    float4 _BaseColor;float _Wood,_Stone,_Emission,_Smoothness,_Metallic;
+    float4 _BaseColor;float _Wood,_Stone,_Emission,_Smoothness,_Metallic,_CampusOutdoorSurface;
    CBUFFER_END
    struct A{float4 p:POSITION;float3 n:NORMAL;};
    struct V{float4 p:SV_POSITION;float3 w:TEXCOORD0;float3 n:TEXCOORD1;};
@@ -42,7 +44,9 @@ Shader "Campus/TeachingInterior" {
     InputData data=(InputData)0;data.positionWS=i.w;data.normalWS=n;data.viewDirectionWS=view;data.shadowCoord=TransformWorldToShadowCoord(i.w);
     data.bakedGI=max(SampleSH(n),float3(.35,.36,.34));data.normalizedScreenSpaceUV=GetNormalizedScreenSpaceUV(i.p);data.shadowMask=half4(1,1,1,1);
     SurfaceData surface=(SurfaceData)0;surface.albedo=c;surface.metallic=_Metallic;surface.specular=.04;surface.smoothness=smooth;surface.occlusion=1;surface.alpha=1;surface.emission=c*_Emission;
-    return UniversalFragmentPBR(data,surface);
+    half4 result=UniversalFragmentPBR(data,surface);
+    result.rgb=CampusOutdoorLight(result.rgb,c,n,i.w,_CampusOutdoorSurface);
+    return result;
    }
    ENDHLSL
   }

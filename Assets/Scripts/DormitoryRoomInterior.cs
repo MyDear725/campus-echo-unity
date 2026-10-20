@@ -17,6 +17,7 @@ public sealed class DormitoryRoomInterior : MonoBehaviour
     Transform roomDoorHinge;
     bool inside, busy;
     public bool Inside => inside;
+    public Vector3 ExitApproach => bedroom?bedroom.TransformPoint(new Vector3(0,.06f,1.15f)):transform.position;
     public string RoomNumber => hallway ? hallway.CurrentRoomNumber : "";
 
     public string Prompt
@@ -63,6 +64,12 @@ public sealed class DormitoryRoomInterior : MonoBehaviour
         if(inside){if(string.IsNullOrEmpty(Prompt))return false;StartCoroutine(Leave());return true;}
         selected=NearestDoor();if(selected==null)return false;
         StartCoroutine(Enter(selected));return true;
+    }
+
+    public IEnumerator RestoreRoom(int index)
+    {
+        var door=System.Array.Find(doors,d=>d.Index==index);
+        if(door!=null)yield return Enter(door);
     }
 
     IEnumerator Enter(Doorway door)

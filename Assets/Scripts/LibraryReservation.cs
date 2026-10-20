@@ -126,6 +126,13 @@ public class LibraryReservationManager : MonoBehaviour
         if (s != null) State = s;
     }
 
+    public void Reload()
+    {
+        State = new LibraryReservationState();
+        Load();
+        DropLiveStateOnLoad();
+    }
+
     // A reload never restores a seated state: the player always comes back standing.
     public void DropLiveStateOnLoad() { State.inUse = false; }
 

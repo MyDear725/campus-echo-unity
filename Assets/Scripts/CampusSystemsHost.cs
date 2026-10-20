@@ -19,6 +19,7 @@ public class CampusSystemsHost : MonoBehaviour
     void EnsureSharedSystems()
     {
         GameClock.Ensure();
+        CampusSemester.Ensure();
         LibrarySeatRegistry.Ensure();
         LibraryReservationManager.Ensure();
         CampusOverlayPainter.Ensure();
