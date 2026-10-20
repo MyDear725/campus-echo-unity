@@ -683,6 +683,9 @@ public class CafeteriaOrdering : MonoBehaviour
         if (!o.NeedsTrayReturn) return false;
         st.orders.Remove(o);
         Save();
+        var campus = FindFirstObjectByType<CampusGame>();
+        if (campus && campus.Story) campus.Story.Reach("meal-returned");
+        if (CampusSemester.Instance) CampusSemester.Instance.MealCompleted();
         return true;
     }
 
@@ -767,6 +770,7 @@ public class CafeteriaOrdering : MonoBehaviour
     }
 
     public Quaternion LastStandRotation => preSeatRot;
+    public Vector3 LastStandPosition => preSeatPos;
 
     // ---------------------------------------------------------------- E ownership
     // True when the ordering system should answer the E key at the player's position.

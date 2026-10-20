@@ -24,6 +24,8 @@ public class LibraryStudy : MonoBehaviour
     public bool Seated { get; private set; }
     public bool Studying { get; private set; }
     public LibrarySeat Seat => seat;
+    public Vector3 StandingPosition => standPos;
+    public Quaternion StandingRotation => standRot;
 
     double studyStartGameSeconds;
     public double StudyGameSeconds =>
@@ -96,6 +98,7 @@ public class LibraryStudy : MonoBehaviour
     {
         if (!Seated || Studying) return;          // repeated presses never stack the rate
         Studying = true;
+        if (game && game.Story) game.Story.Reach("study-started");
         studyStartGameSeconds = GameClock.Instance ? GameClock.Instance.GameSeconds : 0;
         if (GameClock.Instance) GameClock.Instance.SetStudyMode(true);
         var rm = LibraryReservationManager.Instance;

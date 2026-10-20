@@ -8,6 +8,23 @@ using UnityEngine;
 public sealed class GithubIntegrationQA : MonoBehaviour
 {
     static string Folder => Path.Combine(Application.dataPath,"../QA/GithubIntegration");
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void IsolateNewSystems()
+    {
+        var args=Environment.GetCommandLineArgs();
+        var flag=args.FirstOrDefault(a=>a.EndsWith("QA",StringComparison.Ordinal));
+        if(flag==null||args.Contains("-semesterQA")||args.Contains("-allowanceQA"))return;
+        string prefix="GithubCompatibility."+flag+".";
+        CampusSemester.KeyOverride??=prefix+"semester";
+        CampusWelcomeStory.KeyOverride??=prefix+"welcome";
+        CampusRouteGuide.PreferenceKeyOverride??=prefix+"route";
+        GameClock.KeyOverride??=prefix+"clock";
+        CampusWallet.KeyOverride??=prefix+"wallet";
+        CampusInventory.KeyOverride??=prefix+"inventory";
+        CafeteriaOrdering.PrefsKeyOverride??=prefix+"orders";
+        LibraryReservationManager.KeyOverride??=prefix+"booking";
+        VendingSystem.KeyOverridePrefix??=prefix+"stock";
+    }
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void Boot()
     {

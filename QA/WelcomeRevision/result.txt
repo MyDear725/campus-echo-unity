@@ -1,0 +1,132 @@
+PASS: Real CampusLiving Xiaolan locomotion and male/female height matching, signed ascending/descending geometry, no slab over descending well, floors 1–6 and terminal guards. Original character texture issue deferred by user. Windows not run.
+PASS: Original Xiaolan UMA visual exists
+PASS: Xiaolan generated humanoid binds actual locomotion controller
+PASS: Real UMA preset applies: Male
+PASS: Selected avatar completes its actual asynchronous UMA rebuild: Male
+PASS: Real skinned character generated: Male
+PASS: Character scale fits existing 1.8m capsule: Male
+PASS: Real character animator connected: Male
+PASS: Actual baked standing heights agree within 3.5cm: Male guide=2.011434 player=2.013213
+PASS: Real UMA preset applies: Female
+PASS: Selected avatar completes its actual asynchronous UMA rebuild: Female
+PASS: Real skinned character generated: Female
+PASS: Character scale fits existing 1.8m capsule: Female
+PASS: Real character animator connected: Female
+PASS: Actual baked standing heights agree within 3.5cm: Female guide=2.013412 player=2.013283
+PASS: Real walkable outdoor path available for Xiaolan following
+PASS: Xiaolan has real humanoid arm and leg bones
+PASS: Real story follow moves Xiaolan across campus
+PASS: Actual follow enters locomotion state
+PASS: Walking visibly swings limbs: leg=56.67262 arm=54.83314
+PASS: Dialogue/UI block returns Xiaolan to idle
+PASS: Paused Xiaolan does not walk in place
+PASS: Original E enters dormitory for stair regression
+PASS: Travel settles within deadline
+PASS: Revised corridor loads in actual original interior
+PASS: Eight actual collidable treads: Descending flight
+PASS: Tread surface matches signed height Descending flight step 0
+PASS: Tread surface matches signed height Descending flight step 1
+PASS: Tread surface matches signed height Descending flight step 2
+PASS: Tread surface matches signed height Descending flight step 3
+PASS: Tread surface matches signed height Descending flight step 4
+PASS: Tread surface matches signed height Descending flight step 5
+PASS: Tread surface matches signed height Descending flight step 6
+PASS: Tread surface matches signed height Descending flight step 7
+PASS: Eight actual collidable treads: Ascending flight
+PASS: Tread surface matches signed height Ascending flight step 0
+PASS: Tread surface matches signed height Ascending flight step 1
+PASS: Tread surface matches signed height Ascending flight step 2
+PASS: Tread surface matches signed height Ascending flight step 3
+PASS: Tread surface matches signed height Ascending flight step 4
+PASS: Tread surface matches signed height Ascending flight step 5
+PASS: Tread surface matches signed height Ascending flight step 6
+PASS: Tread surface matches signed height Ascending flight step 7
+PASS: Eight actual collidable treads: Descending flight
+PASS: Tread surface matches signed height Descending flight step 0
+PASS: Tread surface matches signed height Descending flight step 1
+PASS: Tread surface matches signed height Descending flight step 2
+PASS: Tread surface matches signed height Descending flight step 3
+PASS: Tread surface matches signed height Descending flight step 4
+PASS: Tread surface matches signed height Descending flight step 5
+PASS: Tread surface matches signed height Descending flight step 6
+PASS: Tread surface matches signed height Descending flight step 7
+PASS: Eight actual collidable treads: Ascending flight
+PASS: Tread surface matches signed height Ascending flight step 0
+PASS: Tread surface matches signed height Ascending flight step 1
+PASS: Tread surface matches signed height Ascending flight step 2
+PASS: Tread surface matches signed height Ascending flight step 3
+PASS: Tread surface matches signed height Ascending flight step 4
+PASS: Tread surface matches signed height Ascending flight step 5
+PASS: Tread surface matches signed height Ascending flight step 6
+PASS: Tread surface matches signed height Ascending flight step 7
+PASS: Descending stairwell ray hits a stair surface, not a flat corridor slab; hit=Continuous stair support y=-0.4024779
+PASS: Original E dispatcher handles stairs
+PASS: Actual floor coroutine reaches 2 (floor=2, transitioning=False, prompt='')
+PASS: Floor transition restores input and capsule
+PASS: Room labels update on floor 2
+PASS: Terminal safety barriers match floor 2
+PASS: Original E dispatcher handles stairs
+PASS: Actual floor coroutine reaches 3 (floor=3, transitioning=False, prompt='')
+PASS: Floor transition restores input and capsule
+PASS: Room labels update on floor 3
+PASS: Original E dispatcher handles stairs
+PASS: Actual floor coroutine reaches 4 (floor=4, transitioning=False, prompt='')
+PASS: Floor transition restores input and capsule
+PASS: Room labels update on floor 4
+PASS: Original E dispatcher handles stairs
+PASS: Actual floor coroutine reaches 5 (floor=5, transitioning=False, prompt='')
+PASS: Floor transition restores input and capsule
+PASS: Room labels update on floor 5
+PASS: Original E dispatcher handles stairs
+PASS: Actual floor coroutine reaches 6 (floor=6, transitioning=False, prompt='')
+PASS: Floor transition restores input and capsule
+PASS: Room labels update on floor 6
+PASS: Terminal safety barriers match floor 6
+PASS: Original E dispatcher handles stairs
+PASS: Actual floor coroutine reaches 5 (floor=5, transitioning=False, prompt='')
+PASS: Floor transition restores input and capsule
+PASS: Original E dispatcher handles stairs
+PASS: Actual floor coroutine reaches 4 (floor=4, transitioning=False, prompt='')
+PASS: Floor transition restores input and capsule
+PASS: Original E dispatcher handles stairs
+PASS: Actual floor coroutine reaches 3 (floor=3, transitioning=False, prompt='')
+PASS: Floor transition restores input and capsule
+PASS: Original E dispatcher handles stairs
+PASS: Actual floor coroutine reaches 2 (floor=2, transitioning=False, prompt='')
+PASS: Floor transition restores input and capsule
+PASS: Original E dispatcher handles stairs
+PASS: Actual floor coroutine reaches 1 (floor=1, transitioning=False, prompt='')
+PASS: Floor transition restores input and capsule
+PASS: Ground floor closes only unavailable descending flights
+PASS: Original E dispatcher handles stairs
+PASS: Actual floor coroutine reaches 2 (floor=2, transitioning=False, prompt='')
+PASS: Floor transition restores input and capsule
+PASS: Real capsule remains supported on ascending stair flight; y=1.225
+PASS: Real capsule returns to corridor floor after stair traversal
+PASS: Real capsule remains supported on descending stair flight; y=-1.175
+PASS: Real capsule returns to corridor floor after stair traversal
+PASS: Original E dispatcher handles stairs
+PASS: Actual floor coroutine reaches 1 (floor=1, transitioning=False, prompt='')
+PASS: Floor transition restores input and capsule
+PASS: Room 101 door interaction identifies the current floor and room
+PASS: Original E dispatcher opens the numbered room
+PASS: Room doorway enters the correct numbered bedroom
+PASS: Bedroom contains four upper bunks
+PASS: Four desks sit beneath the loft beds
+PASS: Toilet has enclosing side, rear and split entrance partitions
+PASS: Washbasin and cabinet are modeled to the right of the entrance
+PASS: Balcony displays the supplied campus-night photo texture
+PASS: Balcony photo has an invisible solid rear wall
+PASS: Bedroom entrance closes behind the player after entry
+PASS: Bedroom offers a clear return prompt by its door
+PASS: Shared bedroom root is present for room 101
+PASS: Entered bedroom geometry is active and renderable in the real scene
+PASS: Actual capsule passes through the toilet partition opening
+PASS: Room exit prompt does not activate from inside the toilet stall
+PASS: Actual player capsule cannot pass through the balcony photo or fall outside; z=10.565 y=0.02499985
+PASS: Room door remains reachable after moving through the bedroom
+PASS: Original E dispatcher returns from the bedroom
+PASS: Bedroom exit returns to the same corridor floor
+PASS: Original E exits after stair regression
+PASS: Travel settles within deadline
+PASS: Revised stairs retain campus return flow

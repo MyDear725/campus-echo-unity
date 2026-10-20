@@ -56,7 +56,7 @@ PASS un-collected order kept
 PASS meal finished, tray owed
 PASS tray returned
 PASS 1F order collected after the tray
-PASS allowance restored after restart (expected 22756, got 22756)
+PASS allowance restored after restart (expected 22456, got 22456)
 PASS menu day restored after restart
 PASS orders restored after restart
 RESULT pass=61 fail=0 OK

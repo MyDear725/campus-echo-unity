@@ -1,5 +1,6 @@
 Shader "Campus/Library" {
  Properties {
+  [HideInInspector] _CampusOutdoorSurface("Exterior lighting",Float)=0
   _BaseColor("Color",Color)=(1,1,1,1) _BaseMap("Texture",2D)="white"{}
   _Wood("Wood grain",Float)=0 _Stone("Stone panels",Float)=0 _Glass("Glass",Float)=0 _Emission("Emission",Float)=0
   _Smoothness("Smoothness",Range(0,1))=.3 _Cutoff("Cutoff",Float)=0 _Cull("Cull",Float)=0
@@ -17,8 +18,9 @@ Shader "Campus/Library" {
    #pragma multi_compile_fragment _ _SHADOWS_SOFT
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+   #include "CampusNightLighting.hlsl"
    CBUFFER_START(UnityPerMaterial)
-    float4 _BaseColor;float _Wood,_Stone,_Glass,_Emission,_Smoothness;
+    float4 _BaseColor;float _Wood,_Stone,_Glass,_Emission,_Smoothness,_CampusOutdoorSurface;
    CBUFFER_END
    struct A{float4 p:POSITION;float3 n:NORMAL;};struct V{float4 p:SV_POSITION;float3 w:TEXCOORD0;float3 n:TEXCOORD1;};
    V vert(A a){V o;o.w=TransformObjectToWorld(a.p.xyz);o.p=TransformWorldToHClip(o.w);o.n=TransformObjectToWorldNormal(a.n);return o;}
@@ -45,6 +47,7 @@ Shader "Campus/Library" {
      float cloud=pow(saturate(sin(r.x*16+r.z*8)*sin(r.z*18-r.x*9)),4);
      lit=lerp(lit,lerp(sky,float3(.85,.86,.83),cloud*.4),.7);alpha=lerp(alpha,.72,f);
     }
+    lit=CampusOutdoorLight(lit,c,n,i.w,_CampusOutdoorSurface);
     float fog=distance(GetCameraPositionWS(),i.w)*.0012;return half4(lerp(lit,unity_FogColor.rgb,1-exp(-fog*fog)),alpha);
    }
    ENDHLSL

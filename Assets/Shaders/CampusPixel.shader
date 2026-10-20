@@ -21,6 +21,7 @@ Shader "Campus/Pixel Surface" {
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
    #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+   #include "CampusNightLighting.hlsl"
    TEXTURE2D(_BaseMap); SAMPLER(sampler_BaseMap);
    CBUFFER_START(UnityPerMaterial)
     float4 _BaseMap_ST,_BaseColor; float _Cutoff,_Smoothness,_Water,_Wind,_Style;
@@ -48,6 +49,7 @@ Shader "Campus/Pixel Surface" {
     half3 lit=c.rgb*(half3(.66,.72,.78)+diffuse*half3(.42,.36,.25))*shadow;
     if(_Style>3.5){float stripe=step(.89,frac((cell.x+cell.z+cell.y*1.7)*.22));lit=lerp(lit,half3(.67,.87,.91),stripe*.32);}
     if(_Water>.5){float2 p=floor(i.world.xz*5)/5;float ripple=sin(p.x*2+p.y*1.3-floor(_Time.y*8)/8*1.5);lit=lerp(half3(.075,.39,.43),half3(.38,.76,.75),step(.8,ripple)*.65+.12);}
+    lit=CampusOutdoorLight(lit,c.rgb,n,i.world,1);
     // Quantize in display space instead of crushing dark linear colors.
     half3 srgb=LinearToSRGB(max(lit,0));srgb=floor(saturate(srgb)*31+.5)/31;lit=SRGBToLinear(srgb);
     float fog=1-exp(-pow(distance(GetCameraPositionWS(),i.world)*.0013,2));

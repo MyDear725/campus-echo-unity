@@ -4,6 +4,7 @@ Shader "Campus/Cafeteria" {
   _Wood("Wood grain",Float)=0 _Stone("Stone panels",Float)=0 _Glass("Glass",Float)=0 _Emission("Emission",Float)=0
   _Smoothness("Smoothness",Range(0,1))=.3 _Cutoff("Cutoff",Float)=0 _Cull("Cull",Float)=0
   _SrcBlend("Source",Float)=1 _DstBlend("Destination",Float)=0 _ZWrite("Depth",Float)=1
+  [HideInInspector] _CampusOutdoorSurface("Exterior lighting",Float)=0
   [HideInInspector] _ViewCutCenter("View cut center",Vector)=(0,0,0,0)
   [HideInInspector] _ViewCutSize("View cut half size",Vector)=(0,0,0,0)
  }
@@ -19,8 +20,9 @@ Shader "Campus/Cafeteria" {
    #pragma multi_compile_fragment _ _SHADOWS_SOFT
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+   #include "CampusNightLighting.hlsl"
    CBUFFER_START(UnityPerMaterial)
-    float4 _BaseColor,_ViewCutCenter,_ViewCutSize;float _Wood,_Stone,_Glass,_Emission,_Smoothness;
+    float4 _BaseColor,_ViewCutCenter,_ViewCutSize;float _Wood,_Stone,_Glass,_Emission,_Smoothness,_CampusOutdoorSurface;
    CBUFFER_END
    struct A{float4 p:POSITION;float3 n:NORMAL;};struct V{float4 p:SV_POSITION;float3 w:TEXCOORD0;float3 n:TEXCOORD1;};
    V vert(A a){V o;o.w=TransformObjectToWorld(a.p.xyz);o.p=TransformWorldToHClip(o.w);o.n=TransformObjectToWorldNormal(a.n);return o;}
@@ -48,6 +50,7 @@ Shader "Campus/Cafeteria" {
      float cloud=pow(saturate(sin(r.x*16+r.z*8)*sin(r.z*18-r.x*9)),4);
      lit=lerp(lit,lerp(sky,float3(.85,.86,.83),cloud*.4),.7);alpha=lerp(alpha,.72,f);
     }
+    lit=CampusOutdoorLight(lit,c,n,i.w,_CampusOutdoorSurface);
     float fog=distance(GetCameraPositionWS(),i.w)*.0012;return half4(lerp(lit,unity_FogColor.rgb,1-exp(-fog*fog)),alpha);
    }
    ENDHLSL
@@ -61,7 +64,7 @@ Shader "Campus/Cafeteria" {
    #pragma fragment depthFrag
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
    CBUFFER_START(UnityPerMaterial)
-    float4 _BaseColor,_ViewCutCenter,_ViewCutSize;float _Wood,_Stone,_Glass,_Emission,_Smoothness;
+    float4 _BaseColor,_ViewCutCenter,_ViewCutSize;float _Wood,_Stone,_Glass,_Emission,_Smoothness,_CampusOutdoorSurface;
    CBUFFER_END
    struct DA{float4 p:POSITION;};struct DV{float4 p:SV_POSITION;float3 w:TEXCOORD0;};
    DV depthVert(DA a){DV o;o.w=TransformObjectToWorld(a.p.xyz);o.p=TransformWorldToHClip(o.w);return o;}

@@ -11,6 +11,7 @@ Shader "Campus/Courtyard" {
    #pragma multi_compile_fragment _ _SHADOWS_SOFT
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+   #include "CampusNightLighting.hlsl"
    CBUFFER_START(UnityPerMaterial)
     float4 _BaseColor;float _Surface;
    CBUFFER_END
@@ -30,6 +31,7 @@ Shader "Campus/Courtyard" {
     else {c*=.9+noise(i.w.xz*8+i.w.y)*.15;}
     Light light=GetMainLight(TransformWorldToShadowCoord(i.w));float3 ambient=max(SampleSH(n),lerp(float3(.24,.26,.25),float3(.45,.5,.52),n.y*.5+.5));
     float3 lit=c*(ambient+light.color*saturate(dot(n,light.direction))*(.15+.85*light.shadowAttenuation));
+    lit=CampusOutdoorLight(lit,c,n,i.w,1);
     float fog=distance(GetCameraPositionWS(),i.w)*.0012;return half4(lerp(lit,unity_FogColor.rgb,1-exp(-fog*fog)),1);
    }
    ENDHLSL

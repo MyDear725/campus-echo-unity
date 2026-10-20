@@ -9,6 +9,7 @@ Shader "Campus/DaySky" {
  #pragma fragment frag
  #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
  float4 _TopColor,_HorizonColor;
+ float _CampusNightAmount;
  struct A{float4 p:POSITION;};struct V{float4 p:SV_POSITION;float3 d:TEXCOORD0;};
  V vert(A a){V o;o.p=TransformObjectToHClip(a.p.xyz);o.d=a.p.xyz;return o;}
  float hash(float2 p){return frac(sin(dot(p,float2(127.1,311.7)))*43758.5453);}
@@ -19,7 +20,7 @@ Shader "Campus/DaySky" {
   float2 p=d.xz/(max(.04,d.y)+.23)*2.2+float2(5.1,1.2)+_Time.y*.0005;
   float n=fbm(p);float clouds=smoothstep(.51,.69,n)*smoothstep(.02,.20,h);
   float edge=fbm(p+float2(.08,.14));float3 white=lerp(float3(.71,.77,.8),float3(.99,.98,.95),saturate((n-edge)*6+.68));
-  sky=lerp(sky,white,clouds*.92);return half4(sky,1);
+  sky=lerp(sky,white,clouds*.92);float3 night=lerp(float3(.025,.04,.075),float3(.004,.009,.025),pow(h,.45));sky=lerp(sky,night,saturate(_CampusNightAmount));return half4(sky,1);
  }
  ENDHLSL
  }

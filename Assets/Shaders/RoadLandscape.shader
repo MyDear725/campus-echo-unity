@@ -22,6 +22,7 @@ Shader "Campus/RoadLandscape" {
    CBUFFER_START(UnityPerMaterial)
    float4 _BaseColor,_TileSize;float _Surface,_Smoothness,_Metallic,_VertexTint;
    CBUFFER_END
+   #include "CampusNightLighting.hlsl"
    struct A {float4 p:POSITION;float3 n:NORMAL;float4 c:COLOR;UNITY_VERTEX_INPUT_INSTANCE_ID};
    struct V {float4 p:SV_POSITION;float3 w:TEXCOORD0;float3 n:TEXCOORD1;float4 c:COLOR;float fog:TEXCOORD2;UNITY_VERTEX_INPUT_INSTANCE_ID};
    V vert(A a){V o;UNITY_SETUP_INSTANCE_ID(a);UNITY_TRANSFER_INSTANCE_ID(a,o);o.w=TransformObjectToWorld(a.p.xyz);o.p=TransformWorldToHClip(o.w);o.n=TransformObjectToWorldNormal(a.n);o.c=a.c;o.fog=ComputeFogFactor(o.p.z);return o;}
@@ -47,7 +48,7 @@ Shader "Campus/RoadLandscape" {
     d.shadowCoord=TransformWorldToShadowCoord(i.w);d.bakedGI=SampleSH(n);d.normalizedScreenSpaceUV=GetNormalizedScreenSpaceUV(i.p);d.shadowMask=1;
     SurfaceData s=(SurfaceData)0;s.albedo=c;s.alpha=1;s.metallic=_Metallic;s.smoothness=smoothness;s.occlusion=1;s.normalTS=float3(0,0,1);
     if(_Surface>3.5&&_Surface<4.5){Light l=GetMainLight(d.shadowCoord);s.emission=c*l.color*pow(saturate(dot(-l.direction,view)),3)*.13*l.shadowAttenuation;}
-    half4 col=UniversalFragmentPBR(d,s);col.rgb=MixFog(col.rgb,i.fog);return col;
+    half4 col=UniversalFragmentPBR(d,s);col.rgb=CampusOutdoorLight(col.rgb,c,n,i.w,1);col.rgb=MixFog(col.rgb,i.fog);return col;
    }
    ENDHLSL
   }

@@ -106,6 +106,23 @@ public class CampusHud : MonoBehaviour, ICampusOverlay
         float top = 14f * scale;
 
         DrawBalance(ref top, right, scale);
+        var semester=CampusSemester.Instance;
+        if(semester){
+            var clock=semester.Clock;
+            float sw=Mathf.Min(450*scale,Screen.width-32);
+            var rect=new Rect(Screen.width-right-sw,top,sw,88*scale);
+            Panel(rect,new Color(.04f,.08f,.06f,.94f));
+            var timeStyle=new GUIStyle(balanceStyle){fontSize=Mathf.RoundToInt(16*scale),wordWrap=true};
+            timeStyle.normal.textColor=new Color(.96f,.95f,.87f);
+            GUI.Label(new Rect(rect.x+12,rect.y+8,rect.width-24,rect.height-12),clock.DateTimeText+"  "+clock.WeekText+"\n"+semester.NextSchedule,timeStyle);
+            top+=rect.height+8*scale;
+            if(!paused&&!game.UiBlocking){
+                string navigation=semester.UI.Navigation();
+                if(!string.IsNullOrEmpty(navigation)){Panel(new Rect(16,Screen.height-210,Screen.width-32,36),new Color(.04f,.08f,.06f,.94f));GUI.Label(new Rect(28,Screen.height-205,Screen.width-56,30),navigation,timeStyle);}
+                var point=CampusSemesterPoint.Nearby(game);
+                if(semester.Ready&&point){Panel(new Rect(Screen.width/2-240,Screen.height-265,480,38),new Color(.04f,.08f,.06f,.94f));GUI.Label(new Rect(Screen.width/2-226,Screen.height-260,452,30),"[ E ] "+point.label,timeStyle);}
+            }
+        }
         if (!paused) DrawOrders(ref top, ordering, right, scale);
 
         DrawInteractionPrompt(ordering, scale);
@@ -264,12 +281,16 @@ public class CampusHud : MonoBehaviour, ICampusOverlay
             if (preparing != null) return preparing.FloorShopLabel + " · " + ordering.LabelOf(preparing);
         }
 
+        var dorm = DormitoryCorridor.Current(game);
+        if (dorm && !string.IsNullOrEmpty(dorm.Prompt)) return dorm.Prompt;
+
         // Building doors and exits keep their own prompt from the travel system.
         if (game.Interiors)
         {
             string door = game.Interiors.InteractionPrompt;
             if (!string.IsNullOrEmpty(door)) return door;
         }
+        if (game.Story && !string.IsNullOrEmpty(game.Story.Prompt)) return game.Story.Prompt;
         return "";
     }
 

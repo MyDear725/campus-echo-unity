@@ -26,3 +26,9 @@ Thumbs.db
 
 # Preserve Assets, Packages, ProjectSettings and all .meta files.
 Builds/
+
+# Standalone player bundles and distribution archives
+*.app/
+*.exe
+*.dmg
+*.pkg

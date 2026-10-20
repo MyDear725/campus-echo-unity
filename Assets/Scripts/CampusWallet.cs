@@ -124,6 +124,15 @@ public static class CampusWallet
         return "生活费不足，还差 " + FormatYuan(shortfall);
     }
 
+    public static void Credit(long fen)
+    {
+        if (fen <= 0) return;
+        EnsureLoaded();
+        cached = checked(cached + fen);
+        Save();
+        RaiseChanged();
+    }
+
     public static void SetForTest(long fen)
     {
         loaded = true;
