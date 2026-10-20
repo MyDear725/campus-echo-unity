@@ -264,12 +264,16 @@ public class CampusHud : MonoBehaviour, ICampusOverlay
             if (preparing != null) return preparing.FloorShopLabel + " · " + ordering.LabelOf(preparing);
         }
 
+        var dorm = DormitoryCorridor.Current(game);
+        if (dorm && !string.IsNullOrEmpty(dorm.Prompt)) return dorm.Prompt;
+
         // Building doors and exits keep their own prompt from the travel system.
         if (game.Interiors)
         {
             string door = game.Interiors.InteractionPrompt;
             if (!string.IsNullOrEmpty(door)) return door;
         }
+        if (game.Story && !string.IsNullOrEmpty(game.Story.Prompt)) return game.Story.Prompt;
         return "";
     }
 

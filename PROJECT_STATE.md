@@ -1,60 +1,36 @@
-# Project State
+# Project State — 2026-10-20 local review
 
-## Objective
+## Current baseline
 
-Add a male/female character choice to the game-start flow and replace the current playable student with suitable free Unity Asset Store models while preserving movement, animation, camera, and interior/exterior travel behavior.
+Remote main at `392ccd0` already includes UMA male/female player selection and persistent choice. The earlier character-selection design/planning notes remain in `docs/superpowers`; the old statement that runtime selection was not implemented is obsolete.
 
-## Verified facts
+## User-authorized work
 
-- Active project root: `D:/大学竞赛/unity游戏/campus-echo-unity-main-full`.
-- The project is a Git repository on `main`; the approved design is committed at `ba318f18`.
-- The current player model is `Assets/Characters/CampusTraveler.fbx` (about 3.1 MB). Although the FBX contains avatar metadata, `CharacterImport.cs` deliberately imports it as Legacy Animation.
-- `CampusGame` directly drives an `Animation` component with named clips such as `Idle`, `Walk`, `Run`, `Jump`, and `Fall`, and also expects facial blend shapes when present.
-- The model is referenced directly as an FBX prefab instance in the three campus scenes and is also loaded by `CampusBuilder.cs`; replacing it safely requires an adapter or coordinated scene/builder changes, not a blind file overwrite.
-- Existing user changes are present in three library materials and `ProjectSettings/URPProjectSettings.asset`; they must not be overwritten.
-- Candidate selection and compatibility design are in progress. No character replacement has been implemented.
-- Official free Asset Store candidates identified so far include Supercyan's `Character Pack: Free Sample` (low-poly male, 11 animations, Humanoid, URP-compatible after material conversion), Hodaart's `Low Poly Character Collection 3` (10 characters, 8 animations, native URP but authored in Unity 6000.4.6), and Vefects' `Stylized Character Female` (free, much larger package, limited public technical metadata).
-- The existing start/pause UI is drawn by `CampusGame.OnGUI()` and currently has a single `开始 / 继续探索` button. Quest progress is persisted through `PlayerPrefs`.
-- The strongest same-style free pair candidate is Hodaart's `Low Poly Character Collection 3`: one 3.7 MB package with male and female characters sharing one material/texture atlas and the same eight animation types. It is native URP, but its listed authoring version (Unity 6000.4.6) is newer than this project's Unity 6000.3.26f1 and therefore requires an import compatibility trial before adoption.
+Build warm new-student onboarding with Xiaolan instead of memory collection, plus six logical floors of dormitory public corridor: central entrance, horizontal double-sided corridor, 12 numbered closed room doors, stairs at both ends, interaction-based floor transitions. Bedroom-door interaction and bedroom interiors are deferred. User confirmed this interpretation on 2026-10-20.
 
-## Workflow
+Work on Mac, demonstrate locally before GitHub upload. User approval of the result is still pending; no push performed. Local branch: `local/welcome-dormitory-review`.
 
-1. Inspect current character rig, animation clips, scale, materials, and scene/code references.
-2. Research current free Unity Asset Store candidates and verify licensing/URP/version compatibility from primary sources.
-3. Present 2-3 candidates and a replacement approach for user approval.
-4. Write and review the approved design before implementation planning.
+## Implemented locally
 
-## Decisions
+- Seven dialogue stages with two choices each; separate persisted progress, resume and reset.
+- Milestones driven by second-floor arrival, cafeteria arrival, completed tray return, teaching-building arrival, actual library study start, and return to dormitory ground floor.
+- Runtime-generated public corridor for all existing `dormitory-*` scenes, preserving travel contract. Six logical floors reuse geometry; 101–112 through 601–612; floor one is the sole campus exit.
+- Local interactive browser preview at `QA/WelcomePreview`, with shared story/layout JSON. Browser preview is not Unity footage.
 
-- 2026-10-18: The player chooses male or female before the first game start. The choice is persisted across launches, and the pause menu will provide a way to change it later.
-- 2026-10-18: Use two same-style characters from the free Hodaart `Low Poly Character Collection 3` package, subject to a compatibility trial in Unity 6000.3.26f1 before permanent integration.
-- 2026-10-18: Keep the existing player movement root, collision, camera target, travel state, and quest state unchanged; switch only the visual character and its animation driver.
-- 2026-10-18: The user reviewed the written design and approved proceeding to implementation planning.
+## Validation
 
-## Changed files
+49 isolated checks passed in actual Unity 6000.3.26f1. The component harness uses stubbed game services. Browser screenshots/checks cover the approximately 410px IAB width. The original project has since been run on Mac; see the real-project audit below. Windows runtime and wider desktop browser layout remain unverified.
 
-- `PROJECT_STATE.md` — created as durable handoff context.
-- `docs/superpowers/specs/2026-10-18-player-gender-selection-design.md` — approved design covering asset selection, architecture, UI flow, persistence, compatibility gates, validation, and rollback.
-- `docs/superpowers/plans/2026-10-18-player-gender-selection.md` — task-by-task TDD implementation plan with exact interfaces, commands, commits, compatibility gate, and runtime QA.
+## Review and next step
 
-## Validation performed
+Start with `QA/WelcomePreview/README.md` and `迎新剧情稿.md`. Let user inspect preview and request changes. Do not push until user approves this concrete result. Before pushing, inspect remote changes and preserve any Windows work committed meanwhile. Full Windows gameplay verification remains necessary.
 
-- Confirmed the active project and Git state.
-- Located the current model, importer, generated materials, and builder references.
-- Inspected the actual Legacy animation integration and all direct FBX scene references.
-- Searched current official Unity Asset Store listings and verified free status, stated render-pipeline compatibility, animation inventory, package size, and license type where available.
-- Located the exact start/continue panel, reset action, save keys, and automated character checks in `CampusGame.cs`.
-- Completed the design self-review for placeholders, contradictions, scope, and ambiguity. The final spec fixes the save key/value mapping, QA default, qualifying-model criteria, airborne animation behavior, and old-model fallback.
-- The approved design and this durable state were committed together using the user-specified repository-local Git identity.
-- Self-reviewed the implementation plan for design coverage, placeholder text, interface/type consistency, safe handling of existing user changes, and staged-file scope.
+## Real-project audit — 2026-10-20
 
-## Next steps
+Original assets are now downloaded and the actual project compiles/loads CampusLiving. Real UMA male/female avatars were exercised through real dormitory entry/exit, capsule movement and floor transitions. Missing UMAIgnore/UMAKeepChain tags were found and added. Actual third-person captures exposed leg cropping; a dormitory-only FOV/target adjustment was added and the outside FOV is restored. Final full traversal retest passed 237 assertions and produced 17 actual camera renders; scope is movement/travel and third-person framing in the original Mac Unity project, not full visual release or Windows validation.
 
-- Choose either subagent-driven or inline plan execution.
-- Begin with the Asset Store import/Unity 6000.3.26f1 compatibility gate; obtain approval of the exact young-adult male/female prefab pair before runtime integration.
+Deferred visual issue (user instruction): original UMA skin/eye/mouth overlay references do not resolve in this clone, and actual rendered characters show white skin and abnormal materials. See QA/WelcomeIntegration/character-assets/overlay-textures.txt and README.md. This is not a fully verified visual release; Windows tests and original texture dependency repair remain outstanding. No push.
 
-## Git identity resolution
+## Xiaolan/stairs revision — user requested
 
-- The design commit was initially blocked because no local Git author identity was configured.
-- The repository remote is `https://github.com/MyDear725/campus-echo-unity.git`.
-- The user explicitly requested the repository-local author identity `yang6667779-wq <yang6667779@gmail.com>`; no global Git identity will be changed.
+Original texture issue explicitly deferred by user. Fixed Xiaolan runtime UMA slot initialization and completion-time locomotion binding; actual displacement drives idle/walk, humanoid scale matches current player. Descending stairs now descend, ground slab no longer covers their well, platform accommodates the original capsule, terminal floors have safety barriers. Real CampusLiving revision run passed 102 assertions on Mac, including baked male/female standing-height comparisons, actual animated limb motion and floors 1–6 traversal through the original E dispatcher. See QA/WelcomeRevision/README.md and actual render/GIF evidence. Windows not run. No commit or push.

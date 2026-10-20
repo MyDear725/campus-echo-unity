@@ -96,6 +96,7 @@ public class LibraryStudy : MonoBehaviour
     {
         if (!Seated || Studying) return;          // repeated presses never stack the rate
         Studying = true;
+        if (game && game.Story) game.Story.Reach("study-started");
         studyStartGameSeconds = GameClock.Instance ? GameClock.Instance.GameSeconds : 0;
         if (GameClock.Instance) GameClock.Instance.SetStudyMode(true);
         var rm = LibraryReservationManager.Instance;

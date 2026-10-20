@@ -683,6 +683,8 @@ public class CafeteriaOrdering : MonoBehaviour
         if (!o.NeedsTrayReturn) return false;
         st.orders.Remove(o);
         Save();
+        var campus = FindFirstObjectByType<CampusGame>();
+        if (campus && campus.Story) campus.Story.Reach("meal-returned");
         return true;
     }
 

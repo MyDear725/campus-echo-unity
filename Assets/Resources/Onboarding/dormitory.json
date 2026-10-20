@@ -1,0 +1,14 @@
+{
+  "floors": 6,
+  "roomsPerSide": 6,
+  "corridorLength": 42.0,
+  "corridorWidth": 3.8,
+  "wallHeight": 3.2,
+  "roomPitch": 6.0,
+  "firstRoomX": -15.0,
+  "stairX": 21.0,
+  "wallColor": "#eee9dc",
+  "lowerWallColor": "#9ba99c",
+  "doorColor": "#b78454",
+  "floorColor": "#c8c7bb"
+}
