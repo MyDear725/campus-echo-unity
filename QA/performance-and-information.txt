@@ -1,0 +1,42 @@
+2026-10-22 · Performance and information-building exterior
+
+Performance changes
+- GPU skinning enabled for Windows; original VRoid bones, expressions and textures retained.
+- Remove per-renderer exterior property blocks from trees and roads. Materials that actually need the exterior-lighting flag use a shared runtime material variant, preserving batching/instancing.
+- Static-batch only immutable library/cafeteria visual meshes after load, inside the entry transition. Keep text, doors, lifts, hinges, animated objects and rigidbodies separate. Keep existing interaction transforms, colliders and seat IDs.
+- Share depth-tested world-lettering materials per font; do not modify shared GUI font materials.
+- 2x MSAA, two exterior shadow cascades over 85 m, lower far-tree LOD bias; keep native render scale. Near buildings and furniture are retained.
+- Normal player frame limit raised from 60 to 120, independent of v-sync. This is a cap, not a guaranteed frame rate.
+
+Visible-window benchmark
+Hardware: NVIDIA GeForce RTX 4060 Laptop GPU; AMD Ryzen 7 7840H.
+Resolution: 1440x900. Fixed camera/player positions, uncapped diagnostic launch, warm-up before each sample, approximately 3 seconds sampled per view.
+The initial hidden-window run performed no normal camera rendering and was discarded. The before/after figures below come from visible-window runs.
+
+View             Mean frame ms before -> after    GPU ms before -> after
+Entrance         12.09 -> 10.73                   11.80 -> 3.72
+Teaching         9.90  -> 10.12                   5.76  -> 3.15
+Bridge           12.15 -> 8.85                    10.02 -> 3.15
+Library          10.95 -> 10.84                   2.11  -> 2.88
+Cafeteria        14.03 -> 8.72                    3.99  -> 2.76
+
+Cafeteria draw calls: 11227 -> 1870 (about 83% fewer).
+Cafeteria p95 frame time: 23.09 -> 9.96 ms.
+These short samples include normal OS/driver variability. Improvement is strongest in the cafeteria and bridge; teaching/library wall time is essentially unchanged. Entrance geometry includes the new information-building art in the after sample.
+Raw CSV and hardware details: Builds/Windows/QA/Performance/before.csv, after.csv, hardware.txt (local ignored build outputs).
+
+Information building
+- Keep the campus parcel, angled main wing and west return approximately in their original positions.
+- Five-storey limestone exterior, dark metal window mullions, vertical oak/bronze fins, glazed atrium with real slab/stair scenery, broad entrance canopy and glass doors.
+- Real exterior steps, continuous landing and a side access ramp; visual forecourt planting, benches and lamps. Use shared material mesh batches for the exterior.
+- Reuse original campus map and building collision; leave other entrances, road coordinates and existing playable interiors in place.
+- This is a reference-inspired exterior, not a new playable information-building interior or a surveyed reconstruction.
+- Builder: InformationBuildingBuilder.Apply; saved mesh/material assets under Assets/InformationRevision.
+- Backup before this exterior update: D:/UnityProjectCaches/BeforeInformationExterior-20261021.
+
+Verification artifacts
+- Release checks passed: library/cafeteria full physical ascent, room entry/return, seventh-dorm LG stairs and exterior restoration after static batching; 24 campus road routes and covered bridge; both VRoid choices, retargeted locomotion and expression data; four information-building views.
+- Final executable built by information-performance-release-build.log; runtime logs: performance-interior-regression.log, information-road-regression.log, performance-vroid-regression.log and information-release-qa.log.
+- Exterior screenshots from front, opposite corner, rear and wall-sign close-up: Builds/Windows/QA/Information.
+- Runtime checks use private QA save keys; player saves are not reset.
+- Optional flags: -performanceQA, -performanceQA -performanceAfter, -informationQA, -interiorRefinementQA, -campusPlanQA, -vroidPresentationQA.

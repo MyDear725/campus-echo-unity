@@ -57,6 +57,48 @@ public sealed class InteriorDetailKit : MonoBehaviour
         var face=Box("LED diffuser",at+Vector3.down*.042f,new Vector3(length-.08f,.012f,.11f),palette.light,.004f);
         face.GetComponent<Renderer>().shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;
     }
+    public void Disc(string name,Vector3 at,float radius,float height,Material material)
+    {
+        var vertices=new List<Vector3>();var normals=new List<Vector3>();var triangles=new List<int>();
+        void Tri(Vector3 a,Vector3 b,Vector3 c,Vector3 normal)
+        {int n=vertices.Count;vertices.AddRange(new[]{a,b,c});normals.AddRange(new[]{normal,normal,normal});triangles.AddRange(new[]{n,n+1,n+2});}
+        for(int i=0;i<32;i++)
+        {
+            float a=i*Mathf.PI/16,b=(i+1)*Mathf.PI/16;
+            var u=new Vector3(Mathf.Cos(a)*radius,0,Mathf.Sin(a)*radius);var v=new Vector3(Mathf.Cos(b)*radius,0,Mathf.Sin(b)*radius);var h=Vector3.up*height;
+            Tri(h,v+h,u+h,Vector3.up);Tri(Vector3.zero,u,v,Vector3.down);
+            var normal=(u+v).normalized;Tri(u,v+h,v,normal);Tri(u,u+h,v+h,normal);
+        }
+        var mesh=new Mesh{name=name};mesh.SetVertices(vertices);mesh.SetNormals(normals);mesh.SetTriangles(triangles,0);mesh.RecalculateBounds();owned.Add(mesh);
+        var go=new GameObject(name);go.transform.SetParent(transform,false);go.transform.localPosition=at;go.AddComponent<MeshFilter>().sharedMesh=mesh;go.AddComponent<MeshRenderer>().sharedMaterial=material;
+    }
+    public void TaskLamp(Vector3 desk)
+    {
+        Disc("Task lamp weighted base",desk,.10f,.022f,palette.graphite);
+        Beam("Task lamp upright",desk+Vector3.up*.02f,desk+new Vector3(0,.32f,0),.025f,palette.graphite);
+        Beam("Task lamp arm",desk+new Vector3(0,.32f,0),desk+new Vector3(0,.39f,-.18f),.025f,palette.graphite);
+        Box("Task lamp shade",desk+new Vector3(0,.38f,-.21f),new Vector3(.30f,.045f,.12f),palette.graphite,.018f);
+        Box("Task lamp diffuser",desk+new Vector3(0,.353f,-.21f),new Vector3(.25f,.008f,.085f),palette.light,.003f);
+    }
+    public void Laptop(Vector3 desk,Material accent)
+    {
+        Box("Laptop aluminium base",desk+Vector3.up*.012f,new Vector3(.36f,.024f,.25f),palette.steel,.009f);
+        Box("Laptop keyboard",desk+new Vector3(0,.026f,.025f),new Vector3(.31f,.004f,.13f),palette.graphite,.002f);
+        Box("Laptop trackpad",desk+new Vector3(0,.027f,-.074f),new Vector3(.10f,.004f,.055f),palette.plaster,.002f);
+        var screen=Box("Laptop screen frame",desk+new Vector3(0,.14f,.13f),new Vector3(.36f,.245f,.016f),palette.graphite,.008f);
+        screen.transform.localRotation=Quaternion.Euler(-12,0,0);
+        var face=Box("Laptop screen",desk+new Vector3(0,.14f,.119f),new Vector3(.325f,.21f,.004f),accent,.002f);face.transform.localRotation=screen.transform.localRotation;
+        for(int i=0;i<3;i++)Box("Screen document line",desk+new Vector3(-.025f,.17f-i*.035f,.112f),new Vector3(.20f,.007f,.004f),palette.linen,.001f);
+    }
+    public void WallComposition(Vector3 at,Vector3 normal,Material accent,float width=3)
+    {
+        var sub=Create(transform,"Framed geometric wall artwork");sub.palette=palette;sub.transform.localPosition=at;sub.transform.localRotation=Quaternion.LookRotation(-normal);
+        sub.Box("Champagne frame",Vector3.zero,new Vector3(width,1.35f,.06f),palette.brass,.018f);
+        sub.Box("Linen picture mount",new Vector3(0,0,-.037f),new Vector3(width-.06f,1.29f,.015f),palette.linen,.005f);
+        sub.Box("Colour field",new Vector3(-width*.22f,0,-.050f),new Vector3(width*.33f,1.04f,.008f),accent,.04f);
+        for(int i=0;i<7;i++)sub.Box("Oak rhythm",new Vector3(-width*.02f+i*width*.06f,-.12f+i*.07f,-.055f),new Vector3(.025f,.64f,.008f),palette.walnut,.002f);
+        sub.Box("Art baseline",new Vector3(0,-.51f,-.058f),new Vector3(width*.82f,.012f,.008f),palette.graphite,.001f);
+    }
     public void Annulus(Vector3 center,float inner,float outer,float depth,Material material)
     {
         // Continuous visible slab replaces overlapping visual boxes, while their

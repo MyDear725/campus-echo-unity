@@ -196,7 +196,7 @@ public static class InteriorRefinementBuilder
         kit.Sign("1F · 南门","SOUTH ENTRANCE / 下楼前往 LG 北门",new Vector3(4.9f,5.05f,-11.70f),Vector3.forward,4.4f,.85f);
         foreach(float x in new[]{-6.7f,6.7f}){kit.Plant(new Vector3(x,0,8.2f),1);kit.Plant(new Vector3(x,2.85f,-8.2f),1);}
     }
-    static void PersistMeshes(InteriorDetailKit kit,string id)
+    public static void PersistMeshes(InteriorDetailKit kit,string id)
     {
         // Batch leaf decorations by material. Signs retain their text children.
         var leaves=kit.GetComponentsInChildren<MeshFilter>().Where(f=>f.transform.childCount==0&&!f.GetComponent<Collider>()&&f.GetComponent<MeshRenderer>()).ToArray();

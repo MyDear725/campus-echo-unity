@@ -1,0 +1,1318 @@
+OFF Campus-mesh | Assets/LivingRevision/Meshes/9.asset | 5
+  sub 0: 0=7
+OFF Campus-mesh | Assets/LivingRevision/Meshes/10.asset | 5
+OFF Campus-mesh | Assets/LivingRevision/Meshes/12.asset | 5
+OFF Campus-mesh | Assets/LivingRevision/Meshes/13.asset | 5
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/223.asset | 83
+  sub 0: 0=6,0.92=6
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/245.asset | 83
+  sub 0: 0.84=1
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/246.asset | 83
+  sub 0: 0=24,0.88=3,0.89=3,0.94=6
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/252.asset | 83
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/291.asset | 83
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/358.asset | 83
+  sub 0: 0=6,0.99=6
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/359.asset | 83
+  sub 0: 0=6,0.93=5,0.94=1
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/366.asset | 83
+OFF Campus-mesh | Assets/LivingRevision/Meshes/405.asset | 91
+OFF Campus-mesh | Assets/LivingRevision/Meshes/406.asset | 92
+  sub 0: 0.02=6
+OFF Campus-mesh | Assets/LivingRevision/Meshes/407.asset | 93
+OFF Campus-mesh | Assets/LivingRevision/Meshes/408.asset | 94
+OFF Campus-mesh | Assets/LivingRevision/Meshes/409.asset | 95
+OFF Campus-mesh | Assets/LivingRevision/Meshes/410.asset | 96
+  sub 0: 0.08=6
+OFF Campus-mesh | Assets/LivingRevision/Meshes/411.asset | 97
+  sub 0: 0.15=297
+OFF Campus-mesh | Assets/LivingRevision/Meshes/412.asset | 98
+  sub 0: 0.09=323,0.1=3
+OFF Campus-mesh | Assets/LivingRevision/Meshes/413.asset | 99
+OFF Campus-mesh | Assets/LivingRevision/Meshes/414.asset | 100
+OFF Campus-mesh | Assets/LivingRevision/Meshes/415.asset | 95
+OFF Campus-mesh | Assets/LivingRevision/Meshes/416.asset | 97
+OFF Campus-mesh | Assets/LivingRevision/Meshes/417.asset | 101
+ON garden-ground-0-3 | Assets/LivingRevision/Meshes/431.asset | 107
+  sub 0: -0.07=299,-0.06=200,-0.05=99
+ON garden-ground-0-3 | Assets/LivingRevision/Meshes/432.asset | 107
+  sub 0: -0.05=198,-0.04=98
+ON garden-ground-0-3 | Assets/LivingRevision/Meshes/433.asset | 107
+  sub 0: -0.08=296
+ON garden-ground-0-3 | Assets/LivingRevision/Meshes/434.asset | 95
+  sub 0: -0.03=238,-0.02=476,-0.01=238
+OFF garden-plants-0-3 | Assets/LivingRevision/Meshes/435.asset | 111
+  sub 0: 0=4,0.01=62,0.02=244,0.03=564,0.04=514,0.05=242,0.06=124,0.07=196,0.08=162,0.09=168,0.1=110,0.11=126,0.12=86,0.13=108,0.14=48,0.15=78,0.16=70,0.17=112,0.18=92,0.19=100,0.2=142,0.21=104,0.22=100,0.23=124,0.24=102,0.25=100,0.26=56,0.27=68,0.28=76,0.29=52,0.3=44,0.31=22,0.32=34,0.33=24,0.34=10,0.35=4,0.36=4,0.37=4,0.38=4
+OFF garden-plants-0-3 | Assets/LivingRevision/Meshes/436.asset | 112
+  sub 0: 0.22=8,0.23=10,0.25=4,0.26=10,0.27=20,0.28=52,0.29=92,0.3=94,0.31=90,0.32=126,0.33=172,0.34=202,0.35=174,0.36=118,0.37=126,0.38=152,0.39=160,0.4=166,0.41=144,0.42=106,0.43=94,0.44=90,0.45=66,0.46=94,0.47=88,0.48=86,0.49=46,0.5=46,0.51=38,0.52=30,0.53=30,0.54=8,0.55=12
+OFF garden-plants-0-3 | Assets/LivingRevision/Meshes/437.asset | 113
+  sub 0: 0.22=6,0.23=12,0.24=6,0.26=18,0.27=18,0.28=54,0.29=108,0.3=126,0.31=126,0.32=138,0.33=216,0.34=264,0.35=234,0.36=180,0.37=174,0.38=168,0.39=210,0.4=228,0.41=216,0.42=156,0.43=144,0.44=96,0.45=108,0.46=102,0.47=132,0.48=120,0.49=72,0.5=54,0.51=66,0.52=36,0.53=36,0.54=30,0.55=12,0.56=6
+OFF garden-plants-0-3 | Assets/LivingRevision/Meshes/438.asset | 114
+  sub 0: -0.04=239,-0.03=565,-0.02=609,-0.01=692,0=563,0.01=491,0.02=399,0.03=392,0.04=395,0.05=364,0.06=325,0.07=293,0.08=265,0.09=242,0.1=199,0.11=194,0.12=155,0.13=145,0.14=151,0.15=151,0.16=109,0.17=86,0.18=81,0.19=58,0.2=52,0.21=53,0.22=48,0.23=37,0.24=37,0.25=11,0.26=17,0.27=23,0.28=9,0.29=3,0.3=6,0.31=7,0.32=11,0.33=13
+OFF garden-plants-0-3 | Assets/LivingRevision/Meshes/439.asset | 111
+  sub 0: 0.02=242,0.03=298,0.04=297,0.05=163,0.06=55,0.07=12,0.08=24,0.09=46,0.1=54,0.11=73,0.12=98,0.13=86,0.14=82,0.15=101,0.16=58,0.17=73,0.18=44,0.19=36,0.2=30,0.21=47,0.22=44,0.23=28,0.24=26,0.25=37,0.26=46,0.27=46,0.28=54,0.29=62,0.3=77,0.31=66,0.32=27,0.33=64,0.34=52,0.35=42,0.36=48,0.37=53,0.38=40,0.39=34,0.4=36,0.41=46,0.42=23,0.43=24,0.44=11,0.45=12,0.46=10,0.47=8,0.48=4
+OFF garden-plants-0-3 | Assets/LivingRevision/Meshes/440.asset | 112
+  sub 0: 0.39=10,0.4=24,0.41=47,0.42=52,0.43=88,0.44=107,0.45=147,0.46=195,0.47=232,0.48=255,0.49=309,0.5=350,0.51=361,0.52=383,0.53=445,0.54=452,0.55=523,0.56=491,0.57=540,0.58=514,0.59=509,0.6=551,0.61=522,0.62=560,0.63=485,0.64=523,0.65=478,0.66=458,0.67=450,0.68=438,0.69=417,0.7=396,0.71=369,0.72=363,0.73=344,0.74=311,0.75=268,0.76=300,0.77=247,0.78=221,0.79=226,0.8=163,0.81=167,0.82=154,0.83=100,0.84=86,0.85=76,0.86=33,0.87=28,0.88=18,0.89=4
+OFF garden-plants-0-3 | Assets/LivingRevision/Meshes/441.asset | 115
+  sub 0: 0.1=6,0.11=14,0.12=30,0.13=52,0.14=32,0.15=46,0.16=30,0.17=52,0.18=53,0.19=70,0.2=48,0.21=58,0.22=42,0.23=52,0.24=90,0.25=57,0.26=66,0.27=71,0.28=79,0.29=76,0.3=94,0.31=62,0.32=53,0.33=86,0.34=47,0.35=56,0.36=74,0.37=82,0.38=51,0.39=59,0.4=49,0.41=82,0.42=58,0.43=40,0.44=24,0.45=30,0.46=43,0.47=20,0.48=16,0.49=36,0.5=38,0.51=24,0.52=16,0.53=30,0.54=28,0.55=20,0.56=32,0.57=16,0.58=20,0.59=8,0.6=5,0.61=12,0.62=10,0.63=2,0.65=10,0.66=8,0.67=6,0.68=6,0.69=6,0.7=2,0.71=2,0.72=6,0.73=2,0.74=4,0.75=6,0.76=4,0.77=8,0.78=2,0.79=4,0.83=2,0.88=2,0.89=2
+ON garden-plants-0-3 | Assets/LivingRevision/Meshes/442.asset | 116
+  sub 0: -0.04=114
+ON garden-ground--1-3 | Assets/LivingRevision/Meshes/454.asset | 107
+  sub 0: -0.07=17,-0.06=17
+ON garden-ground--1-3 | Assets/LivingRevision/Meshes/455.asset | 107
+  sub 0: -0.05=16
+ON garden-ground--1-3 | Assets/LivingRevision/Meshes/456.asset | 107
+  sub 0: -0.08=16
+OFF garden-plants--1-3 | Assets/LivingRevision/Meshes/458.asset | 111
+  sub 0: 0=6,0.01=28,0.02=30,0.03=34,0.04=10,0.05=8,0.06=14,0.07=14,0.08=2,0.09=6,0.1=8,0.11=6,0.12=8,0.13=2,0.14=16,0.15=4,0.16=4,0.17=8,0.18=12,0.19=2,0.2=6,0.21=10,0.22=2,0.24=4,0.25=2,0.26=4,0.3=2
+OFF garden-plants--1-3 | Assets/LivingRevision/Meshes/459.asset | 112
+  sub 0: 0.21=8,0.22=10,0.24=6,0.25=18,0.26=12,0.28=2,0.29=8,0.3=24,0.31=14,0.32=6,0.34=2,0.35=16,0.36=18,0.42=6,0.43=8,0.44=4
+OFF garden-plants--1-3 | Assets/LivingRevision/Meshes/460.asset | 113
+  sub 0: 0.21=6,0.22=12,0.23=6,0.24=6,0.25=18,0.26=18,0.27=6,0.29=12,0.3=24,0.31=30,0.32=6,0.35=18,0.36=18,0.37=12,0.42=6,0.43=12,0.44=6
+OFF garden-plants--1-3 | Assets/LivingRevision/Meshes/461.asset | 114
+  sub 0: -0.04=74,-0.03=157,-0.02=226,-0.01=251,0=205,0.01=154,0.02=148,0.03=142,0.04=148,0.05=125,0.06=128,0.07=84,0.08=89,0.09=92,0.1=67,0.11=74,0.12=62,0.13=61,0.14=57,0.15=55,0.16=43,0.17=44,0.18=23,0.19=24,0.2=25,0.21=22,0.22=19,0.23=13,0.24=11,0.25=12,0.26=7,0.27=2,0.28=4,0.29=3,0.3=3,0.31=5,0.32=1,0.33=1,0.34=1,0.35=1
+OFF garden-plants--1-3 | Assets/LivingRevision/Meshes/464.asset | 115
+  sub 0: 0.18=2,0.19=4,0.2=8,0.21=4,0.22=8,0.23=8,0.24=6,0.25=8,0.26=12,0.27=8,0.28=20,0.29=4,0.3=6,0.31=8,0.32=18,0.33=4,0.34=8,0.35=18,0.36=10,0.37=2,0.38=12,0.39=10,0.4=16,0.41=11,0.42=8,0.43=12,0.44=16,0.45=12,0.46=10,0.47=12,0.48=12,0.49=6,0.5=10,0.51=10,0.52=18,0.53=28,0.54=2,0.55=10,0.56=4,0.57=8,0.58=12,0.59=14,0.6=8,0.61=4,0.62=4,0.63=6,0.64=6,0.65=8,0.66=6,0.67=2,0.68=6,0.69=6,0.7=2,0.71=4,0.72=8,0.73=4,0.74=6,0.75=4,0.76=2,0.8=2,0.85=4
+ON garden-plants--1-3 | Assets/LivingRevision/Meshes/465.asset | 116
+  sub 0: -0.04=8
+OFF garden-plants-1-3 | Assets/LivingRevision/Meshes/466.asset | 111
+  sub 0: 0=10,0.01=68,0.02=124,0.03=108,0.04=160,0.05=134,0.06=46,0.07=50,0.08=72,0.09=42,0.1=44,0.11=46,0.12=24,0.13=52,0.14=20,0.15=34,0.16=38,0.17=30,0.18=44,0.19=22,0.2=40,0.21=34,0.22=36,0.23=40,0.24=34,0.25=24,0.26=26,0.27=24,0.28=10,0.29=18,0.3=16,0.31=8,0.32=16,0.33=8,0.34=2,0.36=2,0.37=6
+OFF garden-plants-1-3 | Assets/LivingRevision/Meshes/467.asset | 112
+  sub 0: 0.21=2,0.22=8,0.23=18,0.24=8,0.25=14,0.26=30,0.27=30,0.28=26,0.29=18,0.3=26,0.31=48,0.32=50,0.33=42,0.34=40,0.35=48,0.36=38,0.37=54,0.38=62,0.39=74,0.4=38,0.41=16,0.42=34,0.43=32,0.44=42,0.45=10,0.46=16,0.47=28,0.48=34,0.49=14,0.51=24,0.52=20,0.53=28
+OFF garden-plants-1-3 | Assets/LivingRevision/Meshes/468.asset | 113
+  sub 0: 0.22=12,0.23=24,0.24=12,0.25=12,0.26=24,0.27=54,0.28=42,0.29=18,0.3=30,0.31=54,0.32=78,0.33=36,0.34=60,0.35=66,0.36=60,0.37=72,0.38=72,0.39=102,0.4=54,0.41=36,0.42=30,0.43=42,0.44=54,0.45=30,0.46=18,0.47=30,0.48=48,0.49=24,0.5=6,0.51=18,0.52=36,0.53=24,0.54=18
+OFF garden-plants-1-3 | Assets/LivingRevision/Meshes/469.asset | 114
+  sub 0: -0.04=96,-0.03=287,-0.02=349,-0.01=397,0=326,0.01=268,0.02=231,0.03=213,0.04=231,0.05=202,0.06=195,0.07=169,0.08=152,0.09=131,0.1=131,0.11=105,0.12=106,0.13=96,0.14=95,0.15=82,0.16=70,0.17=53,0.18=40,0.19=52,0.2=37,0.21=28,0.22=29,0.23=23,0.24=18,0.25=10,0.26=10,0.27=8,0.28=8,0.29=5,0.3=5,0.31=5,0.32=4,0.33=4,0.35=1
+OFF garden-plants-1-3 | Assets/LivingRevision/Meshes/470.asset | 111
+  sub 0: 0.02=42,0.03=48,0.04=124,0.05=22,0.06=14,0.08=4,0.09=6,0.1=8,0.11=8,0.12=26,0.13=26,0.14=30,0.15=24,0.16=12,0.17=18,0.18=8,0.19=12,0.2=12,0.21=14,0.22=2,0.23=2,0.24=6,0.25=4,0.26=20,0.27=12,0.28=10,0.29=10,0.3=12,0.31=4,0.32=10,0.33=14,0.34=18,0.35=18,0.36=14,0.37=22,0.38=6,0.39=14,0.4=20,0.41=6,0.42=4,0.43=2,0.44=8,0.45=4
+OFF garden-plants-1-3 | Assets/LivingRevision/Meshes/471.asset | 112
+  sub 0: 0.39=2,0.4=6,0.41=6,0.42=12,0.43=16,0.44=22,0.45=32,0.46=30,0.47=24,0.48=44,0.49=48,0.5=48,0.51=62,0.52=48,0.53=80,0.54=78,0.55=62,0.56=124,0.57=86,0.58=114,0.59=126,0.6=102,0.61=134,0.62=148,0.63=124,0.64=140,0.65=136,0.66=130,0.67=148,0.68=138,0.69=128,0.7=140,0.71=134,0.72=112,0.73=132,0.74=108,0.75=92,0.76=90,0.77=76,0.78=58,0.79=52,0.8=44,0.81=36,0.82=14,0.83=12,0.84=2
+OFF garden-plants-1-3 | Assets/LivingRevision/Meshes/472.asset | 115
+  sub 0: 0.1=2,0.11=4,0.12=8,0.13=12,0.14=8,0.15=10,0.16=4,0.17=10,0.18=8,0.19=12,0.2=6,0.21=8,0.22=8,0.23=10,0.24=16,0.25=8,0.26=14,0.27=10,0.28=14,0.29=16,0.3=16,0.31=8,0.32=10,0.33=12,0.34=2,0.35=8,0.36=10,0.37=8,0.38=6,0.39=8,0.4=4,0.41=10,0.42=8,0.43=6,0.46=2,0.49=4
+ON garden-ground-1-3 | Assets/LivingRevision/Meshes/473.asset | 107
+  sub 0: -0.07=80,-0.06=80
+ON garden-ground-1-3 | Assets/LivingRevision/Meshes/474.asset | 107
+  sub 0: -0.05=80
+ON garden-ground-1-3 | Assets/LivingRevision/Meshes/475.asset | 107
+  sub 0: -0.08=80
+ON garden-plants-1-3 | Assets/LivingRevision/Meshes/476.asset | 116
+  sub 0: -0.04=44
+ON garden-ground--1-2 | Assets/LivingRevision/Meshes/525.asset | 107
+ON garden-ground--1-2 | Assets/LivingRevision/Meshes/526.asset | 107
+ON garden-ground--1-2 | Assets/LivingRevision/Meshes/527.asset | 107
+ON garden-ground--1-2 | Assets/LivingRevision/Meshes/528.asset | 95
+OFF garden-plants--1-2 | Assets/LivingRevision/Meshes/529.asset | 111
+  sub 0: 0.02=6,0.03=32,0.04=30,0.05=40,0.06=8,0.07=6,0.08=16,0.09=12,0.1=8,0.11=14,0.12=6,0.13=2,0.14=6,0.15=12,0.17=4,0.18=2,0.19=12,0.2=8,0.21=4,0.22=8,0.23=12,0.24=8,0.26=6,0.27=10,0.28=14,0.29=2,0.31=2,0.32=8,0.34=4,0.39=2
+OFF garden-plants--1-2 | Assets/LivingRevision/Meshes/530.asset | 112
+  sub 0: 0.32=6,0.33=16,0.34=12,0.35=2,0.37=14,0.38=20,0.39=22,0.4=8,0.41=8,0.43=6,0.44=10,0.45=24,0.46=20,0.47=12,0.54=3,0.55=3,0.56=6
+OFF garden-plants--1-2 | Assets/LivingRevision/Meshes/531.asset | 113
+  sub 0: 0.32=6,0.33=18,0.34=18,0.35=6,0.37=6,0.38=30,0.39=30,0.4=18,0.41=6,0.42=6,0.43=6,0.44=6,0.45=24,0.46=36,0.47=18,0.48=6,0.54=6,0.55=6,0.56=12
+OFF garden-plants--1-2 | Assets/LivingRevision/Meshes/532.asset | 114
+  sub 0: -0.04=35,-0.03=74,-0.02=105,-0.01=138,0=109,0.01=86,0.02=72,0.03=78,0.04=71,0.05=78,0.06=64,0.07=54,0.08=43,0.09=45,0.1=42,0.11=33,0.12=40,0.13=39,0.14=37,0.15=29,0.16=27,0.17=23,0.18=20,0.19=16,0.2=16,0.21=10,0.22=15,0.23=8,0.24=7,0.25=5,0.26=4,0.27=8,0.28=2,0.29=5,0.3=3,0.32=3,0.34=2,0.35=1
+OFF garden-plants--1-2 | Assets/LivingRevision/Meshes/533.asset | 111
+OFF garden-plants--1-2 | Assets/LivingRevision/Meshes/534.asset | 112
+OFF garden-plants--1-2 | Assets/LivingRevision/Meshes/535.asset | 115
+  sub 0: 0.14=2,0.15=4,0.16=6,0.17=6,0.18=8,0.19=6,0.2=6,0.21=2,0.22=6,0.23=4,0.24=4,0.25=4,0.27=2,0.28=6,0.29=4,0.3=10,0.31=2,0.32=6,0.33=10,0.34=8,0.35=2,0.36=10,0.37=12,0.38=12,0.39=4,0.4=4,0.41=8,0.42=6,0.43=4,0.44=4,0.45=6,0.46=3,0.47=2,0.48=2,0.49=10,0.5=2,0.51=4,0.52=4,0.53=6,0.54=6,0.57=2,0.61=2
+ON garden-plants--1-2 | Assets/LivingRevision/Meshes/536.asset | 116
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1296.asset | 76
+  sub 0: 0.33=1,0.63=1
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/1297.asset | 76
+  sub 0: 0.33=2,0.63=2
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1298.asset | 76
+  sub 0: 0.33=3,0.63=3
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1299.asset | 76
+  sub 0: 0.33=4,0.63=4
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1300.asset | 76
+  sub 0: 0.33=1,0.63=1
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1317.asset | 76
+  sub 0: 0.33=1,0.63=1
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/1318.asset | 76
+  sub 0: 0.33=2,0.63=2
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1319.asset | 76
+  sub 0: 0.33=3,0.63=3
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1320.asset | 76
+  sub 0: 0.33=4,0.63=4
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1321.asset | 76
+  sub 0: 0.33=1,0.63=1
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1338.asset | 76
+  sub 0: 0.93=2
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/1339.asset | 76
+  sub 0: 0.93=4
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1340.asset | 76
+  sub 0: 0.93=6
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1341.asset | 76
+  sub 0: 0.93=8
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1342.asset | 76
+  sub 0: 0.93=2
+ON Campus--1-3 | Assets/LivingRevision/Meshes/1359.asset | 76
+  sub 0: 0.03=2
+ON Campus--1-2 | Assets/LivingRevision/Meshes/1360.asset | 76
+  sub 0: 0.03=4
+ON Campus-0-2 | Assets/LivingRevision/Meshes/1361.asset | 76
+  sub 0: 0.03=6
+ON Campus-1-2 | Assets/LivingRevision/Meshes/1362.asset | 76
+  sub 0: 0.03=8
+ON Campus-0-3 | Assets/LivingRevision/Meshes/1363.asset | 76
+  sub 0: 0.03=2
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1380.asset | 76
+  sub 0: 0.33=1,0.63=1
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/1381.asset | 76
+  sub 0: 0.33=2,0.63=2
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1382.asset | 76
+  sub 0: 0.33=3,0.63=3
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1383.asset | 76
+  sub 0: 0.33=4,0.63=4
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1384.asset | 76
+  sub 0: 0.33=1,0.63=1
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1401.asset | 76
+  sub 0: 0.33=1,0.63=1
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/1402.asset | 76
+  sub 0: 0.33=2,0.63=2
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1403.asset | 76
+  sub 0: 0.33=3,0.63=3
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1404.asset | 76
+  sub 0: 0.33=4,0.63=4
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1405.asset | 76
+  sub 0: 0.33=1,0.63=1
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1422.asset | 131
+  sub 0: 0.66=3,0.71=3
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1424.asset | 131
+  sub 0: 0.66=13,0.71=13,0.75=1
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1425.asset | 131
+  sub 0: 0.66=6,0.71=6,0.75=10,0.8=10
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1426.asset | 131
+  sub 0: 0.66=13,0.71=13
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1427.asset | 131
+  sub 0: 0.66=6,0.71=6
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1448.asset | 131
+  sub 0: 0.66=3,0.71=3
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1450.asset | 131
+  sub 0: 0.66=13,0.71=13,0.75=1,0.8=1
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1451.asset | 131
+  sub 0: 0.66=6,0.71=6,0.75=9,0.8=9
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1452.asset | 131
+  sub 0: 0.66=13,0.71=13
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1453.asset | 131
+  sub 0: 0.66=6,0.71=6
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1474.asset | 131
+  sub 0: 0.75=6
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1476.asset | 131
+  sub 0: 0.75=26,0.84=1
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1477.asset | 131
+  sub 0: 0.75=12,0.84=19
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1478.asset | 131
+  sub 0: 0.75=26
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1479.asset | 131
+  sub 0: 0.75=12
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1500.asset | 131
+  sub 0: 0.62=6
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1502.asset | 131
+  sub 0: 0.62=26,0.71=2
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1503.asset | 131
+  sub 0: 0.62=12,0.71=20
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1504.asset | 131
+  sub 0: 0.62=26
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1505.asset | 131
+  sub 0: 0.62=12
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1526.asset | 131
+  sub 0: 0.66=3,0.71=3
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1528.asset | 131
+  sub 0: 0.66=13,0.71=13
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1529.asset | 131
+  sub 0: 0.66=6,0.71=6,0.75=9,0.8=9
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1530.asset | 131
+  sub 0: 0.66=13,0.71=13
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1531.asset | 131
+  sub 0: 0.66=6,0.71=6
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1552.asset | 131
+  sub 0: 0.66=3,0.71=3
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1554.asset | 131
+  sub 0: 0.66=13,0.71=13,0.75=1,0.8=1
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1555.asset | 131
+  sub 0: 0.66=5,0.71=5,0.75=9,0.8=9
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1556.asset | 131
+  sub 0: 0.66=13,0.71=13
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1557.asset | 131
+  sub 0: 0.66=6,0.71=6
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1578.asset | 132
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1580.asset | 132
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1581.asset | 132
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1582.asset | 132
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1583.asset | 132
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1604.asset | 132
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1606.asset | 132
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1607.asset | 132
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1608.asset | 132
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1609.asset | 132
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1656.asset | 132
+  sub 0: 0.72=6
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1658.asset | 132
+  sub 0: 0.72=26
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1659.asset | 132
+  sub 0: 0.72=12,0.81=20
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1660.asset | 132
+  sub 0: 0=2,0.72=26
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1661.asset | 132
+  sub 0: 0.72=12
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1682.asset | 132
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1684.asset | 132
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1685.asset | 132
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1686.asset | 132
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1687.asset | 132
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1708.asset | 132
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1710.asset | 132
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1711.asset | 132
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1712.asset | 132
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1713.asset | 132
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1734.asset | 9
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/1735.asset | 9
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1736.asset | 9
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1737.asset | 9
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1738.asset | 9
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1739.asset | 9
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1748.asset | 9
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/1749.asset | 9
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1750.asset | 9
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1751.asset | 9
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1752.asset | 9
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1753.asset | 9
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1776.asset | 9
+  sub 0: 0=10
+ON Campus--1-2 | Assets/LivingRevision/Meshes/1777.asset | 9
+  sub 0: 0=12
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1778.asset | 9
+  sub 0: 0=20
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1779.asset | 9
+  sub 0: 0=12
+ON Campus-1-3 | Assets/LivingRevision/Meshes/1780.asset | 9
+  sub 0: 0=10
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1781.asset | 9
+  sub 0: 0=20
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1790.asset | 9
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/1791.asset | 9
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1792.asset | 9
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1793.asset | 9
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1794.asset | 9
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1795.asset | 9
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1804.asset | 9
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/1805.asset | 9
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1806.asset | 9
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1807.asset | 9
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1808.asset | 9
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1809.asset | 9
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1818.asset | 8
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/1819.asset | 8
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1820.asset | 8
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1821.asset | 8
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1822.asset | 8
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1823.asset | 8
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1844.asset | 8
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/1845.asset | 8
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1846.asset | 8
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1847.asset | 8
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1848.asset | 8
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1849.asset | 8
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1896.asset | 8
+  sub 0: 0.25=8,0.82=12
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/1897.asset | 8
+  sub 0: 0.25=18
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1898.asset | 8
+  sub 0: 0.25=4,0.82=52,0.92=4
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1899.asset | 8
+  sub 0: 0.25=6,0.82=24,0.92=40
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1900.asset | 8
+  sub 0: 0.25=4,0.82=24
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1901.asset | 8
+  sub 0: 0.82=52
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1922.asset | 8
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/1923.asset | 8
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1924.asset | 8
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1925.asset | 8
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1926.asset | 8
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1927.asset | 8
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1948.asset | 8
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/1949.asset | 8
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1950.asset | 8
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1951.asset | 8
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1952.asset | 8
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1953.asset | 8
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/1974.asset | 133
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/1975.asset | 133
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/1976.asset | 133
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/1977.asset | 133
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/1978.asset | 133
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/1979.asset | 133
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/2000.asset | 133
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/2001.asset | 133
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2002.asset | 133
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2003.asset | 133
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/2004.asset | 133
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2005.asset | 133
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/2052.asset | 133
+  sub 0: 0.88=4
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/2053.asset | 133
+  sub 0: 0.24=4,0.7=4
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2054.asset | 133
+  sub 0: 0.88=8
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2055.asset | 133
+  sub 0: 0.24=2,0.7=2,0.88=4,0.98=4
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/2056.asset | 133
+  sub 0: 0.88=4
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2057.asset | 133
+  sub 0: 0.88=6
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/2078.asset | 133
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/2079.asset | 133
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2080.asset | 133
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2081.asset | 133
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/2082.asset | 133
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2083.asset | 133
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/2104.asset | 133
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/2105.asset | 133
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2106.asset | 133
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2107.asset | 133
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/2108.asset | 133
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2109.asset | 133
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/2130.asset | 134
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/2131.asset | 134
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2132.asset | 134
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2133.asset | 134
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/2134.asset | 134
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2135.asset | 134
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/2156.asset | 134
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/2157.asset | 134
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2158.asset | 134
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2159.asset | 134
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/2160.asset | 134
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2161.asset | 134
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/2208.asset | 134
+  sub 0: 0.24=2,0.88=2
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/2209.asset | 134
+  sub 0: 0.24=4
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2210.asset | 134
+  sub 0: 0.24=2,0.88=8
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2211.asset | 134
+  sub 0: 0.24=2,0.98=4
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/2212.asset | 134
+  sub 0: 0.88=4
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2213.asset | 134
+  sub 0: 0.88=6
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/2234.asset | 134
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/2235.asset | 134
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2236.asset | 134
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2237.asset | 134
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/2238.asset | 134
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2239.asset | 134
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/2260.asset | 134
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/2261.asset | 134
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2262.asset | 134
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2263.asset | 134
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/2264.asset | 134
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2265.asset | 134
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/2286.asset | 7
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/2287.asset | 7
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2288.asset | 7
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2289.asset | 7
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/2290.asset | 7
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2291.asset | 7
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/2312.asset | 7
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/2313.asset | 7
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2314.asset | 7
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2315.asset | 7
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/2316.asset | 7
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2317.asset | 7
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/2364.asset | 7
+  sub 0: 0.24=2
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/2365.asset | 7
+  sub 0: 0.24=4
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2366.asset | 7
+  sub 0: 0.88=6,0.98=2
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2367.asset | 7
+  sub 0: 0.88=4,0.98=6
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/2368.asset | 7
+  sub 0: 0.24=2,0.88=2
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2369.asset | 7
+  sub 0: 0.08=4,0.88=8
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/2390.asset | 7
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/2391.asset | 7
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2392.asset | 7
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2393.asset | 7
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/2394.asset | 7
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2395.asset | 7
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/2416.asset | 7
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/2417.asset | 7
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2418.asset | 7
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2419.asset | 7
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/2420.asset | 7
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2421.asset | 7
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/2442.asset | 135
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/2443.asset | 135
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2444.asset | 135
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2445.asset | 135
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/2446.asset | 135
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2447.asset | 135
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/2468.asset | 135
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/2469.asset | 135
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2470.asset | 135
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2471.asset | 135
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/2472.asset | 135
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2473.asset | 135
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/2520.asset | 135
+  sub 0: 0.24=2
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/2521.asset | 135
+  sub 0: 0.24=4
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2522.asset | 135
+  sub 0: 0.24=2,0.88=4
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2523.asset | 135
+  sub 0: 0.88=4,0.98=6
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/2524.asset | 135
+  sub 0: 0.24=2,0.88=2
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2525.asset | 135
+  sub 0: 0.88=6
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/2546.asset | 135
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/2547.asset | 135
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2548.asset | 135
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2549.asset | 135
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/2550.asset | 135
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2551.asset | 135
+OFF Campus--1-3 | Assets/LivingRevision/Meshes/2572.asset | 135
+OFF Campus--1-2 | Assets/LivingRevision/Meshes/2573.asset | 135
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2574.asset | 135
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2575.asset | 135
+OFF Campus-1-3 | Assets/LivingRevision/Meshes/2576.asset | 135
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2577.asset | 135
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2599.asset | 8
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2600.asset | 8
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2602.asset | 8
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2622.asset | 8
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2623.asset | 8
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2625.asset | 8
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2668.asset | 8
+  sub 0: 0=10
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2669.asset | 8
+  sub 0: 0=2
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2671.asset | 8
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2691.asset | 8
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2692.asset | 8
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2694.asset | 8
+OFF Campus-1-2 | Assets/LivingRevision/Meshes/2714.asset | 8
+OFF Campus-0-3 | Assets/LivingRevision/Meshes/2715.asset | 8
+OFF Campus-0-2 | Assets/LivingRevision/Meshes/2717.asset | 8
+ON Campus-0-3 | Assets/LivingRevision/Meshes/2868.asset | 131
+  sub 0: 0.09=1,0.15=1
+ON Campus-0-3 | Assets/LivingRevision/Meshes/2879.asset | 131
+  sub 0: 0.09=1,0.15=1
+ON Campus-0-3 | Assets/LivingRevision/Meshes/2890.asset | 131
+  sub 0: 0.21=2
+ON Campus-0-3 | Assets/LivingRevision/Meshes/2901.asset | 131
+  sub 0: 0.03=2
+ON Campus-0-3 | Assets/LivingRevision/Meshes/2912.asset | 131
+  sub 0: 0.09=1,0.15=1
+ON Campus-0-3 | Assets/LivingRevision/Meshes/2923.asset | 131
+  sub 0: 0.09=1,0.15=1
+OFF Preserved surroundings | Assets/ResidenceCourtyard/Meshes/Surroundings-866be8d8a4daf3d4c9e9e5190a633d3f.asset | 91
+OFF Preserved surroundings | Assets/ResidenceCourtyard/Meshes/Surroundings-4d71d723ebbf39f4c9ed9672310d906b.asset | 92
+  sub 0: 0.02=6
+OFF Preserved surroundings | Assets/ResidenceCourtyard/Meshes/Surroundings-49ca48c6e3d948347940befe6829250d.asset | 93
+OFF Preserved surroundings | Assets/ResidenceCourtyard/Meshes/Surroundings-889f3d61e6f0a7a40af85556b405cbe2.asset | 94
+OFF Preserved surroundings | Assets/ResidenceCourtyard/Meshes/Surroundings-97f100f0c3dac3b4399b382cc5dceed1.asset | 95
+OFF Preserved surroundings | Assets/ResidenceCourtyard/Meshes/Surroundings-d615cdfd5571ab548a49839b3840a4eb.asset | 96
+  sub 0: 0.08=6
+OFF Preserved surroundings | Assets/ResidenceCourtyard/Meshes/Surroundings-907b6293f0f19524981bb02181a7a899.asset | 97
+  sub 0: 0.15=297
+OFF Preserved surroundings | Assets/ResidenceCourtyard/Meshes/Surroundings-345f78eb1c14a0d49b54245d6c772765.asset | 98
+  sub 0: 0.09=323,0.1=3
+OFF Preserved surroundings | Assets/ResidenceCourtyard/Meshes/Surroundings-0da7eedd1c5d4104f9413dc041974300.asset | 99
+OFF Preserved surroundings 726ea6047e915814ebaff163eedbf12b | Assets/LibraryRevision/Meshes/Preserved-726ea6047e915814ebaff163eedbf12b.asset | 5
+OFF Preserved surroundings 3407caea6ad274745a85f826a40819b7 | Assets/LibraryRevision/Meshes/Preserved-3407caea6ad274745a85f826a40819b7.asset | 5
+OFF Preserved surroundings 7b7fd9d55dac0d348ae445a30c1e7812 | Assets/LibraryRevision/Meshes/Preserved-7b7fd9d55dac0d348ae445a30c1e7812.asset | 76
+  sub 0: 0.33=3,0.63=3
+OFF Preserved surroundings ed7fd5123bbdc0645b41be00722087c4 | Assets/LibraryRevision/Meshes/Preserved-ed7fd5123bbdc0645b41be00722087c4.asset | 76
+  sub 0: 0.33=4,0.63=4
+OFF Preserved surroundings d5cec5836408b3b4ea7ada40d1e235cb | Assets/LibraryRevision/Meshes/Preserved-d5cec5836408b3b4ea7ada40d1e235cb.asset | 76
+  sub 0: 0.33=3,0.63=3
+OFF Preserved surroundings 1607b7679d918fe4a9b2fda6e73bfb67 | Assets/LibraryRevision/Meshes/Preserved-1607b7679d918fe4a9b2fda6e73bfb67.asset | 76
+  sub 0: 0.33=4,0.63=4
+OFF Preserved surroundings 62c7a2939352c414c9ca54c772a92a9e | Assets/LibraryRevision/Meshes/Preserved-62c7a2939352c414c9ca54c772a92a9e.asset | 76
+  sub 0: 0.93=6
+OFF Preserved surroundings 9f8bac08d56ddd340a88fa8c0ad8e75e | Assets/LibraryRevision/Meshes/Preserved-9f8bac08d56ddd340a88fa8c0ad8e75e.asset | 76
+  sub 0: 0.93=11
+OFF Preserved surroundings 0ea9fc7970a6a004697d0cd1a53e6464 | Assets/LibraryRevision/Meshes/Preserved-0ea9fc7970a6a004697d0cd1a53e6464.asset | 76
+  sub 0: 0.33=3,0.63=3
+OFF Preserved surroundings 8f5bd71b3cab0d44d85e1ab176c84d55 | Assets/LibraryRevision/Meshes/Preserved-8f5bd71b3cab0d44d85e1ab176c84d55.asset | 76
+  sub 0: 0.26=1,0.27=1,0.33=3,0.56=1,0.57=1,0.63=3,0.86=1,0.87=1
+OFF Preserved surroundings a125701de1f045241b96381fe8c112ca | Assets/LibraryRevision/Meshes/Preserved-a125701de1f045241b96381fe8c112ca.asset | 76
+  sub 0: 0.33=3,0.63=3
+OFF Preserved surroundings ab0da2eda82f1e34088208e3e9caf880 | Assets/LibraryRevision/Meshes/Preserved-ab0da2eda82f1e34088208e3e9caf880.asset | 76
+  sub 0: 0.33=4,0.4=1,0.63=4
+OFF Preserved surroundings e0647d5a7ba4cec4d9349f172c3d9a1e | Assets/LibraryRevision/Meshes/Preserved-e0647d5a7ba4cec4d9349f172c3d9a1e.asset | 131
+  sub 0: 0.66=13,0.71=13,0.72=1,0.77=1,0.81=1
+OFF Preserved surroundings 718e861afba0b844fad772aeff305f21 | Assets/LibraryRevision/Meshes/Preserved-718e861afba0b844fad772aeff305f21.asset | 131
+  sub 0: 0.66=6,0.71=6,0.75=10,0.8=10
+OFF Preserved surroundings 3fc3b22f5b845e84da82d472029765af | Assets/LibraryRevision/Meshes/Preserved-3fc3b22f5b845e84da82d472029765af.asset | 131
+  sub 0: 0.66=13,0.71=13,0.75=1,0.8=1,0.84=1
+OFF Preserved surroundings 6f46920d948a66b48abc50cb1a5d437b | Assets/LibraryRevision/Meshes/Preserved-6f46920d948a66b48abc50cb1a5d437b.asset | 131
+  sub 0: 0.66=6,0.71=6,0.75=9,0.8=9
+OFF Preserved surroundings a72e8891f986bf04fa6386182dd23f55 | Assets/LibraryRevision/Meshes/Preserved-a72e8891f986bf04fa6386182dd23f55.asset | 131
+  sub 0: 0.75=26,0.84=3
+OFF Preserved surroundings e02135151147a824bb969c83095798db | Assets/LibraryRevision/Meshes/Preserved-e02135151147a824bb969c83095798db.asset | 131
+  sub 0: 0.75=12,0.84=19
+OFF Preserved surroundings 5d7f0a946c4c1484dbc6899e4556d4d7 | Assets/LibraryRevision/Meshes/Preserved-5d7f0a946c4c1484dbc6899e4556d4d7.asset | 131
+  sub 0: 0.62=26,0.71=3
+OFF Preserved surroundings 2975985d2c76e0a439d0d50a64616456 | Assets/LibraryRevision/Meshes/Preserved-2975985d2c76e0a439d0d50a64616456.asset | 131
+  sub 0: 0.62=12,0.71=20
+OFF Preserved surroundings 5c8aa99057bab1448a9e327708050ddc | Assets/LibraryRevision/Meshes/Preserved-5c8aa99057bab1448a9e327708050ddc.asset | 131
+  sub 0: 0.66=13,0.71=13
+OFF Preserved surroundings 150a21e8339806b4a8a3f177d67366ec | Assets/LibraryRevision/Meshes/Preserved-150a21e8339806b4a8a3f177d67366ec.asset | 131
+  sub 0: 0.66=6,0.71=6,0.75=9,0.8=9
+OFF Preserved surroundings f656318ad73c3064b823a1958a7375d4 | Assets/LibraryRevision/Meshes/Preserved-f656318ad73c3064b823a1958a7375d4.asset | 131
+  sub 0: 0.66=13,0.71=13,0.75=1,0.8=1
+OFF Preserved surroundings 19e52820170c80a4d941700e660ed6d2 | Assets/LibraryRevision/Meshes/Preserved-19e52820170c80a4d941700e660ed6d2.asset | 131
+  sub 0: 0.66=5,0.71=5,0.75=9,0.8=9
+OFF Preserved surroundings 0d1a673a21eee834abde4003619b10bc | Assets/LibraryRevision/Meshes/Preserved-0d1a673a21eee834abde4003619b10bc.asset | 132
+OFF Preserved surroundings b6600e67599db9d47a539c0decd55af3 | Assets/LibraryRevision/Meshes/Preserved-b6600e67599db9d47a539c0decd55af3.asset | 132
+OFF Preserved surroundings 8dfab95a03171d344ba5954c28a387df | Assets/LibraryRevision/Meshes/Preserved-8dfab95a03171d344ba5954c28a387df.asset | 132
+OFF Preserved surroundings ee51da51abed57348b88dcc4b7363f7a | Assets/LibraryRevision/Meshes/Preserved-ee51da51abed57348b88dcc4b7363f7a.asset | 132
+OFF Preserved surroundings a84ceeb32b354114695b282e5eaf6cbf | Assets/LibraryRevision/Meshes/Preserved-a84ceeb32b354114695b282e5eaf6cbf.asset | 132
+  sub 0: 0.72=26
+OFF Preserved surroundings 76797e963e089de408332771a6616cf1 | Assets/LibraryRevision/Meshes/Preserved-76797e963e089de408332771a6616cf1.asset | 132
+  sub 0: 0.72=12,0.81=20
+OFF Preserved surroundings d2feac4cca2306c49afb476dde04f8a7 | Assets/LibraryRevision/Meshes/Preserved-d2feac4cca2306c49afb476dde04f8a7.asset | 132
+OFF Preserved surroundings 0bf478e5592f454478a5b193e122cd9b | Assets/LibraryRevision/Meshes/Preserved-0bf478e5592f454478a5b193e122cd9b.asset | 132
+OFF Preserved surroundings ff9c5703f0143264191aa2cd250050ea | Assets/LibraryRevision/Meshes/Preserved-ff9c5703f0143264191aa2cd250050ea.asset | 132
+OFF Preserved surroundings e67f2533170c8424cbe8050c24bce28f | Assets/LibraryRevision/Meshes/Preserved-e67f2533170c8424cbe8050c24bce28f.asset | 132
+OFF Preserved surroundings 7bdfe900f2ea89b41b5290275f872b1a | Assets/LibraryRevision/Meshes/Preserved-7bdfe900f2ea89b41b5290275f872b1a.asset | 8
+OFF Preserved surroundings 033c4a21d9e00b24999b7b685437be15 | Assets/LibraryRevision/Meshes/Preserved-033c4a21d9e00b24999b7b685437be15.asset | 8
+OFF Preserved surroundings a7b44b385629ff444bf0cb8e17bb2030 | Assets/LibraryRevision/Meshes/Preserved-a7b44b385629ff444bf0cb8e17bb2030.asset | 8
+OFF Preserved surroundings b94fce274323e58438d75b9a4c47b953 | Assets/LibraryRevision/Meshes/Preserved-b94fce274323e58438d75b9a4c47b953.asset | 8
+OFF Preserved surroundings 9a19d43c5fe94e9418ab68250922b308 | Assets/LibraryRevision/Meshes/Preserved-9a19d43c5fe94e9418ab68250922b308.asset | 8
+  sub 0: 0.25=4,0.82=52,0.92=4
+OFF Preserved surroundings a8faf03f744eca14dabb259ffb872a2b | Assets/LibraryRevision/Meshes/Preserved-a8faf03f744eca14dabb259ffb872a2b.asset | 8
+  sub 0: 0.25=6,0.82=24,0.92=40
+OFF Preserved surroundings 7a1ae61d03a22be46bb0937ffff4dad5 | Assets/LibraryRevision/Meshes/Preserved-7a1ae61d03a22be46bb0937ffff4dad5.asset | 8
+OFF Preserved surroundings 931813eadedd75942bbf5c44b81bf622 | Assets/LibraryRevision/Meshes/Preserved-931813eadedd75942bbf5c44b81bf622.asset | 8
+OFF Preserved surroundings 9d2e3607b8b43f64f9bad80f347a8334 | Assets/LibraryRevision/Meshes/Preserved-9d2e3607b8b43f64f9bad80f347a8334.asset | 8
+OFF Preserved surroundings 1c00b864915ffb2408b34eec83c7d125 | Assets/LibraryRevision/Meshes/Preserved-1c00b864915ffb2408b34eec83c7d125.asset | 8
+OFF Preserved surroundings 1f9fcff663c64fc46adc68a3dfed1e8a | Assets/LibraryRevision/Meshes/Preserved-1f9fcff663c64fc46adc68a3dfed1e8a.asset | 133
+OFF Preserved surroundings 9f9c638a4c6697d4886eb108451abd9a | Assets/LibraryRevision/Meshes/Preserved-9f9c638a4c6697d4886eb108451abd9a.asset | 133
+OFF Preserved surroundings f54d83b0eb691ca40acda6f9d90bfd4c | Assets/LibraryRevision/Meshes/Preserved-f54d83b0eb691ca40acda6f9d90bfd4c.asset | 133
+OFF Preserved surroundings 7fef74bc4146e4c44881425432334583 | Assets/LibraryRevision/Meshes/Preserved-7fef74bc4146e4c44881425432334583.asset | 133
+OFF Preserved surroundings 5281971371abf7f44af0c07e6e2c43af | Assets/LibraryRevision/Meshes/Preserved-5281971371abf7f44af0c07e6e2c43af.asset | 133
+  sub 0: 0.88=8
+OFF Preserved surroundings 9a4d8714589bb25479f134af0bb35984 | Assets/LibraryRevision/Meshes/Preserved-9a4d8714589bb25479f134af0bb35984.asset | 133
+  sub 0: 0.24=2,0.7=2,0.88=4,0.98=4
+OFF Preserved surroundings 4a4331dc17384f543b0486763d6483d2 | Assets/LibraryRevision/Meshes/Preserved-4a4331dc17384f543b0486763d6483d2.asset | 133
+OFF Preserved surroundings 06351956d6a7ba0458bb4174f1bee7f1 | Assets/LibraryRevision/Meshes/Preserved-06351956d6a7ba0458bb4174f1bee7f1.asset | 133
+OFF Preserved surroundings fe73890ca705394459ac4093d7e588f6 | Assets/LibraryRevision/Meshes/Preserved-fe73890ca705394459ac4093d7e588f6.asset | 133
+OFF Preserved surroundings ea2f1ee76d9952449bd997cfe3743332 | Assets/LibraryRevision/Meshes/Preserved-ea2f1ee76d9952449bd997cfe3743332.asset | 133
+OFF Preserved surroundings 4b1fb6ff7b7cd44489eef84546579baa | Assets/LibraryRevision/Meshes/Preserved-4b1fb6ff7b7cd44489eef84546579baa.asset | 134
+OFF Preserved surroundings d5878ec649d0a534a9863810da849812 | Assets/LibraryRevision/Meshes/Preserved-d5878ec649d0a534a9863810da849812.asset | 134
+OFF Preserved surroundings a0c0cf3737872cd418ae572ed00dc21e | Assets/LibraryRevision/Meshes/Preserved-a0c0cf3737872cd418ae572ed00dc21e.asset | 134
+OFF Preserved surroundings 03f7b97a89e067746abf99ce99f43b0d | Assets/LibraryRevision/Meshes/Preserved-03f7b97a89e067746abf99ce99f43b0d.asset | 134
+OFF Preserved surroundings f758a5adafca2404985d5789d31d8536 | Assets/LibraryRevision/Meshes/Preserved-f758a5adafca2404985d5789d31d8536.asset | 134
+  sub 0: 0.24=2,0.88=8
+OFF Preserved surroundings f1541f2cf111d3b4bafb5c0998ffc446 | Assets/LibraryRevision/Meshes/Preserved-f1541f2cf111d3b4bafb5c0998ffc446.asset | 134
+  sub 0: 0.24=2,0.98=4
+OFF Preserved surroundings c55b92f7b9e205647b176f350340f7f1 | Assets/LibraryRevision/Meshes/Preserved-c55b92f7b9e205647b176f350340f7f1.asset | 134
+OFF Preserved surroundings c152aea0499398049afc93614ed39516 | Assets/LibraryRevision/Meshes/Preserved-c152aea0499398049afc93614ed39516.asset | 134
+OFF Preserved surroundings f4bd1171b94502540bce730ec08999b2 | Assets/LibraryRevision/Meshes/Preserved-f4bd1171b94502540bce730ec08999b2.asset | 134
+OFF Preserved surroundings 1dae027df5519d440bb3429486bd7a1b | Assets/LibraryRevision/Meshes/Preserved-1dae027df5519d440bb3429486bd7a1b.asset | 134
+OFF Preserved surroundings e197a852b7ab36d4a85573fc03ef1615 | Assets/LibraryRevision/Meshes/Preserved-e197a852b7ab36d4a85573fc03ef1615.asset | 7
+OFF Preserved surroundings d46f57925a080d648b230feafa4a3fa3 | Assets/LibraryRevision/Meshes/Preserved-d46f57925a080d648b230feafa4a3fa3.asset | 7
+OFF Preserved surroundings a25b512901877e44ab6ecab65e4269f3 | Assets/LibraryRevision/Meshes/Preserved-a25b512901877e44ab6ecab65e4269f3.asset | 7
+OFF Preserved surroundings e6b08d4caf9e3344dbd9987d80abd989 | Assets/LibraryRevision/Meshes/Preserved-e6b08d4caf9e3344dbd9987d80abd989.asset | 7
+OFF Preserved surroundings ac0fc034b7b6c16489617d7419b207a8 | Assets/LibraryRevision/Meshes/Preserved-ac0fc034b7b6c16489617d7419b207a8.asset | 7
+  sub 0: 0.88=6,0.98=2
+OFF Preserved surroundings 2fd709ea07e902b4a92fe244b3ded0f9 | Assets/LibraryRevision/Meshes/Preserved-2fd709ea07e902b4a92fe244b3ded0f9.asset | 7
+  sub 0: 0.88=4,0.98=6
+OFF Preserved surroundings bd527155cadec4748835e84e462b236b | Assets/LibraryRevision/Meshes/Preserved-bd527155cadec4748835e84e462b236b.asset | 7
+OFF Preserved surroundings c55bad8fd2f09204cba06d637d69f9d3 | Assets/LibraryRevision/Meshes/Preserved-c55bad8fd2f09204cba06d637d69f9d3.asset | 7
+OFF Preserved surroundings 1cfe7225c70d10b43b0f0d34745420f5 | Assets/LibraryRevision/Meshes/Preserved-1cfe7225c70d10b43b0f0d34745420f5.asset | 7
+OFF Preserved surroundings dd8460fd21bac1c45abe2eb56bd60518 | Assets/LibraryRevision/Meshes/Preserved-dd8460fd21bac1c45abe2eb56bd60518.asset | 7
+OFF Preserved surroundings 7aaa89a73382afd49a91c9f190734d53 | Assets/LibraryRevision/Meshes/Preserved-7aaa89a73382afd49a91c9f190734d53.asset | 135
+OFF Preserved surroundings 2306819f08d5f844db8a7e76b0d69b79 | Assets/LibraryRevision/Meshes/Preserved-2306819f08d5f844db8a7e76b0d69b79.asset | 135
+OFF Preserved surroundings bb175f345454d0548a768d63b5cd1ecf | Assets/LibraryRevision/Meshes/Preserved-bb175f345454d0548a768d63b5cd1ecf.asset | 135
+OFF Preserved surroundings 45563df1123cf004d8ebda9314797393 | Assets/LibraryRevision/Meshes/Preserved-45563df1123cf004d8ebda9314797393.asset | 135
+OFF Preserved surroundings 046d6de104922d94dab2c8c43e4a621a | Assets/LibraryRevision/Meshes/Preserved-046d6de104922d94dab2c8c43e4a621a.asset | 135
+  sub 0: 0.24=2,0.88=4
+OFF Preserved surroundings 0ed4e2badadd9c744b1fd4cf5ecf41dc | Assets/LibraryRevision/Meshes/Preserved-0ed4e2badadd9c744b1fd4cf5ecf41dc.asset | 135
+  sub 0: 0.88=4,0.98=6
+OFF Preserved surroundings 532c741601637d049a12fbcd3b547b90 | Assets/LibraryRevision/Meshes/Preserved-532c741601637d049a12fbcd3b547b90.asset | 135
+OFF Preserved surroundings 3ba2cfa9ff5fce24dae2f0899248516c | Assets/LibraryRevision/Meshes/Preserved-3ba2cfa9ff5fce24dae2f0899248516c.asset | 135
+OFF Preserved surroundings 4df58f23f687fb24982c460feb841dbd | Assets/LibraryRevision/Meshes/Preserved-4df58f23f687fb24982c460feb841dbd.asset | 135
+OFF Preserved surroundings 63e49e98c8ae157439ea91167a281902 | Assets/LibraryRevision/Meshes/Preserved-63e49e98c8ae157439ea91167a281902.asset | 135
+OFF Preserved surroundings cb8f059c26c0f1341bac6163c9757344 | Assets/LibraryRevision/Meshes/Preserved-cb8f059c26c0f1341bac6163c9757344.asset | 8
+OFF Preserved surroundings 1af2599fcc3617b47a5da22c4c0d9a31 | Assets/LibraryRevision/Meshes/Preserved-1af2599fcc3617b47a5da22c4c0d9a31.asset | 8
+OFF Preserved surroundings a2a11e9b2e46ce242a50e03a72a00583 | Assets/LibraryRevision/Meshes/Preserved-a2a11e9b2e46ce242a50e03a72a00583.asset | 8
+  sub 0: 0=10
+OFF Preserved surroundings be8c3be7e2386fd418d600ab7b827d13 | Assets/LibraryRevision/Meshes/Preserved-be8c3be7e2386fd418d600ab7b827d13.asset | 8
+OFF Preserved surroundings fa4dd0f19120fdc49b42ed69c2eb378c | Assets/LibraryRevision/Meshes/Preserved-fa4dd0f19120fdc49b42ed69c2eb378c.asset | 8
+OFF Preserved surroundings 3fd349c30e520f442a4a7bbba8d3fd75 | Assets/LibraryRevision/Meshes/Preserved-3fd349c30e520f442a4a7bbba8d3fd75.asset | 8
+ON Retained west-campus surroundings | Assets/CampusPlanRevision/Meshes/Retained-8.asset | 100
+OFF Retained west-campus surroundings | Assets/CampusPlanRevision/Meshes/Retained-9.asset | 95
+OFF Retained west-campus surroundings | Assets/CampusPlanRevision/Meshes/Retained-10.asset | 97
+OFF Retained west-campus surroundings | Assets/CampusPlanRevision/Meshes/Retained-11.asset | 101
+OFF Retained west-campus surroundings | Assets/CampusPlanRevision/Meshes/Retained-33.asset | 91
+OFF Retained west-campus surroundings | Assets/CampusPlanRevision/Meshes/Retained-34.asset | 92
+  sub 0: 0.02=6
+OFF Retained west-campus surroundings | Assets/CampusPlanRevision/Meshes/Retained-35.asset | 93
+OFF Retained west-campus surroundings | Assets/CampusPlanRevision/Meshes/Retained-36.asset | 94
+OFF Retained west-campus surroundings | Assets/CampusPlanRevision/Meshes/Retained-37.asset | 95
+OFF Retained west-campus surroundings | Assets/CampusPlanRevision/Meshes/Retained-38.asset | 96
+  sub 0: 0.08=6
+OFF Retained west-campus surroundings | Assets/CampusPlanRevision/Meshes/Retained-39.asset | 97
+  sub 0: 0.15=297
+OFF Retained west-campus surroundings | Assets/CampusPlanRevision/Meshes/Retained-40.asset | 98
+  sub 0: 0.09=323,0.1=3
+ON Retained west-campus surroundings | Assets/CampusPlanRevision/Meshes/Retained-41.asset | 99
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-23.asset | 83
+  sub 0: 0=6,0.92=6
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-25.asset | 83
+  sub 0: 0.84=1
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-26.asset | 83
+  sub 0: 0=24
+ON Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-31.asset | 83
+ON Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-51.asset | 83
+ON Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-68.asset | 83
+  sub 0: 0=6
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-69.asset | 83
+  sub 0: 0=6
+ON Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-72.asset | 83
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-86.asset | 111
+  sub 0: 0=4,0.01=62,0.02=244,0.03=492,0.04=442,0.05=186,0.06=90,0.07=152,0.08=120,0.09=122,0.1=86,0.11=98,0.12=68,0.13=78,0.14=42,0.15=54,0.16=54,0.17=74,0.18=66,0.19=72,0.2=110,0.21=80,0.22=80,0.23=86,0.24=82,0.25=74,0.26=44,0.27=56,0.28=48,0.29=44,0.3=38,0.31=20,0.32=26,0.33=18,0.34=8,0.35=4,0.36=4,0.37=4,0.38=2
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-87.asset | 112
+  sub 0: 0.22=8,0.23=10,0.25=4,0.26=10,0.27=12,0.28=38,0.29=52,0.3=57,0.31=70,0.32=96,0.33=122,0.34=144,0.35=138,0.36=100,0.37=102,0.38=118,0.39=120,0.4=114,0.41=98,0.42=76,0.43=82,0.44=74,0.45=46,0.46=68,0.47=70,0.48=72,0.49=34,0.5=40,0.51=38,0.52=28,0.53=22,0.54=4,0.55=8
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-88.asset | 113
+  sub 0: 0.22=6,0.23=12,0.24=6,0.26=18,0.27=12,0.28=36,0.29=66,0.3=72,0.31=84,0.32=108,0.33=156,0.34=186,0.35=174,0.36=150,0.37=150,0.38=126,0.39=162,0.4=168,0.41=144,0.42=108,0.43=126,0.44=84,0.45=78,0.46=66,0.47=102,0.48=96,0.49=60,0.5=42,0.51=66,0.52=36,0.53=30,0.54=18,0.55=6,0.56=6
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-89.asset | 114
+  sub 0: -0.04=239,-0.03=565,-0.02=573,-0.01=519,0=460,0.01=437,0.02=372,0.03=341,0.04=270,0.05=241,0.06=212,0.07=177,0.08=167,0.09=162,0.1=126,0.11=123,0.12=92,0.13=89,0.14=99,0.15=108,0.16=68,0.17=65,0.18=51,0.19=38,0.2=35,0.21=37,0.22=34,0.23=28,0.24=25,0.25=9,0.26=13,0.27=15,0.28=4,0.3=5,0.31=6,0.32=8,0.33=9
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-90.asset | 111
+  sub 0: 0.02=242,0.03=276,0.04=252,0.05=146,0.06=54,0.07=10,0.08=20,0.09=40,0.1=38,0.11=64,0.12=66,0.13=74,0.14=66,0.15=84,0.16=44,0.17=66,0.18=42,0.19=24,0.2=26,0.21=44,0.22=30,0.23=26,0.24=20,0.25=30,0.26=32,0.27=38,0.28=44,0.29=56,0.3=60,0.31=48,0.32=24,0.33=50,0.34=34,0.35=34,0.36=36,0.37=46,0.38=36,0.39=32,0.4=28,0.41=44,0.42=18,0.43=24,0.44=8,0.45=12,0.46=10,0.47=8,0.48=4
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-91.asset | 112
+  sub 0: 0.39=10,0.4=22,0.41=40,0.42=46,0.43=78,0.44=82,0.45=126,0.46=168,0.47=188,0.48=212,0.49=252,0.5=270,0.51=280,0.52=298,0.53=350,0.54=354,0.55=392,0.56=378,0.57=394,0.58=384,0.59=394,0.6=416,0.61=396,0.62=414,0.63=376,0.64=378,0.65=380,0.66=380,0.67=342,0.68=366,0.69=342,0.7=312,0.71=308,0.72=296,0.73=282,0.74=258,0.75=236,0.76=268,0.77=226,0.78=204,0.79=214,0.8=156,0.81=154,0.82=148,0.83=98,0.84=78,0.85=74,0.86=32,0.87=26,0.88=18,0.89=4
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-92.asset | 115
+  sub 0: 0.1=6,0.11=12,0.12=24,0.13=36,0.14=24,0.15=30,0.16=12,0.17=30,0.18=24,0.19=36,0.2=18,0.21=24,0.22=26,0.23=30,0.24=52,0.25=30,0.26=44,0.27=36,0.28=52,0.29=50,0.3=58,0.31=26,0.32=32,0.33=42,0.34=10,0.35=32,0.36=32,0.37=32,0.38=22,0.39=26,0.4=16,0.41=36,0.42=32,0.43=20,0.44=4,0.45=6,0.46=20,0.47=6,0.48=2,0.49=16,0.5=14,0.51=6,0.52=4,0.53=8,0.54=12,0.55=8,0.56=16,0.57=2,0.58=6,0.59=4,0.6=4,0.61=6,0.62=8,0.63=2,0.65=6,0.66=4,0.67=6,0.68=6,0.69=6,0.7=2,0.71=2,0.72=6,0.73=2,0.74=4,0.75=6,0.76=4,0.77=8,0.78=2,0.79=4,0.83=2,0.88=2,0.89=2
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-93.asset | 111
+  sub 0: 0=6,0.01=28,0.02=30,0.03=34,0.04=10,0.05=8,0.06=14,0.07=14,0.08=2,0.09=6,0.1=8,0.11=6,0.12=8,0.13=2,0.14=16,0.15=4,0.16=4,0.17=8,0.18=12,0.19=2,0.2=6,0.21=10,0.22=2,0.24=4,0.25=2,0.26=4,0.3=2
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-94.asset | 112
+  sub 0: 0.21=8,0.22=10,0.24=6,0.25=18,0.26=12,0.28=2,0.29=8,0.3=24,0.31=14,0.32=6,0.34=2,0.35=16,0.36=18,0.42=6,0.43=8,0.44=4
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-95.asset | 113
+  sub 0: 0.21=6,0.22=12,0.23=6,0.24=6,0.25=18,0.26=18,0.27=6,0.29=12,0.3=24,0.31=30,0.32=6,0.35=18,0.36=18,0.37=12,0.42=6,0.43=12,0.44=6
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-96.asset | 114
+  sub 0: -0.04=74,-0.03=157,-0.02=226,-0.01=251,0=205,0.01=154,0.02=148,0.03=141,0.04=146,0.05=123,0.06=122,0.07=79,0.08=81,0.09=86,0.1=61,0.11=68,0.12=56,0.13=54,0.14=54,0.15=55,0.16=43,0.17=44,0.18=23,0.19=24,0.2=25,0.21=22,0.22=19,0.23=13,0.24=11,0.25=12,0.26=7,0.27=2,0.28=4,0.29=3,0.3=3,0.31=5,0.32=1,0.33=1,0.34=1,0.35=1
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-99.asset | 115
+  sub 0: 0.18=2,0.19=4,0.2=8,0.21=4,0.22=8,0.23=8,0.24=6,0.25=8,0.26=12,0.27=8,0.28=20,0.29=4,0.3=6,0.31=8,0.32=18,0.33=4,0.34=8,0.35=18,0.36=10,0.37=2,0.38=12,0.39=10,0.4=16,0.41=11,0.42=8,0.43=12,0.44=16,0.45=12,0.46=10,0.47=12,0.48=12,0.49=6,0.5=10,0.51=10,0.52=18,0.53=28,0.54=2,0.55=10,0.56=4,0.57=8,0.58=12,0.59=14,0.6=8,0.61=4,0.62=4,0.63=6,0.64=6,0.65=8,0.66=6,0.67=2,0.68=6,0.69=6,0.7=2,0.71=4,0.72=8,0.73=4,0.74=6,0.75=4,0.76=2,0.8=2,0.85=4
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-100.asset | 111
+  sub 0: 0=10,0.01=68,0.02=124,0.03=84,0.04=156,0.05=126,0.06=34,0.07=46,0.08=56,0.09=36,0.1=38,0.11=42,0.12=18,0.13=48,0.14=16,0.15=26,0.16=28,0.17=22,0.18=38,0.19=14,0.2=36,0.21=28,0.22=26,0.23=34,0.24=34,0.25=20,0.26=22,0.27=20,0.28=10,0.29=18,0.3=16,0.31=6,0.32=16,0.33=8,0.34=2,0.36=2,0.37=6
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-101.asset | 112
+  sub 0: 0.21=2,0.22=8,0.23=18,0.24=8,0.25=8,0.26=20,0.27=16,0.28=20,0.29=12,0.3=14,0.31=32,0.32=38,0.33=34,0.34=40,0.35=48,0.36=22,0.37=34,0.38=48,0.39=70,0.4=38,0.41=16,0.42=34,0.43=32,0.44=34,0.45=2,0.46=14,0.47=28,0.48=34,0.49=14,0.51=24,0.52=20,0.53=28
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-102.asset | 113
+  sub 0: 0.22=12,0.23=24,0.24=12,0.25=6,0.26=18,0.27=30,0.28=30,0.29=12,0.3=18,0.31=36,0.32=54,0.33=30,0.34=54,0.35=66,0.36=42,0.37=42,0.38=54,0.39=96,0.4=54,0.41=36,0.42=30,0.43=42,0.44=48,0.45=18,0.46=12,0.47=30,0.48=48,0.49=24,0.5=6,0.51=18,0.52=36,0.53=24,0.54=18
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-103.asset | 114
+  sub 0: -0.04=96,-0.03=287,-0.02=328,-0.01=235,0=222,0.01=210,0.02=201,0.03=179,0.04=130,0.05=108,0.06=107,0.07=94,0.08=81,0.09=63,0.1=67,0.11=65,0.12=55,0.13=45,0.14=46,0.15=38,0.16=33,0.17=30,0.18=19,0.19=22,0.2=19,0.21=10,0.22=15,0.23=11,0.24=4,0.25=5,0.26=7,0.27=4,0.28=1,0.29=3,0.3=2,0.31=4,0.32=1,0.35=1
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-104.asset | 115
+  sub 0: 0.1=2,0.11=4,0.12=8,0.13=12,0.14=8,0.15=10,0.16=4,0.17=10,0.18=8,0.19=12,0.2=6,0.21=8,0.22=8,0.23=10,0.24=16,0.25=8,0.26=14,0.27=10,0.28=14,0.29=16,0.3=16,0.31=8,0.32=10,0.33=12,0.34=2,0.35=8,0.36=10,0.37=8,0.38=6,0.39=8,0.4=4,0.41=10,0.42=8,0.43=6,0.46=2,0.49=4
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-117.asset | 111
+  sub 0: 0.02=6,0.03=32,0.04=6,0.05=18,0.06=6,0.07=2,0.08=10,0.09=4,0.1=6,0.11=4,0.12=2,0.13=2,0.15=6,0.17=2,0.18=2,0.19=6,0.2=4,0.22=6,0.23=8,0.26=6,0.27=4,0.28=6,0.31=2,0.32=2
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-118.asset | 112
+  sub 0: 0.32=6,0.33=8,0.34=4,0.37=10,0.38=14,0.39=8,0.4=4,0.43=6,0.44=8,0.45=14,0.46=8
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-119.asset | 113
+  sub 0: 0.32=6,0.33=12,0.34=6,0.37=6,0.38=18,0.39=18,0.4=6,0.43=6,0.44=6,0.45=18,0.46=12,0.47=6
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-120.asset | 114
+  sub 0: -0.04=35,-0.03=74,-0.02=96,-0.01=101,0=85,0.01=71,0.02=65,0.03=64,0.04=48,0.05=50,0.06=44,0.07=38,0.08=31,0.09=29,0.1=26,0.11=20,0.12=24,0.13=27,0.14=24,0.15=20,0.16=19,0.17=11,0.18=15,0.19=12,0.2=10,0.21=7,0.22=9,0.23=6,0.24=5,0.25=2,0.26=3,0.27=6,0.28=1,0.29=3,0.3=2,0.32=3,0.34=1,0.35=1
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-121.asset | 111
+ON Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-122.asset | 112
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-123.asset | 115
+  sub 0: 0.14=2,0.15=4,0.16=6,0.17=6,0.18=8,0.19=6,0.2=6,0.21=2,0.22=6,0.23=4,0.24=4,0.25=4,0.27=2,0.28=6,0.29=4,0.3=10,0.31=2,0.32=6,0.33=10,0.34=8,0.35=2,0.36=10,0.37=12,0.38=12,0.39=4,0.4=4,0.41=8,0.42=6,0.43=4,0.44=4,0.45=6,0.46=3,0.47=2,0.48=2,0.49=10,0.5=2,0.51=4,0.52=4,0.53=6,0.54=6,0.57=2,0.61=2
+ON Road clearance surroundings | Assets/CampusModernization/BridgeClear-e067135761dd3b64e9ebd9f8b37bb553.asset | 95
+ON Road clearance surroundings | Assets/CampusModernization/BridgeClear-8df95715e8906da41b188cb5910d59af.asset | 97
+ON Road clearance surroundings | Assets/CampusModernization/BridgeClear-48e160210f2d391449fc3fc8014fe7a0.asset | 101
+ON Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-270.asset | 92
+ON Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-271.asset | 93
+ON Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-272.asset | 94
+ON Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-273.asset | 95
+ON Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-274.asset | 96
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-275.asset | 97
+OFF Road clearance surroundings | Assets/CampusPlanRevision/Meshes/RoadClear-276.asset | 98
+OFF Ground overlap repair | Assets/CampusPlanRevision/Meshes/AlignedSurface-23.asset | 111
+  sub 0: 0=4,0.01=62,0.02=244,0.03=492,0.04=442,0.05=186,0.06=90,0.07=152,0.08=120,0.09=122,0.1=86,0.11=98,0.12=68,0.13=78,0.14=42,0.15=54,0.16=54,0.17=74,0.18=66,0.19=72,0.2=110,0.21=80,0.22=80,0.23=86,0.24=80,0.25=74,0.26=44,0.27=56,0.28=48,0.29=44,0.3=38,0.31=20,0.32=26,0.33=18,0.34=8,0.35=4,0.36=4,0.37=4,0.38=2
+OFF Ground overlap repair | Assets/CampusPlanRevision/Meshes/AlignedSurface-24.asset | 112
+  sub 0: 0.22=8,0.23=10,0.25=4,0.26=10,0.27=12,0.28=38,0.29=52,0.3=52,0.31=70,0.32=96,0.33=116,0.34=136,0.35=134,0.36=100,0.37=102,0.38=118,0.39=120,0.4=114,0.41=98,0.42=76,0.43=82,0.44=74,0.45=46,0.46=68,0.47=70,0.48=72,0.49=34,0.5=40,0.51=38,0.52=28,0.53=22,0.54=4,0.55=8
+OFF Ground overlap repair | Assets/CampusPlanRevision/Meshes/AlignedSurface-25.asset | 113
+  sub 0: 0.22=6,0.23=12,0.24=6,0.26=18,0.27=12,0.28=36,0.29=66,0.3=72,0.31=84,0.32=108,0.33=150,0.34=186,0.35=174,0.36=150,0.37=150,0.38=126,0.39=162,0.4=168,0.41=144,0.42=108,0.43=126,0.44=84,0.45=78,0.46=66,0.47=102,0.48=96,0.49=60,0.5=42,0.51=66,0.52=36,0.53=30,0.54=18,0.55=6,0.56=6
+OFF Ground overlap repair | Assets/CampusPlanRevision/Meshes/AlignedSurface-26.asset | 111
+  sub 0: 0.02=242,0.03=276,0.04=252,0.05=146,0.06=54,0.07=10,0.08=20,0.09=40,0.1=38,0.11=64,0.12=66,0.13=74,0.14=66,0.15=84,0.16=44,0.17=66,0.18=42,0.19=24,0.2=26,0.21=44,0.22=30,0.23=26,0.24=20,0.25=30,0.26=32,0.27=38,0.28=44,0.29=56,0.3=60,0.31=48,0.32=24,0.33=50,0.34=34,0.35=34,0.36=36,0.37=46,0.38=36,0.39=32,0.4=28,0.41=44,0.42=18,0.43=24,0.44=8,0.45=12,0.46=10,0.47=8,0.48=4
+OFF Ground overlap repair | Assets/CampusPlanRevision/Meshes/AlignedSurface-27.asset | 115
+  sub 0: 0.1=2,0.11=4,0.12=8,0.13=12,0.14=8,0.15=10,0.16=4,0.17=10,0.18=8,0.19=12,0.2=6,0.21=8,0.22=8,0.23=10,0.24=16,0.25=8,0.26=14,0.27=10,0.28=14,0.29=16,0.3=16,0.31=8,0.32=10,0.33=12,0.34=2,0.35=8,0.36=10,0.37=8,0.38=6,0.39=8,0.4=4,0.41=10,0.42=8,0.43=6,0.46=2,0.49=4
+OFF Ground overlap repair | Assets/CampusPlanRevision/Meshes/AlignedSurface-32.asset | 111
+  sub 0: 0.02=6,0.03=32,0.04=6,0.05=18,0.06=6,0.07=2,0.08=10,0.09=4,0.1=6,0.11=4,0.12=2,0.13=2,0.15=6,0.17=2,0.18=2,0.19=6,0.2=4,0.22=6,0.23=8,0.26=6,0.27=4,0.28=6,0.31=2,0.32=2
+OFF Ground overlap repair | Assets/CampusPlanRevision/Meshes/AlignedSurface-33.asset | 112
+  sub 0: 0.32=6,0.33=8,0.34=4,0.37=10,0.38=14,0.39=8,0.4=4,0.43=6,0.44=8,0.45=14,0.46=8
+OFF Ground overlap repair | Assets/CampusPlanRevision/Meshes/AlignedSurface-34.asset | 113
+  sub 0: 0.32=6,0.33=12,0.34=6,0.37=6,0.38=18,0.39=18,0.4=6,0.43=6,0.44=6,0.45=18,0.46=12,0.47=6
+ON Ground overlap repair | Assets/CampusPlanRevision/Meshes/AlignedSurface-35.asset | 111
+OFF Ground overlap repair | Assets/CampusPlanRevision/Meshes/AlignedSurface-36.asset | 115
+  sub 0: 0.14=2,0.15=4,0.16=6,0.17=6,0.18=8,0.19=6,0.2=6,0.21=2,0.22=6,0.23=4,0.24=4,0.25=4,0.27=2,0.28=6,0.29=4,0.3=10,0.31=2,0.32=6,0.33=10,0.34=8,0.35=2,0.36=10,0.37=12,0.38=12,0.39=4,0.4=4,0.41=8,0.42=6,0.43=4,0.44=4,0.45=6,0.46=3,0.47=2,0.48=2,0.49=10,0.5=2,0.51=4,0.52=4,0.53=6,0.54=6,0.57=2,0.61=2
+OFF Paving-chunk--1-3 | Assets/CampusPlanRevision/Meshes/Paving-chunk--1-3.asset | Campus landscape · Paving
+  sub 0: 0.3=225
+OFF Paving-chunk--1-2 | Assets/CampusPlanRevision/Meshes/Paving-chunk--1-2.asset | Campus landscape · Paving
+  sub 0: 0.3=181
+ON Paving-chunk-1-2 | Assets/CampusPlanRevision/Meshes/Paving-chunk-1-2.asset | Campus landscape · Paving
+OFF Paving-chunk-1-3 | Assets/CampusPlanRevision/Meshes/Paving-chunk-1-3.asset | Campus landscape · Paving
+  sub 0: 0.3=310
+OFF Paving-chunk-0-3 | Assets/CampusPlanRevision/Meshes/Paving-chunk-0-3.asset | Campus landscape · Paving
+  sub 0: 0.3=493
+OFF Asphalt-chunk-1-3 | Assets/CampusPlanRevision/Meshes/Asphalt-chunk-1-3.asset | Campus landscape · Asphalt
+  sub 0: 0.3=761
+OFF Asphalt-chunk-0-3 | Assets/CampusPlanRevision/Meshes/Asphalt-chunk-0-3.asset | Campus landscape · Asphalt
+  sub 0: 0.3=670
+OFF Asphalt-chunk--1-3 | Assets/CampusPlanRevision/Meshes/Asphalt-chunk--1-3.asset | Campus landscape · Asphalt
+  sub 0: 0.3=654
+OFF Stone-chunk--1-3 | Assets/CampusPlanRevision/Meshes/Stone-chunk--1-3.asset | Campus landscape · Stone
+  sub 0: 0.3=80
+OFF Stone-chunk--1-2 | Assets/CampusPlanRevision/Meshes/Stone-chunk--1-2.asset | Campus landscape · Stone
+  sub 0: 0.3=69
+ON Stone-chunk-1-2 | Assets/CampusPlanRevision/Meshes/Stone-chunk-1-2.asset | Campus landscape · Stone
+OFF Stone-chunk-1-3 | Assets/CampusPlanRevision/Meshes/Stone-chunk-1-3.asset | Campus landscape · Stone
+  sub 0: 0.3=134
+OFF Stone-chunk-0-3 | Assets/CampusPlanRevision/Meshes/Stone-chunk-0-3.asset | Campus landscape · Stone
+  sub 0: 0.3=183
+ON Wood | Assets/CampusPlanRevision/Meshes/Wood.asset | Campus landscape · Wood
+ON Metal-chunk--1-3 | Assets/CampusPlanRevision/Meshes/Metal-chunk--1-3.asset | Campus landscape · Metal
+ON Metal-chunk--1-2 | Assets/CampusPlanRevision/Meshes/Metal-chunk--1-2.asset | Campus landscape · Metal
+ON Leaf-chunk--1-3 | Assets/CampusPlanRevision/Meshes/Leaf-chunk--1-3.asset | Campus landscape · Leaf
+ON Leaf-chunk--1-2 | Assets/CampusPlanRevision/Meshes/Leaf-chunk--1-2.asset | Campus landscape · Leaf
+OFF Paint | Assets/CampusPlanRevision/Meshes/Paint.asset | Plan Paint
+  sub 0: 0.3=405
+ON Light | Assets/CampusPlanRevision/Meshes/Light.asset | Plan Light
+ON BorderStone-chunk--1-3 | Assets/CampusPlanRevision/Meshes/BorderStone-chunk--1-3.asset | Campus landscape · BorderStone
+OFF BorderStone-chunk--1-2 | Assets/CampusPlanRevision/Meshes/BorderStone-chunk--1-2.asset | Campus landscape · BorderStone
+  sub 0: 0.3=65
+ON DarkBand-chunk--1-3 | Assets/CampusPlanRevision/Meshes/DarkBand-chunk--1-3.asset | Campus landscape · DarkBand
+OFF DarkBand-chunk--1-2 | Assets/CampusPlanRevision/Meshes/DarkBand-chunk--1-2.asset | Campus landscape · DarkBand
+  sub 0: 0.3=53
+ON Soil | Assets/CampusPlanRevision/Meshes/Soil.asset | Campus landscape · Soil
+ON Bark-chunk--1-3 | Assets/CampusPlanRevision/Meshes/Bark-chunk--1-3.asset | Campus landscape · Bark
+ON Bark-chunk--1-2 | Assets/CampusPlanRevision/Meshes/Bark-chunk--1-2.asset | Campus landscape · Bark
+ON GrassDetail | Assets/CampusPlanRevision/Meshes/GrassDetail.asset | Campus landscape · GrassDetail
+ON ShrubLight-chunk--1-3 | Assets/CampusPlanRevision/Meshes/ShrubLight-chunk--1-3.asset | Campus landscape · ShrubLight
+ON ShrubLight-chunk--1-2 | Assets/CampusPlanRevision/Meshes/ShrubLight-chunk--1-2.asset | Campus landscape · ShrubLight
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-9a8cb32e5284b844a821841f56667d92.asset | 5
+  sub 0: 0=7
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-62172a106cc36cf4a95790e7e084703a.asset | 5
+  sub 0: 0.17=9,0.33=18
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-ad5953a21bc640b42989935ed9cf2447.asset | 111
+  sub 0: 0.02=42,0.03=48,0.04=124,0.05=22,0.06=14,0.08=4,0.09=6,0.1=8,0.11=8,0.12=106,0.13=18,0.14=6,0.15=4,0.17=2,0.18=8,0.19=12,0.2=12,0.21=14,0.22=2,0.23=2,0.24=6,0.25=4,0.26=20,0.27=12,0.28=10,0.29=10,0.3=12,0.31=164,0.32=6,0.33=10,0.34=10,0.35=2,0.36=10,0.37=6,0.38=2,0.39=6,0.4=4,0.41=6,0.42=4,0.43=2,0.44=8,0.45=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-7f268a7f135bf63479215901d7bad448.asset | 112
+  sub 0: 0.39=2,0.4=6,0.41=6,0.42=12,0.43=16,0.44=22,0.45=32,0.46=30,0.47=24,0.48=48,0.49=105,0.5=107
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-eaaa36ad0b75f0e4bb1a2b5aec48b23b.asset | 76
+  sub 0: 0.19=1,0.34=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-55309f3b4e1ec354ca9df76fd7af34b9.asset | 76
+  sub 0: 0.19=2,0.34=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-8844d5b064bfafb4a9b15d132b1b1c0f.asset | 76
+  sub 0: 0.19=1,0.34=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-118db8849b4170f498c7a5d93b800360.asset | 76
+  sub 0: 0.19=1,0.34=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-f044cc7150cb99d439641b957824afe2.asset | 76
+  sub 0: 0.19=2,0.34=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-ac905882accbdfb468063a5d03b8d7d3.asset | 76
+  sub 0: 0.19=1,0.34=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-cd321f3efbcf06243bb9af048b932c49.asset | 76
+  sub 0: 0.19=1,0.34=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-800de13017c0f4e4189cc8e61b45c4b9.asset | 76
+  sub 0: 0.19=2,0.34=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-511a46c679da46140b9e6a72a9d36560.asset | 76
+  sub 0: 0.19=1,0.34=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-9f612ea5f7af5f741bb1ae64e8c6d9eb.asset | 76
+  sub 0: 0.19=1,0.34=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-c7a607fa2c1ae3845be818f8958947ba.asset | 76
+  sub 0: 0.19=2,0.34=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-88236c4f41637f340a3222220c41d815.asset | 76
+  sub 0: 0.19=1,0.34=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-0e45c75ed0263f64e987926d7569dab6.asset | 132
+  sub 0: 0.17=1,0.33=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-ff649a40ee8beba48a16aedbac2f3d26.asset | 132
+  sub 0: 0.17=1,0.33=2
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-411f3086479406d438811096afd2d050.asset | 132
+  sub 0: 0=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-025d41a2d1f38f84fa7979944f0a0d04.asset | 132
+  sub 0: 0.17=1,0.33=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-b1446ba1ab4f54a43badd8660e042f78.asset | 132
+  sub 0: 0.17=1,0.33=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-4a081d1f97effbb43819033ab616ade7.asset | 9
+  sub 0: 0.17=5,0.33=10
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-3c3c876d640cd9748bdc18910bb8a93d.asset | 9
+  sub 0: 0.17=6,0.33=12
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-ea9774427e461a647bf51533014dfcdc.asset | 9
+  sub 0: 0.17=10,0.33=20
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-e47d661f8d0f5dc42805e1536fa2eba3.asset | 9
+  sub 0: 0.17=6,0.33=12
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-bbd8e14ed64ee454982a0c599e2b18d3.asset | 9
+  sub 0: 0.17=5,0.33=10
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-adeed63db7b20ce41bd4a42c2d51d8ed.asset | 9
+  sub 0: 0.17=10,0.33=20
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-4ebca1f69efbab342bece7feec3d988c.asset | 9
+  sub 0: 0.17=5,0.33=10
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-48c201115d6c0714a9076f18e8a1b82f.asset | 9
+  sub 0: 0.17=6,0.33=12
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-9b6a6f00e05c2f64eaf99dc97d8f6f9f.asset | 9
+  sub 0: 0.17=10,0.33=20
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-3bb562fcf1e30364e9629f04a2b1ed6c.asset | 9
+  sub 0: 0.17=6,0.33=12
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-9cb6f5708629d004e9d035dd1373bab6.asset | 9
+  sub 0: 0.17=5,0.33=10
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-b8394c0b3ab7652499be34deb710386a.asset | 9
+  sub 0: 0.17=10,0.33=20
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-16c5cbccbe13405468ba81dfcec72d6e.asset | 9
+  sub 0: 0=10
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-f056d49b7e87f0041afcf16b97ac96e6.asset | 9
+  sub 0: 0=20
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-1ec188dd018f73f48a8c3febb4e649a3.asset | 9
+  sub 0: 0=12
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-d83392ce68c6bdc4eafa60c0fd62627a.asset | 9
+  sub 0: 0=20
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-03834556b9525a04ba7ecf421635c0c9.asset | 9
+  sub 0: 0.17=5,0.33=10
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-def8a7a66f5f9da4699cc7579cb43e34.asset | 9
+  sub 0: 0.17=6,0.33=12
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-d96d3fd519df2f54fb88cedfbce637d7.asset | 9
+  sub 0: 0.17=10,0.33=20
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-c446226391272e14c9ece0cca1906ae5.asset | 9
+  sub 0: 0.17=6,0.33=12
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-f5e43e39aa43b944d954e213f76d0b47.asset | 9
+  sub 0: 0.17=5,0.33=10
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-4af6e9370ae47814f8389737ee4a5f40.asset | 9
+  sub 0: 0.17=10,0.33=20
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-1376c4e1e820ca24f970d6ed20a99f7d.asset | 9
+  sub 0: 0.17=5,0.33=10
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-d26a581fa4f719240a8f48dc8ed710db.asset | 9
+  sub 0: 0.17=6,0.33=12
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-2d91e06170ee3654096c34cddc775344.asset | 9
+  sub 0: 0.17=10,0.33=20
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-70f981cb2a8d95a42a2a393c4e5de103.asset | 9
+  sub 0: 0.17=6,0.33=12
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-caeabacf70242a84084e159704a95b26.asset | 9
+  sub 0: 0.17=5,0.33=10
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-8566f008577da364088dd096a7fa4051.asset | 9
+  sub 0: 0.17=10,0.33=20
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-de0d21b52087b7c46965a34c72077f13.asset | 8
+  sub 0: 0.33=4,0.42=8
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-cc9992f7285fe5f4fa206db30bb2f822.asset | 8
+  sub 0: 0.33=9,0.42=18
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-45c22746ba666cd49a6bd525c57b790e.asset | 8
+  sub 0: 0.33=2,0.42=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-cf8b8e49e16cf724e8aa1652375bc6b2.asset | 8
+  sub 0: 0.33=4,0.42=8
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-13b859414e2617d468f5a834fc159953.asset | 8
+  sub 0: 0.33=9,0.42=18
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-4aa697951521d114e9f98abf5b246630.asset | 8
+  sub 0: 0.33=2,0.42=4
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-a212115c8b1afac4aabe439b5a0dfd89.asset | 8
+  sub 0: 0.25=8
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-5135a460a77aa6940b6f9f17f6656e91.asset | 8
+  sub 0: 0.25=18
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-67e895eb9de7ca14899ab9f2ce3f5bf2.asset | 8
+  sub 0: 0.25=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-03e25a12e0040764fab7cf0985b6a52c.asset | 8
+  sub 0: 0.33=4,0.42=8
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-b338d755a93ff0d4282f574f689d4bd2.asset | 8
+  sub 0: 0.33=9,0.42=18
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-696c47f6c26c984489dec3ce2e2e6a06.asset | 8
+  sub 0: 0.33=2,0.42=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-abdff3f7c26504542bbf81e5298b6f51.asset | 8
+  sub 0: 0.33=4,0.42=8
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-d38fe44d5fd08d640b79c2df4378b87e.asset | 8
+  sub 0: 0.33=9,0.42=18
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-fdfd789451af49240b433c53f8560d92.asset | 8
+  sub 0: 0.33=2,0.42=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-5c4e378c18304464581f4011b36728c7.asset | 133
+  sub 0: 0.33=2,0.41=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-ad836277b9c569840991dfe2f0c6a1fd.asset | 133
+  sub 0: 0.33=2,0.41=4
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-0a550fa4db2cb494ba50e4edeac6352f.asset | 133
+  sub 0: 0.24=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-37d0af2ba298e784da3cca44f18059c2.asset | 133
+  sub 0: 0.33=2,0.41=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-da9d582b97bc3e0458a02be6ea8d1ff6.asset | 133
+  sub 0: 0.33=2,0.41=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-bcfd10f3f7da65c468383c602dc6ffca.asset | 134
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-4b79c676be8d34044aa9ba5513961adf.asset | 134
+  sub 0: 0.33=2,0.41=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-151458b759663ce488567191e1947557.asset | 134
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-312f2cec0364b27469d408f705981584.asset | 134
+  sub 0: 0.33=2,0.41=4
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-5abd34e699d7ec24790e72f628601d35.asset | 134
+  sub 0: 0.24=2
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-cc700079686555446b9877f302059bf4.asset | 134
+  sub 0: 0.24=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-6b779e1593c3f1547a1708cd3d91ca85.asset | 134
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-925410821707fee499912277210a82c6.asset | 134
+  sub 0: 0.33=2,0.41=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-cb2913cbc6ef9644da5c77b141a060a4.asset | 134
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-2da8e1a6db721904884e5161d36e99af.asset | 134
+  sub 0: 0.33=2,0.41=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-4e8992d0b6197834fb298c52f184e8a7.asset | 7
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-c5290b90c71689046b963635e2f25378.asset | 7
+  sub 0: 0.33=2,0.41=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-bc2b332aa62926f4ba7e861a59af6722.asset | 7
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-4874dda41c6084447bedf8f4f6c041fc.asset | 7
+  sub 0: 0.22=2,0.36=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-b31a6e9daa1409247b34ac6ee55e87c7.asset | 7
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-1af464b2873990f4db3dc6aa3ad00410.asset | 7
+  sub 0: 0.33=2,0.41=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-ceacfd0439b1a9a4eb77fdced1ec506c.asset | 7
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-3e4365916a90e8f4dbb67a044d943ac3.asset | 7
+  sub 0: 0.22=2,0.36=4
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-9ebf3a78bf715e84e90dfb48ff8d3dc4.asset | 7
+  sub 0: 0.24=2
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-276e1837e03f0d848966e71fcd263a63.asset | 7
+  sub 0: 0.24=4
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-44e937c846aa7e84b9ab5c9cb39a942f.asset | 7
+  sub 0: 0.24=2
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-3245f9ed80e93bd468d12b10964ab351.asset | 7
+  sub 0: 0.08=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-a793687bb014fcf44b49a1a7c0f6b59f.asset | 7
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-24c1d3278273eca4e9628bd3ba74de67.asset | 7
+  sub 0: 0.33=2,0.41=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-786a4b328d89a474d9fb37ee6197b56e.asset | 7
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-68bc2bc6824cfa84a820ba5c99d12be3.asset | 7
+  sub 0: 0.22=2,0.36=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-8cc461e1870d9d24c82bdb8c9bf6325d.asset | 7
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-6075bc99ef859ac44a46cb70fbe8d5cb.asset | 7
+  sub 0: 0.33=2,0.41=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-3f146dd9278730441b53dc49b01bac52.asset | 7
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-da3c71ba8578b8f48a999d18256624c1.asset | 7
+  sub 0: 0.22=2,0.36=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-f448bce9c4086fb48abb42da72872958.asset | 135
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-60f2d291a6907ea479f2bf558f96aa9a.asset | 135
+  sub 0: 0.33=2,0.41=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-ae0c7d2952afb64458520f5d47a85ad3.asset | 135
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-ba854cbf03b355a4b8dd230032b06480.asset | 135
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-7e2f66fb61059194587bc90d2c6c07ea.asset | 135
+  sub 0: 0.33=2,0.41=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-c382a43c58acc48458c20922a950c4de.asset | 135
+  sub 0: 0.33=1,0.41=2
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-1f1748e72162cad44acc34396ea86820.asset | 135
+  sub 0: 0.24=2
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-22ba22d884e901f46b234ee9ada7a222.asset | 135
+  sub 0: 0.24=4
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-64b2a4ca92a9cb347a68711ccdbdd3ed.asset | 135
+  sub 0: 0.24=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-dc936dfcb17f28a4a9bdea3cc2b8c4cc.asset | 135
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-ad054eb1d15a59e499617b467d456e1d.asset | 135
+  sub 0: 0.33=2,0.41=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-9129b0f6b83a8cf49a1faf5fb8567a3e.asset | 135
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-f996bf3c0770b004caaa93919f5c8221.asset | 135
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-cbf3ca6b7431e484a88603248c4c7ef9.asset | 135
+  sub 0: 0.33=2,0.41=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-d5d2c0a02a104e54dac7a55e8138536b.asset | 135
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-6ab8c8e9cd29e5f4f8266e4b83234894.asset | 8
+  sub 0: 0.17=1,0.33=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-d7d1384e8ff732343af2f722d7d67072.asset | 8
+  sub 0: 0.17=1,0.33=2
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-4601615785f2386469cc5a057e53f7cc.asset | 8
+  sub 0: 0=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-2b18b22937449b74ebfb770a286c272c.asset | 8
+  sub 0: 0.17=1,0.33=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-03c87cae1421d6943976b3dab37f91cf.asset | 8
+  sub 0: 0.17=1,0.33=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-2f60f0baf21991b41a58b6d50a5f642b.asset | 5
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-8a7abe84a21a04c4289fdb262bb81303.asset | 5
+  sub 0: 0.17=3,0.33=7
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-8a122dc7754a1214d8f338b93043db74.asset | 76
+  sub 0: 0.19=3,0.34=6
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-f2e5c2fa1fa272d4087d6750e4c542bd.asset | 76
+  sub 0: 0.19=4,0.34=8
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-9ff5be2037f9079408f50cb481f1c3b8.asset | 76
+  sub 0: 0.19=3,0.34=6
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-a56dfab781c49ad47bba9b68ffd34e78.asset | 76
+  sub 0: 0.19=4,0.34=8
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-b1d9d61aa5da5c84ca56f1bc18b2fbe0.asset | 76
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-bae9e8ddcadef724784425ef814845a4.asset | 76
+  sub 0: 0.19=3,0.34=6
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-26a12746bcf1341438788ec6b701f8ea.asset | 76
+  sub 0: 0.19=5,0.34=10
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-ea979aa6c5bbd784ca2e206a2f92e88c.asset | 76
+  sub 0: 0.19=3,0.34=6
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-43b219ee0b169aa45a17ce3ffeaf3bd2.asset | 76
+  sub 0: 0.05=1,0.19=3,0.21=1,0.23=1,0.34=7,0.36=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-f188a4eb54636c94591fe1b1029915af.asset | 131
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-b32ab91ef2088d0428caf6b057a878bc.asset | 131
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-1bd50d27a3744214790fe48985ebb1d7.asset | 131
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-b7fc66f6d2828aa4a89d29e764bf2596.asset | 131
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-6c529e982e1dd54418fe24d832c0c8e0.asset | 131
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-c36e37b42c4b1ac448774cfc3ca6bac2.asset | 131
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-06ca9f7f7cc82c04a8dbbfe5b0ae0404.asset | 131
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-3323ad399fe666a419b432b0a4af64a2.asset | 131
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-521fdbe341ef9c841ae094969d8ec251.asset | 131
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-f1d495994db56f14ab46f4c5f12a7122.asset | 131
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-c3cb4afa3bb317646ab105495ed62b35.asset | 132
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-6ede5d56a8c263647b1a5bd4f8c500c2.asset | 132
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-7a1c15c17d138c74ea01fad541ea462e.asset | 132
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-6c5dd8eb1364df349895fa64fd8eaf35.asset | 132
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-a2c56f4ec463f134d8c0fd60a6e6eaa0.asset | 132
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-c89e08127f38b1c44b473df1f6f021a5.asset | 132
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-ceb6ed063949cb943803192918eb7f0b.asset | 132
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-90baadf3ac561c542a93a3a3800c2795.asset | 132
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-d47b7d00ee0eb9e4c88ead2dc7a86674.asset | 8
+  sub 0: 0.33=2,0.42=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-108cdd224439b634888c0c4cd925a083.asset | 8
+  sub 0: 0.33=3,0.42=6
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-379b5aed70836c94789954de25819565.asset | 8
+  sub 0: 0.33=2,0.42=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-3482659a7543bac42b627d902dabdf7a.asset | 8
+  sub 0: 0.33=3,0.42=6
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-b551b01fd9fa8f240b557343d356d9cf.asset | 8
+  sub 0: 0.25=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-facbbd37a7e66a4408c3a49aaf4c0325.asset | 8
+  sub 0: 0.25=6
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-f21d5e907c27f0f459b0fbe42b9f160f.asset | 8
+  sub 0: 0.33=2,0.42=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-10116e1b610d2284781cc40dd66af8c4.asset | 8
+  sub 0: 0.33=3,0.42=6
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-ad31d1106d0c8e140a58594853905f43.asset | 8
+  sub 0: 0.33=2,0.42=4
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-106c70d01e68c8843b63bc6e0e9377a9.asset | 8
+  sub 0: 0.33=3,0.42=6
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-4b96b877869b9c74790a80c176556eb6.asset | 133
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-a983c4405162d1843ae10f3961bab811.asset | 133
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-92a886bff41f6ff46876c615ec7a74de.asset | 133
+  sub 0: 0.24=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-0f4bf0d86d5f28943a9add341bd8a6c6.asset | 133
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-c7e52b51434d91c46b6a2ac2508c1968.asset | 133
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-be463a0d97dfa004081ddd89ac99218a.asset | 134
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-0ef04b4c2271d4244985f68cf75a5310.asset | 134
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-0de7b3723438f4b48b5f41b2e0fece79.asset | 134
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-38408efc28df945448ec9582efdcc1d9.asset | 134
+  sub 0: 0.33=1,0.41=2
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-1d84e049eb28f384a94d5da5a1b3b1c0.asset | 134
+  sub 0: 0.24=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-58390c1db8654394d80ca88f5da50a5a.asset | 134
+  sub 0: 0.24=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-0c10efbd572c4e64cbc2fbd2641a17ae.asset | 134
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-3df438c630d3dab4e9d79e2dd53c9272.asset | 134
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-9dec769a420cfed4b9f139f8d34c224f.asset | 134
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-f16d4233016fbec43aca2b4eaa39ca5f.asset | 134
+  sub 0: 0.33=1,0.41=2
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-63e229bac711f664bab62c3a3ca89498.asset | 7
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-63848214529b4dc48912e02d62622181.asset | 135
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-abb8f23b65999cd4fb9399874be96294.asset | 135
+  sub 0: 0.33=1,0.41=2
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-2cfdd472c1e61c141a292ecfe2b2239f.asset | 135
+  sub 0: 0.24=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-581e920feee32d049bfbfbcd67142e3f.asset | 135
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-f8cebba8dbf137f44b55d619be9db44e.asset | 135
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-7a5a24457923a654e8fff5b940d2c724.asset | 135
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-3d8e8bca19e0afa478b9497b0cfcf1d2.asset | 135
+  sub 0: 0.33=1,0.41=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-f4f1ea737777554498316e301a3aabdc.asset | 135
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-346e82ec955b8ec47ab538c81f9cf77e.asset | 8
+  sub 0: 0.17=5,0.33=10
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-1054b14e3b2c2bc49baffbfffb7ce5a7.asset | 8
+  sub 0: 0.17=5,0.33=10
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-475ef2f07fbf8db4882a40f906a25c58.asset | 8
+  sub 0: 0=10
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-b5671dbc3810c664aad8a0d92b658944.asset | 8
+  sub 0: 0.17=5,0.33=10
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-0c1dc274fdbd9224198d8d29d2eb5af5.asset | 8
+  sub 0: 0.17=5,0.33=10
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-b9ba83dae8c912848b1de10dd8cdcee4.asset | 83
+  sub 0: 0=6,0.17=6,0.33=12
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-0d5515d2f7959c84394a1f2ee27a7c78.asset | 83
+  sub 0: 0.17=2,0.32=1,0.33=3,0.49=1
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-e291535391084554281abca1285dac2f.asset | 83
+  sub 0: 0=24,0.17=12,0.33=24
+ON Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-328ccdbc8f9f092439838d2001c2d2e5.asset | 83
+  sub 0: 0=6
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-dce8ddbd044a320468d9b9b6de107616.asset | 112
+  sub 0: 0.39=10,0.4=22,0.41=40,0.42=46,0.43=78,0.44=82,0.45=126,0.46=168,0.47=188,0.48=230,0.49=484,0.5=568
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-5692693c7bb4f24429152ace756f9483.asset | 115
+  sub 0: 0.1=6,0.11=12,0.12=24,0.13=36,0.14=24,0.15=30,0.16=12,0.17=30,0.18=24,0.19=36,0.2=18,0.21=24,0.22=26,0.23=30,0.24=52,0.25=30,0.26=44,0.27=36,0.28=52,0.29=50,0.3=58,0.31=26,0.32=32,0.33=42,0.34=10,0.35=32,0.36=32,0.37=32,0.38=22,0.39=26,0.4=16,0.41=36,0.42=32,0.43=20,0.44=6,0.45=12,0.46=26,0.47=8,0.48=44,0.49=32,0.5=10
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-0966e55e02796174baf3e2b20b1a275c.asset | 114
+  sub 0: -0.04=74,-0.03=157,-0.02=226,-0.01=251,0=205,0.01=154,0.02=148,0.03=141,0.04=146,0.05=123,0.06=122,0.07=79,0.08=81,0.09=86,0.1=61,0.11=68,0.12=56,0.13=54,0.14=54,0.15=55,0.16=43,0.17=44,0.18=23,0.19=24,0.2=25,0.21=22,0.22=19,0.23=13,0.24=11,0.25=12,0.26=7,0.27=2,0.28=4,0.29=3,0.3=3,0.31=5,0.32=1,0.33=1,0.34=2,0.42=1
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-58af0c0cfe263d44c838cc5ed803f2f7.asset | 115
+  sub 0: 0.18=2,0.19=4,0.2=8,0.21=4,0.22=8,0.23=8,0.24=6,0.25=8,0.26=12,0.27=8,0.28=20,0.29=4,0.3=6,0.31=8,0.32=18,0.33=4,0.34=8,0.35=18,0.36=10,0.37=2,0.38=12,0.39=10,0.4=16,0.41=11,0.42=8,0.43=12,0.44=16,0.45=13,0.46=20,0.47=25,0.48=44,0.49=36,0.5=10
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-1154bdbf1412a954381dd937c5388cec.asset | 111
+  sub 0: 0=10,0.01=68,0.02=124,0.03=84,0.04=156,0.05=126,0.06=34,0.07=46,0.08=56,0.09=36,0.1=38,0.11=42,0.12=34,0.13=32,0.14=16,0.15=26,0.16=28,0.17=22,0.18=38,0.19=14,0.2=36,0.21=28,0.22=26,0.23=34,0.24=34,0.25=20,0.26=22,0.27=20,0.28=10,0.29=18,0.3=16,0.31=38,0.33=8,0.34=2,0.36=2,0.37=6
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-70448ff7a153412469c5244f2c6b485b.asset | 112
+  sub 0: 0.21=2,0.22=8,0.23=18,0.24=8,0.25=8,0.26=20,0.27=16,0.28=20,0.29=12,0.3=14,0.31=32,0.32=38,0.33=34,0.34=40,0.35=48,0.36=22,0.37=34,0.38=48,0.39=70,0.4=38,0.41=16,0.42=34,0.43=32,0.44=34,0.45=2,0.46=14,0.47=28,0.48=34,0.49=16,0.5=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-b221d682951bb4f469febcb7ace10073.asset | 113
+  sub 0: 0.22=12,0.23=24,0.24=12,0.25=6,0.26=18,0.27=30,0.28=30,0.29=12,0.3=18,0.31=36,0.32=54,0.33=30,0.34=54,0.35=66,0.36=42,0.37=42,0.38=54,0.39=96,0.4=54,0.41=36,0.42=30,0.43=42,0.44=48,0.45=18,0.46=12,0.47=30,0.48=48,0.49=24,0.5=12
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-defc401009096e8468b5c93070e48871.asset | 114
+  sub 0: -0.04=96,-0.03=287,-0.02=328,-0.01=235,0=222,0.01=210,0.02=201,0.03=179,0.04=130,0.05=108,0.06=107,0.07=94,0.08=81,0.09=63,0.1=67,0.11=65,0.12=55,0.13=45,0.14=46,0.15=38,0.16=33,0.17=30,0.18=19,0.19=22,0.2=19,0.21=10,0.22=15,0.23=11,0.24=4,0.25=5,0.26=7,0.27=4,0.28=1,0.29=3,0.3=2,0.31=4,0.32=1,0.34=1,0.42=1
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-9cf60d282e5c7bd49afad94110f98ef2.asset | 114
+  sub 0: -0.04=35,-0.03=74,-0.02=96,-0.01=101,0=85,0.01=71,0.02=65,0.03=64,0.04=48,0.05=50,0.06=44,0.07=38,0.08=31,0.09=29,0.1=26,0.11=20,0.12=24,0.13=27,0.14=24,0.15=20,0.16=19,0.17=11,0.18=15,0.19=12,0.2=10,0.21=7,0.22=9,0.23=6,0.24=5,0.25=2,0.26=3,0.27=6,0.28=1,0.29=3,0.3=2,0.32=3,0.34=1,0.35=1,0.42=1
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-716686da0a77697418c72dfbeb37b6a9.asset | 111
+  sub 0: 0=4,0.01=62,0.02=244,0.03=492,0.04=442,0.05=186,0.06=90,0.07=152,0.08=120,0.09=122,0.1=86,0.11=98,0.12=88,0.13=58,0.14=42,0.15=54,0.16=54,0.17=74,0.18=66,0.19=72,0.2=110,0.21=80,0.22=80,0.23=86,0.24=80,0.25=74,0.26=44,0.27=56,0.28=48,0.29=44,0.3=38,0.31=60,0.32=10,0.33=14,0.34=8,0.35=4,0.36=4,0.37=4,0.38=2
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-a7231dd6f71fa2d458bbb5e1d91ccaf8.asset | 112
+  sub 0: 0.22=8,0.23=10,0.25=4,0.26=10,0.27=12,0.28=38,0.29=52,0.3=52,0.31=70,0.32=96,0.33=116,0.34=136,0.35=134,0.36=100,0.37=102,0.38=118,0.39=120,0.4=114,0.41=98,0.42=76,0.43=82,0.44=74,0.45=46,0.46=68,0.47=70,0.48=72,0.49=48,0.5=60
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-86c396e8c144be648be171e24a662f73.asset | 113
+  sub 0: 0.22=6,0.23=12,0.24=6,0.26=18,0.27=12,0.28=36,0.29=66,0.3=72,0.31=84,0.32=108,0.33=150,0.34=186,0.35=174,0.36=150,0.37=150,0.38=126,0.39=162,0.4=168,0.41=144,0.42=108,0.43=126,0.44=84,0.45=78,0.46=66,0.47=102,0.48=96,0.49=60,0.5=78
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-4ee8b4e8db964144aa4aca5ed310082e.asset | 111
+  sub 0: 0.02=242,0.03=276,0.04=252,0.05=146,0.06=54,0.07=10,0.08=20,0.09=40,0.1=38,0.11=64,0.12=282,0.13=42,0.14=34,0.15=40,0.16=12,0.17=14,0.18=18,0.19=24,0.2=26,0.21=44,0.22=30,0.23=26,0.24=20,0.25=30,0.26=32,0.27=38,0.28=44,0.29=56,0.3=60,0.31=488,0.32=16,0.33=26,0.34=18,0.35=18,0.36=16,0.37=22,0.38=20,0.39=16,0.4=12,0.41=8,0.42=10,0.43=8,0.44=8,0.45=12,0.46=10,0.47=14,0.48=10
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-c8eda95f24361b74484c91c5857faecb.asset | 115
+  sub 0: 0.1=2,0.11=4,0.12=8,0.13=12,0.14=8,0.15=10,0.16=4,0.17=10,0.18=8,0.19=12,0.2=6,0.21=8,0.22=8,0.23=10,0.24=16,0.25=8,0.26=14,0.27=10,0.28=14,0.29=16,0.3=16,0.31=8,0.32=10,0.33=12,0.34=2,0.35=8,0.36=10,0.37=8,0.38=6,0.39=8,0.4=4,0.41=10,0.42=8,0.43=6,0.46=2,0.48=8
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-a252ac6a03a29144888909c0db68aced.asset | 112
+  sub 0: 0.32=6,0.33=8,0.34=4,0.37=10,0.38=14,0.39=8,0.4=4,0.43=6,0.44=8,0.45=14,0.46=8
+OFF Information preserved surroundings | Assets/InformationRevision/Meshes/Retained-4ce211007d1570e40beb587b8582e036.asset | 115
+  sub 0: 0.14=2,0.15=4,0.16=6,0.17=6,0.18=8,0.19=6,0.2=6,0.21=2,0.22=6,0.23=4,0.24=4,0.25=4,0.27=2,0.28=6,0.29=4,0.3=10,0.31=2,0.32=6,0.33=10,0.34=8,0.35=2,0.36=10,0.37=12,0.38=12,0.39=4,0.4=4,0.41=8,0.42=6,0.43=4,0.44=4,0.45=6,0.46=4,0.47=8,0.48=10,0.49=11,0.5=10
+ON Limestone | Assets/InformationRevision/Meshes/Limestone.asset | Information · Limestone
+  sub 0: 0=2,0.2=4,0.23=4,0.35=4,0.39=8,0.43=8,0.55=18,0.67=8,0.71=4,0.8=6,0.88=4,0.9=4,0.92=32
+ON Stone edge | Assets/InformationRevision/Meshes/Stone edge.asset | Information · Stone edge
+  sub 0: 0=2,0.23=22,0.27=4,0.3=8,0.33=1,0.34=6,0.35=4,0.36=16,0.38=8,0.39=1,0.41=4,0.45=15,0.5=16,0.52=4,0.55=1,0.56=2,0.6=4,0.61=1,0.63=8,0.67=11,0.69=4,0.78=2,0.89=4,0.92=2,0.99=4,1=24
+ON Graphite | Assets/InformationRevision/Meshes/Graphite.asset | Information · Graphite
+  sub 0: 0.2=4,0.8=10
+ON Oak | Assets/InformationRevision/Meshes/Oak.asset | Information · Oak
+  sub 0: 0.66=20,0.69=40,0.71=40,0.74=20,0.95=4,0.98=8
+ON Interior | Assets/InformationRevision/Meshes/Interior.asset | Information · Interior
+  sub 0: 0.69=2,0.76=4,0.84=6,0.88=4,0.91=2,0.92=4,0.96=2
+ON Glass | Assets/InformationRevision/Meshes/Glass.asset | Information · Glass
+ON Leaf | Assets/InformationRevision/Meshes/Leaf.asset | Information · Leaf
+  sub 0: 0.92=72
+ON Soil | Assets/InformationRevision/Meshes/Soil.asset | Information · Soil
+  sub 0: 0.89=4,0.9=8,0.92=8,0.93=4
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-4.asset | 91
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-5.asset | 114
+  sub 0: -0.04=239,-0.03=565,-0.02=573,-0.01=519,0=460,0.01=437,0.02=372,0.03=341,0.04=264,0.05=241,0.06=212,0.07=177,0.08=167,0.09=162,0.1=126,0.11=123,0.12=92,0.13=89,0.14=99,0.15=102,0.16=48
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-6.asset | 111
+  sub 0: 0=6,0.01=28,0.02=30,0.03=34,0.04=10,0.05=4,0.06=6,0.07=6,0.08=2,0.09=6,0.1=4,0.11=6,0.12=8,0.13=2,0.14=16,0.15=4,0.16=4,0.17=4,0.18=4,0.19=2,0.2=6,0.21=2,0.22=2
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-7.asset | 112
+  sub 0: 0.21=8,0.22=10,0.24=6,0.25=6
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-8.asset | 113
+  sub 0: 0.21=6,0.22=12,0.23=6,0.24=6
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-10.asset | 97
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-11.asset | 98
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-12.asset | 111
+  sub 0: 0.02=6,0.03=32,0.04=6,0.05=18,0.06=2,0.07=2,0.08=2,0.09=4,0.1=2,0.12=2,0.13=2,0.15=6,0.17=2,0.18=2,0.19=2,0.2=4,0.22=2
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-13.asset | 113
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-17.asset | Campus landscape · Paving
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-18.asset | Campus landscape · Paving
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-19.asset | Campus landscape · Paving
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-20.asset | Campus landscape · Paving
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-22.asset | Campus landscape · Asphalt
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-23.asset | Campus landscape · Asphalt
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-24.asset | Campus landscape · Asphalt
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-28.asset | Campus landscape · Stone
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-29.asset | Campus landscape · Stone
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-31.asset | Campus landscape · Stone
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-32.asset | Campus landscape · Stone
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-36.asset | Plan Paint
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-40.asset | Campus landscape · BorderStone
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-44.asset | Campus landscape · DarkBand
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-45.asset | 111
+  sub 0: 0.02=42,0.03=48,0.04=124,0.05=22,0.06=14,0.08=4,0.09=6,0.11=4,0.12=18,0.13=18,0.14=6,0.15=4,0.17=2,0.18=8,0.19=12,0.2=12,0.21=14,0.22=2
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-46.asset | 5
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-47.asset | 5
+  sub 0: 0=1,0.17=2,0.33=2,0.5=1
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-50.asset | 76
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-51.asset | 76
+  sub 0: 0.03=1,0.19=2,0.34=2,0.5=1
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-52.asset | 76
+  sub 0: 0.05=1,0.09=2,0.23=1,0.28=1,0.36=1,0.39=1,0.5=1
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-53.asset | 131
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-54.asset | 131
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-55.asset | 131
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-56.asset | 131
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-57.asset | 131
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-58.asset | 131
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-59.asset | 131
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-60.asset | 131
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-61.asset | 131
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-62.asset | 131
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-63.asset | 132
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-64.asset | 132
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-65.asset | 132
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-68.asset | 132
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-69.asset | 132
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-70.asset | 132
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-71.asset | 132
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-72.asset | 132
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-73.asset | 8
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-74.asset | 8
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-75.asset | 8
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-78.asset | 8
+  sub 0: 0.25=4
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-79.asset | 8
+  sub 0: 0.25=6
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-80.asset | 8
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-81.asset | 8
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-82.asset | 8
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-86.asset | 133
+  sub 0: 0.24=2
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-92.asset | 134
+  sub 0: 0.24=2
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-93.asset | 134
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-94.asset | 134
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-96.asset | 135
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-97.asset | 135
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-98.asset | 135
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-99.asset | 8
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-102.asset | 8
+  sub 0: 0=10
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-103.asset | 8
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-104.asset | 8
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-107.asset | 83
+  sub 0: 0=6
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-108.asset | 83
+  sub 0: 0.17=1,0.33=1,0.47=1,0.48=1,0.49=1,0.5=1
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-109.asset | 83
+  sub 0: 0=24
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-112.asset | 115
+  sub 0: 0.1=6,0.11=12,0.12=24,0.13=36,0.14=24,0.15=30,0.16=12,0.17=30,0.18=24,0.19=36,0.2=18,0.21=24,0.22=18,0.23=6,0.24=12
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-113.asset | 114
+  sub 0: -0.04=74,-0.03=157,-0.02=226,-0.01=251,0=205,0.01=154,0.02=148,0.03=141,0.04=143,0.05=122,0.06=122,0.07=79,0.08=81,0.09=86,0.1=61,0.11=68,0.12=56,0.13=54,0.14=54,0.15=53,0.16=34
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-114.asset | 115
+  sub 0: 0.18=2,0.19=4,0.2=8,0.21=2,0.23=4,0.49=2,0.5=11
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-115.asset | 111
+  sub 0: 0=10,0.01=68,0.02=124,0.03=84,0.04=148,0.05=118,0.06=10,0.07=18,0.08=28,0.09=16,0.1=18,0.11=26,0.12=14,0.13=32,0.14=16,0.15=18,0.16=20,0.17=22,0.18=22,0.19=6,0.2=24,0.21=12,0.22=10
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-116.asset | 112
+  sub 0: 0.21=2,0.22=8,0.23=18,0.24=8
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-117.asset | 113
+  sub 0: 0.22=12,0.23=24,0.24=12
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-118.asset | 114
+  sub 0: -0.04=96,-0.03=287,-0.02=328,-0.01=235,0=222,0.01=210,0.02=201,0.03=179,0.04=130,0.05=107,0.06=107,0.07=94,0.08=81,0.09=63,0.1=67,0.11=65,0.12=55,0.13=45,0.14=46,0.15=38,0.16=23
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-119.asset | 114
+  sub 0: -0.04=35,-0.03=74,-0.02=96,-0.01=101,0=85,0.01=71,0.02=65,0.03=64,0.04=47,0.05=49,0.06=44,0.07=38,0.08=31,0.09=29,0.1=26,0.11=20,0.12=24,0.13=27,0.14=24,0.15=19,0.16=14
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-120.asset | 111
+  sub 0: 0=4,0.01=62,0.02=244,0.03=492,0.04=438,0.05=158,0.06=38,0.07=56,0.08=48,0.09=50,0.1=46,0.11=50,0.12=44,0.13=58,0.14=42,0.15=50,0.16=46,0.17=54,0.18=46,0.19=40,0.2=46,0.21=48,0.22=20
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-121.asset | 112
+  sub 0: 0.22=8,0.23=10
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-122.asset | 113
+  sub 0: 0.22=6,0.23=12,0.24=6
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-123.asset | 111
+  sub 0: 0.02=242,0.03=276,0.04=252,0.05=146,0.06=54,0.07=10,0.08=20,0.09=28,0.1=18,0.11=20,0.12=18,0.13=42,0.14=34,0.15=40,0.16=12,0.17=14,0.18=18,0.19=24,0.2=26,0.21=44,0.22=8
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-124.asset | 115
+  sub 0: 0.1=2,0.11=4,0.12=8,0.13=12,0.14=8,0.15=10,0.16=4,0.17=10,0.18=8,0.19=12,0.2=6,0.21=8,0.22=6,0.23=2,0.24=4
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-125.asset | 112
+ON Court/map preserved surroundings | Assets/OutdoorBasketball/Meshes/Retained-126.asset | 115
+  sub 0: 0.14=2,0.15=4,0.16=6,0.17=6,0.18=8,0.19=6,0.2=6,0.21=2,0.22=4,0.23=2,0.45=3,0.47=1,0.48=2,0.49=5,0.5=8

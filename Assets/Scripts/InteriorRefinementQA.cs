@@ -68,7 +68,9 @@ public sealed class InteriorRefinementQA : MonoBehaviour
     {
         game.enabled=false;game.player.gameObject.SetActive(false);var cam=game.followCamera;
         cam.transform.position=root.TransformPoint(at);cam.transform.LookAt(root.TransformPoint(target));cam.fieldOfView=66;
-        yield return new WaitForSecondsRealtime(.5f);DormitoryPreview.SaveCamera(cam,Path.Combine(folder,name+".png"));
+        yield return new WaitForSecondsRealtime(.5f);
+        var labels=root.GetComponent<InteriorFloorTextVisibility>();if(labels)labels.ApplyForHeight(root.TransformPoint(at).y-1.6f);
+        DormitoryPreview.SaveCamera(cam,Path.Combine(folder,name+".png"));
         game.player.gameObject.SetActive(true);game.enabled=true;
     }
     IEnumerator Walk(Transform root,Vector3 local)
@@ -82,6 +84,10 @@ public sealed class InteriorRefinementQA : MonoBehaviour
         for(int i=0;i<30;i++)game.MoveIndoor(Vector3.zero,1f/60);
         Check(Mathf.Abs(game.player.position.y-target.y)<.2f,"Physical floor reached: "+local);
     }
+    void PoseIndoor(Vector3 at)
+    {
+        var controller=travel.IndoorController;controller.enabled=false;game.SetTravelPose(travel.Interior.transform.TransformPoint(at),0);Physics.SyncTransforms();controller.enabled=true;
+    }
     IEnumerator Run()
     {
         yield return new WaitForSecondsRealtime(3);game=FindFirstObjectByType<CampusGame>();travel=game.Interiors;
@@ -90,10 +96,32 @@ public sealed class InteriorRefinementQA : MonoBehaviour
         var ordering=travel.Interior.GetComponent<CafeteriaOrdering>();Check(ordering&&ordering.orderSpots.Length>=3&&ordering.seatSpots.Length>20,"Food ordering and dining anchors retained");
         yield return Shot(travel.Interior.transform,new Vector3(-13,1.8f,-2),new Vector3(1,1.7f,4),"01-cafeteria-dining");
         yield return Shot(travel.Interior.transform,new Vector3(0,6,-6),new Vector3(-6,5.6f,5),"02-cafeteria-upper");
+        PoseIndoor(new Vector3(4.05f,.06f,-8.1f));
+        for(int level=0;level<2;level++)
+        {
+            var diningRoot=travel.Interior.transform;float y=level*4.3f;
+            yield return Walk(diningRoot,new Vector3(4.05f,y+2.15f,-12.65f));
+            yield return Walk(diningRoot,new Vector3(6.15f,y+2.15f,-12.65f));
+            yield return Walk(diningRoot,new Vector3(6.15f,y+4.3f,-8.1f));
+            yield return Shot(diningRoot,new Vector3(-13,y+6.1f,-2),new Vector3(-7,y+5.7f,7),"cafeteria-"+(level+2)+"F-modern");
+            // Cross to the next flight on the same storey's open north approach.
+            yield return Walk(diningRoot,new Vector3(4.05f,y+4.3f,-8.1f));
+        }
         yield return Exit();yield return Enter("library");
         Check(LibrarySeatRegistry.Ensure().OnFloor(2).Count>20,"Reservable seats remain registered");
         yield return Shot(travel.Interior.transform,new Vector3(0,1.8f,-10),new Vector3(-3,1.8f,8),"03-library-lobby");
         yield return Shot(travel.Interior.transform,new Vector3(46,6.1f,-7),new Vector3(33,5.9f,3),"04-library-reading");
+        PoseIndoor(new Vector3(9.85f,.06f,-9));
+        for(int level=0;level<3;level++)
+        {
+            var libraryRoot=travel.Interior.transform;float y=level*4.3f;
+            yield return Walk(libraryRoot,new Vector3(9.85f,y+2.15f,-15));
+            yield return Walk(libraryRoot,new Vector3(6.55f,y+2.15f,-15));
+            yield return Walk(libraryRoot,new Vector3(6.8f,y+4.3f,-8.0f));
+            yield return Shot(libraryRoot,new Vector3(5.9f,y+5.95f,-9.3f),new Vector3(9.7f,y+3.1f,-14),"library-stair-"+(level+1));
+            yield return Shot(libraryRoot,new Vector3(46,y+6.1f,-7),new Vector3(33,y+5.9f,3),"library-"+(level+2)+"F-modern");
+            if(level<2)yield return Walk(libraryRoot,new Vector3(9.85f,y+4.3f,-8.0f));
+        }
         yield return Exit();yield return Enter("dormitory-1");
         var hall=DormitoryCorridor.Current(game);Check(hall&&hall.Layout.floors==6,"Six-floor dormitory remains available");
         yield return Shot(travel.Interior.transform,new Vector3(-18,1.65f,0),new Vector3(12,1.6f,0),"05-dormitory-corridor");
@@ -107,7 +135,7 @@ public sealed class InteriorRefinementQA : MonoBehaviour
         yield return Walk(root,new Vector3(0,0,3.6f));yield return Walk(root,new Vector3(0,2.85f,-5));yield return Walk(root,new Vector3(0,2.85f,-8));
         yield return Shot(root,new Vector3(-5,1.8f,9),new Vector3(0,2.6f,-6),"07-seventh-LG-stair");
         yield return Exit();Check(data.antialiasing==aa,"Outdoor camera presentation restored");
-        done=true;File.WriteAllText(Path.Combine(folder,"result.txt"),"PASS: four building interiors; material support; ordering and reservation anchors; bedroom entry/return; physical LG to 1F stair walk; exterior restoration; seven rendered views.\n"+checks);
+        done=true;File.WriteAllText(Path.Combine(folder,"result.txt"),"PASS: cafeteria 1F to 3F and library 1F to 4F physically walked; material support; ordering and reservation anchors; bedroom entry/return; physical LG to 1F stair walk; exterior restoration; fifteen rendered views.\n"+checks);
         Debug.Log("INTERIOR_REFINEMENT_QA_PASS");Quit(0);
     }
 }

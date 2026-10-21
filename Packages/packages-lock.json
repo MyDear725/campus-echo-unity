@@ -150,6 +150,27 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "com.vrmc.gltf": {
+      "version": "file:com.vrmc.gltf",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.modules.animation": "1.0.0",
+        "com.unity.modules.imgui": "1.0.0",
+        "com.unity.modules.imageconversion": "1.0.0",
+        "com.unity.test-framework": "1.4.6",
+        "com.unity.mathematics": "1.2.6"
+      }
+    },
+    "com.vrmc.univrm": {
+      "version": "file:com.vrmc.univrm",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.vrmc.gltf": "0.131.4",
+        "com.unity.ugui": "1.0.0"
+      }
+    },
     "com.unity.modules.animation": {
       "version": "1.0.0",
       "depth": 0,

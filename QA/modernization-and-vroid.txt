@@ -1,0 +1,28 @@
+2026-10-21 · Campus environment and character update
+
+Environment
+- Clear legacy combined scenery inside the covered bridge and its straight stair corridor; 3570 obstructing triangles clipped from 10 batches. Original combined meshes are retained; the saved campus scene references new trimmed copies. New bridge geometry, traffic space and collision stay intact.
+- Separate all 66 library tread/riser pairs by 1 mm; preserve tread heights and landing levels. Original floor-seam strips crossing the stair openings are hidden; the floor shader supplies the visible slab joints. Lift the decorative dome clear of the fourth-storey ceiling.
+- Library: four floor identities, framed geometric artwork, acoustic oak details, wall coves, radial reading baffles, felt desk mats, reference pages and selected laptops. Original desks, bookcases, bookable seat IDs and routes retained.
+- Cafeteria: three floor colour identities, acoustic ceiling blades, wall art, ordering/wayfinding details, napkin holders, trays and tableware. Preserve upstream widened switchback stairs, ordering/collection anchors and seat IDs.
+- Shared dorm rooms: supported task lamps, desk mats/laptops, power strips, full wardrobe doors and handles, quilt borders, mirror lighting, soap and perimeter ceiling details. Wardrobes stay against the rear corners and clear of the central aisle. Existing bedroom entry/return and seventh-dorm LG stairs retained.
+- Existing scene coordinates and metre scale are authoritative; decorative additions describe a modern campus interior and do not claim survey accuracy.
+
+Characters
+- Replace selectable male/female visuals and guide with pixiv / VRoid Project CC0 models from the supplied OpenGameArt collection.
+- Import with official UniVRM 0.131.4 embedded packages (MIT). Original VRM bytes, textures, meshes, bone weights and facial expression data retained.
+- Adapt materials to URP; normalise height to 1.78 m / 1.68 m. Reuse the existing humanoid controller and camera/movement root, retain gender preference and introduce natural blinking.
+- Model sources and official terms: Assets/Characters/VRoidCampus/SOURCES.txt.
+
+Verification
+- Runtime VRoid QA: both choices, supported textured materials, valid humanoid retargeting, leg motion, facial data, blink driver, unchanged player root and guide visual; four rendered views.
+- Runtime interior QA: physically walk cafeteria 1F to 3F and library 1F to 4F; preserve ordering and reservation anchors; enter/leave bedroom; walk seventh-dorm LG to 1F; restore exterior presentation; fifteen rendered views.
+- Windows build and visual inspection of actual rendered scenes; screenshots/logs under ignored Builds/Windows/QA.
+- Pre-change scene/finish backup: D:/UnityProjectCaches/BeforeModernization-20261021.
+
+Refresh tools
+CampusModernizationBuilder.Apply updates the saved campus and library/cafeteria scenes. Do not regenerate the entire campus to apply this art pass.
+CampusBuilder.Build builds the existing scenes.
+Optional QA flags: -interiorRefinementQA, -vroidPresentationQA, -campusPlanQA.
+
+Changes remain local for the owner to commit and push through GitHub Desktop.
