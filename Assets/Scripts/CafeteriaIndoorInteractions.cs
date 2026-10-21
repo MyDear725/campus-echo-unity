@@ -37,18 +37,18 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
         new InteractiveSpot
         {
             id = "stairs_1_up",
-            position = new Vector3(-10.2f, 0.5f, -12.5f),
-            radius = 2.4f,
-            prompt = "[ E ] 楼梯 1 · 从右向左（朝西）上楼",
-            message = "沿西南角楼梯 1 从右向左（向西）拾级而上，前往二层特色餐厅！"
+            position = new Vector3(-9.6f, 0.5f, -11.8f),
+            radius = 0.75f,
+            prompt = "[ E ] 楼梯 1 · 上楼前往 2F",
+            message = "沿楼梯行走，在中间平台转弯，前往 2F。"
         },
         new InteractiveSpot
         {
             id = "stairs_2_up",
-            position = new Vector3(6.0f, 0.5f, -15.0f),
-            radius = 2.4f,
-            prompt = "[ E ] 楼梯 2 · 朝北攀升前往二层",
-            message = "沿东南门旁楼梯 2 向北拾级而上，前往二层特色餐厅！"
+            position = new Vector3(5.4f, 0.5f, -8.2f),
+            radius = 0.75f,
+            prompt = "[ E ] 楼梯 2 · 上楼前往 2F",
+            message = "沿楼梯行走，在中间平台转弯，前往 2F。"
         },
 
         // --- 2F Spots ---
@@ -63,34 +63,34 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
         new InteractiveSpot
         {
             id = "stairs_1_down",
-            position = new Vector3(-17.2f, 4.8f, -12.5f),
-            radius = 2.4f,
-            prompt = "[ E ] 楼梯 1 · 向东下楼返回一层",
-            message = "沿西南角楼梯 1 向东缓步下楼，返回一层大众餐厅！"
+            position = new Vector3(-9.6f, 4.8f, -13.2f),
+            radius = 0.75f,
+            prompt = "[ E ] 楼梯 1 · 下楼前往 1F",
+            message = "沿楼梯行走，在中间平台转弯，前往 1F。"
         },
         new InteractiveSpot
         {
             id = "stairs_2_down",
-            position = new Vector3(6.0f, 4.8f, -8.6f),
-            radius = 2.4f,
-            prompt = "[ E ] 楼梯 2 · 向南下楼返回一层",
-            message = "沿东南侧楼梯 2 向南缓步下楼，返回一层大众餐厅东南门厅！"
+            position = new Vector3(6.6f, 4.8f, -8.2f),
+            radius = 0.75f,
+            prompt = "[ E ] 楼梯 2 · 下楼前往 1F",
+            message = "沿楼梯行走，在中间平台转弯，前往 1F。"
         },
         new InteractiveSpot
         {
             id = "stairs_1_up_2f",
-            position = new Vector3(-10.2f, 4.8f, -12.5f),
-            radius = 2.4f,
-            prompt = "[ E ] 楼梯 1 · 朝西上楼前往三层",
-            message = "沿西南角楼梯 1 从右向左（向西）上楼，前往三层鲜果市与自选餐厅！"
+            position = new Vector3(-9.6f, 4.8f, -11.8f),
+            radius = 0.75f,
+            prompt = "[ E ] 楼梯 1 · 上楼前往 3F",
+            message = "沿楼梯行走，在中间平台转弯，前往 3F。"
         },
         new InteractiveSpot
         {
             id = "stairs_2_up_2f",
-            position = new Vector3(6.0f, 4.8f, -15.0f),
-            radius = 2.4f,
-            prompt = "[ E ] 楼梯 2 · 朝北上楼前往三层",
-            message = "沿东南侧楼梯 2 向北上楼，前往三层鲜果市与自选餐厅！"
+            position = new Vector3(5.4f, 4.8f, -8.2f),
+            radius = 0.75f,
+            prompt = "[ E ] 楼梯 2 · 上楼前往 3F",
+            message = "沿楼梯行走，在中间平台转弯，前往 3F。"
         },
 
         // --- 3F Spots ---
@@ -129,18 +129,18 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
         new InteractiveSpot
         {
             id = "stairs_1_down_3f",
-            position = new Vector3(-17.2f, 9.1f, -12.5f),
-            radius = 2.4f,
-            prompt = "[ E ] 楼梯 1 · 朝东下楼返回二层",
-            message = "沿西南角楼梯 1 向东缓步下楼，返回二层风味特色餐厅！"
+            position = new Vector3(-9.6f, 9.1f, -13.2f),
+            radius = 0.75f,
+            prompt = "[ E ] 楼梯 1 · 下楼前往 2F",
+            message = "沿楼梯行走，在中间平台转弯，前往 2F。"
         },
         new InteractiveSpot
         {
             id = "stairs_2_down_3f",
-            position = new Vector3(6.0f, 9.1f, -8.6f),
-            radius = 2.4f,
-            prompt = "[ E ] 楼梯 2 · 朝南下楼返回二层",
-            message = "沿东南侧楼梯 2 向南缓步下楼，返回二层风味特色餐厅！"
+            position = new Vector3(6.6f, 9.1f, -8.2f),
+            radius = 0.75f,
+            prompt = "[ E ] 楼梯 2 · 下楼前往 2F",
+            message = "沿楼梯行走，在中间平台转弯，前往 2F。"
         }
     };
 
@@ -203,7 +203,7 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
         var matrix = GUI.matrix;
         GUI.matrix = Matrix4x4.identity;
 
-        float w = 380, h = 42;
+        float w = Mathf.Min(560, Screen.width - 32), h = 48;
         Rect rect = new Rect((Screen.width - w) * 0.5f, Screen.height - 110, w, h);
         GUI.Box(rect, "");
 
@@ -211,7 +211,7 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
         {
             alignment = TextAnchor.MiddleCenter,
             font = game.interfaceFont,
-            fontSize = 18,
+            fontSize = 22,
             fontStyle = FontStyle.Bold
         };
         style.normal.textColor = new Color(1.0f, 0.95f, 0.70f);

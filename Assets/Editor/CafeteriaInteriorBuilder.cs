@@ -279,6 +279,7 @@ public static class CafeteriaInteriorBuilder
         BuildOrdering(rootObj.transform, sceneRoot);
         InteriorLabelStairFix.ConfigureLabels(rootObj.transform, 3);
         InteriorLabelStairFix.ConfigureCafeteriaRails(rootObj.transform);
+        CafeteriaReadabilityUpgrade.Apply(rootObj.transform);
 
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);

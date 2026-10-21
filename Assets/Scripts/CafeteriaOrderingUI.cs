@@ -88,11 +88,11 @@ public class CafeteriaOrderingUI : MonoBehaviour, ICampusOverlay
         var f = game ? game.interfaceFont : null;
         if (!f) f = Resources.Load<Font>("CampusFont");
 
-        titleStyle = new GUIStyle { alignment = TextAnchor.MiddleLeft, fontSize = 20, fontStyle = FontStyle.Bold };
-        headStyle = new GUIStyle { alignment = TextAnchor.MiddleLeft, fontSize = 16, fontStyle = FontStyle.Bold };
-        rowStyle = new GUIStyle { alignment = TextAnchor.MiddleLeft, fontSize = 17 };
-        smallStyle = new GUIStyle { alignment = TextAnchor.MiddleLeft, fontSize = 14 };
-        buttonStyle = new GUIStyle(GUI.skin.button) { fontSize = 16 };
+        titleStyle = new GUIStyle { alignment = TextAnchor.MiddleLeft, fontSize = 24, fontStyle = FontStyle.Bold };
+        headStyle = new GUIStyle { alignment = TextAnchor.MiddleLeft, fontSize = 20, fontStyle = FontStyle.Bold };
+        rowStyle = new GUIStyle { alignment = TextAnchor.MiddleLeft, fontSize = 21 };
+        smallStyle = new GUIStyle { alignment = TextAnchor.MiddleLeft, fontSize = 18 };
+        buttonStyle = new GUIStyle(GUI.skin.button) { fontSize = 20 };
         boxStyle = new GUIStyle(GUI.skin.box);
         if (f) { titleStyle.font = f; headStyle.font = f; rowStyle.font = f; smallStyle.font = f; buttonStyle.font = f; }
 
@@ -226,7 +226,7 @@ public class CafeteriaOrderingUI : MonoBehaviour, ICampusOverlay
 
         // Basket
         var cartY = box.y + 422f;
-        GUI.Label(new Rect(box.x + 20f, cartY, 260f, 24f), "本次结算 · " + (def != null ? def.FloorLabel : ""), titleStyle);
+        GUI.Label(new Rect(box.x + 20f, cartY, 260f, 28f), "本次结算 · " + (def != null ? def.FloorLabel : ""), titleStyle);
         var cartRect = new Rect(box.x + 16f, cartY + 28f, w - 32f, 120f);
         GUI.Box(cartRect, "");
 
@@ -241,11 +241,11 @@ public class CafeteriaOrderingUI : MonoBehaviour, ICampusOverlay
             for (int i = 0; i < sys.CartCount && i < 4; i++)
             {
                 string line = sys.CartName(i) + "  ×" + sys.CartQty(i) + "  = " + CampusWallet.FormatYuan(sys.CartUnitFen(i) * sys.CartQty(i));
-                GUI.Label(new Rect(cartRect.x + 12f, cy, cartRect.width - 140f, 22f), line, rowStyle);
+                GUI.Label(new Rect(cartRect.x + 12f, cy, cartRect.width - 140f, 26f), line, rowStyle);
                 if (GUI.Button(new Rect(cartRect.x + cartRect.width - 116f, cy - 1f, 24f, 20f), "−")) sys.CartChange(i, -1);
                 if (GUI.Button(new Rect(cartRect.x + cartRect.width - 88f, cy - 1f, 24f, 20f), "+")) sys.CartChange(i, 1);
                 if (GUI.Button(new Rect(cartRect.x + cartRect.width - 60f, cy - 1f, 48f, 20f), "移除")) sys.CartRemove(i);
-                cy += 24f;
+                cy += 26f;
             }
         }
 
@@ -293,7 +293,7 @@ public class CafeteriaOrderingUI : MonoBehaviour, ICampusOverlay
             }
         }
 
-        if (GUI.Button(new Rect(box.x + w - 110f, box.y + h - 40f, 90f, 28f), "关闭 (ESC)", buttonStyle))
+        if (GUI.Button(new Rect(box.x + w - 146f, box.y + h - 40f, 126f, 30f), "关闭 (ESC)", buttonStyle))
             CloseUI();
         UIDrawRecorder.EndPass();
     }
