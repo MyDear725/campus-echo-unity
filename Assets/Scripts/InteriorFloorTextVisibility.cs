@@ -45,6 +45,9 @@ public sealed class InteriorFloorTextVisibility : MonoBehaviour
         originalSuppression = new bool[labels.Length];
         for (int i = 0; i < labels.Length; i++)
         {
+            if (Application.isPlaying && interior && (interior.buildingId == "cafeteria" || interior.buildingId == "library")
+                && !labels[i].GetComponent<InteriorWorldLabel>())
+                labels[i].gameObject.AddComponent<InteriorWorldLabel>();
             renderers[i] = labels[i].GetComponent<Renderer>();
             originalSuppression[i] = renderers[i] && renderers[i].forceRenderingOff;
         }

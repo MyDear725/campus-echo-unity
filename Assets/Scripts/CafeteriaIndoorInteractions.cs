@@ -37,7 +37,7 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
         new InteractiveSpot
         {
             id = "stairs_1_up",
-            position = new Vector3(-9.6f, 0.5f, -11.8f),
+            position = new Vector3(-9.6f, 0.5f, -11.45f),
             radius = 0.75f,
             prompt = "[ E ] 楼梯 1 · 上楼前往 2F",
             message = "沿楼梯行走，在中间平台转弯，前往 2F。"
@@ -45,7 +45,7 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
         new InteractiveSpot
         {
             id = "stairs_2_up",
-            position = new Vector3(5.4f, 0.5f, -8.2f),
+            position = new Vector3(4.05f, 0.5f, -8.2f),
             radius = 0.75f,
             prompt = "[ E ] 楼梯 2 · 上楼前往 2F",
             message = "沿楼梯行走，在中间平台转弯，前往 2F。"
@@ -63,7 +63,7 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
         new InteractiveSpot
         {
             id = "stairs_1_down",
-            position = new Vector3(-9.6f, 4.8f, -13.2f),
+            position = new Vector3(-9.6f, 4.8f, -13.55f),
             radius = 0.75f,
             prompt = "[ E ] 楼梯 1 · 下楼前往 1F",
             message = "沿楼梯行走，在中间平台转弯，前往 1F。"
@@ -71,7 +71,7 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
         new InteractiveSpot
         {
             id = "stairs_2_down",
-            position = new Vector3(6.6f, 4.8f, -8.2f),
+            position = new Vector3(6.15f, 4.8f, -8.2f),
             radius = 0.75f,
             prompt = "[ E ] 楼梯 2 · 下楼前往 1F",
             message = "沿楼梯行走，在中间平台转弯，前往 1F。"
@@ -79,7 +79,7 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
         new InteractiveSpot
         {
             id = "stairs_1_up_2f",
-            position = new Vector3(-9.6f, 4.8f, -11.8f),
+            position = new Vector3(-9.6f, 4.8f, -11.45f),
             radius = 0.75f,
             prompt = "[ E ] 楼梯 1 · 上楼前往 3F",
             message = "沿楼梯行走，在中间平台转弯，前往 3F。"
@@ -87,7 +87,7 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
         new InteractiveSpot
         {
             id = "stairs_2_up_2f",
-            position = new Vector3(5.4f, 4.8f, -8.2f),
+            position = new Vector3(4.05f, 4.8f, -8.2f),
             radius = 0.75f,
             prompt = "[ E ] 楼梯 2 · 上楼前往 3F",
             message = "沿楼梯行走，在中间平台转弯，前往 3F。"
@@ -129,7 +129,7 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
         new InteractiveSpot
         {
             id = "stairs_1_down_3f",
-            position = new Vector3(-9.6f, 9.1f, -13.2f),
+            position = new Vector3(-9.6f, 9.1f, -13.55f),
             radius = 0.75f,
             prompt = "[ E ] 楼梯 1 · 下楼前往 2F",
             message = "沿楼梯行走，在中间平台转弯，前往 2F。"
@@ -137,7 +137,7 @@ public class CafeteriaIndoorInteractions : MonoBehaviour
         new InteractiveSpot
         {
             id = "stairs_2_down_3f",
-            position = new Vector3(6.6f, 9.1f, -8.2f),
+            position = new Vector3(6.15f, 9.1f, -8.2f),
             radius = 0.75f,
             prompt = "[ E ] 楼梯 2 · 下楼前往 2F",
             message = "沿楼梯行走，在中间平台转弯，前往 2F。"

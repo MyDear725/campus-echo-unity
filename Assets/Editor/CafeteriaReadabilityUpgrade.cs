@@ -12,7 +12,8 @@ public static class CafeteriaReadabilityUpgrade
 {
     const string ScenePath = "Assets/Interiors/Scenes/cafeteria.unity";
     const string Output = "output/食堂文字楼梯验证";
-    const float H = 4.3f, FlightRun = 3.08f, Landing = 1.2f;
+    const float H = 4.3f, FlightRun = 3.08f, Landing = 1.6f;
+    const float StairWidth = 4.2f, EastStairX = 5.1f;
     static Material Mat(string name) => AssetDatabase.LoadAssetAtPath<Material>("Assets/Interiors/Materials/CafeteriaModern/Mat_" + name + ".mat");
     static GameObject Box(Transform root, string name, Vector3 pos, Vector3 size, Material mat, bool solid = true)
     {
@@ -32,19 +33,29 @@ public static class CafeteriaReadabilityUpgrade
     }
     public static void Apply(Transform root)
     {
+        EnsureTextMaterial();
         var multi = root.Find("Cafeteria_MultiFloor_Interior");
         if (!multi) throw new InvalidOperationException("Cafeteria architecture not found");
-        // Keep the existing stairwell footprints, exits, furniture and ordering anchors.
+        // Widen both flights; keep the east edge clear of the faculty-room wall.
         Remove(multi, "00_Vertical_Circulation"); Remove(root, "Cafeteria_Open_Stair_Rails");
         var stairs = Group(multi, "00_Vertical_Circulation");
         for (int storey = 0; storey < 2; storey++)
         {
-            BuildStair(stairs, 1, storey, new Vector3(-10.2f, storey * H, -12.5f), -90, 2.8f);
-            BuildStair(stairs, 2, storey, new Vector3(6f, storey * H, -8.8f), 180, 2.4f);
+            BuildStair(stairs, 1, storey, new Vector3(-10.2f, storey * H, -12.5f), -90, StairWidth);
+            BuildStair(stairs, 2, storey, new Vector3(EastStairX, storey * H, -8.8f), 180, StairWidth);
         }
         RebuildDecks(multi);
         foreach (var text in root.GetComponentsInChildren<TextMesh>(true)) ResizeText(text);
         InteriorLabelStairFix.ConfigureLabels(root, 3);
+    }
+    static void EnsureTextMaterial()
+    {
+        const string path="Assets/Resources/InteriorWorldText.mat";
+        if(AssetDatabase.LoadAssetAtPath<Material>(path))return;
+        var shader=Shader.Find("Campus/WallLettering");
+        if(!shader)throw new InvalidOperationException("Missing depth-tested lettering shader");
+        AssetDatabase.CreateAsset(new Material(shader){name="InteriorWorldText"},path);
+        AssetDatabase.SaveAssets();
     }
     static void BuildStair(Transform parent, int id, int floor, Vector3 origin, float yaw, float width)
     {
@@ -56,15 +67,15 @@ public static class CafeteriaReadabilityUpgrade
         for(int i=0;i<11;i++)
         {
             float y=(i+1)*rise;
-            Box(t,"B_Riser_"+i,new Vector3(offset,y-rise/2,(i+.5f)*.28f),new Vector3(lane,rise,.28f),riser);
-            Box(t,"B_Tread_"+i,new Vector3(offset,y-.015f,(i+.5f)*.28f),new Vector3(lane+.02f,.03f,.29f),tread);
-            Box(t,"A_Riser_"+i,new Vector3(-offset,H/2+y-rise/2,FlightRun-(i+.5f)*.28f),new Vector3(lane,rise,.28f),riser);
-            Box(t,"A_Tread_"+i,new Vector3(-offset,H/2+y-.015f,FlightRun-(i+.5f)*.28f),new Vector3(lane+.02f,.03f,.29f),tread);
+            Box(t,"B_Riser_"+i,new Vector3(offset,y-rise/2-.0155f,(i+.5f)*.28f),new Vector3(lane,rise-.031f,.28f),riser);
+            Box(t,"B_Tread_"+i,new Vector3(offset,y-.015f,(i+.5f)*.28f),new Vector3(lane+.02f,.03f,.28f),tread);
+            Box(t,"A_Riser_"+i,new Vector3(-offset,H/2+y-rise/2-.0155f,FlightRun-(i+.5f)*.28f),new Vector3(lane,rise-.031f,.28f),riser);
+            Box(t,"A_Tread_"+i,new Vector3(-offset,H/2+y-.015f,FlightRun-(i+.5f)*.28f),new Vector3(lane+.02f,.03f,.28f),tread);
         }
         // Same open-front, two-flight enclosure as the library, scaled to this well.
         foreach(float side in new[]{-1f,1f})
             Box(t,"Stair_Wall_"+side,new Vector3(side*(width/2-.03f),H/2,(FlightRun+Landing)/2),new Vector3(.06f,H,FlightRun+Landing),wall);
-        Box(t,"Stair_Back_Wall",new Vector3(0,H/2,FlightRun+Landing-.03f),new Vector3(width,H,.06f),wall);
+        Box(t,"Stair_Back_Wall",new Vector3(0,H/2,FlightRun+Landing-.03f),new Vector3(width-.12f,H,.06f),wall);
         Box(t,"Spine_Wall",new Vector3(0,H/2,FlightRun/2),new Vector3(.12f,H,FlightRun-.1f),wall);
         Rail(t, "B", width/2-.12f, 0,0,FlightRun,H/2);
         Rail(t, "A", -width/2+.12f,H/2,FlightRun,0,H/2);
@@ -86,8 +97,13 @@ public static class CafeteriaReadabilityUpgrade
     static void RebuildDecks(Transform multi)
     {
         var shell=multi.Find("00_Architecture_Shell");
-        // Cut only the returning flight; deck over the first flight has >=2m clearance.
-        var holes=new[]{new Rect(-14.48f,-13.84f,4.28f,1.31f),new Rect(6.03f,-13.08f,1.11f,4.28f)};
+        // Share one opening definition between floor slabs and ceiling finishes.
+        float length=FlightRun+Landing;
+        var holes=new[]{new Rect(-10.2f-length,-12.5f-StairWidth/2,length,StairWidth),new Rect(EastStairX-StairWidth/2,-8.8f-length,StairWidth,length)};
+        var multiParent=multi.parent;
+        var oldCeiling=multiParent.GetComponentsInChildren<Transform>(true).FirstOrDefault(t=>t.name=="00_Ceiling_Finish");
+        if(oldCeiling)Object.DestroyImmediate(oldCeiling.gameObject);
+        var ceiling=Group(multi,"00_Ceiling_Finish");
         float[] xs=new[]{-18f,holes[0].xMin,holes[0].xMax,holes[1].xMin,holes[1].xMax,18f}.Distinct().OrderBy(v=>v).ToArray();
         float[] zs=new[]{-16f,holes[0].yMin,holes[0].yMax,holes[1].yMin,holes[1].yMax,16f}.Distinct().OrderBy(v=>v).ToArray();
         for(int f=1;f<=2;f++)
@@ -98,6 +114,7 @@ public static class CafeteriaReadabilityUpgrade
                 var center=new Vector2((xs[x]+xs[x+1])/2,(zs[z]+zs[z+1])/2);
                 if(holes.Any(h=>h.Contains(center)))continue;
                 Box(deck,$"Deck_{x}_{z}",new Vector3(center.x,f*H-.075f,center.y),new Vector3(xs[x+1]-xs[x],.15f,zs[z+1]-zs[z]),Mat("Floor_Terrazzo"));
+                Box(ceiling,$"Ceiling_{f}F_{x}_{z}",new Vector3(center.x,f*H-.175f,center.y),new Vector3(xs[x+1]-xs[x],.03f,zs[z+1]-zs[z]),Mat("Ceiling_White"),false);
             }
             // Top-storey guardrails around the three closed edges of each well.
             if(f==2) foreach(var hole in holes){
@@ -105,7 +122,8 @@ public static class CafeteriaReadabilityUpgrade
                 Vector3 a=new Vector3(hole.xMin,f*H,hole.yMin), b=new Vector3(hole.xMax,f*H,hole.yMin);
                 Vector3 c=new Vector3(hole.xMax,f*H,hole.yMax), d=new Vector3(hole.xMin,f*H,hole.yMax);
                 Guard(deck,a,b);Guard(deck,a,d);
-                if(west)Guard(deck,d,c);else Guard(deck,b,c);
+                if(west){Guard(deck,d,c);Guard(deck,(b+c)/2,c);}
+                else{Guard(deck,b,c);Guard(deck,d,(d+c)/2);}
             }
         }
     }
@@ -126,7 +144,7 @@ public static class CafeteriaReadabilityUpgrade
         // Absolute sizing makes the migration safe to run repeatedly.
         bool table=text.text.StartsWith("1F-")||text.text.StartsWith("2F-")||text.text.StartsWith("3F-");
         var candidates=text.transform.parent.GetComponentsInChildren<MeshRenderer>(true)
-            .Where(r=>!r.GetComponent<TextMesh>()&&(r.name.Contains("Sign")||r.name.Contains("Board")||r.name.Contains("Price")||r.name=="Table_Num"));
+            .Where(r=>!r.GetComponent<TextMesh>()&&!r.name.Contains("Glow")&&!r.name.Contains("Face")&&(r.name.Contains("Sign")||r.name.Contains("Board")||r.name.Contains("Price")||r.name=="Table_Num"));
         var board=candidates.OrderBy(r=>Vector3.Distance(r.bounds.center,text.transform.position)).FirstOrDefault();
         if(board&&Vector3.Distance(board.bounds.center,text.transform.position)>1.2f)board=null;
         if(table&&board){var s=board.transform.localScale;s.x=Mathf.Max(s.x,.3f);s.y=Mathf.Max(s.y,.18f);board.transform.localScale=s;}
@@ -140,7 +158,24 @@ public static class CafeteriaReadabilityUpgrade
         float targetHeight=table?.10f:(text.text.Contains("\n")?.42f:.26f);
         float factor=Mathf.Min(width/bounds.x,Mathf.Min(height,targetHeight)/bounds.y);
         text.characterSize*=factor;
+        FitLabelToSurface(text, board);
+        var material=Resources.Load<Material>("InteriorWorldText");
+        renderer.sharedMaterial=material;
+        if(!text.GetComponent<InteriorWorldLabel>())text.gameObject.AddComponent<InteriorWorldLabel>();
         EditorUtility.SetDirty(text);
+    }
+    static void FitLabelToSurface(TextMesh text, MeshRenderer board)
+    {
+        if(!board)return;
+        Vector3 normal=-text.transform.forward;
+        var filter=board.GetComponent<MeshFilter>();if(!filter||!filter.sharedMesh)return;
+        Bounds local=filter.sharedMesh.bounds; float face=float.NegativeInfinity;
+        for(int x=-1;x<=1;x+=2)for(int y=-1;y<=1;y+=2)for(int z=-1;z<=1;z+=2){
+            var corner=board.transform.TransformPoint(local.center+Vector3.Scale(local.extents,new Vector3(x,y,z)));
+            face=Mathf.Max(face,Vector3.Dot(corner,normal));
+        }
+        float current=Vector3.Dot(text.transform.position,normal);
+        text.transform.position+=normal*(face+.012f-current);
     }
     [MenuItem("Campus/Interiors/Upgrade Cafeteria Text and Stairs")]
     public static void Run()
@@ -154,6 +189,7 @@ public static class CafeteriaReadabilityUpgrade
             var root=Object.FindFirstObjectByType<InteriorSceneRoot>(); Apply(root.transform);
             Physics.SyncTransforms(); Validate(root.transform);
             Capture(root.transform);
+            CafeteriaVisibilityValidation.Run(root.transform);
             EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
             File.WriteAllText(Output+"/complete.txt","Saved cafeteria scene; labels fitted; all stair journeys passed.");
             Debug.Log("CAFETERIA_UPGRADE_PASS");
@@ -165,11 +201,13 @@ public static class CafeteriaReadabilityUpgrade
         camera.fieldOfView=68; camera.nearClipPlane=.05f; camera.farClipPlane=100;
         var rt=new RenderTexture(1600,1000,24); camera.targetTexture=rt;
         var previous=RenderTexture.active;
+        var font=Resources.Load<Font>("CampusFont");
+        Resources.Load<Material>("InteriorWorldText").mainTexture=font.material.mainTexture;
         var visibility=root.GetComponent<InteriorFloorTextVisibility>();
         visibility.ApplyForHeight(root.position.y+.02f);
         try {
-            Vector3[] positions={new Vector3(-6,2,-12.5f),new Vector3(6,2,-4.8f),new Vector3(0,2,9)};
-            Vector3[] targets={new Vector3(-12.5f,2,-12.5f),new Vector3(6,2,-11),new Vector3(0,2.5f,15)};
+            Vector3[] positions={new Vector3(-6,2,-12.5f),new Vector3(EastStairX,2,-4.8f),new Vector3(0,2,9)};
+            Vector3[] targets={new Vector3(-12.5f,2,-12.5f),new Vector3(EastStairX,2,-11),new Vector3(0,2.5f,15)};
             for(int i=0;i<positions.Length;i++){
                 camera.transform.position=root.TransformPoint(positions[i]); camera.transform.LookAt(root.TransformPoint(targets[i]));
                 camera.Render(); RenderTexture.active=rt;
@@ -184,9 +222,12 @@ public static class CafeteriaReadabilityUpgrade
         var log=new StringBuilder();
         foreach(var stair in root.Find("Cafeteria_MultiFloor_Interior/00_Vertical_Circulation").Cast<Transform>())
         {
-            float width=stair.name.StartsWith("Stairs_1")?2.8f:2.4f, off=width/4;
-            Vector3[] points={new Vector3(off,.03f,-.6f),new Vector3(off,H/2,FlightRun+.6f),new Vector3(-off,H/2,FlightRun+.6f),new Vector3(-off,H,-.6f)};
-            Walk(stair,points,log);Walk(stair,points.Reverse().ToArray(),log);
+            float width=StairWidth, off=width/4;
+            Vector3[] points={new Vector3(off,.03f,-.6f),new Vector3(off,H/2,FlightRun+Landing/2),new Vector3(-off,H/2,FlightRun+Landing/2),new Vector3(-off,H,-.6f)};
+            foreach(float shift in new[]{-.45f,0f,.45f}){
+                var path=points.Select(p=>p+Vector3.right*shift).ToArray();
+                Walk(stair,path,log);Walk(stair,path.Reverse().ToArray(),log);
+            }
         }
         File.WriteAllText(Output+"/walkability.txt",log.ToString());
         if(log.ToString().Contains("FAIL"))throw new InvalidOperationException("Stair validation failed: "+log);
