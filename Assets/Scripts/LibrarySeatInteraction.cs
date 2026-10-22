@@ -19,6 +19,9 @@ public class LibrarySeatInteraction : MonoBehaviour, ICampusOverlay
 
     GUIStyle promptStyle, boxStyle, btnStyle;
     bool styles;
+    public bool SubjectsOpen { get; private set; }
+    string pendingCourse, studyFeedback="";
+    int pendingMinutes;
 
     // Cached so the painted highlight and the prompt agree with the E action.
     LibrarySeat nearSeat;
@@ -66,6 +69,11 @@ public class LibrarySeatInteraction : MonoBehaviour, ICampusOverlay
         bool inLibrary = InLibrary();
         if (!inLibrary) { nearSeat = null; nearMachine = null; return; }
 
+        if(SubjectsOpen){
+            if(!inLibrary||!study.Seated){CloseSubjects();return;}
+            if(Input.GetKeyDown(KeyCode.Escape)){CampusOverlayHub.ConsumeInput();if(pendingCourse!=null)pendingCourse=null;else CloseSubjects();}
+            return;
+        }
         // Another owned UI already has the cursor.
         if (game.UiBlocking) { nearSeat = null; nearMachine = null; return; }
 
@@ -82,23 +90,23 @@ public class LibrarySeatInteraction : MonoBehaviour, ICampusOverlay
         nearMachine = vending.MachineAtPlayerPublic();
         nearSeat = study.SeatNearPlayer();
 
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            if (nearMachine != null) { vending.OpenAt(nearMachine); return; }
+    }
 
-            if (nearSeat != null)
-            {
-                var rm = LibraryReservationManager.Instance;
-                bool mine = rm && rm.IsReservedSeat(nearSeat.id);
-                if (mine)
-                {
-                    study.TrySit(nearSeat);
-                    return;
-                }
-                game.Notify("该座位未预约，请打开手机（P）预约后再使用。");
-                return;
-            }
-        }
+    // The main E dispatcher and the prompt use the same seat selection.
+    public bool InteractOnce()
+    {
+        if (!game) game = FindFirstObjectByType<CampusGame>();
+        if (!game || !game.player || !InLibrary() || game.paused || game.UiBlocking) return false;
+        if (!study) study = LibraryStudy.Ensure();
+        if (!vending) vending = VendingMachineUI.Ensure();
+        if (study.Seated || game.Interiors.Interior.NearExit(game.player.position)) return false;
+        nearMachine = vending.MachineAtPlayerPublic();
+        if (nearMachine != null) { vending.OpenAt(nearMachine); return true; }
+        nearSeat = study.SeatNearPlayer();
+        if (nearSeat == null) return false;
+        if (LibraryReservationManager.Ensure().IsReservedSeat(nearSeat.id)) study.TrySit(nearSeat);
+        else game.Notify("该座位未预约，请打开手机（P）预约后再使用。");
+        return true;
     }
 
     // Used by LibraryIndoorInteractions so the generic spots yield this frame.
@@ -136,7 +144,8 @@ public class LibrarySeatInteraction : MonoBehaviour, ICampusOverlay
         InitStyles();
         if (!game || !game.player) return;
         if (!InLibrary()) return;
-        if (game.paused || (PhoneUI.Instance && PhoneUI.Instance.IsOpen) || VendingMachineUI.AnyOpen) return;
+        if(SubjectsOpen){DrawSubjects();return;}
+        if (game.paused || game.UiBlocking || (PhoneUI.Instance && PhoneUI.Instance.IsOpen) || VendingMachineUI.AnyOpen) return;
 
         // Study panel while seated.
         if (study && study.Seated)
@@ -152,7 +161,19 @@ public class LibrarySeatInteraction : MonoBehaviour, ICampusOverlay
             return;
         }
 
-        if (nearSeat == null) return;
+        if (nearSeat == null)
+        {
+            var booking = LibraryReservationManager.Ensure();
+            var reserved = LibrarySeatRegistry.Ensure().ById(booking.ReservedSeatId);
+            if (reserved != null)
+            {
+                float metres = Vector2.Distance(new Vector2(game.player.position.x,game.player.position.z),new Vector2(reserved.sitPos.x,reserved.sitPos.z));
+                DrawPrompt(Mathf.Abs(game.player.position.y-reserved.sitPos.y)>=2f
+                    ? $"预约 {reserved.id} · 请前往 {reserved.floor}F，靠近座椅按 E"
+                    : $"预约 {reserved.id} · 距离 {metres:F0} 米 · 靠近座椅按 E");
+            }
+            return;
+        }
 
         var rm = LibraryReservationManager.Instance;
         bool mine = rm && rm.IsReservedSeat(nearSeat.id);
@@ -223,18 +244,71 @@ public class LibrarySeatInteraction : MonoBehaviour, ICampusOverlay
         }
         else
         {
-            if (GUI.Button(new Rect(box.x + 18f, box.y + 80f, w - 36f, 34f), "开始学习", btnStyle))
+            if (LibraryUiProbe.Button("seat:start",new Rect(box.x + 18f, box.y + 80f, w - 36f, 34f), "开始学习", btnStyle))
             {
                 var semester=CampusSemester.Instance;
-                if(semester&&semester.Ready)semester.UI.Open("study");else study.StartStudy();
+                if(semester&&semester.Ready)OpenSubjects();else study.StartStudy();
             }
         }
 
-        if (GUI.Button(new Rect(box.x + 18f, box.y + h - 44f, (w - 48f) * 0.5f, 32f), "起身 (Q)", btnStyle))
+        if (LibraryUiProbe.Button("seat:stand",new Rect(box.x + 18f, box.y + h - 44f, (w - 48f) * 0.5f, 32f), "起身 (Q)", btnStyle))
             study.TryStandUp();
 
-        if (GUI.Button(new Rect(box.x + w - 18f - (w - 48f) * 0.5f, box.y + h - 44f, (w - 48f) * 0.5f, 32f),
+        if (LibraryUiProbe.Button("seat:release",new Rect(box.x + w - 18f - (w - 48f) * 0.5f, box.y + h - 44f, (w - 48f) * 0.5f, 32f),
                         "结束并释放座位", btnStyle))
             study.FinishAndRelease();
+    }
+
+    public void OpenSubjects(){
+        if(!study||!study.Seated||!game||game.UiBlocking)return;
+        SubjectsOpen=true;pendingCourse=null;studyFeedback="选择科目与时长。完成学习后仍保留座位。";
+        game.SetUiCursor(true);CampusOverlayHub.ConsumeInput();
+    }
+    public void CloseSubjects(){
+        if(!SubjectsOpen)return;
+        SubjectsOpen=false;pendingCourse=null;game.SetUiCursor(false);CampusOverlayHub.ConsumeInput();
+    }
+    void ChooseStudy(string course,int minutes){
+        var semester=CampusSemester.Instance;
+        string conflict=semester.Conflict(minutes);
+        if(!string.IsNullOrEmpty(conflict)){pendingCourse=course;pendingMinutes=minutes;studyFeedback=conflict;return;}
+        semester.Study(course,minutes);studyFeedback=semester.LastMessage;
+    }
+    void DrawSubjects(){
+        var semester=CampusSemester.Instance;if(!semester||!study||!study.Seated){CloseSubjects();return;}
+        float scale=Mathf.Min(1,(Screen.width-24)/680f,(Screen.height-24)/530f);
+        var origin=new Vector2((Screen.width-680*scale)/2,(Screen.height-530*scale)/2);
+        System.Func<float,float,float,float,Rect> rect=(x,y,w,h)=>new Rect(origin+new Vector2(x,y)*scale,new Vector2(w,h)*scale);
+        var font=game.interfaceFont;
+        var heading=new GUIStyle(promptStyle){fontSize=Mathf.RoundToInt(26*scale),alignment=TextAnchor.MiddleLeft};
+        var text=new GUIStyle(promptStyle){fontSize=Mathf.RoundToInt(18*scale),alignment=TextAnchor.UpperLeft,wordWrap=true,normal={textColor=CampusStoryStyle.Paper}};
+        var action=new GUIStyle(btnStyle){fontSize=Mathf.RoundToInt(17*scale),wordWrap=true};
+        var old=GUI.color;GUI.color=new Color(.025f,.035f,.05f,.70f);GUI.DrawTexture(new Rect(0,0,Screen.width,Screen.height),Texture2D.whiteTexture);GUI.color=old;
+        CampusStoryStyle.Panel(rect(0,0,680,530));
+        GUI.Label(rect(24,18,490,36),"图书馆自习 · "+study.Seat.id,heading);
+        if(LibraryUiProbe.Button("study:close",rect(564,18,92,36),"返回座位",action)){CloseSubjects();return;}
+        GUI.Label(rect(24,62,632,30),semester.Clock.DateTimeText+"  ·  精力 "+semester.State.energy+" / 100",text);
+        if(pendingCourse!=null){
+            GUI.Label(rect(24,126,632,120),"学习 "+pendingMinutes+"分钟将结束于 "+semester.Clock.Now.AddMinutes(pendingMinutes).ToString("HH:mm")+"。\n"+studyFeedback+"\n是否继续？",text);
+            if(LibraryUiProbe.Button("confirm:accept",rect(24,284,306,48),"确认继续学习",action)){
+                string course=pendingCourse;int minutes=pendingMinutes;pendingCourse=null;
+                semester.Study(course,minutes,true);studyFeedback=semester.LastMessage;
+            }
+            if(LibraryUiProbe.Button("confirm:cancel",rect(350,284,306,48),"取消，保留座位",action))pendingCourse=null;
+        }else{
+            int row=0;
+            foreach(var course in semester.State.courses){
+                float y=108+row*86;
+                GUI.Label(rect(24,y,632,26),course.name+" · 掌握度 "+course.mastery.ToString("F1")+" / 100",text);
+                int column=0;
+                foreach(int minutes in new[]{30,60,90}){
+                    if(LibraryUiProbe.Button("study:"+course.id+":"+minutes,rect(24+column*216,y+30,200,42),minutes+"分钟 · 精力 "+minutes/6,action))ChooseStudy(course.id,minutes);
+                    column++;
+                }
+                row++;
+            }
+        }
+        GUI.Label(rect(24,380,632,104),studyFeedback,text);
+        GUI.Label(rect(24,492,632,26),"关闭面板保留座位；返回后可起身或结束预约。",text);
     }
 }

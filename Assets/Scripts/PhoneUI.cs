@@ -17,6 +17,7 @@ public class PhoneUI : MonoBehaviour, ICampusOverlay
     bool open;
     Page page = Page.Home;
     int floor = 2;
+    string seatArea="A";
     LibrarySeat selected;
     string toast;
     float toastUntil;
@@ -263,7 +264,7 @@ public class PhoneUI : MonoBehaviour, ICampusOverlay
 
         float y = c.y + 66f;
         var reg = LibrarySeatRegistry.Ensure();
-        for (int f = 1; f <= 3; f++)
+        for (int f = 1; f <= 4; f++)
         {
             int n = reg.CountOnFloor(f);
             string label = f + "F   " + (n > 0 ? n + " 个可预约座位" : "暂无可预约座位");
@@ -296,13 +297,16 @@ public class PhoneUI : MonoBehaviour, ICampusOverlay
     {
         var reg = LibrarySeatRegistry.Ensure();
         var rm = LibraryReservationManager.Ensure();
-        var seats = reg.OnFloor(floor);
+        var seats = reg.OnFloor(floor).FindAll(s=>s.area==seatArea);
 
         GUI.Label(new Rect(c.x, c.y, c.width, 30f), floor + "F 座位平面图", title);
 
         // Plan view area, kept square so the layout is not distorted.
-        float size = Mathf.Min(c.width - 10f, c.height - 190f);
-        var plan = new Rect(c.x + (c.width - size) * 0.5f, c.y + 36f, size, size);
+        float column=(c.width-6)/2;
+        if(LibraryUiProbe.Button("phone:area:A",new Rect(c.x,c.y+36,column,28),seatArea=="A"?"圆厅 A · 当前":"圆厅 A",btnStyle)){seatArea="A";selected=null;}
+        if(LibraryUiProbe.Button("phone:area:B",new Rect(c.x+column+6,c.y+36,column,28),seatArea=="B"?"阅览 B · 当前":"阅览 B",btnStyle)){seatArea="B";selected=null;}
+        float size = Mathf.Min(c.width - 10f, c.height - 224f);
+        var plan = new Rect(c.x + (c.width - size) * 0.5f, c.y + 70f, size, size);
 
         GUI.color = new Color(0.10f, 0.12f, 0.15f, 1f);
         GUI.DrawTexture(plan, Texture2D.whiteTexture);
@@ -317,50 +321,49 @@ public class PhoneUI : MonoBehaviour, ICampusOverlay
         Label(plan, 0.80f, 0.92f, "出入口");
         Label(plan, 0.44f, 0.06f, "圆厅");
 
-        foreach (var s in seats)
-        {
-            var r = new Rect(plan.x + 12f + s.mapPos.x * (size - 34f),
-                             plan.y + 12f + s.mapPos.y * (size - 34f), 16f, 16f);
-
-            bool mine = rm.IsReservedSeat(s.id);
-            bool sel = selected != null && selected.id == s.id;
-
-            GUI.color = sel ? new Color(1f, 0.85f, 0.35f)
-                      : mine ? new Color(0.45f, 0.95f, 0.55f)
-                      : new Color(0.62f, 0.68f, 0.78f);
-            GUI.DrawTexture(r, Texture2D.whiteTexture);
-            GUI.color = Color.white;
-
-            if (GUI.Button(new Rect(r.x - 2f, r.y - 2f, 20f, 20f), GUIContent.none, GUIStyle.none))
-                selected = s;
+        // Select by nearest centre once; neighbouring hit boxes must not steal clicks.
+        float minX=1,maxX=0,minY=1,maxY=0;
+        foreach(var seat in seats){minX=Mathf.Min(minX,seat.mapPos.x);maxX=Mathf.Max(maxX,seat.mapPos.x);minY=Mathf.Min(minY,seat.mapPos.y);maxY=Mathf.Max(maxY,seat.mapPos.y);}
+        float span=Mathf.Max(.001f,maxX-minX,maxY-minY);
+        System.Func<LibrarySeat,Vector2> centre = s => new Vector2(plan.x+16+(s.mapPos.x-minX)/span*(size-32),plan.y+16+(maxY-s.mapPos.y)/span*(size-32));
+        foreach(var seat in seats)LibraryUiProbe.Record("phone:seat:"+seat.id,new Rect(centre(seat)-Vector2.one*8,Vector2.one*16));
+        if(LibraryUiProbe.Button("phone:plan",plan,"",GUIStyle.none)){
+            var pointer=Event.current.mousePosition;LibrarySeat closest=null;float best=18*18;
+            foreach(var seat in seats){float sq=(centre(seat)-pointer).sqrMagnitude;if(sq<best){best=sq;closest=seat;}}
+            if(closest!=null)selected=closest;
         }
-
-        // Legend
-        float ly = plan.yMax + 6f;
-        GUI.Label(new Rect(c.x, ly, c.width, 22f), "● 可选   ● 我的预约   ● 选中", small);
-
-        if (selected != null)
-            GUI.Label(new Rect(c.x, ly + 22f, c.width, 22f),
-                      $"座位 {selected.id} · {selected.areaName} · {(rm.IsReservedSeat(selected.id) ? "已预约" : "可选")}",
-                      body);
-
-        bool canBook = selected != null && !rm.IsBlocked(selected.id, out _);
-        GUI.enabled = canBook;
-        if (GUI.Button(new Rect(c.x, c.yMax - 38f, c.width - 100f, 32f),
-                       rm.HasReservation ? "更换到这里（会取消原预约）" : "确认预约", btnStyle))
-        {
-            if (rm.TryReplace(selected.id, selected.floor, selected.area, true))
-            {
-                Toast("预约成功：" + selected.id);
-                page = Page.MyBooking;
-            }
-            else Toast("预约失败，请重试");
+        foreach(var seat in seats)if(selected==null||seat.id!=selected.id)PaintSeat(seat,centre(seat),rm,false);
+        if(selected!=null)PaintSeat(selected,centre(selected),rm,true);
+        float ly=plan.yMax+8;
+        float legend=c.width/3;
+        SeatLegend(new Rect(c.x,ly,legend,20),new Color(.62f,.68f,.78f),"可预约");
+        SeatLegend(new Rect(c.x+legend,ly,legend,20),new Color(.45f,.95f,.55f),"我的预约");
+        SeatLegend(new Rect(c.x+legend*2,ly,legend,20),new Color(1f,.85f,.35f),"已选中");
+        if(selected!=null){
+            var previous=title.normal.textColor;title.normal.textColor=new Color(1f,.85f,.35f);
+            GUI.Label(new Rect(c.x,ly+25,c.width,26),"已选中 "+selected.id,title);title.normal.textColor=previous;
+            GUI.Label(new Rect(c.x,ly+52,c.width,22),selected.areaName+" · "+(rm.IsReservedSeat(selected.id)?"这就是我的预约":"确认后预约此座位"),small);
+        }else GUI.Label(new Rect(c.x,ly+28,c.width,44),"点击座位选中，再确认预约。",body);
+        bool occupied=rm.HasReservation&&rm.State.inUse;
+        bool canBook=selected!=null&&!occupied&&!rm.IsBlocked(selected.id,out _);
+        bool oldEnabled=GUI.enabled;GUI.enabled=canBook;
+        string bookingLabel=occupied?"正在使用座位，请先起身":selected!=null&&rm.IsReservedSeat(selected.id)?"已预约此座位":rm.HasReservation?"确认更换座位":"确认预约所选座位";
+        if(LibraryUiProbe.Button("phone:reserve",new Rect(c.x,c.yMax-40,c.width,36),bookingLabel,btnStyle)){
+            if(rm.TryReplace(selected.id,selected.floor,selected.areaName,true)){Toast("预约成功："+selected.id);page=Page.MyBooking;}
+            else Toast("预约失败；使用中请先起身再更换座位。");
         }
-        GUI.enabled = true;
-
-        if (GUI.Button(new Rect(c.xMax - 90f, c.yMax - 38f, 90f, 32f), "‹ 返回", btnStyle))
-            page = Page.Booking;
+        GUI.enabled=oldEnabled;
+        if(LibraryUiProbe.Button("phone:back",new Rect(c.xMax-76,c.y,76,28),"‹ 楼层",btnStyle))page=Page.Booking;
     }
+    void PaintSeat(LibrarySeat seat,Vector2 centre,LibraryReservationManager rm,bool selectedSeat){
+        var previous=GUI.color;
+        float extent=selectedSeat?9:2.5f;
+        if(selectedSeat){GUI.color=Color.white;GUI.DrawTexture(new Rect(centre-Vector2.one*11,Vector2.one*22),Texture2D.whiteTexture);}
+        GUI.color=selectedSeat?new Color(1f,.85f,.35f):rm.IsReservedSeat(seat.id)?new Color(.45f,.95f,.55f):new Color(.62f,.68f,.78f);
+        GUI.DrawTexture(new Rect(centre-Vector2.one*extent,Vector2.one*(extent*2)),Texture2D.whiteTexture);GUI.color=previous;
+        if(selectedSeat){var style=new GUIStyle(small){fontSize=12,alignment=TextAnchor.MiddleCenter,normal={textColor=new Color(.06f,.07f,.09f)}};GUI.Label(new Rect(centre-Vector2.one*12,Vector2.one*24),seat.id.Substring(seat.id.Length-2),style);}
+    }
+    void SeatLegend(Rect rect,Color color,string text){var previous=GUI.color;GUI.color=color;GUI.DrawTexture(new Rect(rect.x,rect.y+6,8,8),Texture2D.whiteTexture);GUI.color=previous;GUI.Label(new Rect(rect.x+14,rect.y,rect.width-14,rect.height),text,small);}
 
     void DrawMyBooking(Rect c)
     {

@@ -167,6 +167,9 @@ public class CampusGame : MonoBehaviour {
     var ordering=CampusSystemsRegistry.FindOrdering();
     if(ordering){var ui=ordering.GetComponent<CafeteriaOrderingUI>();if(ui&&ui.InteractOnce())return true;}
   }
+  if(Interiors&&Interiors.Inside&&Interiors.Interior&&Interiors.Interior.buildingId=="library"){
+    var seats=LibrarySeatInteraction.Ensure();if(seats.InteractOnce())return true;
+  }
   var semester=CampusSemester.Instance;
   var semesterPoint=CampusSemesterPoint.Nearby(this);
   if(semester&&semester.Ready&&semesterPoint){semester.UI.OpenAt(semesterPoint);return true;}

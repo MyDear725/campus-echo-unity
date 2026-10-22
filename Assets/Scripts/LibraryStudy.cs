@@ -60,7 +60,13 @@ public class LibraryStudy : MonoBehaviour
         if (!game || !game.player) return null;
         var reg = LibrarySeatRegistry.Instance;
         if (!reg) return null;
-        return reg.NearestTo(game.player.position, sitReach);
+        // Keep the owned seat selectable when neighbouring chair footprints overlap.
+        var mine = reg.ById(LibraryReservationManager.Ensure().ReservedSeatId);
+        var p = game.player.position;
+        if (mine != null && Mathf.Abs(p.y - mine.sitPos.y) < 2f &&
+            Vector2.Distance(new Vector2(p.x,p.z),new Vector2(mine.sitPos.x,mine.sitPos.z)) <= sitReach)
+            return mine;
+        return reg.NearestTo(p, sitReach);
     }
 
     // Sit on a seat. Returns false when there is no valid seat or the player already sits.
@@ -69,6 +75,8 @@ public class LibraryStudy : MonoBehaviour
         if (Seated || s == null) return false;
         if (!game) game = FindFirstObjectByType<CampusGame>();
         if (!game || !game.player) return false;
+        var reservation=LibraryReservationManager.Ensure();
+        if(!reservation.IsReservedSeat(s.id))return false;
 
         seat = s;
         standPos = game.player.position;
@@ -90,6 +98,7 @@ public class LibraryStudy : MonoBehaviour
         Physics.SyncTransforms();
 
         Seated = true;
+        reservation.SetInUse(true);
         game.RefreshCursorState();
         return true;
     }
@@ -111,13 +120,14 @@ public class LibraryStudy : MonoBehaviour
         Studying = false;
         if (GameClock.Instance) GameClock.Instance.RestoreNormal();
         var rm = LibraryReservationManager.Instance;
-        if (rm) rm.SetInUse(false);
+        if (rm) rm.SetInUse(Seated);
     }
 
     // Stand up, keeping the reservation so the player can sit again.
     public bool TryStandUp()
     {
         if (!Seated) return false;
+        if(LibrarySeatInteraction.Instance)LibrarySeatInteraction.Instance.CloseSubjects();
         StopStudy();
 
         if (pose) pose.active = false;
@@ -134,6 +144,7 @@ public class LibraryStudy : MonoBehaviour
 
         Seated = false;
         seat = null;
+        LibraryReservationManager.Ensure().SetInUse(false);
         return true;
     }
 
@@ -149,12 +160,13 @@ public class LibraryStudy : MonoBehaviour
     // the clock sped up.
     public void ForceUp()
     {
+        if(LibrarySeatInteraction.Instance)LibrarySeatInteraction.Instance.CloseSubjects();
         if (Studying)
         {
             Studying = false;
             if (GameClock.Instance) GameClock.Instance.RestoreNormal();
             var rm = LibraryReservationManager.Instance;
-            if (rm) rm.SetInUse(false);
+            if (rm) rm.SetInUse(Seated);
         }
         if (Seated)
         {
@@ -170,6 +182,7 @@ public class LibraryStudy : MonoBehaviour
             if (game) { game.Seated = false; game.RefreshCursorState(); }
             Seated = false;
             seat = null;
+            LibraryReservationManager.Ensure().SetInUse(false);
         }
     }
 }

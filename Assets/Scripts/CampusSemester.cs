@@ -225,18 +225,19 @@ public sealed class CampusSemester : MonoBehaviour
         if (!RequireReady()) return false;
         if (minutes != 30 && minutes != 60 && minutes != 90) return Tell("请选择30、60或90分钟。");
         var study = LibraryStudy.Instance;
-        if (!study || !study.Seated || !LibraryReservationManager.Ensure().HasReservation || !Game.Interiors.Inside || Game.Interiors.Interior.buildingId != "library")
+        if (!study || !study.Seated || !LibraryReservationManager.Ensure().IsReservedSeat(study.Seat?.id) || !Game.Interiors.Inside || Game.Interiors.Interior.buildingId != "library")
             return Tell("先在手机预约图书馆座位，走到自己的座位按 E 坐下，再选科目学习。");
         var course = State.Course(courseId); if (course == null) return false;
         int cost = minutes / 6;
         if (!CanSpend(minutes, cost, allowConflict)) return false;
         study.StopStudy();
         float gain = SemesterRules.StudyGain(course, minutes);
+        float beforeMastery=course.mastery;int beforeEnergy=State.energy;var beforeTime=Clock.Now;
         course.mastery = Mathf.Min(100, course.mastery + gain);
         var task = State.assignments.FirstOrDefault(t => t.course == courseId && !t.prepared && !t.submitted);
         if (task != null) task.prepared = true;
         State.Mark("study-" + courseId);
-        Commit("针对学习 · " + course.name, course.topic + "：掌握度 +" + gain.ToString("F1") + (task != null ? "，一份作业已完成，可在手册提交。" : "，学习记录已保存。"), minutes, cost);
+        Commit("针对学习 · " + course.name, course.name+"学习完成 · "+minutes+"分钟（"+beforeTime.ToString("HH:mm")+"—"+beforeTime.AddMinutes(minutes).ToString("HH:mm")+"）\n掌握度 "+beforeMastery.ToString("F1")+" → "+course.mastery.ToString("F1")+"，精力 "+beforeEnergy+" → "+(beforeEnergy-cost)+(task != null ? "；一份作业已完成，可在手册提交。" : "；预约座位保留。"), minutes, cost);
         return true;
     }
     public bool Submit(string assignmentId)
@@ -355,14 +356,26 @@ public sealed class CampusSemester : MonoBehaviour
         Tell("早上好。" + NextSchedule);
         return true;
     }
+    // Shared by the preview and transaction; inspecting availability never changes progress.
+    public string RoutineDayUnavailableReason()
+    {
+        if (!Ready) return "请先完成小岚的迎新剧情。";
+        var reasons = new List<string>();
+        if (!At("dorm")) reasons.Add("请先前往宿舍休息登记处。");
+        if (Clock.Now.Date >= GameClock.SemesterEnd.Date) reasons.Add("本学期已结束，请查看学期回顾。");
+        if (Clock.DayIndex < 7) reasons.Add("现在是第一周，请亲自体验迎新与课程；9月8日起才可使用平常日计划。");
+        else if (SemesterRules.IsImportantDay(Clock.DayIndex, Catalog)) reasons.Add("今天有重要剧情、考试或活动，请亲自体验。");
+        if (Clock.Now.Hour >= 8) reasons.Add("当前已到早晨8点，平常日计划仅在8点前可用；可先在宿舍休息至明早07:00。");
+        if (Catalog.beats.Any(b => b.day == Clock.DayIndex && SemesterRules.Available(State,b,Clock.DayIndex))) reasons.Add("今天有新的故事，请先查看故事与回忆。");
+        if (State.assignments.Any(t => !t.submitted && t.dueDay <= Clock.DayIndex)) reasons.Add("今天有作业截止或待补交，请先处理学习任务。");
+        if (CampusWallet.BalanceFen < 2000) reasons.Add("餐费需要20元，当前余额不足。可亲自安排餐食或参与勤工助学。");
+        return string.Join("\n", reasons);
+    }
     public bool RoutineDay()
     {
-        if (!RequireReady() || !RequirePlace("dorm")) return false;
-        if (Clock.DayIndex < 7 || SemesterRules.IsImportantDay(Clock.DayIndex, Catalog)) return Tell("今天有重要内容，或仍在第一周，请亲自体验这一天。");
-        if (Clock.Now.Hour >= 8) return Tell("平常日计划需在早晨8点前、从宿舍开始。可先休息至明早。");
-        if (Catalog.beats.Any(b => b.day <= Clock.DayIndex && b.day > Clock.DayIndex-1 && SemesterRules.Available(State,b,Clock.DayIndex))) return Tell("今天有新的故事，请先查看手册。");
-        if (State.assignments.Any(t=>!t.submitted&&t.dueDay<=Clock.DayIndex)) return Tell("今天有作业截止或待补交，请先处理学习任务再使用平常日计划。");
-        if (!CampusWallet.TrySpend(2000)) return Tell("平常日餐费需要20元，余额不足。可亲自安排更便宜的餐食或参与勤工助学。");
+        string reason = RoutineDayUnavailableReason();
+        if (!string.IsNullOrEmpty(reason)) return Tell(reason);
+        if (!CampusWallet.TrySpend(2000)) return Tell("餐费需要20元，当前余额不足。");
         foreach (var lesson in SemesterRules.Lessons(Clock.Now))
         {
             if (State.attendance.Contains(lesson.id)) continue;

@@ -10,6 +10,8 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
     public bool OverlayVisible => IsOpen;
     string page="today", selectedBeat, confirmTitle, confirmText;
     Func<bool> confirmAction;
+    Func<string> confirmUnavailable;
+    string actionFeedback;
     Vector2 scroll;
     bool previousPaused;
     GUIStyle title, body, muted, button, selectedButton, section;
@@ -38,7 +40,7 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
             previousPaused=semester.Game.paused;
         }
         if (PhoneUI.Instance && PhoneUI.Instance.IsOpen) PhoneUI.Instance.Close();
-        CampusOverlayHub.ConsumeInput(); IsOpen=true; page=target; scroll=Vector2.zero; selectedBeat=null;
+        CampusOverlayHub.ConsumeInput(); IsOpen=true; page=target; scroll=Vector2.zero; selectedBeat=null; actionFeedback=null;
         semester.Game.SetUiCursor(true);
     }
     public void Close()
@@ -63,7 +65,21 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
             : "恢复今天开始时的完整进度。今天发生的消费、获得的物品、学习、成绩、任务与奖励同时撤回；此前各天的进度保留。系统会先留一份完整备份。",
             () => whole ? CampusSemesterSave.RestoreSemester(semester) : CampusSemesterSave.RestoreDay(semester));
     }
-    void Ask(string heading,string text,Func<bool> action) { confirmTitle=heading;confirmText=text;confirmAction=action; }
+    void Ask(string heading,string text,Func<bool> action,Func<string> unavailable=null)
+    {
+        confirmTitle=heading;confirmText=text;confirmAction=action;confirmUnavailable=unavailable;
+        actionFeedback=null;scroll=Vector2.zero;
+    }
+    void ExecuteConfirmation()
+    {
+        if (confirmAction == null) return;
+        string reason=confirmUnavailable?.Invoke();
+        if (!string.IsNullOrEmpty(reason)) { actionFeedback=reason;return; }
+        bool succeeded=confirmAction();
+        actionFeedback=semester.LastMessage;
+        if (succeeded) { confirmAction=null;confirmUnavailable=null; }
+        scroll=Vector2.zero;
+    }
     void WithTime(string heading,int minutes,Func<bool> normal,Func<bool> overrideConflict,string except=null)
     {
         string conflict=semester.Conflict(minutes,except);
@@ -111,14 +127,15 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
         string[] ids={"today","study","growth","story","life"};string[] labels={"今日日程","学习与作业","成绩与奖励","故事与回忆","生活与设置"};
         for(int i=0;i<ids.Length;i++){
             var tab=new Rect(panel.x+24,panel.y+142+i*62,178,50);
-            if(GUI.Button(tab,labels[i],page==ids[i]?selectedButton:button)){page=ids[i];scroll=Vector2.zero;selectedBeat=null;confirmAction=null;}
+            if(GUI.Button(tab,labels[i],page==ids[i]?selectedButton:button)){page=ids[i];scroll=Vector2.zero;selectedBeat=null;confirmAction=null;actionFeedback=null;}
             if(page==ids[i])Fill(new Rect(tab.x,tab.y+12,3,26),CampusStoryStyle.Gold);
         }
         GUI.Label(new Rect(panel.x+28,panel.y+492,168,110),"精力 "+semester.State.energy+" / 100\n"+CampusWallet.BalanceText,body);
         GUI.Label(new Rect(panel.x+28,panel.y+620,168,92),"K 学期手册\nP 手机预约\nE 到场交互",muted);
         CampusStoryStyle.Round(new Rect(panel.x+218,panel.y+140,856,520),new Color(.12f,.16f,.20f,.40f));
-        GUILayout.BeginArea(new Rect(panel.x+240,panel.y+154,812,492));
+        GUILayout.BeginArea(new Rect(panel.x+240,panel.y+154,812,confirmAction!=null?366:492));
         scroll=GUILayout.BeginScrollView(scroll,false,true);
+        if(!string.IsNullOrEmpty(actionFeedback)){Heading("操作结果");Text(actionFeedback);}
         if(confirmAction!=null)DrawConfirmation();
         else switch(page)
         {
@@ -129,6 +146,7 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
             case "life": Life();break;
         }
         GUILayout.EndScrollView();GUILayout.EndArea();
+        if(confirmAction!=null)DrawConfirmationControls(panel);
         Fill(new Rect(panel.x+230,panel.y+675,842,1),CampusStoryStyle.Line);
         GUI.Label(new Rect(panel.x+230,panel.y+690,820,68),string.IsNullOrEmpty(semester.LastMessage)?"查看日程时暂停计时。到场后开始上课、学习或活动。":semester.LastMessage,muted);
     }
@@ -144,8 +162,18 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
     void DrawConfirmation()
     {
         Heading(confirmTitle);Text(confirmText);
-        if(Btn("确认 · "+confirmTitle)){var action=confirmAction;confirmAction=null;action();}
-        if(Btn("返回，保留当前进度")){confirmAction=null;semester.EndClassroom();}
+        string reason=confirmUnavailable?.Invoke();
+        if(!string.IsNullOrEmpty(reason))Text("当前暂不可用\n"+reason);
+    }
+    void DrawConfirmationControls(Rect panel)
+    {
+        // Keep confirmation controls outside the scrolling content: stable hit targets at every scroll offset.
+        bool enabled=GUI.enabled;
+        GUI.enabled=string.IsNullOrEmpty(confirmUnavailable?.Invoke());
+        if(LibraryUiProbe.Button("semester:confirm",new Rect(panel.x+240,panel.y+540,812,48),"确认 · "+confirmTitle,button))ExecuteConfirmation();
+        GUI.enabled=enabled;
+        if(LibraryUiProbe.Button("semester:return",new Rect(panel.x+240,panel.y+599,812,48),"返回，保留当前进度",button))
+        {confirmAction=null;actionFeedback=null;scroll=Vector2.zero;semester.EndClassroom();}
     }
     void Today()
     {
@@ -262,12 +290,18 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
         }
         return info;
     }
+    void ShowRoutinePlan()
+    {
+        Ask("按计划度过平常日","仅第一周之后的普通日、早晨8点前可用。完成今日课程与练习，结算餐费20元，时间到21:00；不会代做新剧情、考试和活动。",()=>semester.RoutineDay(),()=>semester.RoutineDayUnavailableReason());
+    }
     void Life()
     {
         Heading("生活与日程");Text("每周生活费300元自动到账。到第六食堂完整用餐可恢复精力，每个用餐时段生效一次。图书整理岗位提供一次30元补贴。休息恢复精力，跨过午夜本身不会恢复。");
         if(Btn("指引至宿舍休息登记处"))Track("dorm");
         if(Btn("休息至明早07:00",semester.Ready&&semester.At("dorm")))Ask("休息至明早","将结束今天，未完成的课程与任务不会自动完成。明早恢复精力并生成新的每日起点存档。",()=>semester.Rest());
-        if(Btn("查看平常日计划",semester.Ready&&semester.At("dorm")))Ask("按计划度过平常日","仅第一周之后的普通日、早晨8点前可用。完成今日课程与练习，结算餐费20元，时间到21:00；不会代做新剧情、考试和活动。",()=>semester.RoutineDay());
+        if(Btn("查看平常日计划"))ShowRoutinePlan();
+        string routineReason=semester.RoutineDayUnavailableReason();
+        Hint(string.IsNullOrEmpty(routineReason)?"平常日计划当前可用：餐费20元，结算至今晚21:00。":"平常日计划暂不可用：\n"+routineReason);
         if(Btn(semester.State.reminders?"课程与作业提醒：已开启 · 点击关闭":"课程与作业提醒：已关闭 · 点击开启"))
         {semester.State.reminders=!semester.State.reminders;semester.Save();}
         if(Btn(semester.Route.LineEnabled?"路线指引线：已开启 · 点击关闭":"路线指引线：已关闭 · 点击开启"))

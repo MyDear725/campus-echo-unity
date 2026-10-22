@@ -67,6 +67,8 @@ public class LibraryReservationManager : MonoBehaviour
     {
         if (string.IsNullOrEmpty(seatId)) return false;
 
+        if(HasReservation && State.seatId==seatId)return true;
+
         // One live reservation at a time.
         if (HasReservation && State.seatId != seatId) return false;
 
@@ -85,7 +87,7 @@ public class LibraryReservationManager : MonoBehaviour
     {
         // Re-confirming the seat already held is a harmless no-op success.
         if (HasReservation && State.seatId == seatId) return true;
-        if (HasReservation && !allowReplace) return false;
+        if (HasReservation && (State.inUse || !allowReplace)) return false;
         if (HasReservation) { State.seatId = null; }
         return TryReserve(seatId, floor, area);
     }

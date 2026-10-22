@@ -16,7 +16,8 @@ public static class CampusOverlayHub
     static void ResetForNewSession() { overlays.Clear(); InputConsumedFrame = -1; }
 
     public static int InputConsumedFrame { get; private set; } = -1;
-    public static void ConsumeInput() { InputConsumedFrame = Time.frameCount; }
+    public static int InputRevision { get; private set; }
+    public static void ConsumeInput() { InputConsumedFrame = Time.frameCount; InputRevision++; }
 
     public static void Register(ICampusOverlay o)
     {
@@ -31,9 +32,17 @@ public static class CampusOverlayHub
     // skip Repaint/MouseUp, leaving both pixels and buttons broken.
     public static void Draw()
     {
-        for (int i = overlays.Count - 1; i >= 0; i--)
+        ICampusOverlay modal=null;
+        if(LibrarySeatInteraction.Instance&&LibrarySeatInteraction.Instance.SubjectsOpen)modal=LibrarySeatInteraction.Instance;
+        else if(CampusSemester.Instance&&CampusSemester.Instance.UI&&CampusSemester.Instance.UI.IsOpen)modal=CampusSemester.Instance.UI;
+        else if(PhoneUI.Instance&&PhoneUI.Instance.IsOpen)modal=PhoneUI.Instance;
+        bool input=Event.current.type!=EventType.Layout&&Event.current.type!=EventType.Repaint;
+        int first=modal!=null?overlays.Count:overlays.Count-1;
+        for (int i = first; i >= 0; i--)
         {
-            var o = overlays[i];
+            var o = i==overlays.Count?modal:overlays[i];
+            if(modal!=null&&i<first&&(ReferenceEquals(o,modal)||input))continue;
+            int revision=InputRevision;
             // Interface references do not use Unity's destroyed-object null check.
             if (o is Object owner && !owner) { overlays.RemoveAt(i); continue; }
             if (o is Behaviour behaviour && !behaviour.isActiveAndEnabled) continue;
@@ -60,6 +69,7 @@ public static class CampusOverlayHub
                 GUI.skin = skin;
                 GUI.enabled = enabled;
             }
+            if(input&&InputRevision!=revision)break;
         }
     }
 }

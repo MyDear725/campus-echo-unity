@@ -882,7 +882,7 @@ public static class LibraryInteriorBuilder
         // Stable, human-readable ids: floor + area + running index within that area.
         var perArea = new System.Collections.Generic.Dictionary<string, int>();
 
-        // Keep only the three reservable floors that actually have chairs.
+        // Keep every reservable floor that actually has chairs.
         builtSeats.Sort((a, b) =>
             a.floor != b.floor ? a.floor.CompareTo(b.floor)
             : a.area != b.area ? string.CompareOrdinal(a.area, b.area)
@@ -892,7 +892,7 @@ public static class LibraryInteriorBuilder
         var kept = new System.Collections.Generic.List<LibrarySeat>();
         foreach (var seat in builtSeats)
         {
-            if (seat.floor < 1 || seat.floor > 3) continue;
+            if (seat.floor < 1 || seat.floor > Storeys) continue;
             string key = seat.floor + "-" + seat.area;
             int n;
             perArea.TryGetValue(key, out n);

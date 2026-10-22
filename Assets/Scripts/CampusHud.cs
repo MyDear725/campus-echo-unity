@@ -106,6 +106,7 @@ public class CampusHud : MonoBehaviour, ICampusOverlay
         float top = 14f * scale;
 
         DrawBalance(ref top, right, scale);
+        if(LibrarySeatInteraction.Instance&&LibrarySeatInteraction.Instance.SubjectsOpen)return;
         var semester=CampusSemester.Instance;
         if(semester){
             var clock=semester.Clock;

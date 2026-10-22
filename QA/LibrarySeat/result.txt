@@ -1,0 +1,1176 @@
+PASS: 1173 checks passed, 0 failed.
+Library loaded: True seats=192 interaction active=True
+Seat floors: 2F=64, 4F=64, 3F=64
+PASS: All 192 actual reading chairs have seat markers
+PASS: Seat IDs unique
+PASS: Fourth floor supports 64 reservations
+PASS: Reserve 2F-B-023
+PASS: Recognize owned chair from approach 2F-B-023
+PASS: Prompt target matches booking 2F-B-023
+PASS: Real E dispatcher seats player 2F-B-023
+PASS: Movement locked while seated 2F-B-023
+PASS: Stand and restore movement 2F-B-023
+PASS: Reserve 2F-A-033
+PASS: Recognize owned chair from approach 2F-A-033
+PASS: Prompt target matches booking 2F-A-033
+PASS: Real E dispatcher seats player 2F-A-033
+PASS: Movement locked while seated 2F-A-033
+PASS: Stand and restore movement 2F-A-033
+PASS: Reserve 4F-B-012
+PASS: Recognize owned chair from approach 4F-B-012
+PASS: Prompt target matches booking 4F-B-012
+PASS: Real E dispatcher seats player 4F-B-012
+PASS: Movement locked while seated 4F-B-012
+PASS: Stand and restore movement 4F-B-012
+PASS: Reserve 3F-B-013
+PASS: Recognize owned chair from approach 3F-B-013
+PASS: Prompt target matches booking 3F-B-013
+PASS: Real E dispatcher seats player 3F-B-013
+PASS: Movement locked while seated 3F-B-013
+PASS: Stand and restore movement 3F-B-013
+PASS: Reserve 4F-A-002
+PASS: Recognize owned chair from approach 4F-A-002
+PASS: Prompt target matches booking 4F-A-002
+PASS: Real E dispatcher seats player 4F-A-002
+PASS: Movement locked while seated 4F-A-002
+PASS: Stand and restore movement 4F-A-002
+PASS: Reserve 4F-A-021
+PASS: Recognize owned chair from approach 4F-A-021
+PASS: Prompt target matches booking 4F-A-021
+PASS: Real E dispatcher seats player 4F-A-021
+PASS: Movement locked while seated 4F-A-021
+PASS: Stand and restore movement 4F-A-021
+PASS: Reserve 4F-A-016
+PASS: Recognize owned chair from approach 4F-A-016
+PASS: Prompt target matches booking 4F-A-016
+PASS: Real E dispatcher seats player 4F-A-016
+PASS: Movement locked while seated 4F-A-016
+PASS: Stand and restore movement 4F-A-016
+PASS: Reserve 3F-B-010
+PASS: Recognize owned chair from approach 3F-B-010
+PASS: Prompt target matches booking 3F-B-010
+PASS: Real E dispatcher seats player 3F-B-010
+PASS: Movement locked while seated 3F-B-010
+PASS: Stand and restore movement 3F-B-010
+PASS: Reserve 3F-B-009
+PASS: Recognize owned chair from approach 3F-B-009
+PASS: Prompt target matches booking 3F-B-009
+PASS: Real E dispatcher seats player 3F-B-009
+PASS: Movement locked while seated 3F-B-009
+PASS: Stand and restore movement 3F-B-009
+PASS: Reserve 3F-B-021
+PASS: Recognize owned chair from approach 3F-B-021
+PASS: Prompt target matches booking 3F-B-021
+PASS: Real E dispatcher seats player 3F-B-021
+PASS: Movement locked while seated 3F-B-021
+PASS: Stand and restore movement 3F-B-021
+PASS: Reserve 4F-A-006
+PASS: Recognize owned chair from approach 4F-A-006
+PASS: Prompt target matches booking 4F-A-006
+PASS: Real E dispatcher seats player 4F-A-006
+PASS: Movement locked while seated 4F-A-006
+PASS: Stand and restore movement 4F-A-006
+PASS: Reserve 3F-A-021
+PASS: Recognize owned chair from approach 3F-A-021
+PASS: Prompt target matches booking 3F-A-021
+PASS: Real E dispatcher seats player 3F-A-021
+PASS: Movement locked while seated 3F-A-021
+PASS: Stand and restore movement 3F-A-021
+PASS: Reserve 2F-B-012
+PASS: Recognize owned chair from approach 2F-B-012
+PASS: Prompt target matches booking 2F-B-012
+PASS: Real E dispatcher seats player 2F-B-012
+PASS: Movement locked while seated 2F-B-012
+PASS: Stand and restore movement 2F-B-012
+PASS: Reserve 4F-B-013
+PASS: Recognize owned chair from approach 4F-B-013
+PASS: Prompt target matches booking 4F-B-013
+PASS: Real E dispatcher seats player 4F-B-013
+PASS: Movement locked while seated 4F-B-013
+PASS: Stand and restore movement 4F-B-013
+PASS: Reserve 2F-B-014
+PASS: Recognize owned chair from approach 2F-B-014
+PASS: Prompt target matches booking 2F-B-014
+PASS: Real E dispatcher seats player 2F-B-014
+PASS: Movement locked while seated 2F-B-014
+PASS: Stand and restore movement 2F-B-014
+PASS: Reserve 3F-A-024
+PASS: Recognize owned chair from approach 3F-A-024
+PASS: Prompt target matches booking 3F-A-024
+PASS: Real E dispatcher seats player 3F-A-024
+PASS: Movement locked while seated 3F-A-024
+PASS: Stand and restore movement 3F-A-024
+PASS: Reserve 4F-B-004
+PASS: Recognize owned chair from approach 4F-B-004
+PASS: Prompt target matches booking 4F-B-004
+PASS: Real E dispatcher seats player 4F-B-004
+PASS: Movement locked while seated 4F-B-004
+PASS: Stand and restore movement 4F-B-004
+PASS: Reserve 2F-B-019
+PASS: Recognize owned chair from approach 2F-B-019
+PASS: Prompt target matches booking 2F-B-019
+PASS: Real E dispatcher seats player 2F-B-019
+PASS: Movement locked while seated 2F-B-019
+PASS: Stand and restore movement 2F-B-019
+PASS: Reserve 4F-B-008
+PASS: Recognize owned chair from approach 4F-B-008
+PASS: Prompt target matches booking 4F-B-008
+PASS: Real E dispatcher seats player 4F-B-008
+PASS: Movement locked while seated 4F-B-008
+PASS: Stand and restore movement 4F-B-008
+PASS: Reserve 4F-B-021
+PASS: Recognize owned chair from approach 4F-B-021
+PASS: Prompt target matches booking 4F-B-021
+PASS: Real E dispatcher seats player 4F-B-021
+PASS: Movement locked while seated 4F-B-021
+PASS: Stand and restore movement 4F-B-021
+PASS: Reserve 3F-B-011
+PASS: Recognize owned chair from approach 3F-B-011
+PASS: Prompt target matches booking 3F-B-011
+PASS: Real E dispatcher seats player 3F-B-011
+PASS: Movement locked while seated 3F-B-011
+PASS: Stand and restore movement 3F-B-011
+PASS: Reserve 4F-A-005
+PASS: Recognize owned chair from approach 4F-A-005
+PASS: Prompt target matches booking 4F-A-005
+PASS: Real E dispatcher seats player 4F-A-005
+PASS: Movement locked while seated 4F-A-005
+PASS: Stand and restore movement 4F-A-005
+PASS: Reserve 4F-B-006
+PASS: Recognize owned chair from approach 4F-B-006
+PASS: Prompt target matches booking 4F-B-006
+PASS: Real E dispatcher seats player 4F-B-006
+PASS: Movement locked while seated 4F-B-006
+PASS: Stand and restore movement 4F-B-006
+PASS: Reserve 2F-A-013
+PASS: Recognize owned chair from approach 2F-A-013
+PASS: Prompt target matches booking 2F-A-013
+PASS: Real E dispatcher seats player 2F-A-013
+PASS: Movement locked while seated 2F-A-013
+PASS: Stand and restore movement 2F-A-013
+PASS: Reserve 2F-A-010
+PASS: Recognize owned chair from approach 2F-A-010
+PASS: Prompt target matches booking 2F-A-010
+PASS: Real E dispatcher seats player 2F-A-010
+PASS: Movement locked while seated 2F-A-010
+PASS: Stand and restore movement 2F-A-010
+PASS: Reserve 4F-A-013
+PASS: Recognize owned chair from approach 4F-A-013
+PASS: Prompt target matches booking 4F-A-013
+PASS: Real E dispatcher seats player 4F-A-013
+PASS: Movement locked while seated 4F-A-013
+PASS: Stand and restore movement 4F-A-013
+PASS: Reserve 4F-B-011
+PASS: Recognize owned chair from approach 4F-B-011
+PASS: Prompt target matches booking 4F-B-011
+PASS: Real E dispatcher seats player 4F-B-011
+PASS: Movement locked while seated 4F-B-011
+PASS: Stand and restore movement 4F-B-011
+PASS: Reserve 4F-A-010
+PASS: Recognize owned chair from approach 4F-A-010
+PASS: Prompt target matches booking 4F-A-010
+PASS: Real E dispatcher seats player 4F-A-010
+PASS: Movement locked while seated 4F-A-010
+PASS: Stand and restore movement 4F-A-010
+PASS: Reserve 4F-B-009
+PASS: Recognize owned chair from approach 4F-B-009
+PASS: Prompt target matches booking 4F-B-009
+PASS: Real E dispatcher seats player 4F-B-009
+PASS: Movement locked while seated 4F-B-009
+PASS: Stand and restore movement 4F-B-009
+PASS: Reserve 2F-B-010
+PASS: Recognize owned chair from approach 2F-B-010
+PASS: Prompt target matches booking 2F-B-010
+PASS: Real E dispatcher seats player 2F-B-010
+PASS: Movement locked while seated 2F-B-010
+PASS: Stand and restore movement 2F-B-010
+PASS: Reserve 4F-A-035
+PASS: Recognize owned chair from approach 4F-A-035
+PASS: Prompt target matches booking 4F-A-035
+PASS: Real E dispatcher seats player 4F-A-035
+PASS: Movement locked while seated 4F-A-035
+PASS: Stand and restore movement 4F-A-035
+PASS: Reserve 3F-A-037
+PASS: Recognize owned chair from approach 3F-A-037
+PASS: Prompt target matches booking 3F-A-037
+PASS: Real E dispatcher seats player 3F-A-037
+PASS: Movement locked while seated 3F-A-037
+PASS: Stand and restore movement 3F-A-037
+PASS: Reserve 4F-B-007
+PASS: Recognize owned chair from approach 4F-B-007
+PASS: Prompt target matches booking 4F-B-007
+PASS: Real E dispatcher seats player 4F-B-007
+PASS: Movement locked while seated 4F-B-007
+PASS: Stand and restore movement 4F-B-007
+PASS: Reserve 4F-B-017
+PASS: Recognize owned chair from approach 4F-B-017
+PASS: Prompt target matches booking 4F-B-017
+PASS: Real E dispatcher seats player 4F-B-017
+PASS: Movement locked while seated 4F-B-017
+PASS: Stand and restore movement 4F-B-017
+PASS: Reserve 3F-B-023
+PASS: Recognize owned chair from approach 3F-B-023
+PASS: Prompt target matches booking 3F-B-023
+PASS: Real E dispatcher seats player 3F-B-023
+PASS: Movement locked while seated 3F-B-023
+PASS: Stand and restore movement 3F-B-023
+PASS: Reserve 2F-B-015
+PASS: Recognize owned chair from approach 2F-B-015
+PASS: Prompt target matches booking 2F-B-015
+PASS: Real E dispatcher seats player 2F-B-015
+PASS: Movement locked while seated 2F-B-015
+PASS: Stand and restore movement 2F-B-015
+PASS: Reserve 2F-A-040
+PASS: Recognize owned chair from approach 2F-A-040
+PASS: Prompt target matches booking 2F-A-040
+PASS: Real E dispatcher seats player 2F-A-040
+PASS: Movement locked while seated 2F-A-040
+PASS: Stand and restore movement 2F-A-040
+PASS: Reserve 4F-A-011
+PASS: Recognize owned chair from approach 4F-A-011
+PASS: Prompt target matches booking 4F-A-011
+PASS: Real E dispatcher seats player 4F-A-011
+PASS: Movement locked while seated 4F-A-011
+PASS: Stand and restore movement 4F-A-011
+PASS: Reserve 2F-A-031
+PASS: Recognize owned chair from approach 2F-A-031
+PASS: Prompt target matches booking 2F-A-031
+PASS: Real E dispatcher seats player 2F-A-031
+PASS: Movement locked while seated 2F-A-031
+PASS: Stand and restore movement 2F-A-031
+PASS: Reserve 2F-B-002
+PASS: Recognize owned chair from approach 2F-B-002
+PASS: Prompt target matches booking 2F-B-002
+PASS: Real E dispatcher seats player 2F-B-002
+PASS: Movement locked while seated 2F-B-002
+PASS: Stand and restore movement 2F-B-002
+PASS: Reserve 2F-A-026
+PASS: Recognize owned chair from approach 2F-A-026
+PASS: Prompt target matches booking 2F-A-026
+PASS: Real E dispatcher seats player 2F-A-026
+PASS: Movement locked while seated 2F-A-026
+PASS: Stand and restore movement 2F-A-026
+PASS: Reserve 4F-A-033
+PASS: Recognize owned chair from approach 4F-A-033
+PASS: Prompt target matches booking 4F-A-033
+PASS: Real E dispatcher seats player 4F-A-033
+PASS: Movement locked while seated 4F-A-033
+PASS: Stand and restore movement 4F-A-033
+PASS: Reserve 2F-B-013
+PASS: Recognize owned chair from approach 2F-B-013
+PASS: Prompt target matches booking 2F-B-013
+PASS: Real E dispatcher seats player 2F-B-013
+PASS: Movement locked while seated 2F-B-013
+PASS: Stand and restore movement 2F-B-013
+PASS: Reserve 3F-A-013
+PASS: Recognize owned chair from approach 3F-A-013
+PASS: Prompt target matches booking 3F-A-013
+PASS: Real E dispatcher seats player 3F-A-013
+PASS: Movement locked while seated 3F-A-013
+PASS: Stand and restore movement 3F-A-013
+PASS: Reserve 2F-A-023
+PASS: Recognize owned chair from approach 2F-A-023
+PASS: Prompt target matches booking 2F-A-023
+PASS: Real E dispatcher seats player 2F-A-023
+PASS: Movement locked while seated 2F-A-023
+PASS: Stand and restore movement 2F-A-023
+PASS: Reserve 4F-A-003
+PASS: Recognize owned chair from approach 4F-A-003
+PASS: Prompt target matches booking 4F-A-003
+PASS: Real E dispatcher seats player 4F-A-003
+PASS: Movement locked while seated 4F-A-003
+PASS: Stand and restore movement 4F-A-003
+PASS: Reserve 4F-A-024
+PASS: Recognize owned chair from approach 4F-A-024
+PASS: Prompt target matches booking 4F-A-024
+PASS: Real E dispatcher seats player 4F-A-024
+PASS: Movement locked while seated 4F-A-024
+PASS: Stand and restore movement 4F-A-024
+PASS: Reserve 4F-B-024
+PASS: Recognize owned chair from approach 4F-B-024
+PASS: Prompt target matches booking 4F-B-024
+PASS: Real E dispatcher seats player 4F-B-024
+PASS: Movement locked while seated 4F-B-024
+PASS: Stand and restore movement 4F-B-024
+PASS: Reserve 2F-B-009
+PASS: Recognize owned chair from approach 2F-B-009
+PASS: Prompt target matches booking 2F-B-009
+PASS: Real E dispatcher seats player 2F-B-009
+PASS: Movement locked while seated 2F-B-009
+PASS: Stand and restore movement 2F-B-009
+PASS: Reserve 3F-A-006
+PASS: Recognize owned chair from approach 3F-A-006
+PASS: Prompt target matches booking 3F-A-006
+PASS: Real E dispatcher seats player 3F-A-006
+PASS: Movement locked while seated 3F-A-006
+PASS: Stand and restore movement 3F-A-006
+PASS: Reserve 4F-B-020
+PASS: Recognize owned chair from approach 4F-B-020
+PASS: Prompt target matches booking 4F-B-020
+PASS: Real E dispatcher seats player 4F-B-020
+PASS: Movement locked while seated 4F-B-020
+PASS: Stand and restore movement 4F-B-020
+PASS: Reserve 2F-B-006
+PASS: Recognize owned chair from approach 2F-B-006
+PASS: Prompt target matches booking 2F-B-006
+PASS: Real E dispatcher seats player 2F-B-006
+PASS: Movement locked while seated 2F-B-006
+PASS: Stand and restore movement 2F-B-006
+PASS: Reserve 4F-A-018
+PASS: Recognize owned chair from approach 4F-A-018
+PASS: Prompt target matches booking 4F-A-018
+PASS: Real E dispatcher seats player 4F-A-018
+PASS: Movement locked while seated 4F-A-018
+PASS: Stand and restore movement 4F-A-018
+PASS: Reserve 3F-A-019
+PASS: Recognize owned chair from approach 3F-A-019
+PASS: Prompt target matches booking 3F-A-019
+PASS: Real E dispatcher seats player 3F-A-019
+PASS: Movement locked while seated 3F-A-019
+PASS: Stand and restore movement 3F-A-019
+PASS: Reserve 2F-B-024
+PASS: Recognize owned chair from approach 2F-B-024
+PASS: Prompt target matches booking 2F-B-024
+PASS: Real E dispatcher seats player 2F-B-024
+PASS: Movement locked while seated 2F-B-024
+PASS: Stand and restore movement 2F-B-024
+PASS: Reserve 4F-B-016
+PASS: Recognize owned chair from approach 4F-B-016
+PASS: Prompt target matches booking 4F-B-016
+PASS: Real E dispatcher seats player 4F-B-016
+PASS: Movement locked while seated 4F-B-016
+PASS: Stand and restore movement 4F-B-016
+PASS: Reserve 2F-B-017
+PASS: Recognize owned chair from approach 2F-B-017
+PASS: Prompt target matches booking 2F-B-017
+PASS: Real E dispatcher seats player 2F-B-017
+PASS: Movement locked while seated 2F-B-017
+PASS: Stand and restore movement 2F-B-017
+PASS: Reserve 3F-A-011
+PASS: Recognize owned chair from approach 3F-A-011
+PASS: Prompt target matches booking 3F-A-011
+PASS: Real E dispatcher seats player 3F-A-011
+PASS: Movement locked while seated 3F-A-011
+PASS: Stand and restore movement 3F-A-011
+PASS: Reserve 3F-A-033
+PASS: Recognize owned chair from approach 3F-A-033
+PASS: Prompt target matches booking 3F-A-033
+PASS: Real E dispatcher seats player 3F-A-033
+PASS: Movement locked while seated 3F-A-033
+PASS: Stand and restore movement 3F-A-033
+PASS: Reserve 3F-A-014
+PASS: Recognize owned chair from approach 3F-A-014
+PASS: Prompt target matches booking 3F-A-014
+PASS: Real E dispatcher seats player 3F-A-014
+PASS: Movement locked while seated 3F-A-014
+PASS: Stand and restore movement 3F-A-014
+PASS: Reserve 4F-A-009
+PASS: Recognize owned chair from approach 4F-A-009
+PASS: Prompt target matches booking 4F-A-009
+PASS: Real E dispatcher seats player 4F-A-009
+PASS: Movement locked while seated 4F-A-009
+PASS: Stand and restore movement 4F-A-009
+PASS: Reserve 2F-A-003
+PASS: Recognize owned chair from approach 2F-A-003
+PASS: Prompt target matches booking 2F-A-003
+PASS: Real E dispatcher seats player 2F-A-003
+PASS: Movement locked while seated 2F-A-003
+PASS: Stand and restore movement 2F-A-003
+PASS: Reserve 4F-A-036
+PASS: Recognize owned chair from approach 4F-A-036
+PASS: Prompt target matches booking 4F-A-036
+PASS: Real E dispatcher seats player 4F-A-036
+PASS: Movement locked while seated 4F-A-036
+PASS: Stand and restore movement 4F-A-036
+PASS: Reserve 2F-A-017
+PASS: Recognize owned chair from approach 2F-A-017
+PASS: Prompt target matches booking 2F-A-017
+PASS: Real E dispatcher seats player 2F-A-017
+PASS: Movement locked while seated 2F-A-017
+PASS: Stand and restore movement 2F-A-017
+PASS: Reserve 3F-B-017
+PASS: Recognize owned chair from approach 3F-B-017
+PASS: Prompt target matches booking 3F-B-017
+PASS: Real E dispatcher seats player 3F-B-017
+PASS: Movement locked while seated 3F-B-017
+PASS: Stand and restore movement 3F-B-017
+PASS: Reserve 2F-A-015
+PASS: Recognize owned chair from approach 2F-A-015
+PASS: Prompt target matches booking 2F-A-015
+PASS: Real E dispatcher seats player 2F-A-015
+PASS: Movement locked while seated 2F-A-015
+PASS: Stand and restore movement 2F-A-015
+PASS: Reserve 2F-A-009
+PASS: Recognize owned chair from approach 2F-A-009
+PASS: Prompt target matches booking 2F-A-009
+PASS: Real E dispatcher seats player 2F-A-009
+PASS: Movement locked while seated 2F-A-009
+PASS: Stand and restore movement 2F-A-009
+PASS: Reserve 2F-B-018
+PASS: Recognize owned chair from approach 2F-B-018
+PASS: Prompt target matches booking 2F-B-018
+PASS: Real E dispatcher seats player 2F-B-018
+PASS: Movement locked while seated 2F-B-018
+PASS: Stand and restore movement 2F-B-018
+PASS: Reserve 3F-A-028
+PASS: Recognize owned chair from approach 3F-A-028
+PASS: Prompt target matches booking 3F-A-028
+PASS: Real E dispatcher seats player 3F-A-028
+PASS: Movement locked while seated 3F-A-028
+PASS: Stand and restore movement 3F-A-028
+PASS: Reserve 4F-A-038
+PASS: Recognize owned chair from approach 4F-A-038
+PASS: Prompt target matches booking 4F-A-038
+PASS: Real E dispatcher seats player 4F-A-038
+PASS: Movement locked while seated 4F-A-038
+PASS: Stand and restore movement 4F-A-038
+PASS: Reserve 4F-B-023
+PASS: Recognize owned chair from approach 4F-B-023
+PASS: Prompt target matches booking 4F-B-023
+PASS: Real E dispatcher seats player 4F-B-023
+PASS: Movement locked while seated 4F-B-023
+PASS: Stand and restore movement 4F-B-023
+PASS: Reserve 2F-A-036
+PASS: Recognize owned chair from approach 2F-A-036
+PASS: Prompt target matches booking 2F-A-036
+PASS: Real E dispatcher seats player 2F-A-036
+PASS: Movement locked while seated 2F-A-036
+PASS: Stand and restore movement 2F-A-036
+PASS: Reserve 3F-B-024
+PASS: Recognize owned chair from approach 3F-B-024
+PASS: Prompt target matches booking 3F-B-024
+PASS: Real E dispatcher seats player 3F-B-024
+PASS: Movement locked while seated 3F-B-024
+PASS: Stand and restore movement 3F-B-024
+PASS: Reserve 4F-B-015
+PASS: Recognize owned chair from approach 4F-B-015
+PASS: Prompt target matches booking 4F-B-015
+PASS: Real E dispatcher seats player 4F-B-015
+PASS: Movement locked while seated 4F-B-015
+PASS: Stand and restore movement 4F-B-015
+PASS: Reserve 3F-A-031
+PASS: Recognize owned chair from approach 3F-A-031
+PASS: Prompt target matches booking 3F-A-031
+PASS: Real E dispatcher seats player 3F-A-031
+PASS: Movement locked while seated 3F-A-031
+PASS: Stand and restore movement 3F-A-031
+PASS: Reserve 2F-A-025
+PASS: Recognize owned chair from approach 2F-A-025
+PASS: Prompt target matches booking 2F-A-025
+PASS: Real E dispatcher seats player 2F-A-025
+PASS: Movement locked while seated 2F-A-025
+PASS: Stand and restore movement 2F-A-025
+PASS: Reserve 3F-B-014
+PASS: Recognize owned chair from approach 3F-B-014
+PASS: Prompt target matches booking 3F-B-014
+PASS: Real E dispatcher seats player 3F-B-014
+PASS: Movement locked while seated 3F-B-014
+PASS: Stand and restore movement 3F-B-014
+PASS: Reserve 2F-A-021
+PASS: Recognize owned chair from approach 2F-A-021
+PASS: Prompt target matches booking 2F-A-021
+PASS: Real E dispatcher seats player 2F-A-021
+PASS: Movement locked while seated 2F-A-021
+PASS: Stand and restore movement 2F-A-021
+PASS: Reserve 4F-A-039
+PASS: Recognize owned chair from approach 4F-A-039
+PASS: Prompt target matches booking 4F-A-039
+PASS: Real E dispatcher seats player 4F-A-039
+PASS: Movement locked while seated 4F-A-039
+PASS: Stand and restore movement 4F-A-039
+PASS: Reserve 2F-B-008
+PASS: Recognize owned chair from approach 2F-B-008
+PASS: Prompt target matches booking 2F-B-008
+PASS: Real E dispatcher seats player 2F-B-008
+PASS: Movement locked while seated 2F-B-008
+PASS: Stand and restore movement 2F-B-008
+PASS: Reserve 3F-B-003
+PASS: Recognize owned chair from approach 3F-B-003
+PASS: Prompt target matches booking 3F-B-003
+PASS: Real E dispatcher seats player 3F-B-003
+PASS: Movement locked while seated 3F-B-003
+PASS: Stand and restore movement 3F-B-003
+PASS: Reserve 3F-B-005
+PASS: Recognize owned chair from approach 3F-B-005
+PASS: Prompt target matches booking 3F-B-005
+PASS: Real E dispatcher seats player 3F-B-005
+PASS: Movement locked while seated 3F-B-005
+PASS: Stand and restore movement 3F-B-005
+PASS: Reserve 2F-A-006
+PASS: Recognize owned chair from approach 2F-A-006
+PASS: Prompt target matches booking 2F-A-006
+PASS: Real E dispatcher seats player 2F-A-006
+PASS: Movement locked while seated 2F-A-006
+PASS: Stand and restore movement 2F-A-006
+PASS: Reserve 4F-B-018
+PASS: Recognize owned chair from approach 4F-B-018
+PASS: Prompt target matches booking 4F-B-018
+PASS: Real E dispatcher seats player 4F-B-018
+PASS: Movement locked while seated 4F-B-018
+PASS: Stand and restore movement 4F-B-018
+PASS: Reserve 3F-A-020
+PASS: Recognize owned chair from approach 3F-A-020
+PASS: Prompt target matches booking 3F-A-020
+PASS: Real E dispatcher seats player 3F-A-020
+PASS: Movement locked while seated 3F-A-020
+PASS: Stand and restore movement 3F-A-020
+PASS: Reserve 3F-B-006
+PASS: Recognize owned chair from approach 3F-B-006
+PASS: Prompt target matches booking 3F-B-006
+PASS: Real E dispatcher seats player 3F-B-006
+PASS: Movement locked while seated 3F-B-006
+PASS: Stand and restore movement 3F-B-006
+PASS: Reserve 4F-B-002
+PASS: Recognize owned chair from approach 4F-B-002
+PASS: Prompt target matches booking 4F-B-002
+PASS: Real E dispatcher seats player 4F-B-002
+PASS: Movement locked while seated 4F-B-002
+PASS: Stand and restore movement 4F-B-002
+PASS: Reserve 3F-A-027
+PASS: Recognize owned chair from approach 3F-A-027
+PASS: Prompt target matches booking 3F-A-027
+PASS: Real E dispatcher seats player 3F-A-027
+PASS: Movement locked while seated 3F-A-027
+PASS: Stand and restore movement 3F-A-027
+PASS: Reserve 3F-B-001
+PASS: Recognize owned chair from approach 3F-B-001
+PASS: Prompt target matches booking 3F-B-001
+PASS: Real E dispatcher seats player 3F-B-001
+PASS: Movement locked while seated 3F-B-001
+PASS: Targeted study transaction 3F-B-001
+PASS: Study improves mastery 3F-B-001
+PASS: Stand and restore movement 3F-B-001
+PASS: Reserve 2F-A-014
+PASS: Recognize owned chair from approach 2F-A-014
+PASS: Prompt target matches booking 2F-A-014
+PASS: Real E dispatcher seats player 2F-A-014
+PASS: Movement locked while seated 2F-A-014
+PASS: Stand and restore movement 2F-A-014
+PASS: Reserve 2F-A-035
+PASS: Recognize owned chair from approach 2F-A-035
+PASS: Prompt target matches booking 2F-A-035
+PASS: Real E dispatcher seats player 2F-A-035
+PASS: Movement locked while seated 2F-A-035
+PASS: Stand and restore movement 2F-A-035
+PASS: Reserve 2F-A-007
+PASS: Recognize owned chair from approach 2F-A-007
+PASS: Prompt target matches booking 2F-A-007
+PASS: Real E dispatcher seats player 2F-A-007
+PASS: Movement locked while seated 2F-A-007
+PASS: Stand and restore movement 2F-A-007
+PASS: Reserve 3F-A-008
+PASS: Recognize owned chair from approach 3F-A-008
+PASS: Prompt target matches booking 3F-A-008
+PASS: Real E dispatcher seats player 3F-A-008
+PASS: Movement locked while seated 3F-A-008
+PASS: Stand and restore movement 3F-A-008
+PASS: Reserve 2F-A-005
+PASS: Recognize owned chair from approach 2F-A-005
+PASS: Prompt target matches booking 2F-A-005
+PASS: Real E dispatcher seats player 2F-A-005
+PASS: Movement locked while seated 2F-A-005
+PASS: Stand and restore movement 2F-A-005
+PASS: Reserve 2F-A-029
+PASS: Recognize owned chair from approach 2F-A-029
+PASS: Prompt target matches booking 2F-A-029
+PASS: Real E dispatcher seats player 2F-A-029
+PASS: Movement locked while seated 2F-A-029
+PASS: Stand and restore movement 2F-A-029
+PASS: Reserve 2F-A-027
+PASS: Recognize owned chair from approach 2F-A-027
+PASS: Prompt target matches booking 2F-A-027
+PASS: Real E dispatcher seats player 2F-A-027
+PASS: Movement locked while seated 2F-A-027
+PASS: Stand and restore movement 2F-A-027
+PASS: Reserve 3F-A-038
+PASS: Recognize owned chair from approach 3F-A-038
+PASS: Prompt target matches booking 3F-A-038
+PASS: Real E dispatcher seats player 3F-A-038
+PASS: Movement locked while seated 3F-A-038
+PASS: Stand and restore movement 3F-A-038
+PASS: Reserve 3F-A-007
+PASS: Recognize owned chair from approach 3F-A-007
+PASS: Prompt target matches booking 3F-A-007
+PASS: Real E dispatcher seats player 3F-A-007
+PASS: Movement locked while seated 3F-A-007
+PASS: Stand and restore movement 3F-A-007
+PASS: Reserve 4F-A-031
+PASS: Recognize owned chair from approach 4F-A-031
+PASS: Prompt target matches booking 4F-A-031
+PASS: Real E dispatcher seats player 4F-A-031
+PASS: Movement locked while seated 4F-A-031
+PASS: Stand and restore movement 4F-A-031
+PASS: Reserve 3F-A-001
+PASS: Recognize owned chair from approach 3F-A-001
+PASS: Prompt target matches booking 3F-A-001
+PASS: Real E dispatcher seats player 3F-A-001
+PASS: Movement locked while seated 3F-A-001
+PASS: Targeted study transaction 3F-A-001
+PASS: Study improves mastery 3F-A-001
+PASS: Stand and restore movement 3F-A-001
+PASS: Reserve 3F-B-016
+PASS: Recognize owned chair from approach 3F-B-016
+PASS: Prompt target matches booking 3F-B-016
+PASS: Real E dispatcher seats player 3F-B-016
+PASS: Movement locked while seated 3F-B-016
+PASS: Stand and restore movement 3F-B-016
+PASS: Reserve 3F-B-002
+PASS: Recognize owned chair from approach 3F-B-002
+PASS: Prompt target matches booking 3F-B-002
+PASS: Real E dispatcher seats player 3F-B-002
+PASS: Movement locked while seated 3F-B-002
+PASS: Stand and restore movement 3F-B-002
+PASS: Reserve 2F-B-020
+PASS: Recognize owned chair from approach 2F-B-020
+PASS: Prompt target matches booking 2F-B-020
+PASS: Real E dispatcher seats player 2F-B-020
+PASS: Movement locked while seated 2F-B-020
+PASS: Stand and restore movement 2F-B-020
+PASS: Reserve 3F-A-034
+PASS: Recognize owned chair from approach 3F-A-034
+PASS: Prompt target matches booking 3F-A-034
+PASS: Real E dispatcher seats player 3F-A-034
+PASS: Movement locked while seated 3F-A-034
+PASS: Stand and restore movement 3F-A-034
+PASS: Reserve 2F-A-016
+PASS: Recognize owned chair from approach 2F-A-016
+PASS: Prompt target matches booking 2F-A-016
+PASS: Real E dispatcher seats player 2F-A-016
+PASS: Movement locked while seated 2F-A-016
+PASS: Stand and restore movement 2F-A-016
+PASS: Reserve 3F-A-016
+PASS: Recognize owned chair from approach 3F-A-016
+PASS: Prompt target matches booking 3F-A-016
+PASS: Real E dispatcher seats player 3F-A-016
+PASS: Movement locked while seated 3F-A-016
+PASS: Stand and restore movement 3F-A-016
+PASS: Reserve 3F-A-025
+PASS: Recognize owned chair from approach 3F-A-025
+PASS: Prompt target matches booking 3F-A-025
+PASS: Real E dispatcher seats player 3F-A-025
+PASS: Movement locked while seated 3F-A-025
+PASS: Stand and restore movement 3F-A-025
+PASS: Reserve 2F-A-018
+PASS: Recognize owned chair from approach 2F-A-018
+PASS: Prompt target matches booking 2F-A-018
+PASS: Real E dispatcher seats player 2F-A-018
+PASS: Movement locked while seated 2F-A-018
+PASS: Stand and restore movement 2F-A-018
+PASS: Reserve 4F-B-003
+PASS: Recognize owned chair from approach 4F-B-003
+PASS: Prompt target matches booking 4F-B-003
+PASS: Real E dispatcher seats player 4F-B-003
+PASS: Movement locked while seated 4F-B-003
+PASS: Stand and restore movement 4F-B-003
+PASS: Reserve 3F-B-022
+PASS: Recognize owned chair from approach 3F-B-022
+PASS: Prompt target matches booking 3F-B-022
+PASS: Real E dispatcher seats player 3F-B-022
+PASS: Movement locked while seated 3F-B-022
+PASS: Stand and restore movement 3F-B-022
+PASS: Reserve 3F-B-019
+PASS: Recognize owned chair from approach 3F-B-019
+PASS: Prompt target matches booking 3F-B-019
+PASS: Real E dispatcher seats player 3F-B-019
+PASS: Movement locked while seated 3F-B-019
+PASS: Stand and restore movement 3F-B-019
+PASS: Reserve 4F-A-026
+PASS: Recognize owned chair from approach 4F-A-026
+PASS: Prompt target matches booking 4F-A-026
+PASS: Real E dispatcher seats player 4F-A-026
+PASS: Movement locked while seated 4F-A-026
+PASS: Stand and restore movement 4F-A-026
+PASS: Reserve 4F-A-025
+PASS: Recognize owned chair from approach 4F-A-025
+PASS: Prompt target matches booking 4F-A-025
+PASS: Real E dispatcher seats player 4F-A-025
+PASS: Movement locked while seated 4F-A-025
+PASS: Stand and restore movement 4F-A-025
+PASS: Reserve 2F-A-012
+PASS: Recognize owned chair from approach 2F-A-012
+PASS: Prompt target matches booking 2F-A-012
+PASS: Real E dispatcher seats player 2F-A-012
+PASS: Movement locked while seated 2F-A-012
+PASS: Stand and restore movement 2F-A-012
+PASS: Reserve 4F-A-020
+PASS: Recognize owned chair from approach 4F-A-020
+PASS: Prompt target matches booking 4F-A-020
+PASS: Real E dispatcher seats player 4F-A-020
+PASS: Movement locked while seated 4F-A-020
+PASS: Stand and restore movement 4F-A-020
+PASS: Reserve 4F-A-032
+PASS: Recognize owned chair from approach 4F-A-032
+PASS: Prompt target matches booking 4F-A-032
+PASS: Real E dispatcher seats player 4F-A-032
+PASS: Movement locked while seated 4F-A-032
+PASS: Stand and restore movement 4F-A-032
+PASS: Reserve 3F-B-015
+PASS: Recognize owned chair from approach 3F-B-015
+PASS: Prompt target matches booking 3F-B-015
+PASS: Real E dispatcher seats player 3F-B-015
+PASS: Movement locked while seated 3F-B-015
+PASS: Stand and restore movement 3F-B-015
+PASS: Reserve 3F-A-030
+PASS: Recognize owned chair from approach 3F-A-030
+PASS: Prompt target matches booking 3F-A-030
+PASS: Real E dispatcher seats player 3F-A-030
+PASS: Movement locked while seated 3F-A-030
+PASS: Stand and restore movement 3F-A-030
+PASS: Reserve 3F-B-004
+PASS: Recognize owned chair from approach 3F-B-004
+PASS: Prompt target matches booking 3F-B-004
+PASS: Real E dispatcher seats player 3F-B-004
+PASS: Movement locked while seated 3F-B-004
+PASS: Stand and restore movement 3F-B-004
+PASS: Reserve 2F-A-028
+PASS: Recognize owned chair from approach 2F-A-028
+PASS: Prompt target matches booking 2F-A-028
+PASS: Real E dispatcher seats player 2F-A-028
+PASS: Movement locked while seated 2F-A-028
+PASS: Stand and restore movement 2F-A-028
+PASS: Reserve 2F-B-016
+PASS: Recognize owned chair from approach 2F-B-016
+PASS: Prompt target matches booking 2F-B-016
+PASS: Real E dispatcher seats player 2F-B-016
+PASS: Movement locked while seated 2F-B-016
+PASS: Stand and restore movement 2F-B-016
+PASS: Reserve 3F-B-012
+PASS: Recognize owned chair from approach 3F-B-012
+PASS: Prompt target matches booking 3F-B-012
+PASS: Real E dispatcher seats player 3F-B-012
+PASS: Movement locked while seated 3F-B-012
+PASS: Stand and restore movement 3F-B-012
+PASS: Reserve 3F-A-023
+PASS: Recognize owned chair from approach 3F-A-023
+PASS: Prompt target matches booking 3F-A-023
+PASS: Real E dispatcher seats player 3F-A-023
+PASS: Movement locked while seated 3F-A-023
+PASS: Stand and restore movement 3F-A-023
+PASS: Reserve 4F-B-010
+PASS: Recognize owned chair from approach 4F-B-010
+PASS: Prompt target matches booking 4F-B-010
+PASS: Real E dispatcher seats player 4F-B-010
+PASS: Movement locked while seated 4F-B-010
+PASS: Stand and restore movement 4F-B-010
+PASS: Reserve 2F-A-032
+PASS: Recognize owned chair from approach 2F-A-032
+PASS: Prompt target matches booking 2F-A-032
+PASS: Real E dispatcher seats player 2F-A-032
+PASS: Movement locked while seated 2F-A-032
+PASS: Stand and restore movement 2F-A-032
+PASS: Reserve 4F-A-023
+PASS: Recognize owned chair from approach 4F-A-023
+PASS: Prompt target matches booking 4F-A-023
+PASS: Real E dispatcher seats player 4F-A-023
+PASS: Movement locked while seated 4F-A-023
+PASS: Stand and restore movement 4F-A-023
+PASS: Reserve 3F-A-015
+PASS: Recognize owned chair from approach 3F-A-015
+PASS: Prompt target matches booking 3F-A-015
+PASS: Real E dispatcher seats player 3F-A-015
+PASS: Movement locked while seated 3F-A-015
+PASS: Stand and restore movement 3F-A-015
+PASS: Reserve 3F-A-035
+PASS: Recognize owned chair from approach 3F-A-035
+PASS: Prompt target matches booking 3F-A-035
+PASS: Real E dispatcher seats player 3F-A-035
+PASS: Movement locked while seated 3F-A-035
+PASS: Stand and restore movement 3F-A-035
+PASS: Reserve 3F-A-036
+PASS: Recognize owned chair from approach 3F-A-036
+PASS: Prompt target matches booking 3F-A-036
+PASS: Real E dispatcher seats player 3F-A-036
+PASS: Movement locked while seated 3F-A-036
+PASS: Stand and restore movement 3F-A-036
+PASS: Reserve 3F-A-017
+PASS: Recognize owned chair from approach 3F-A-017
+PASS: Prompt target matches booking 3F-A-017
+PASS: Real E dispatcher seats player 3F-A-017
+PASS: Movement locked while seated 3F-A-017
+PASS: Stand and restore movement 3F-A-017
+PASS: Reserve 2F-A-024
+PASS: Recognize owned chair from approach 2F-A-024
+PASS: Prompt target matches booking 2F-A-024
+PASS: Real E dispatcher seats player 2F-A-024
+PASS: Movement locked while seated 2F-A-024
+PASS: Stand and restore movement 2F-A-024
+PASS: Reserve 4F-A-029
+PASS: Recognize owned chair from approach 4F-A-029
+PASS: Prompt target matches booking 4F-A-029
+PASS: Real E dispatcher seats player 4F-A-029
+PASS: Movement locked while seated 4F-A-029
+PASS: Stand and restore movement 4F-A-029
+PASS: Reserve 2F-B-007
+PASS: Recognize owned chair from approach 2F-B-007
+PASS: Prompt target matches booking 2F-B-007
+PASS: Real E dispatcher seats player 2F-B-007
+PASS: Movement locked while seated 2F-B-007
+PASS: Stand and restore movement 2F-B-007
+PASS: Reserve 2F-A-011
+PASS: Recognize owned chair from approach 2F-A-011
+PASS: Prompt target matches booking 2F-A-011
+PASS: Real E dispatcher seats player 2F-A-011
+PASS: Movement locked while seated 2F-A-011
+PASS: Stand and restore movement 2F-A-011
+PASS: Reserve 3F-A-032
+PASS: Recognize owned chair from approach 3F-A-032
+PASS: Prompt target matches booking 3F-A-032
+PASS: Real E dispatcher seats player 3F-A-032
+PASS: Movement locked while seated 3F-A-032
+PASS: Stand and restore movement 3F-A-032
+PASS: Reserve 3F-B-007
+PASS: Recognize owned chair from approach 3F-B-007
+PASS: Prompt target matches booking 3F-B-007
+PASS: Real E dispatcher seats player 3F-B-007
+PASS: Movement locked while seated 3F-B-007
+PASS: Stand and restore movement 3F-B-007
+PASS: Reserve 2F-A-034
+PASS: Recognize owned chair from approach 2F-A-034
+PASS: Prompt target matches booking 2F-A-034
+PASS: Real E dispatcher seats player 2F-A-034
+PASS: Movement locked while seated 2F-A-034
+PASS: Stand and restore movement 2F-A-034
+PASS: Reserve 2F-A-020
+PASS: Recognize owned chair from approach 2F-A-020
+PASS: Prompt target matches booking 2F-A-020
+PASS: Real E dispatcher seats player 2F-A-020
+PASS: Movement locked while seated 2F-A-020
+PASS: Stand and restore movement 2F-A-020
+PASS: Reserve 2F-A-004
+PASS: Recognize owned chair from approach 2F-A-004
+PASS: Prompt target matches booking 2F-A-004
+PASS: Real E dispatcher seats player 2F-A-004
+PASS: Movement locked while seated 2F-A-004
+PASS: Stand and restore movement 2F-A-004
+PASS: Reserve 3F-A-002
+PASS: Recognize owned chair from approach 3F-A-002
+PASS: Prompt target matches booking 3F-A-002
+PASS: Real E dispatcher seats player 3F-A-002
+PASS: Movement locked while seated 3F-A-002
+PASS: Stand and restore movement 3F-A-002
+PASS: Reserve 2F-A-037
+PASS: Recognize owned chair from approach 2F-A-037
+PASS: Prompt target matches booking 2F-A-037
+PASS: Real E dispatcher seats player 2F-A-037
+PASS: Movement locked while seated 2F-A-037
+PASS: Stand and restore movement 2F-A-037
+PASS: Reserve 2F-A-002
+PASS: Recognize owned chair from approach 2F-A-002
+PASS: Prompt target matches booking 2F-A-002
+PASS: Real E dispatcher seats player 2F-A-002
+PASS: Movement locked while seated 2F-A-002
+PASS: Stand and restore movement 2F-A-002
+PASS: Reserve 2F-B-003
+PASS: Recognize owned chair from approach 2F-B-003
+PASS: Prompt target matches booking 2F-B-003
+PASS: Real E dispatcher seats player 2F-B-003
+PASS: Movement locked while seated 2F-B-003
+PASS: Stand and restore movement 2F-B-003
+PASS: Reserve 4F-A-028
+PASS: Recognize owned chair from approach 4F-A-028
+PASS: Prompt target matches booking 4F-A-028
+PASS: Real E dispatcher seats player 4F-A-028
+PASS: Movement locked while seated 4F-A-028
+PASS: Stand and restore movement 4F-A-028
+PASS: Reserve 2F-B-011
+PASS: Recognize owned chair from approach 2F-B-011
+PASS: Prompt target matches booking 2F-B-011
+PASS: Real E dispatcher seats player 2F-B-011
+PASS: Movement locked while seated 2F-B-011
+PASS: Stand and restore movement 2F-B-011
+PASS: Reserve 4F-A-015
+PASS: Recognize owned chair from approach 4F-A-015
+PASS: Prompt target matches booking 4F-A-015
+PASS: Real E dispatcher seats player 4F-A-015
+PASS: Movement locked while seated 4F-A-015
+PASS: Stand and restore movement 4F-A-015
+PASS: Reserve 4F-B-019
+PASS: Recognize owned chair from approach 4F-B-019
+PASS: Prompt target matches booking 4F-B-019
+PASS: Real E dispatcher seats player 4F-B-019
+PASS: Movement locked while seated 4F-B-019
+PASS: Stand and restore movement 4F-B-019
+PASS: Reserve 2F-B-022
+PASS: Recognize owned chair from approach 2F-B-022
+PASS: Prompt target matches booking 2F-B-022
+PASS: Real E dispatcher seats player 2F-B-022
+PASS: Movement locked while seated 2F-B-022
+PASS: Stand and restore movement 2F-B-022
+PASS: Reserve 2F-A-001
+PASS: Recognize owned chair from approach 2F-A-001
+PASS: Prompt target matches booking 2F-A-001
+PASS: Real E dispatcher seats player 2F-A-001
+PASS: Movement locked while seated 2F-A-001
+PASS: Targeted study transaction 2F-A-001
+PASS: Study improves mastery 2F-A-001
+PASS: Stand and restore movement 2F-A-001
+PASS: Reserve 4F-A-019
+PASS: Recognize owned chair from approach 4F-A-019
+PASS: Prompt target matches booking 4F-A-019
+PASS: Real E dispatcher seats player 4F-A-019
+PASS: Movement locked while seated 4F-A-019
+PASS: Stand and restore movement 4F-A-019
+PASS: Reserve 2F-A-022
+PASS: Recognize owned chair from approach 2F-A-022
+PASS: Prompt target matches booking 2F-A-022
+PASS: Real E dispatcher seats player 2F-A-022
+PASS: Movement locked while seated 2F-A-022
+PASS: Stand and restore movement 2F-A-022
+PASS: Reserve 2F-A-019
+PASS: Recognize owned chair from approach 2F-A-019
+PASS: Prompt target matches booking 2F-A-019
+PASS: Real E dispatcher seats player 2F-A-019
+PASS: Movement locked while seated 2F-A-019
+PASS: Stand and restore movement 2F-A-019
+PASS: Reserve 4F-B-022
+PASS: Recognize owned chair from approach 4F-B-022
+PASS: Prompt target matches booking 4F-B-022
+PASS: Real E dispatcher seats player 4F-B-022
+PASS: Movement locked while seated 4F-B-022
+PASS: Stand and restore movement 4F-B-022
+PASS: Reserve 4F-A-022
+PASS: Recognize owned chair from approach 4F-A-022
+PASS: Prompt target matches booking 4F-A-022
+PASS: Real E dispatcher seats player 4F-A-022
+PASS: Movement locked while seated 4F-A-022
+PASS: Stand and restore movement 4F-A-022
+PASS: Reserve 2F-B-004
+PASS: Recognize owned chair from approach 2F-B-004
+PASS: Prompt target matches booking 2F-B-004
+PASS: Real E dispatcher seats player 2F-B-004
+PASS: Movement locked while seated 2F-B-004
+PASS: Stand and restore movement 2F-B-004
+PASS: Reserve 2F-B-001
+PASS: Recognize owned chair from approach 2F-B-001
+PASS: Prompt target matches booking 2F-B-001
+PASS: Real E dispatcher seats player 2F-B-001
+PASS: Movement locked while seated 2F-B-001
+PASS: Targeted study transaction 2F-B-001
+PASS: Study improves mastery 2F-B-001
+PASS: Stand and restore movement 2F-B-001
+PASS: Reserve 4F-A-040
+PASS: Recognize owned chair from approach 4F-A-040
+PASS: Prompt target matches booking 4F-A-040
+PASS: Real E dispatcher seats player 4F-A-040
+PASS: Movement locked while seated 4F-A-040
+PASS: Stand and restore movement 4F-A-040
+PASS: Reserve 4F-B-001
+PASS: Recognize owned chair from approach 4F-B-001
+PASS: Prompt target matches booking 4F-B-001
+PASS: Real E dispatcher seats player 4F-B-001
+PASS: Movement locked while seated 4F-B-001
+PASS: Targeted study transaction 4F-B-001
+PASS: Study improves mastery 4F-B-001
+PASS: Stand and restore movement 4F-B-001
+PASS: Reserve 2F-B-005
+PASS: Recognize owned chair from approach 2F-B-005
+PASS: Prompt target matches booking 2F-B-005
+PASS: Real E dispatcher seats player 2F-B-005
+PASS: Movement locked while seated 2F-B-005
+PASS: Stand and restore movement 2F-B-005
+PASS: Reserve 3F-A-003
+PASS: Recognize owned chair from approach 3F-A-003
+PASS: Prompt target matches booking 3F-A-003
+PASS: Real E dispatcher seats player 3F-A-003
+PASS: Movement locked while seated 3F-A-003
+PASS: Stand and restore movement 3F-A-003
+PASS: Reserve 4F-A-014
+PASS: Recognize owned chair from approach 4F-A-014
+PASS: Prompt target matches booking 4F-A-014
+PASS: Real E dispatcher seats player 4F-A-014
+PASS: Movement locked while seated 4F-A-014
+PASS: Stand and restore movement 4F-A-014
+PASS: Reserve 3F-B-020
+PASS: Recognize owned chair from approach 3F-B-020
+PASS: Prompt target matches booking 3F-B-020
+PASS: Real E dispatcher seats player 3F-B-020
+PASS: Movement locked while seated 3F-B-020
+PASS: Stand and restore movement 3F-B-020
+PASS: Reserve 3F-A-040
+PASS: Recognize owned chair from approach 3F-A-040
+PASS: Prompt target matches booking 3F-A-040
+PASS: Real E dispatcher seats player 3F-A-040
+PASS: Movement locked while seated 3F-A-040
+PASS: Stand and restore movement 3F-A-040
+PASS: Reserve 4F-A-037
+PASS: Recognize owned chair from approach 4F-A-037
+PASS: Prompt target matches booking 4F-A-037
+PASS: Real E dispatcher seats player 4F-A-037
+PASS: Movement locked while seated 4F-A-037
+PASS: Stand and restore movement 4F-A-037
+PASS: Reserve 3F-A-009
+PASS: Recognize owned chair from approach 3F-A-009
+PASS: Prompt target matches booking 3F-A-009
+PASS: Real E dispatcher seats player 3F-A-009
+PASS: Movement locked while seated 3F-A-009
+PASS: Stand and restore movement 3F-A-009
+PASS: Reserve 4F-A-027
+PASS: Recognize owned chair from approach 4F-A-027
+PASS: Prompt target matches booking 4F-A-027
+PASS: Real E dispatcher seats player 4F-A-027
+PASS: Movement locked while seated 4F-A-027
+PASS: Stand and restore movement 4F-A-027
+PASS: Reserve 3F-A-022
+PASS: Recognize owned chair from approach 3F-A-022
+PASS: Prompt target matches booking 3F-A-022
+PASS: Real E dispatcher seats player 3F-A-022
+PASS: Movement locked while seated 3F-A-022
+PASS: Stand and restore movement 3F-A-022
+PASS: Reserve 4F-A-008
+PASS: Recognize owned chair from approach 4F-A-008
+PASS: Prompt target matches booking 4F-A-008
+PASS: Real E dispatcher seats player 4F-A-008
+PASS: Movement locked while seated 4F-A-008
+PASS: Stand and restore movement 4F-A-008
+PASS: Reserve 3F-A-026
+PASS: Recognize owned chair from approach 3F-A-026
+PASS: Prompt target matches booking 3F-A-026
+PASS: Real E dispatcher seats player 3F-A-026
+PASS: Movement locked while seated 3F-A-026
+PASS: Stand and restore movement 3F-A-026
+PASS: Reserve 3F-A-039
+PASS: Recognize owned chair from approach 3F-A-039
+PASS: Prompt target matches booking 3F-A-039
+PASS: Real E dispatcher seats player 3F-A-039
+PASS: Movement locked while seated 3F-A-039
+PASS: Stand and restore movement 3F-A-039
+PASS: Reserve 3F-B-018
+PASS: Recognize owned chair from approach 3F-B-018
+PASS: Prompt target matches booking 3F-B-018
+PASS: Real E dispatcher seats player 3F-B-018
+PASS: Movement locked while seated 3F-B-018
+PASS: Stand and restore movement 3F-B-018
+PASS: Reserve 2F-A-039
+PASS: Recognize owned chair from approach 2F-A-039
+PASS: Prompt target matches booking 2F-A-039
+PASS: Real E dispatcher seats player 2F-A-039
+PASS: Movement locked while seated 2F-A-039
+PASS: Stand and restore movement 2F-A-039
+PASS: Reserve 3F-A-018
+PASS: Recognize owned chair from approach 3F-A-018
+PASS: Prompt target matches booking 3F-A-018
+PASS: Real E dispatcher seats player 3F-A-018
+PASS: Movement locked while seated 3F-A-018
+PASS: Stand and restore movement 3F-A-018
+PASS: Reserve 2F-A-030
+PASS: Recognize owned chair from approach 2F-A-030
+PASS: Prompt target matches booking 2F-A-030
+PASS: Real E dispatcher seats player 2F-A-030
+PASS: Movement locked while seated 2F-A-030
+PASS: Stand and restore movement 2F-A-030
+PASS: Reserve 4F-A-007
+PASS: Recognize owned chair from approach 4F-A-007
+PASS: Prompt target matches booking 4F-A-007
+PASS: Real E dispatcher seats player 4F-A-007
+PASS: Movement locked while seated 4F-A-007
+PASS: Stand and restore movement 4F-A-007
+PASS: Reserve 4F-A-001
+PASS: Recognize owned chair from approach 4F-A-001
+PASS: Prompt target matches booking 4F-A-001
+PASS: Real E dispatcher seats player 4F-A-001
+PASS: Movement locked while seated 4F-A-001
+PASS: Targeted study transaction 4F-A-001
+PASS: Study improves mastery 4F-A-001
+PASS: Stand and restore movement 4F-A-001
+PASS: Reserve 3F-A-029
+PASS: Recognize owned chair from approach 3F-A-029
+PASS: Prompt target matches booking 3F-A-029
+PASS: Real E dispatcher seats player 3F-A-029
+PASS: Movement locked while seated 3F-A-029
+PASS: Stand and restore movement 3F-A-029
+PASS: Reserve 3F-A-004
+PASS: Recognize owned chair from approach 3F-A-004
+PASS: Prompt target matches booking 3F-A-004
+PASS: Real E dispatcher seats player 3F-A-004
+PASS: Movement locked while seated 3F-A-004
+PASS: Stand and restore movement 3F-A-004
+PASS: Reserve 4F-B-005
+PASS: Recognize owned chair from approach 4F-B-005
+PASS: Prompt target matches booking 4F-B-005
+PASS: Real E dispatcher seats player 4F-B-005
+PASS: Movement locked while seated 4F-B-005
+PASS: Stand and restore movement 4F-B-005
+PASS: Reserve 2F-A-038
+PASS: Recognize owned chair from approach 2F-A-038
+PASS: Prompt target matches booking 2F-A-038
+PASS: Real E dispatcher seats player 2F-A-038
+PASS: Movement locked while seated 2F-A-038
+PASS: Stand and restore movement 2F-A-038
+PASS: Reserve 3F-A-010
+PASS: Recognize owned chair from approach 3F-A-010
+PASS: Prompt target matches booking 3F-A-010
+PASS: Real E dispatcher seats player 3F-A-010
+PASS: Movement locked while seated 3F-A-010
+PASS: Stand and restore movement 3F-A-010
+PASS: Reserve 4F-A-017
+PASS: Recognize owned chair from approach 4F-A-017
+PASS: Prompt target matches booking 4F-A-017
+PASS: Real E dispatcher seats player 4F-A-017
+PASS: Movement locked while seated 4F-A-017
+PASS: Stand and restore movement 4F-A-017
+PASS: Reserve 2F-A-008
+PASS: Recognize owned chair from approach 2F-A-008
+PASS: Prompt target matches booking 2F-A-008
+PASS: Real E dispatcher seats player 2F-A-008
+PASS: Movement locked while seated 2F-A-008
+PASS: Stand and restore movement 2F-A-008
+PASS: Reserve 3F-B-008
+PASS: Recognize owned chair from approach 3F-B-008
+PASS: Prompt target matches booking 3F-B-008
+PASS: Real E dispatcher seats player 3F-B-008
+PASS: Movement locked while seated 3F-B-008
+PASS: Stand and restore movement 3F-B-008
+PASS: Reserve 4F-B-014
+PASS: Recognize owned chair from approach 4F-B-014
+PASS: Prompt target matches booking 4F-B-014
+PASS: Real E dispatcher seats player 4F-B-014
+PASS: Movement locked while seated 4F-B-014
+PASS: Stand and restore movement 4F-B-014
+PASS: Reserve 2F-B-021
+PASS: Recognize owned chair from approach 2F-B-021
+PASS: Prompt target matches booking 2F-B-021
+PASS: Real E dispatcher seats player 2F-B-021
+PASS: Movement locked while seated 2F-B-021
+PASS: Stand and restore movement 2F-B-021
+PASS: Reserve 4F-A-004
+PASS: Recognize owned chair from approach 4F-A-004
+PASS: Prompt target matches booking 4F-A-004
+PASS: Real E dispatcher seats player 4F-A-004
+PASS: Movement locked while seated 4F-A-004
+PASS: Stand and restore movement 4F-A-004
+PASS: Reserve 3F-A-005
+PASS: Recognize owned chair from approach 3F-A-005
+PASS: Prompt target matches booking 3F-A-005
+PASS: Real E dispatcher seats player 3F-A-005
+PASS: Movement locked while seated 3F-A-005
+PASS: Stand and restore movement 3F-A-005
+PASS: Reserve 4F-A-012
+PASS: Recognize owned chair from approach 4F-A-012
+PASS: Prompt target matches booking 4F-A-012
+PASS: Real E dispatcher seats player 4F-A-012
+PASS: Movement locked while seated 4F-A-012
+PASS: Stand and restore movement 4F-A-012
+PASS: Reserve 3F-A-012
+PASS: Recognize owned chair from approach 3F-A-012
+PASS: Prompt target matches booking 3F-A-012
+PASS: Real E dispatcher seats player 3F-A-012
+PASS: Movement locked while seated 3F-A-012
+PASS: Stand and restore movement 3F-A-012
+PASS: Reserve 4F-A-030
+PASS: Recognize owned chair from approach 4F-A-030
+PASS: Prompt target matches booking 4F-A-030
+PASS: Real E dispatcher seats player 4F-A-030
+PASS: Movement locked while seated 4F-A-030
+PASS: Stand and restore movement 4F-A-030
+PASS: Reserve 4F-A-034
+PASS: Recognize owned chair from approach 4F-A-034
+PASS: Prompt target matches booking 4F-A-034
+PASS: Real E dispatcher seats player 4F-A-034
+PASS: Movement locked while seated 4F-A-034
+PASS: Stand and restore movement 4F-A-034
+PASS: Unreserved seat cannot be used
+PASS: Reservation cannot be selected through another floor
+PASS: Leave library through real exit
+PASS: Reenter library
+PASS: Reentry registers exactly 192 seats without duplicates
+PASS: Existing reservation survives scene reload
