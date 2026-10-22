@@ -1,0 +1,7 @@
+PASS: latest remote 1569bb80 is merged without conflict.
+PASS: patch relative to remote contains exactly the original 39 reviewed files.
+PASS: all remote library YAML blocks preserved except the intended seat-holder transform, registry component and invalid embedded runtime MonoScript.
+PASS: 192 new seat-marker YAML blocks and correct registry MonoScript reference retained.
+PASS: remote library stair clearance and dome height retained.
+PASS: remote CampusMapUI, VRoid character labels and frame setting retained.
+PASS: packed apps, builds, local logs and unrelated QA captures excluded.

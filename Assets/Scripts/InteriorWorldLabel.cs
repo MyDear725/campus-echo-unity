@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 // A font atlas is rebuilt at runtime. Keep depth-tested lettering bound to that atlas
 // without changing the font's shared GUI material (HUD text must stay on screen).
@@ -9,6 +10,8 @@ public sealed class InteriorWorldLabel : MonoBehaviour
     Material glyphs, original;
     Font font;
     MeshRenderer target;
+    sealed class SharedGlyphs{public Material material;public int users;}
+    static readonly Dictionary<Font,SharedGlyphs> cache=new Dictionary<Font,SharedGlyphs>();
 
     void OnEnable()
     {
@@ -18,7 +21,9 @@ public sealed class InteriorWorldLabel : MonoBehaviour
         var template = Resources.Load<Material>("InteriorWorldText");
         if (!font || !template) return;
         original = target.sharedMaterial;
-        glyphs = new Material(template) { name = "Depth-tested " + text.name };
+        if(!cache.TryGetValue(font,out var shared))
+        {shared=new SharedGlyphs{material=new Material(template){name="Shared depth-tested world lettering"}};cache.Add(font,shared);}
+        shared.users++;glyphs=shared.material;
         font.RequestCharactersInTexture(text.text, text.fontSize, text.fontStyle);
         glyphs.mainTexture = font.material.mainTexture;
         target.sharedMaterial = glyphs;
@@ -34,7 +39,8 @@ public sealed class InteriorWorldLabel : MonoBehaviour
     {
         Font.textureRebuilt -= Refresh;
         if (target && target.sharedMaterial == glyphs) target.sharedMaterial = original;
-        if (glyphs) Destroy(glyphs);
+        if(font&&glyphs&&cache.TryGetValue(font,out var shared)&&--shared.users==0)
+        {cache.Remove(font);Destroy(shared.material);}
         glyphs = null;
     }
 }

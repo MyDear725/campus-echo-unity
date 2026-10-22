@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UMA;
 using UMA.CharacterSystem;
 using UnityEngine;
@@ -16,6 +17,7 @@ public sealed class PlayerCharacterSelector : MonoBehaviour
 
     private Animator activeAnimator;
     private bool subscribed;
+    private GameObject importedVisual;
 
     public PlayerCharacterChoice CurrentChoice { get; private set; }
     public SkinnedMeshRenderer PrimaryRenderer { get; private set; }
@@ -47,6 +49,18 @@ public sealed class PlayerCharacterSelector : MonoBehaviour
 
     public bool ApplyChoice(PlayerCharacterChoice choice, bool persist)
     {
+        var prefab=catalog?catalog.ResolveVisual(choice):null;
+        if(prefab)
+        {
+            UnsubscribeAvatar();
+            if(importedVisual){importedVisual.SetActive(false);Destroy(importedVisual);}
+            if(avatar)avatar.gameObject.SetActive(false);
+            if(fallbackVisual)fallbackVisual.SetActive(false);
+            importedVisual=Instantiate(prefab,transform,false);importedVisual.name="VRoid · "+choice;
+            CurrentChoice=choice;RefreshGeneratedVisual();
+            if(persist)PersistCurrentChoice();VisualChanged?.Invoke();return true;
+        }
+        if(importedVisual){importedVisual.SetActive(false);Destroy(importedVisual);importedVisual=null;}
         UMAPreset preset = catalog ? catalog.Resolve(choice) : null;
         if (!preset || !avatar)
             return UseFallback("UMA preset or avatar is missing for " + choice, choice != PlayerCharacterChoice.None);
@@ -186,6 +200,13 @@ public sealed class PlayerCharacterSelector : MonoBehaviour
 
     private void RefreshGeneratedVisual()
     {
+        if(importedVisual)
+        {
+            activeAnimator=importedVisual.GetComponentInChildren<Animator>(true);
+            PrimaryRenderer=importedVisual.GetComponentsInChildren<SkinnedMeshRenderer>(true).OrderByDescending(r=>r.sharedMesh?r.sharedMesh.vertexCount:0).FirstOrDefault();
+            if(activeAnimator&&catalog){activeAnimator.runtimeAnimatorController=catalog.LocomotionController;activeAnimator.applyRootMotion=false;activeAnimator.cullingMode=AnimatorCullingMode.AlwaysAnimate;}
+            return;
+        }
         if (!avatar)
             return;
 

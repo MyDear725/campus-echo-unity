@@ -24,6 +24,7 @@ public sealed class CampusDayNight : MonoBehaviour
     readonly List<Vector3> lamps=new List<Vector3>();
     readonly List<Renderer> lenses=new List<Renderer>();
     readonly List<Light> pool=new List<Light>();
+    readonly Dictionary<Material,Material> outdoorMaterials=new Dictionary<Material,Material>();
     readonly Vector4[] lampUniforms=new Vector4[8];
     Transform lampRoot;
     float poolTimer;
@@ -91,7 +92,17 @@ public sealed class CampusDayNight : MonoBehaviour
         foreach(var renderer in environment.GetComponentsInChildren<MeshRenderer>(true))
         {
             exterior.Add(renderer);
-            var block=new MaterialPropertyBlock();renderer.GetPropertyBlock(block);block.SetFloat("_CampusOutdoorSurface",1);renderer.SetPropertyBlock(block);
+            // A property block on every tree disabled SRP batching / instancing,
+            // even for shaders that never read this building-only property.
+            var shared=renderer.sharedMaterials;bool changed=false;
+            for(int i=0;i<shared.Length;i++)
+            {
+                var original=shared[i];if(!original||!original.HasProperty("_CampusOutdoorSurface"))continue;
+                if(!outdoorMaterials.TryGetValue(original,out var material))
+                {material=new Material(original){name=original.name+" · outdoor lighting"};material.SetFloat("_CampusOutdoorSurface",1);outdoorMaterials.Add(original,material);}
+                shared[i]=material;changed=true;
+            }
+            if(changed)renderer.sharedMaterials=shared;
             if(renderer.name.Equals("Lamp",StringComparison.OrdinalIgnoreCase)||renderer.name.IndexOf("路灯",StringComparison.Ordinal)>=0)fixtureRenderers.Add(renderer);
         }
         lampRoot=new GameObject("Campus lamps · 18:00–06:00").transform;lampRoot.SetParent(environment.transform,false);
@@ -165,5 +176,6 @@ public sealed class CampusDayNight : MonoBehaviour
         Shader.SetGlobalFloat("_CampusNightAmount",0);Shader.SetGlobalInt("_CampusLampCount",0);
         if(sky){if(RenderSettings.skybox==sky)RenderSettings.skybox=originalSky;Destroy(sky);}
         if(poleMaterial)Destroy(poleMaterial);if(lensMaterial)Destroy(lensMaterial);
+        foreach(var material in outdoorMaterials.Values)if(material)Destroy(material);outdoorMaterials.Clear();
     }
 }

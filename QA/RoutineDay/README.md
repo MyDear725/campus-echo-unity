@@ -9,3 +9,5 @@
 截图：`01-unavailable.png` 显示两个限制与禁用按钮；`02-complete.png` 显示21:00、余额300→280元、精力100→65及正文结果。
 
 复跑入口：编辑器 `LibrarySeatValidation.RunRoutine`，使用现有 LibrarySeatAccessQA 的隔离存档键，不修改玩家实际进度。`RoutineDayQA` 为显式启用的编辑器测试，普通游戏不启动。日志 `editor.log` 保留本地且被 git 忽略。日志中的 UMA BeforeAssemblyReload 空引用是此前已有的编辑器重载问题，本次未修改 UMA。没有验证 Windows 或重新生成独立运行包。
+
+发布前合入队友最新 main `1569bb80` 并重跑，22项仍全部通过。当前截图为合并后版本；保留队友综合楼、角色、地图以及图书馆楼梯/穹顶更新，见merge-audit.txt。本地merged.log不上传。

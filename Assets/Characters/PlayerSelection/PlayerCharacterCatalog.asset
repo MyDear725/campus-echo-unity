@@ -15,3 +15,5 @@ MonoBehaviour:
   malePreset: {fileID: 11400000, guid: 27e619e3cdfcdcb4cb521b69cc24c5c4, type: 2}
   femalePreset: {fileID: 11400000, guid: 618d8755795d94c4b8a957b535a9c83b, type: 2}
   locomotionController: {fileID: 9100000, guid: 7b2325c148834db0b13bb8f7dbce1542, type: 2}
+  maleVisual: {fileID: 9193657854569174016, guid: 684871a822947944d8976a3c701e498e, type: 3}
+  femaleVisual: {fileID: 8951308820940497742, guid: 7b7f9b94072cdaa4ca2d4b4c83be2a81, type: 3}

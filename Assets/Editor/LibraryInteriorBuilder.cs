@@ -594,8 +594,8 @@ public static class LibraryInteriorBuilder
         {
             float topY = baseY + (i + 1) * riser;
             float z = zEnter - (i + 0.5f) * going;
-            MakeBox(root, "B_Riser_" + i, new Vector3(laneB_X, topY - riser * 0.5f, z),
-                new Vector3(laneW, riser, going), matWallDarkCharcoal);
+            MakeBox(root, "B_Riser_" + i, new Vector3(laneB_X, topY - riser * 0.5f - .0155f, z),
+                new Vector3(laneW, riser - .031f, going), matWallDarkCharcoal);
             MakeBox(root, "B_Tread_" + i, new Vector3(laneB_X, topY - 0.015f, z),
                 new Vector3(laneW + 0.02f, 0.03f, going + 0.03f), matWoodScandiOak);
         }
@@ -605,8 +605,8 @@ public static class LibraryInteriorBuilder
         {
             float topY = midY + (i + 1) * riser;
             float z = (zLandN + 0.1f) + (i + 0.5f) * going;
-            MakeBox(root, "A_Riser_" + i, new Vector3(laneA_X, topY - riser * 0.5f, z),
-                new Vector3(laneW, riser, going), matWallDarkCharcoal);
+            MakeBox(root, "A_Riser_" + i, new Vector3(laneA_X, topY - riser * 0.5f - .0155f, z),
+                new Vector3(laneW, riser - .031f, going), matWallDarkCharcoal);
             MakeBox(root, "A_Tread_" + i, new Vector3(laneA_X, topY - 0.015f, z),
                 new Vector3(laneW + 0.02f, 0.03f, going + 0.03f), matWoodScandiOak);
         }
@@ -1351,7 +1351,7 @@ public static class LibraryInteriorBuilder
             new Vector3(RoundCX, TotalH + 0.1f, RoundCZ),
             new Vector3(RoundR * 2f + 0.6f, 0.2f, RoundR * 2f + 0.6f), matCeilingWhite);
         MakeSphere(root, "Round_Dome",
-            new Vector3(RoundCX, TotalH + 0.2f, RoundCZ),
+            new Vector3(RoundCX, TotalH + 1.8f, RoundCZ),
             new Vector3(RoundR * 2f - 1.0f, 3.2f, RoundR * 2f - 1.0f), matCeilingWhite);
     }
 

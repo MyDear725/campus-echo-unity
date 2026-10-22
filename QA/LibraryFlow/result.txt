@@ -1,16 +1,16 @@
 PASS: 62 passed, 0 failed.
-CLICK phone:seat:2F-A-002 rect=(x:532.86, y:299.40, width:16.00, height:16.00) screen=1061x540
+CLICK phone:seat:2F-A-020 rect=(x:554.58, y:205.58, width:16.00, height:16.00) screen=1061x473
 PASS: Mouse selects the exact seat at its centre
-CLICK phone:reserve rect=(x:420.52, y:437.40, width:219.97, height:36.00) screen=1061x540
+CLICK phone:reserve rect=(x:435.90, y:376.43, width:189.20, height:36.00) screen=1061x473
 PASS: Mouse confirms the selected reservation
 PASS: E seats player
 PASS: Player is seated before opening subject selector
-CLICK seat:start rect=(x:358.50, y:252.80, width:344.00, height:34.00) screen=1061x540
+CLICK seat:start rect=(x:358.50, y:231.36, width:344.00, height:34.00) screen=1061x473
 PASS: Mouse opens subject selector
 PASS: Release-seat button hidden while subject selector is modal
-STUDY_CLICK study:math:60 point=(530.50, 166.80) cached=True
+STUDY_CLICK study:math:60 point=(530.50, 146.70) cached=True
 AFTER_CLICK message=高等数学学习完成 · 60分钟（12:00—13:00）
-掌握度 20.0 → 28.0，精力 100 → 90；预约座位保留。 energy=90 mastery=28 time=9/5/2026 1:00:02 PM ui=False
+掌握度 20.0 → 28.0，精力 100 → 90；预约座位保留。 energy=90 mastery=28 time=9/5/2026 1:00:00 PM ui=False
 PASS: Subject click preserves seat and reservation
 PASS: Subject click increases mathematics mastery
 PASS: Energy deducted exactly once
@@ -18,74 +18,74 @@ PASS: Game time advances selected duration exactly once
 PASS: Subject study retains in-use occupancy
 PASS: Cannot replace a seat while seated
 PASS: Reconfirming owned seat preserves occupancy
-CLICK study:math:30 rect=(x:222.85, y:146.35, width:194.72, height:40.89) screen=1061x540
+CLICK study:math:30 rect=(x:262.79, y:128.91, width:169.43, height:35.58) screen=1061x473
 PASS: Mouse study improves math 30 minutes
 PASS: Energy charged once math 30
 PASS: Exact study duration math 30
 PASS: Seat retained after math 30
-CLICK study:math:60 rect=(x:433.14, y:146.35, width:194.72, height:40.89) screen=1061x540
+CLICK study:math:60 rect=(x:445.78, y:128.91, width:169.43, height:35.58) screen=1061x473
 PASS: Mouse study improves math 60 minutes
 PASS: Energy charged once math 60
 PASS: Exact study duration math 60
 PASS: Seat retained after math 60
-CLICK study:math:90 rect=(x:643.44, y:146.35, width:194.72, height:40.89) screen=1061x540
+CLICK study:math:90 rect=(x:628.77, y:128.91, width:169.43, height:35.58) screen=1061x473
 PASS: Mouse study improves math 90 minutes
 PASS: Energy charged once math 90
 PASS: Exact study duration math 90
 PASS: Seat retained after math 90
-CLICK study:code:30 rect=(x:222.85, y:230.08, width:194.72, height:40.89) screen=1061x540
+CLICK study:code:30 rect=(x:262.79, y:201.77, width:169.43, height:35.58) screen=1061x473
 PASS: Mouse study improves code 30 minutes
 PASS: Energy charged once code 30
 PASS: Exact study duration code 30
 PASS: Seat retained after code 30
-CLICK study:code:60 rect=(x:433.14, y:230.08, width:194.72, height:40.89) screen=1061x540
+CLICK study:code:60 rect=(x:445.78, y:201.77, width:169.43, height:35.58) screen=1061x473
 PASS: Mouse study improves code 60 minutes
 PASS: Energy charged once code 60
 PASS: Exact study duration code 60
 PASS: Seat retained after code 60
-CLICK study:code:90 rect=(x:643.44, y:230.08, width:194.72, height:40.89) screen=1061x540
+CLICK study:code:90 rect=(x:628.77, y:201.77, width:169.43, height:35.58) screen=1061x473
 PASS: Mouse study improves code 90 minutes
 PASS: Energy charged once code 90
 PASS: Exact study duration code 90
 PASS: Seat retained after code 90
-CLICK study:english:30 rect=(x:222.85, y:313.81, width:194.72, height:40.89) screen=1061x540
+CLICK study:english:30 rect=(x:262.79, y:274.62, width:169.43, height:35.58) screen=1061x473
 PASS: Mouse study improves english 30 minutes
 PASS: Energy charged once english 30
 PASS: Exact study duration english 30
 PASS: Seat retained after english 30
-CLICK study:english:60 rect=(x:433.14, y:313.81, width:194.72, height:40.89) screen=1061x540
+CLICK study:english:60 rect=(x:445.78, y:274.62, width:169.43, height:35.58) screen=1061x473
 PASS: Mouse study improves english 60 minutes
 PASS: Energy charged once english 60
 PASS: Exact study duration english 60
 PASS: Seat retained after english 60
-CLICK study:english:90 rect=(x:643.44, y:313.81, width:194.72, height:40.89) screen=1061x540
+CLICK study:english:90 rect=(x:628.77, y:274.62, width:169.43, height:35.58) screen=1061x473
 PASS: Mouse study improves english 90 minutes
 PASS: Energy charged once english 90
 PASS: Exact study duration english 90
 PASS: Seat retained after english 90
-CLICK study:math:30 rect=(x:222.85, y:146.35, width:194.72, height:40.89) screen=1061x540
+CLICK study:math:30 rect=(x:262.79, y:128.91, width:169.43, height:35.58) screen=1061x473
 PASS: Insufficient energy changes nothing and retains seat
-CLICK study:math:60 rect=(x:433.14, y:146.35, width:194.72, height:40.89) screen=1061x540
+CLICK study:math:60 rect=(x:445.78, y:128.91, width:169.43, height:35.58) screen=1061x473
 PASS: Timetable conflict waits for confirmation
-CLICK confirm:cancel rect=(x:540.24, y:288.50, width:297.92, height:46.73) screen=1061x540
+CLICK confirm:cancel rect=(x:538.97, y:252.60, width:259.23, height:40.66) screen=1061x473
 PASS: Cancel conflict keeps seat and all progress
-CLICK study:math:60 rect=(x:433.14, y:146.35, width:194.72, height:40.89) screen=1061x540
-CLICK confirm:accept rect=(x:222.85, y:288.50, width:297.92, height:46.73) screen=1061x540
+CLICK study:math:60 rect=(x:445.78, y:128.91, width:169.43, height:35.58) screen=1061x473
+CLICK confirm:accept rect=(x:262.79, y:252.60, width:259.23, height:40.66) screen=1061x473
 PASS: Confirmed conflict studies once and retains seat
-CLICK study:math:30 rect=(x:222.85, y:146.35, width:194.72, height:40.89) screen=1061x540
-CLICK confirm:accept rect=(x:222.85, y:288.50, width:297.92, height:46.73) screen=1061x540
+CLICK study:math:30 rect=(x:262.79, y:128.91, width:169.43, height:35.58) screen=1061x473
+CLICK confirm:accept rect=(x:262.79, y:252.60, width:259.23, height:40.66) screen=1061x473
 PASS: Cross-midnight rejection preserves seat, clock and mastery
-CLICK study:close rect=(x:748.58, y:29.52, width:89.57, height:35.05) screen=1061x540
-CLICK seat:stand rect=(x:358.50, y:358.80, width:166.00, height:32.00) screen=1061x540
+CLICK study:close rect=(x:720.27, y:27.25, width:77.94, height:30.50) screen=1061x473
+CLICK seat:stand rect=(x:358.50, y:337.36, width:166.00, height:32.00) screen=1061x473
 PASS: Standing retains reservation and clears occupancy
 PASS: Can sit again after standing
-CLICK seat:release rect=(x:536.50, y:358.80, width:166.00, height:32.00) screen=1061x540
+CLICK seat:release rect=(x:536.50, y:337.36, width:166.00, height:32.00) screen=1061x473
 PASS: Explicit release alone ends the reservation
 PASS: Open self-study menu for forced-exit safety check
 PASS: Forced stand closes owned menu and releases movement lock
 PASS: Forced stand retains booking without occupied flag
-CLICK phone:area:B rect=(x:533.50, y:126.60, width:106.98, height:28.00) screen=1061x540
-CLICK phone:seat:2F-B-016 rect=(x:530.02, y:224.16, width:16.00, height:16.00) screen=1061x540
+CLICK phone:area:B rect=(x:533.50, y:120.57, width:91.60, height:28.00) screen=1061x473
+CLICK phone:seat:2F-B-002 rect=(x:490.61, y:238.43, width:16.00, height:16.00) screen=1061x473
 PASS: Reading-area seat can be selected independently
-CLICK phone:reserve rect=(x:420.52, y:437.40, width:219.97, height:36.00) screen=1061x540
+CLICK phone:reserve rect=(x:435.90, y:376.43, width:189.20, height:36.00) screen=1061x473
 PASS: Reading-area reservation uses selected ID

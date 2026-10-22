@@ -32,3 +32,6 @@ Builds/
 *.exe
 *.dmg
 *.pkg
+
+# Local environment-authoring previews and temporary render output
+/output/

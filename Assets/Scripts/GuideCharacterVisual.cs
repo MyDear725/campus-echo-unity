@@ -18,6 +18,16 @@ public sealed class GuideCharacterVisual : MonoBehaviour
 
     public void Initialize(PlayerCharacterCatalog catalog, Transform player)
     {
+        var prefab=catalog?catalog.ResolveVisual(PlayerCharacterChoice.Female):null;
+        if(!initialized&&prefab)
+        {
+            this.catalog=catalog;this.player=player;playerSelector=player?player.GetComponent<PlayerCharacterSelector>():null;
+            previousPosition=transform.position;
+            foreach(Transform child in transform)if(child.GetComponentInChildren<Animation>(true)||child.GetComponentInChildren<SkinnedMeshRenderer>(true))child.gameObject.SetActive(false);
+            var imported=Instantiate(prefab,transform,false);imported.name="Xiaolan VRoid visual";
+            activeAnimator=imported.GetComponentInChildren<Animator>();activeAnimator.runtimeAnimatorController=catalog.LocomotionController;activeAnimator.applyRootMotion=false;
+            activeAnimator.cullingMode=AnimatorCullingMode.AlwaysAnimate;initialized=true;return;
+        }
         if (initialized || !catalog || !catalog.FemalePreset)
             return;
 
@@ -91,7 +101,7 @@ public sealed class GuideCharacterVisual : MonoBehaviour
             return;
         float current = activeAnimator.humanScale * Mathf.Abs(activeAnimator.transform.lossyScale.y);
         float target = playerAnimator.humanScale * Mathf.Abs(playerAnimator.transform.lossyScale.y);
-        if (current > .1f && target > .1f && Mathf.Abs(current - target) > .001f)
+        if (avatar && current > .1f && target > .1f && Mathf.Abs(current - target) > .001f)
             avatar.transform.localScale *= target / current;
     }
 

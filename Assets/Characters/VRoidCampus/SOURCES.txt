@@ -1,0 +1,19 @@
+Campus Echo - VRoid character sources (2026-10-21)
+
+Male: Sakurada Fumiriya (pixiv / VRoid Project).
+Download: https://opengameart.org/sites/default/files/sakurada_fumiriya.zip
+Official terms: https://vroid.pixiv.help/hc/en-us/articles/360014788554-Sakurada-Fumiriya
+License: CC0 1.0.
+
+Female and guide: beta AvatarSample_D, also known as beta AvatarSample_1 / Sendagaya Shibu (pixiv / VRoid Project).
+Download: https://opengameart.org/sites/default/files/avatarsample_d_0.zip
+Official terms: https://vroid.pixiv.help/hc/en-us/articles/360012381793
+License: CC0 1.0.
+
+Collection: https://opengameart.org/content/vroid-studio-cc0-models
+License reference: https://creativecommons.org/publicdomain/zero/1.0/
+
+Imported via official UniVRM 0.131.4 (MIT), embedded in Packages/com.vrmc.gltf and Packages/com.vrmc.univrm with their upstream notices.
+Original VRM bytes retained beside the prefabs. Materials adapted for this project's URP pipeline; metre scale adjusted to 1.78m / 1.68m.
+These are third-party sample assets, not original character artwork. Original meshes, UVs, textures, bone weights and facial blend shapes are retained.
+No AvatarSample A, B or C assets used.

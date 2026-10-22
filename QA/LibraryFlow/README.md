@@ -33,4 +33,8 @@
 
     -projectPath <项目目录> -executeMethod LibrarySeatValidation.RunUI -logFile <日志路径>
 
-该命令打开原CampusLiving、运行隔离测试，完成后退出测试编辑器。运行期间不要修改脚本。本次修改仅保存在本地，未推送、未更新独立运行版。
+该命令打开原CampusLiving、运行隔离测试，完成后退出测试编辑器。运行期间不要修改脚本。本次发布仅包含项目源码、资源与验证记录，独立运行版未重新打包。
+
+## 发布前合并回归
+
+合入队友最新 main `1569bb80` 后，在同一原项目编辑器重跑，仍为62项通过、0失败。当前截图和result.txt为合并后的结果，本地日志merged.log不上传。

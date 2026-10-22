@@ -17,6 +17,7 @@ public class CampusGame : MonoBehaviour {
  public BuildingInteriorTravel Interiors {get;private set;}
  public bool Automated {get;private set;}
  public CampusWelcomeStory Story {get;private set;}
+ public CampusMapUI Map {get;private set;}
  public bool UiCursorActive {get;private set;}
  public bool UiBlocking {get=>UiCursorActive;set=>SetUiCursor(value);}
  public bool Seated;
@@ -27,15 +28,15 @@ public class CampusGame : MonoBehaviour {
  public Vector3 WorldToMap(Vector3 point)=>MapToWorld(point);
  float dormitoryOriginalFieldOfView; bool dormitoryCameraApplied;
  CampusData data; float yaw=180,pitch=18,targetYaw=180,targetPitch=18,distance=5.8f,vertical;
- bool grounded=true,started,complete,mapOpen,qa; int collected; string message="欢迎来到开发区校区。沿路到书韵广场寻找小岚。";
- float messageUntil=10; Animation animationPlayer; SkinnedMeshRenderer face; string motion=""; GUIStyle title,body,small; Texture2D minimap;
+ bool grounded=true,started,complete,qa; int collected; string message="欢迎来到开发区校区。沿路到书韵广场寻找小岚。";
+ float messageUntil=10; Animation animationPlayer; SkinnedMeshRenderer face; string motion=""; GUIStyle title,body,small;
  PlayerCharacterSelector characterSelector; PlayerCharacterChoice pendingCharacterChoice; bool characterChoiceConfirmed,choosingCharacter;
  void Awake(){
   data=JsonUtility.FromJson<CampusData>(mapData.text);qa=Environment.GetCommandLineArgs().Contains("-campusQA");bool femaleQa=Environment.GetCommandLineArgs().Contains("-femaleCharacterQA");
   Interiors=GetComponent<BuildingInteriorTravel>();Automated=qa||Environment.GetCommandLineArgs().Contains("-githubIntegrationQA")||Environment.GetCommandLineArgs().Contains("-overlayRenderQA")||Environment.GetCommandLineArgs().Contains("-cafeteriaQA")||Environment.GetCommandLineArgs().Contains("-allowanceQA")||Environment.GetCommandLineArgs().Contains("-phoneQA")||Environment.GetCommandLineArgs().Contains("-libDirectQA")||Environment.GetCommandLineArgs().Contains("-femaleCharacterQA")||Environment.GetCommandLineArgs().Contains("-campusPlanQA")||Environment.GetCommandLineArgs().Contains("-gymInteriorQA")||Environment.GetCommandLineArgs().Contains("-entranceQA")||Environment.GetCommandLineArgs().Contains("-teachingCQA")||Environment.GetCommandLineArgs().Contains("-teachingABQA")||Environment.GetCommandLineArgs().Contains("-skybridgeQA");
-  Automated=Automated||Environment.GetCommandLineArgs().Contains("-interiorRefinementQA");
+  Automated=Automated||Environment.GetCommandLineArgs().Contains("-interiorRefinementQA")||Environment.GetCommandLineArgs().Contains("-vroidPresentationQA")||Environment.GetCommandLineArgs().Contains("-performanceQA")||Environment.GetCommandLineArgs().Contains("-informationQA")||Environment.GetCommandLineArgs().Contains("-courtMapQA")||Environment.GetCommandLineArgs().Contains("-remoteCompatibilityQA");
   Outdoor=GetComponent<CampusOutdoorTraversal>();
-  Application.targetFrameRate=60;
+  QualitySettings.vSyncCount=0;Application.targetFrameRate=120;
   characterSelector=player.GetComponent<PlayerCharacterSelector>();
   if(guide!=null&&guideCharacterCatalog!=null){var guideVisual=guide.GetComponent<GuideCharacterVisual>();if(guideVisual==null)guideVisual=guide.gameObject.AddComponent<GuideCharacterVisual>();try{guideVisual.Initialize(guideCharacterCatalog,player);}catch(Exception error){Debug.LogWarning("Xiaolan UMA visual failed to initialize; keeping gameplay flow active. "+error.Message,this);}}
   if(characterSelector!=null){characterSelector.VisualChanged+=RefreshCharacterVisual;var saved=characterSelector.ReadSavedChoice();pendingCharacterChoice=saved;characterChoiceConfirmed=saved==PlayerCharacterChoice.Male||saved==PlayerCharacterChoice.Female;if(Automated){pendingCharacterChoice=femaleQa?PlayerCharacterChoice.Female:PlayerCharacterChoice.Male;characterChoiceConfirmed=true;if(characterSelector.CurrentChoice!=pendingCharacterChoice)characterSelector.ApplyChoice(pendingCharacterChoice,false);}else if(characterChoiceConfirmed&&characterSelector.CurrentChoice!=saved)characterSelector.ApplyChoice(saved,false);}
@@ -55,7 +56,7 @@ public class CampusGame : MonoBehaviour {
   if(interfaceFont==null)interfaceFont=Resources.Load<Font>("CampusFont");
   if(interfaceFont==null)interfaceFont=Font.CreateDynamicFontFromOSFont(new string[]{"Arial Unicode MS","Hiragino Sans GB","STHeiti Medium","Microsoft YaHei","SimHei"},20);
   if(!Automated){Story=gameObject.AddComponent<CampusWelcomeStory>();Story.Initialize(this);}
-  BuildMap();if(pixelStudy&&!qa)Teleport(new Vector3(65,.23f,-72));ApplyCursor();if(qa){StartCoroutine(QA());StartCoroutine(QATimeout());}
+  Map=gameObject.AddComponent<CampusMapUI>();Map.Initialize(this,data);if(pixelStudy&&!qa)Teleport(new Vector3(65,.23f,-72));ApplyCursor();if(qa){StartCoroutine(QA());StartCoroutine(QATimeout());}
  }
  public void SetUiCursor(bool active){UiCursorActive=active;uiCursorChangedFrame=Time.frameCount;ApplyCursor();}
  void ApplyCursor(){bool free=paused||Automated||UiCursorActive||Seated;Cursor.lockState=free?CursorLockMode.None:CursorLockMode.Locked;Cursor.visible=free;}
@@ -72,7 +73,7 @@ public class CampusGame : MonoBehaviour {
    // Sitting: pause handles the toggle above, but no movement, gravity or yaw may run.
    if(Seated){Animate("Idle",0);return;}
    if(Interiors&&Interiors.Busy){Animate("Idle",0);return;}
-   if(Input.GetKeyDown(KeyCode.M)&&ExteriorShortcutsAllowed)mapOpen=!mapOpen;
+
    targetYaw=Mathf.Repeat(targetYaw+Input.GetAxisRaw("Mouse X")*2.3f,360);targetPitch=Mathf.Clamp(targetPitch-Input.GetAxisRaw("Mouse Y")*1.8f,-32,68);
    distance=Mathf.Clamp(distance-Input.mouseScrollDelta.y*.5f,2.5f,11);
    yaw=Mathf.LerpAngle(yaw,targetYaw,1-Mathf.Exp(-22*Time.deltaTime));pitch=Mathf.Lerp(pitch,targetPitch,1-Mathf.Exp(-22*Time.deltaTime));
@@ -145,7 +146,7 @@ public class CampusGame : MonoBehaviour {
  // Turn the follow camera to a heading without moving the player. Used so sitting down
  // frames the table instead of keeping the pre-sit yaw.
  public void AlignViewToSeat(float heading){yaw=targetYaw=heading;player.rotation=Quaternion.Euler(0,heading,0);UpdateCamera();}
- public void SetTravelPose(Vector3 worldPosition,float heading,float elevation=12){player.position=worldPosition;yaw=targetYaw=heading;pitch=targetPitch=elevation;player.rotation=Quaternion.Euler(0,yaw,0);vertical=0;grounded=true;mapOpen=false;Animate("Idle",0);UpdateCamera();}
+ public void SetTravelPose(Vector3 worldPosition,float heading,float elevation=12){if(Map&&Map.IsOpen)Map.Close();player.position=worldPosition;yaw=targetYaw=heading;pitch=targetPitch=elevation;player.rotation=Quaternion.Euler(0,yaw,0);vertical=0;grounded=true;Animate("Idle",0);UpdateCamera();}
  public void Notify(string text)=>Say(text);
  void Animate(string state,float speed,bool backwards=false){
   if(characterSelector!=null&&characterSelector.CurrentChoice!=PlayerCharacterChoice.None){characterSelector.SetMotion(speed,backwards?-speed:speed,grounded);return;}
@@ -211,11 +212,10 @@ public class CampusGame : MonoBehaviour {
   if(!readingStory)GUI.Label(new Rect(24,h-37,w-48,30),indoors?"WASD 移动    鼠标转向    Shift 奔跑    空格跳跃    E 交互    K 学期手册    P 手机    J 剧情指引    ESC 暂停":"WASD 移动    鼠标转向    Shift 奔跑    空格跳跃    E 交互 / 进入建筑    M 地图    K 学期手册    P 手机    J 指引    T 教学    L 生活区    B 宿舍    F 食堂    G 图书馆    R 南门    ESC 暂停",small);
   if(Time.time<messageUntil&&!readingStory){CampusStoryStyle.Panel(new Rect(w*.5f-330,h-140,660,76));GUI.Label(new Rect(w*.5f-306,h-126,612,52),message,CampusStoryStyle.Label(interfaceFont,17,CampusStoryStyle.Paper,false,TextAnchor.MiddleLeft));}
   // The contextual "[ E ] ..." prompt is drawn once, by CampusHud.
-  if(mapOpen){float s=Mathf.Min(h-190,620);var r=new Rect(w-s-25,25,s,s*.692f);GUI.DrawTexture(r,minimap);if(Story==null)foreach(var spot in data.spots)Dot(r,spot.x,spot.z,new Color(1,.76f,.3f));if(guide!=null){var gp=WorldToMap(guide.position);Dot(r,gp.x,gp.z,Color.cyan);}Dot(r,player.position.x*mapXSign,player.position.z,Color.white);GUI.Label(new Rect(r.x,r.yMax+8,s,35),Story!=null?"北 ↑   白：你   蓝：小岚":"北 ↑   白：你   蓝：小岚   金：记忆",small);}
   if(paused&&(!qa||pixelStudy)){
    bool showChoices=characterSelector!=null&&(!characterChoiceConfirmed||choosingCharacter);float panelHeight=showChoices?375:455;float top=h/2-panelHeight/2;
    GUI.Box(new Rect(w/2-230,top,460,panelHeight),"");GUI.Label(new Rect(w/2-185,top+22,400,40),"校园漫游已准备就绪",title);
-   if(showChoices){GUI.Label(new Rect(w/2-185,top+70,370,48),characterChoiceConfirmed?"选择要更换的角色：":"首次开始前，请选择角色：",body);if(GUI.Button(new Rect(w/2-175,top+124,168,44),pendingCharacterChoice==PlayerCharacterChoice.Male?"✓ 男生 · Shane":"男生 · Shane")){if(characterSelector.ApplyChoice(PlayerCharacterChoice.Male,characterChoiceConfirmed)){pendingCharacterChoice=PlayerCharacterChoice.Male;if(characterChoiceConfirmed)choosingCharacter=false;}}if(GUI.Button(new Rect(w/2+7,top+124,168,44),pendingCharacterChoice==PlayerCharacterChoice.Female?"✓ 女生 · Sheila":"女生 · Sheila")){if(characterSelector.ApplyChoice(PlayerCharacterChoice.Female,characterChoiceConfirmed)){pendingCharacterChoice=PlayerCharacterChoice.Female;if(characterChoiceConfirmed)choosingCharacter=false;}}}
+   if(showChoices){GUI.Label(new Rect(w/2-185,top+70,370,48),characterChoiceConfirmed?"选择要更换的角色：":"首次开始前，请选择角色：",body);if(GUI.Button(new Rect(w/2-175,top+124,168,44),pendingCharacterChoice==PlayerCharacterChoice.Male?"✓ 男生 · 日系校园":"男生 · 日系校园")){if(characterSelector.ApplyChoice(PlayerCharacterChoice.Male,characterChoiceConfirmed)){pendingCharacterChoice=PlayerCharacterChoice.Male;if(characterChoiceConfirmed)choosingCharacter=false;}}if(GUI.Button(new Rect(w/2+7,top+124,168,44),pendingCharacterChoice==PlayerCharacterChoice.Female?"✓ 女生 · 日系校园":"女生 · 日系校园")){if(characterSelector.ApplyChoice(PlayerCharacterChoice.Female,characterChoiceConfirmed)){pendingCharacterChoice=PlayerCharacterChoice.Female;if(characterChoiceConfirmed)choosingCharacter=false;}}}
    else GUI.Label(new Rect(w/2-185,top+70,370,58),"点击开始后，鼠标控制视角。\n按 ESC 可暂停并释放鼠标。",body);
    float startY=showChoices?top+188:top+142;bool canStart=characterSelector==null||characterChoiceConfirmed||pendingCharacterChoice==PlayerCharacterChoice.Male||pendingCharacterChoice==PlayerCharacterChoice.Female;bool oldEnabled=GUI.enabled;GUI.enabled=canStart;if(GUI.Button(new Rect(w/2-175,startY,350,44),"开始 / 继续探索")){if(!characterChoiceConfirmed&&characterSelector!=null){characterChoiceConfirmed=characterSelector.PersistCurrentChoice();if(!characterChoiceConfirmed)return;}choosingCharacter=false;paused=false;PlayerPrefs.SetInt("CampusUnityStarted",1);PlayerPrefs.Save();ApplyCursor();}GUI.enabled=oldEnabled;
    if(characterChoiceConfirmed&&characterSelector!=null&&GUI.Button(new Rect(w/2-175,startY+54,350,34),choosingCharacter?"取消更换角色":"更换角色"))choosingCharacter=!choosingCharacter;
@@ -229,16 +229,6 @@ public class CampusGame : MonoBehaviour {
    }
 
   }
- }
- void Dot(Rect r,float x,float z,Color color){var old=GUI.color;GUI.color=color;GUI.DrawTexture(new Rect(r.x+(x+290)/600*r.width-3,r.y+(z+180)/415*r.height-3,6,6),Texture2D.whiteTexture);GUI.color=old;}
- void BuildMap(){
-  minimap=new Texture2D(600,415);var pixels=Enumerable.Repeat(new Color(.21f,.3f,.24f),600*415).ToArray();
-  foreach(var f in data.features){Color c=f.kind=="water"?new Color(.18f,.44f,.49f):f.kind=="building"?new Color(.69f,.7f,.65f):new Color(.36f,.47f,.35f);
-   int x0=Mathf.Clamp(Mathf.FloorToInt(f.points.Min(p=>p.x)+290),0,599),x1=Mathf.Clamp(Mathf.CeilToInt(f.points.Max(p=>p.x)+290),0,599),z0=Mathf.Clamp(Mathf.FloorToInt(f.points.Min(p=>p.z)+180),0,414),z1=Mathf.Clamp(Mathf.CeilToInt(f.points.Max(p=>p.z)+180),0,414);
-   for(int x=x0;x<=x1;x++)for(int z=z0;z<=z1;z++)if(CampusCollision.Inside(x-290,z-180,f.points))pixels[(414-z)*600+x]=c;
-  }
-  foreach(var road in data.roads)for(int i=1;i<road.points.Length;i++){var a=road.points[i-1];var b=road.points[i];int steps=Mathf.CeilToInt(Vector2.Distance(new Vector2(a.x,a.z),new Vector2(b.x,b.z))*2);for(int j=0;j<=steps;j++){int x=Mathf.RoundToInt(Mathf.Lerp(a.x,b.x,j/(float)steps)+290),z=Mathf.RoundToInt(Mathf.Lerp(a.z,b.z,j/(float)steps)+180);for(int dx=-1;dx<=1;dx++)for(int dz=-1;dz<=1;dz++)if(x+dx>=0&&x+dx<600&&z+dz>=0&&z+dz<415)pixels[(414-z-dz)*600+x+dx]=new Color(.68f,.64f,.5f);}}
-  minimap.SetPixels(pixels);minimap.Apply();
  }
  IEnumerator QATimeout(){yield return new WaitForSecondsRealtime(120);Debug.LogError("Campus QA timed out; inspect runtime log.");Application.Quit(1);}
  IEnumerator QA(){

@@ -1,0 +1,308 @@
+Clipped legacy mesh: Campus-mesh / Assets/LivingRevision/Meshes/8.asset
+Clipped legacy mesh: garden-ground-2--1 / Assets/LivingRevision/Meshes/489.asset
+Clipped legacy mesh: garden-ground-2--1 / Assets/LivingRevision/Meshes/490.asset
+Clipped legacy mesh: garden-ground-2--1 / Assets/LivingRevision/Meshes/491.asset
+Clipped legacy mesh: garden-plants-2--1 / Assets/LivingRevision/Meshes/500.asset
+Clipped legacy mesh: garden-ground-2--2 / Assets/LivingRevision/Meshes/501.asset
+Clipped legacy mesh: garden-ground-2--2 / Assets/LivingRevision/Meshes/502.asset
+Clipped legacy mesh: garden-ground-2--2 / Assets/LivingRevision/Meshes/503.asset
+Clipped legacy mesh: garden-ground-2--2 / Assets/LivingRevision/Meshes/504.asset
+Clipped legacy mesh: garden-plants-2--2 / Assets/LivingRevision/Meshes/512.asset
+Clipped legacy mesh: Campus-2--2 / Assets/LivingRevision/Meshes/1124.asset
+Clipped legacy mesh: Campus-2--3 / Assets/LivingRevision/Meshes/1126.asset
+Clipped legacy mesh: Campus-2--2 / Assets/LivingRevision/Meshes/1127.asset
+Clipped legacy mesh: Campus-2--3 / Assets/LivingRevision/Meshes/1129.asset
+Clipped legacy mesh: Campus-2--2 / Assets/LivingRevision/Meshes/1130.asset
+Clipped legacy mesh: Campus-2--3 / Assets/LivingRevision/Meshes/1132.asset
+Clipped legacy mesh: Campus-2--2 / Assets/LivingRevision/Meshes/1133.asset
+Clipped legacy mesh: Campus-2--3 / Assets/LivingRevision/Meshes/1135.asset
+Clipped legacy mesh: Campus-2--2 / Assets/LivingRevision/Meshes/1136.asset
+Clipped legacy mesh: Campus-2--3 / Assets/LivingRevision/Meshes/1138.asset
+Clipped legacy mesh: Campus-2--2 / Assets/LivingRevision/Meshes/1139.asset
+Clipped legacy mesh: Campus-2--3 / Assets/LivingRevision/Meshes/1142.asset
+Clipped legacy mesh: Campus-3--3 / Assets/LivingRevision/Meshes/1143.asset
+Clipped legacy mesh: Campus-2--2 / Assets/LivingRevision/Meshes/1144.asset
+Clipped legacy mesh: Campus-3--2 / Assets/LivingRevision/Meshes/1145.asset
+Clipped legacy mesh: Campus-2--3 / Assets/LivingRevision/Meshes/1148.asset
+Clipped legacy mesh: Campus-3--3 / Assets/LivingRevision/Meshes/1149.asset
+Clipped legacy mesh: Campus-2--2 / Assets/LivingRevision/Meshes/1150.asset
+Clipped legacy mesh: Campus-3--2 / Assets/LivingRevision/Meshes/1151.asset
+Clipped legacy mesh: Campus-2--3 / Assets/LivingRevision/Meshes/1154.asset
+Clipped legacy mesh: Campus-3--3 / Assets/LivingRevision/Meshes/1155.asset
+Clipped legacy mesh: Campus-2--2 / Assets/LivingRevision/Meshes/1156.asset
+Clipped legacy mesh: Campus-3--2 / Assets/LivingRevision/Meshes/1157.asset
+Clipped legacy mesh: Campus-2--3 / Assets/LivingRevision/Meshes/1160.asset
+Clipped legacy mesh: Campus-3--3 / Assets/LivingRevision/Meshes/1161.asset
+Clipped legacy mesh: Campus-2--2 / Assets/LivingRevision/Meshes/1162.asset
+Clipped legacy mesh: Campus-3--2 / Assets/LivingRevision/Meshes/1163.asset
+Clipped legacy mesh: Campus-2--3 / Assets/LivingRevision/Meshes/1166.asset
+Clipped legacy mesh: Campus-3--3 / Assets/LivingRevision/Meshes/1167.asset
+Clipped legacy mesh: Campus-2--2 / Assets/LivingRevision/Meshes/1168.asset
+Clipped legacy mesh: Campus-3--2 / Assets/LivingRevision/Meshes/1169.asset
+Clipped legacy mesh: Campus-2--3 / Assets/LivingRevision/Meshes/1172.asset
+Clipped legacy mesh: Campus-3--3 / Assets/LivingRevision/Meshes/1173.asset
+Clipped legacy mesh: Campus-2--2 / Assets/LivingRevision/Meshes/1174.asset
+Clipped legacy mesh: Campus-3--2 / Assets/LivingRevision/Meshes/1175.asset
+Clipped legacy mesh: Campus-2--3 / Assets/LivingRevision/Meshes/1178.asset
+Clipped legacy mesh: Campus-3--3 / Assets/LivingRevision/Meshes/1179.asset
+Clipped legacy mesh: Campus-3--2 / Assets/LivingRevision/Meshes/1180.asset
+Clipped legacy mesh: Campus-2--2 / Assets/LivingRevision/Meshes/1181.asset
+Clipped legacy mesh: Campus-2--3 / Assets/LivingRevision/Meshes/1184.asset
+Clipped legacy mesh: Campus-3--3 / Assets/LivingRevision/Meshes/1185.asset
+Clipped legacy mesh: Campus-3--2 / Assets/LivingRevision/Meshes/1186.asset
+Clipped legacy mesh: Campus-2--2 / Assets/LivingRevision/Meshes/1187.asset
+Clipped legacy mesh: Campus-2--3 / Assets/LivingRevision/Meshes/1190.asset
+Clipped legacy mesh: Campus-3--3 / Assets/LivingRevision/Meshes/1191.asset
+Clipped legacy mesh: Campus-3--2 / Assets/LivingRevision/Meshes/1192.asset
+Clipped legacy mesh: Campus-2--2 / Assets/LivingRevision/Meshes/1193.asset
+Clipped legacy mesh: Campus-0-3 / Assets/LivingRevision/Meshes/2868.asset
+Clipped legacy mesh: Campus-0-3 / Assets/LivingRevision/Meshes/2879.asset
+Clipped legacy mesh: Campus-0-3 / Assets/LivingRevision/Meshes/2890.asset
+Clipped legacy mesh: Campus-0-3 / Assets/LivingRevision/Meshes/2912.asset
+Clipped legacy mesh: Campus-0-3 / Assets/LivingRevision/Meshes/2923.asset
+Clipped legacy mesh: Preserved surroundings aad2a7f391a3bfb40afe37238bcc1d10 / Assets/TeachingRevision/Meshes/Preserved-aad2a7f391a3bfb40afe37238bcc1d10.asset
+Clipped legacy mesh: Preserved surroundings ce80ccf1e02b16c4fbbc632c6c540180 / Assets/TeachingRevision/Meshes/Preserved-ce80ccf1e02b16c4fbbc632c6c540180.asset
+Clipped legacy mesh: Retained west-campus surroundings / Assets/CampusPlanRevision/Meshes/Retained-2.asset
+Clipped legacy mesh: Retained west-campus surroundings / Assets/CampusPlanRevision/Meshes/Retained-12.asset
+Clipped legacy mesh: Retained west-campus surroundings / Assets/CampusPlanRevision/Meshes/Retained-33.asset
+Clipped legacy mesh: Road clearance surroundings / Assets/CampusPlanRevision/Meshes/RoadClear-6.asset
+Clipped legacy mesh: Road clearance surroundings / Assets/CampusPlanRevision/Meshes/RoadClear-29.asset
+Clipped legacy mesh: Road clearance surroundings / Assets/CampusPlanRevision/Meshes/RoadClear-56.asset
+Clipped legacy mesh: Road clearance surroundings / Assets/CampusPlanRevision/Meshes/RoadClear-57.asset
+Clipped legacy mesh: Road clearance surroundings / Assets/CampusPlanRevision/Meshes/RoadClear-70.asset
+Clipped legacy mesh: Road clearance surroundings / Assets/CampusPlanRevision/Meshes/RoadClear-214.asset
+Clipped legacy mesh: Road clearance surroundings / Assets/CampusPlanRevision/Meshes/RoadClear-240.asset
+Clipped legacy mesh: Road clearance surroundings / Assets/CampusPlanRevision/Meshes/RoadClear-245.asset
+Clipped legacy mesh: Road clearance surroundings / Assets/CampusPlanRevision/Meshes/RoadClear-249.asset
+Clipped legacy mesh: Road clearance surroundings / Assets/CampusPlanRevision/Meshes/RoadClear-261.asset
+Clipped legacy mesh: Road clearance surroundings / Assets/CampusPlanRevision/Meshes/RoadClear-270.asset
+Clipped legacy mesh: Road clearance surroundings / Assets/CampusPlanRevision/Meshes/RoadClear-274.asset
+Clipped legacy mesh: Road clearance surroundings / Assets/CampusPlanRevision/Meshes/RoadClear-275.asset
+Clipped legacy mesh: Road clearance surroundings / Assets/CampusPlanRevision/Meshes/RoadClear-276.asset
+Clipped legacy mesh: Ground overlap repair / Assets/CampusPlanRevision/Meshes/AlignedSurface-65.asset
+Clipped legacy mesh: Ground overlap repair / Assets/CampusPlanRevision/Meshes/AlignedSurface-66.asset
+Clipped legacy mesh: Ground overlap repair / Assets/CampusPlanRevision/Meshes/AlignedSurface-67.asset
+Clipped legacy mesh: Ground overlap repair / Assets/CampusPlanRevision/Meshes/AlignedSurface-68.asset
+Clipped legacy mesh: Ground overlap repair / Assets/CampusPlanRevision/Meshes/AlignedSurface-69.asset
+Clipped legacy mesh: Paving-chunk-2--3 / Assets/CampusPlanRevision/Meshes/Paving-chunk-2--3.asset
+Clipped legacy mesh: Paving-chunk-2--2 / Assets/CampusPlanRevision/Meshes/Paving-chunk-2--2.asset
+Clipped legacy mesh: Paving-chunk-2--1 / Assets/CampusPlanRevision/Meshes/Paving-chunk-2--1.asset
+Clipped legacy mesh: Asphalt-chunk-2--3 / Assets/CampusPlanRevision/Meshes/Asphalt-chunk-2--3.asset
+Clipped legacy mesh: Asphalt-chunk-2--2 / Assets/CampusPlanRevision/Meshes/Asphalt-chunk-2--2.asset
+Clipped legacy mesh: Asphalt-chunk-2--1 / Assets/CampusPlanRevision/Meshes/Asphalt-chunk-2--1.asset
+Clipped legacy mesh: Stone-chunk-2--3 / Assets/CampusPlanRevision/Meshes/Stone-chunk-2--3.asset
+Clipped legacy mesh: Stone-chunk-2--2 / Assets/CampusPlanRevision/Meshes/Stone-chunk-2--2.asset
+Clipped legacy mesh: Stone-chunk-2--1 / Assets/CampusPlanRevision/Meshes/Stone-chunk-2--1.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-62172a106cc36cf4a95790e7e084703a.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-ad5953a21bc640b42989935ed9cf2447.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-7f268a7f135bf63479215901d7bad448.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-eaaa36ad0b75f0e4bb1a2b5aec48b23b.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-55309f3b4e1ec354ca9df76fd7af34b9.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-8844d5b064bfafb4a9b15d132b1b1c0f.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-118db8849b4170f498c7a5d93b800360.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-f044cc7150cb99d439641b957824afe2.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-ac905882accbdfb468063a5d03b8d7d3.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-cd321f3efbcf06243bb9af048b932c49.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-800de13017c0f4e4189cc8e61b45c4b9.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-511a46c679da46140b9e6a72a9d36560.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-9f612ea5f7af5f741bb1ae64e8c6d9eb.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-c7a607fa2c1ae3845be818f8958947ba.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-88236c4f41637f340a3222220c41d815.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-0e45c75ed0263f64e987926d7569dab6.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-ff649a40ee8beba48a16aedbac2f3d26.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-025d41a2d1f38f84fa7979944f0a0d04.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-b1446ba1ab4f54a43badd8660e042f78.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-4a081d1f97effbb43819033ab616ade7.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-3c3c876d640cd9748bdc18910bb8a93d.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-ea9774427e461a647bf51533014dfcdc.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-e47d661f8d0f5dc42805e1536fa2eba3.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-bbd8e14ed64ee454982a0c599e2b18d3.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-adeed63db7b20ce41bd4a42c2d51d8ed.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-4ebca1f69efbab342bece7feec3d988c.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-48c201115d6c0714a9076f18e8a1b82f.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-9b6a6f00e05c2f64eaf99dc97d8f6f9f.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-3bb562fcf1e30364e9629f04a2b1ed6c.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-9cb6f5708629d004e9d035dd1373bab6.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-b8394c0b3ab7652499be34deb710386a.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-03834556b9525a04ba7ecf421635c0c9.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-def8a7a66f5f9da4699cc7579cb43e34.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-d96d3fd519df2f54fb88cedfbce637d7.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-c446226391272e14c9ece0cca1906ae5.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-f5e43e39aa43b944d954e213f76d0b47.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-4af6e9370ae47814f8389737ee4a5f40.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-1376c4e1e820ca24f970d6ed20a99f7d.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-d26a581fa4f719240a8f48dc8ed710db.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-2d91e06170ee3654096c34cddc775344.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-70f981cb2a8d95a42a2a393c4e5de103.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-caeabacf70242a84084e159704a95b26.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-8566f008577da364088dd096a7fa4051.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-de0d21b52087b7c46965a34c72077f13.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-cc9992f7285fe5f4fa206db30bb2f822.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-45c22746ba666cd49a6bd525c57b790e.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-cf8b8e49e16cf724e8aa1652375bc6b2.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-13b859414e2617d468f5a834fc159953.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-4aa697951521d114e9f98abf5b246630.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-a212115c8b1afac4aabe439b5a0dfd89.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-5135a460a77aa6940b6f9f17f6656e91.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-67e895eb9de7ca14899ab9f2ce3f5bf2.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-03e25a12e0040764fab7cf0985b6a52c.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-b338d755a93ff0d4282f574f689d4bd2.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-696c47f6c26c984489dec3ce2e2e6a06.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-abdff3f7c26504542bbf81e5298b6f51.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-d38fe44d5fd08d640b79c2df4378b87e.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-fdfd789451af49240b433c53f8560d92.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-5c4e378c18304464581f4011b36728c7.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-ad836277b9c569840991dfe2f0c6a1fd.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-0a550fa4db2cb494ba50e4edeac6352f.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-37d0af2ba298e784da3cca44f18059c2.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-da9d582b97bc3e0458a02be6ea8d1ff6.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-bcfd10f3f7da65c468383c602dc6ffca.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-4b79c676be8d34044aa9ba5513961adf.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-151458b759663ce488567191e1947557.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-312f2cec0364b27469d408f705981584.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-5abd34e699d7ec24790e72f628601d35.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-cc700079686555446b9877f302059bf4.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-6b779e1593c3f1547a1708cd3d91ca85.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-925410821707fee499912277210a82c6.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-cb2913cbc6ef9644da5c77b141a060a4.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-2da8e1a6db721904884e5161d36e99af.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-4e8992d0b6197834fb298c52f184e8a7.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-c5290b90c71689046b963635e2f25378.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-bc2b332aa62926f4ba7e861a59af6722.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-4874dda41c6084447bedf8f4f6c041fc.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-b31a6e9daa1409247b34ac6ee55e87c7.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-1af464b2873990f4db3dc6aa3ad00410.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-ceacfd0439b1a9a4eb77fdced1ec506c.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-3e4365916a90e8f4dbb67a044d943ac3.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-9ebf3a78bf715e84e90dfb48ff8d3dc4.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-276e1837e03f0d848966e71fcd263a63.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-44e937c846aa7e84b9ab5c9cb39a942f.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-3245f9ed80e93bd468d12b10964ab351.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-a793687bb014fcf44b49a1a7c0f6b59f.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-24c1d3278273eca4e9628bd3ba74de67.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-786a4b328d89a474d9fb37ee6197b56e.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-68bc2bc6824cfa84a820ba5c99d12be3.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-8cc461e1870d9d24c82bdb8c9bf6325d.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-6075bc99ef859ac44a46cb70fbe8d5cb.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-3f146dd9278730441b53dc49b01bac52.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-da3c71ba8578b8f48a999d18256624c1.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-f448bce9c4086fb48abb42da72872958.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-60f2d291a6907ea479f2bf558f96aa9a.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-ae0c7d2952afb64458520f5d47a85ad3.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-ba854cbf03b355a4b8dd230032b06480.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-7e2f66fb61059194587bc90d2c6c07ea.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-c382a43c58acc48458c20922a950c4de.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-1f1748e72162cad44acc34396ea86820.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-22ba22d884e901f46b234ee9ada7a222.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-64b2a4ca92a9cb347a68711ccdbdd3ed.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-dc936dfcb17f28a4a9bdea3cc2b8c4cc.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-ad054eb1d15a59e499617b467d456e1d.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-9129b0f6b83a8cf49a1faf5fb8567a3e.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-f996bf3c0770b004caaa93919f5c8221.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-cbf3ca6b7431e484a88603248c4c7ef9.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-d5d2c0a02a104e54dac7a55e8138536b.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-6ab8c8e9cd29e5f4f8266e4b83234894.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-d7d1384e8ff732343af2f722d7d67072.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-2b18b22937449b74ebfb770a286c272c.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-03c87cae1421d6943976b3dab37f91cf.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-2f60f0baf21991b41a58b6d50a5f642b.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-8a7abe84a21a04c4289fdb262bb81303.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-69c69a8d088ad9240aaf30247a37c603.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-8a122dc7754a1214d8f338b93043db74.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-f2e5c2fa1fa272d4087d6750e4c542bd.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-9ff5be2037f9079408f50cb481f1c3b8.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-a56dfab781c49ad47bba9b68ffd34e78.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-b1d9d61aa5da5c84ca56f1bc18b2fbe0.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-bae9e8ddcadef724784425ef814845a4.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-26a12746bcf1341438788ec6b701f8ea.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-ea979aa6c5bbd784ca2e206a2f92e88c.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-43b219ee0b169aa45a17ce3ffeaf3bd2.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-f188a4eb54636c94591fe1b1029915af.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-b32ab91ef2088d0428caf6b057a878bc.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-1bd50d27a3744214790fe48985ebb1d7.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-b7fc66f6d2828aa4a89d29e764bf2596.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-6c529e982e1dd54418fe24d832c0c8e0.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-c36e37b42c4b1ac448774cfc3ca6bac2.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-06ca9f7f7cc82c04a8dbbfe5b0ae0404.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-3323ad399fe666a419b432b0a4af64a2.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-521fdbe341ef9c841ae094969d8ec251.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-f1d495994db56f14ab46f4c5f12a7122.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-c3cb4afa3bb317646ab105495ed62b35.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-6ede5d56a8c263647b1a5bd4f8c500c2.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-7a1c15c17d138c74ea01fad541ea462e.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-ab45086dc4fa0164abfd0993c9e0bdfb.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-6271b944ac640ad46a4aac6398c7a217.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-6c5dd8eb1364df349895fa64fd8eaf35.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-a2c56f4ec463f134d8c0fd60a6e6eaa0.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-c89e08127f38b1c44b473df1f6f021a5.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-ceb6ed063949cb943803192918eb7f0b.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-90baadf3ac561c542a93a3a3800c2795.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-d47b7d00ee0eb9e4c88ead2dc7a86674.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-108cdd224439b634888c0c4cd925a083.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-379b5aed70836c94789954de25819565.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-3482659a7543bac42b627d902dabdf7a.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-74089126a7dbcac4e98f0589841e49b5.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-dc0a17e873f41c646872eaba13623931.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-b551b01fd9fa8f240b557343d356d9cf.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-facbbd37a7e66a4408c3a49aaf4c0325.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-f21d5e907c27f0f459b0fbe42b9f160f.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-10116e1b610d2284781cc40dd66af8c4.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-ad31d1106d0c8e140a58594853905f43.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-106c70d01e68c8843b63bc6e0e9377a9.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-4b96b877869b9c74790a80c176556eb6.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-a983c4405162d1843ae10f3961bab811.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-fc24657e399b6ed42a8e72d221dce676.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-92a886bff41f6ff46876c615ec7a74de.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-0f4bf0d86d5f28943a9add341bd8a6c6.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-c7e52b51434d91c46b6a2ac2508c1968.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-be463a0d97dfa004081ddd89ac99218a.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-0ef04b4c2271d4244985f68cf75a5310.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-0de7b3723438f4b48b5f41b2e0fece79.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-38408efc28df945448ec9582efdcc1d9.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-45113a333de9a8343937eced058ee102.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-1d84e049eb28f384a94d5da5a1b3b1c0.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-58390c1db8654394d80ca88f5da50a5a.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-0c10efbd572c4e64cbc2fbd2641a17ae.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-3df438c630d3dab4e9d79e2dd53c9272.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-9dec769a420cfed4b9f139f8d34c224f.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-f16d4233016fbec43aca2b4eaa39ca5f.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-63848214529b4dc48912e02d62622181.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-abb8f23b65999cd4fb9399874be96294.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-a2a96810b83346247a11b84ca360fd2e.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-2cfdd472c1e61c141a292ecfe2b2239f.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-581e920feee32d049bfbfbcd67142e3f.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-f8cebba8dbf137f44b55d619be9db44e.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-7a5a24457923a654e8fff5b940d2c724.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-3d8e8bca19e0afa478b9497b0cfcf1d2.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-f4f1ea737777554498316e301a3aabdc.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-346e82ec955b8ec47ab538c81f9cf77e.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-1054b14e3b2c2bc49baffbfffb7ce5a7.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-05d9a81ed5b06e749b328b5274409d92.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-475ef2f07fbf8db4882a40f906a25c58.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-b5671dbc3810c664aad8a0d92b658944.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-0c1dc274fdbd9224198d8d29d2eb5af5.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-738f321192af0a24abd634d23c478113.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-8a0366fe6c1eea54f8ff623a44f2aad8.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-b9ba83dae8c912848b1de10dd8cdcee4.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-0d5515d2f7959c84394a1f2ee27a7c78.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-e291535391084554281abca1285dac2f.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-6ef2bd06f84aded47bdb529efeb172e3.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-dce8ddbd044a320468d9b9b6de107616.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-5692693c7bb4f24429152ace756f9483.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-0966e55e02796174baf3e2b20b1a275c.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-58af0c0cfe263d44c838cc5ed803f2f7.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-1154bdbf1412a954381dd937c5388cec.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-70448ff7a153412469c5244f2c6b485b.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-b221d682951bb4f469febcb7ace10073.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-defc401009096e8468b5c93070e48871.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-9cf60d282e5c7bd49afad94110f98ef2.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-716686da0a77697418c72dfbeb37b6a9.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-a7231dd6f71fa2d458bbb5e1d91ccaf8.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-86c396e8c144be648be171e24a662f73.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-4ee8b4e8db964144aa4aca5ed310082e.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-c8eda95f24361b74484c91c5857faecb.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-a252ac6a03a29144888909c0db68aced.asset
+Clipped legacy mesh: Information preserved surroundings / Assets/InformationRevision/Meshes/Retained-4ce211007d1570e40beb587b8582e036.asset
+Removed/clipped legacy faces: 38660. Information cleanup only targets residual old meshes; the new facade, entry, trees with LOD, roads and street furniture remain.
+CORRECTION: athletics feature 39327169 and its original renderers restored. Basketball revision targets feature 39327816 beside teaching building C only: two 15 x 28 metre courts fitted to its narrow footprint, 4 baskets with woven 3D nets and balls. Three gateways connect to the existing teaching-area east main road at z=-137, -91 and -40. Interiors, teaching buildings and the athletics grounds are preserved.
+Map is an in-game plan in existing map metres, north = -Z / east = +map X. All building features have live selectable labels and index entries, with bridge and new access roads shown. Source drawings constrain relative placement; not a surveyed map. Basketballs are scene props; no sports rules or shooting controls added.

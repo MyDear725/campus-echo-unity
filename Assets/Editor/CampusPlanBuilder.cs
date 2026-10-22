@@ -34,6 +34,7 @@ public static partial class CampusPlanBuilder
     [MenuItem("Campus/Apply campus plan and covered bridge")]
     public static void Generate(){
         EditorSceneManager.OpenScene("Assets/Scenes/CampusLiving.unity");game=UnityEngine.Object.FindFirstObjectByType<CampusGame>();root=GameObject.Find("开发区校区 · 校园环境").transform;
+        ComprehensiveBuildingBuilder.RestoreSources(root);
         foreach(string dir in new[]{Folder,Folder+"/Meshes",Folder+"/Materials",Folder+"/Entrances"})Directory.CreateDirectory(dir);
         if(!File.Exists(Folder+"/SourceMap.json"))File.WriteAllText(Folder+"/SourceMap.json",game.mapData.text);
         data=JsonUtility.FromJson<CampusData>(File.ReadAllText(Folder+"/SourceMap.json"));
@@ -50,6 +51,7 @@ public static partial class CampusPlanBuilder
         MoveCafeteria();ReplaceOldLife();UpdateMap();BuildDorms();BuildLandscape();BuildPlanRoads();BuildBridge();BuildOutdoorCollision();BuildRoadScenery();ResolveGroundSurfaces();
         SavePlanGeometry();
         UpdateEntrances();if(!game.GetComponent<CampusOutdoorTraversal>())game.gameObject.AddComponent<CampusOutdoorTraversal>();if(!game.GetComponent<CampusPlanQA>())game.gameObject.AddComponent<CampusPlanQA>();
+        ComprehensiveBuildingBuilder.Apply(root,data,game);
         File.WriteAllText(Folder+"/CampusMap.json",JsonUtility.ToJson(data,true));AssetDatabase.ImportAsset(Folder+"/CampusMap.json");game.mapData=AssetDatabase.LoadAssetAtPath<TextAsset>(Folder+"/CampusMap.json");
         ValidateResolvedPlanEntrances();
         EditorUtility.SetDirty(game);EditorSceneManager.MarkSceneDirty(game.gameObject.scene);EditorSceneManager.SaveScene(game.gameObject.scene);AssetDatabase.SaveAssets();
