@@ -1,0 +1,23 @@
+PASS: 22 passed, 0 failed
+PASS: Enter actual dormitory
+PASS: Player at real dormitory action point
+PASS: Screenshot date explains BOTH first-week and morning limits
+PASS: Backend rejects unavailable day
+PASS: Rejected action preserves all progress, balance and time
+PASS: Disabled confirmation cannot run or close preview
+PASS: Real mouse return leaves unavailable confirmation
+PASS: Normal morning at 07:59 is eligible
+PASS: Preview rechecks money
+PASS: Changed eligibility disables confirmation without spending
+PASS: Cancel keeps progress and time
+PASS: Real mouse executes and closes valid confirmation
+PASS: Plan advances clock to 21:00
+PASS: Plan settles exactly 20 yuan and 35 energy
+PASS: Plan records today's classes
+PASS: Successful result remains visible in main content
+PASS: Repeat execution rejected without duplicate charge
+PASS: 08:00 boundary is unavailable
+PASS: Exam day unavailable
+PASS: Due assignment blocks ordinary-day plan
+PASS: Semester end unavailable
+PASS: Failed transaction keeps confirmation and visible reason

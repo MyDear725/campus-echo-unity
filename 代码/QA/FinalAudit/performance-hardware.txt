@@ -1,0 +1,5 @@
+NVIDIA GeForce RTX 4060 Laptop GPU
+AMD Ryzen 7 7840H with Radeon 780M Graphics
+1440x900
+Main recorder valid: True
+Render recorder valid: False

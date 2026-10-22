@@ -1,0 +1,31 @@
+Unity 6000.3.26f1 / Windows / Direct3D 11
+Missing scripts, meshes, materials and exactly duplicated enabled mesh groups: 0
+Individual LOD tree and roadside lamp clearance candidates remaining: 0
+SCENE Assets/Scenes/CampusLiving.unity | objects=9571
+COLLIDERS 2023; negative scale=0
+SCENE Assets/Interiors/Scenes/library.unity | objects=14752
+COLLIDERS 1469; negative scale=0
+SCENE Assets/Interiors/Scenes/gymnasium.unity | objects=1973
+COLLIDERS 445; negative scale=0
+SCENE Assets/Interiors/Scenes/cafeteria.unity | objects=7542
+COLLIDERS 400; negative scale=0
+SCENE Assets/Interiors/Scenes/teaching-a.unity | objects=2680
+COLLIDERS 2412; negative scale=0
+SCENE Assets/Interiors/Scenes/teaching-b.unity | objects=2126
+COLLIDERS 1818; negative scale=0
+SCENE Assets/Interiors/Scenes/teaching-c.unity | objects=2732
+COLLIDERS 2413; negative scale=0
+SCENE Assets/Interiors/Scenes/dormitory-1.unity | objects=13
+COLLIDERS 6; negative scale=0
+SCENE Assets/Interiors/Scenes/dormitory-2.unity | objects=13
+COLLIDERS 6; negative scale=0
+SCENE Assets/Interiors/Scenes/dormitory-west.unity | objects=13
+COLLIDERS 6; negative scale=0
+SCENE Assets/Interiors/Scenes/dormitory-4.unity | objects=13
+COLLIDERS 6; negative scale=0
+SCENE Assets/Interiors/Scenes/dormitory-5.unity | objects=13
+COLLIDERS 6; negative scale=0
+SCENE Assets/Interiors/Scenes/dormitory-6.unity | objects=13
+COLLIDERS 6; negative scale=0
+SCENE Assets/CampusPlanRevision/Dormitory7.unity | objects=121
+COLLIDERS 95; negative scale=0

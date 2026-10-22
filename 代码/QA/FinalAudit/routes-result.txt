@@ -1,0 +1,67 @@
+PASS: No reflected active outdoor BoxColliders
+PASS: All 48 campus road ribbons form one connected network: 
+PASS: Real capsule walked 生活区西侧坡道主路
+PASS: Real capsule walked 生活区北环路
+PASS: Real capsule walked 生活区东环路
+PASS: Real capsule walked 公寓花园中轴
+PASS: Real capsule walked 北庭院横轴
+PASS: Real capsule walked 一二舍入户步道
+PASS: Real capsule walked 四五舍南侧步道
+PASS: Real capsule walked 二舍入口
+PASS: Real capsule walked 一舍入口
+PASS: Real capsule walked 四舍入口
+PASS: Real capsule walked 五舍入口
+PASS: Real capsule walked 七舍北门LG引道
+PASS: Real capsule walked 七舍南门1F入口
+PASS: Real capsule walked 食堂南广场
+PASS: Real capsule walked 食堂西正门广场
+PASS: Real capsule walked 六舍入口
+PASS: Real capsule walked 食堂西侧步道
+PASS: Real capsule walked 学苑桥
+PASS: Real capsule walked 教学区东侧主路
+PASS: Real capsule walked 教学楼外围环路
+PASS: Real capsule walked 教学区西北主路
+PASS: Real capsule walked 运动场西侧园路
+PASS: Real capsule walked 体育馆至教学区主路
+PASS: Real capsule walked 西侧校内环路
+PASS: Real capsule walked 锦屏山西侧主路
+PASS: Real capsule walked 田径场与体育馆连接路
+PASS: Real capsule walked 综合楼东侧路
+PASS: Real capsule walked 综合楼门前步道
+PASS: Real capsule walked 图书馆与信息楼连接主路
+PASS: Real capsule walked 图书馆北侧路
+PASS: Real capsule walked 图书馆南侧路
+PASS: Real capsule walked 书韵广场入口
+PASS: Real capsule walked 天桥西侧接驳步道
+PASS: Real capsule walked 两湖直行步道
+PASS: Real capsule walked 教学楼方向步道
+PASS: Real capsule walked 思源湖环湖步道
+PASS: Real capsule walked 涌泉湖环湖步道
+PASS: Real capsule walked 湖畔至书韵广场
+PASS: Real capsule walked 图书馆正门方向步道
+PASS: Real capsule walked 教学内庭南入口
+PASS: Real capsule walked 入口林荫步行带
+PASS: Real capsule walked 体育馆运动带
+PASS: Real capsule walked 教学楼 A入户步道
+PASS: Real capsule walked B 楼弧形入口步道
+PASS: Real capsule walked C 楼入口步道
+PASS: Real capsule walked 教学区篮球场南入口连接路
+PASS: Real capsule walked 教学区篮球场中入口连接路
+PASS: Real capsule walked 教学区篮球场北入口连接路
+PASS: No blocked campus road: 
+PASS: Entrance map clearance library
+PASS: Entrance map clearance gymnasium
+PASS: Entrance map clearance cafeteria
+PASS: Entrance map clearance teaching-a
+PASS: Entrance map clearance teaching-b
+PASS: Entrance map clearance teaching-c
+PASS: Entrance map clearance dormitory-1
+PASS: Entrance map clearance dormitory-2
+PASS: Entrance map clearance dormitory-west
+PASS: Entrance map clearance dormitory-4
+PASS: Entrance map clearance dormitory-5
+PASS: Entrance map clearance dormitory-6
+PASS: Entrance map clearance library-rear
+PASS: Entrance map clearance dormitory-7-south
+PASS: Entrance map clearance dormitory-7-north
+Physical movement steps=54666. Public vehicle streets excluded; bridge is included as an independent elevated walk.

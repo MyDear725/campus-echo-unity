@@ -1,0 +1,52 @@
+﻿[
+    {
+        "Check":  "teachingABQA",
+        "ExitCode":  0,
+        "Result":  "PASS: A/B five-floor physical ascent/descent; 192 stair treads; every lecture tier, room doorway, study-floor aisle and washroom approach walked; 10 rendered views; E entry/exit and exterior rendering restored. Movement steps: 28562"
+    },
+    {
+        "Check":  "teachingCQA",
+        "ExitCode":  0,
+        "Result":  "PASS: five floors and 96 solid treads; 1F to 5F and back; 10 m/s stair sprint at 60 ms frame delta; ten washroom envelopes checked for floor/ceiling/front-wall/lintel gaps; both washroom vanity and cubicle aisles walked; classroom/lab passages; balcony collision; entry/exit; exterior camera/renderer settings restored; ten rendered views. Movement steps: 5081"
+    },
+    {
+        "Check":  "gymInteriorQA",
+        "ExitCode":  0,
+        "Result":  "PASS: E entry/exit; seven room routes on three storeys; all 96 solid stair treads; continuous 1F-3F ascent/descent; stair sprint at 10m/s with 60ms frame delta; lobby floor joints; materials; nine rendered views; exterior settings restored. Movement steps: 7647"
+    },
+    {
+        "Check":  "entranceQA",
+        "ExitCode":  0,
+        "Result":  "PASS: 15 doorway prompts and E entry/exit round trips; library front/rear share one scene and return to their own doors; duplicate-input guards; paused input; original return points; campus visibility; one camera/listener; floor/wall collisions; fall recovery; outdoor shortcut lockout; missing scene and invalid spawn rollback; retry after failure; lifecycle hooks."
+    },
+    {
+        "Check":  "storyStyleQA",
+        "ExitCode":  0,
+        "Result":  "PASS: guidance, dialogue, two choices, reply, closing and handbook screenshots; 1600x1000 and 1280x720; close/reopen; cursor ownership; exactly one welcome stage advanced."
+    },
+    {
+        "Check":  "vroidPresentationQA",
+        "ExitCode":  0,
+        "Result":  "PASS: both VRoid selections, complete textured meshes, supported URP materials, valid humanoid locomotion, retained facial expressions and blink drivers, unchanged gameplay roots; guide replacement; four rendered views."
+    },
+    {
+        "Check":  "finalEnvironmentQA",
+        "ExitCode":  0,
+        "Result":  "PASS: No reflected active outdoor BoxColliders"
+    },
+    {
+        "Check":  "campusPlanQA",
+        "ExitCode":  0,
+        "Result":  "PASS: bridge arrival avenue and all three destination branches including library main-door interaction; 24 road routes and uninterrupted eight-node landscape tour; north-low south-high grade; straight covered bridge flights both directions, aligned cafeteria front; dorm north LG to south 1F and reverse, correct exterior exits."
+    },
+    {
+        "Check":  "interiorRefinementQA",
+        "ExitCode":  0,
+        "Result":  "PASS: cafeteria 1F to 3F and library 1F to 4F physically walked; material support; ordering and reservation anchors; bedroom entry/return; physical LG to 1F stair walk; exterior restoration; fifteen rendered views."
+    },
+    {
+        "Check":  "courtMapQA",
+        "ExitCode":  0,
+        "Result":  "PASS: athletics feature restored, no mistaken west-campus access roads; basketball courts beside teaching C only; 3 teaching-main-road entrances walked both directions; 2 courts, 4 baskets, nets and balls rendered; map labels, selection, 2 resolutions and input ownership."
+    }
+]

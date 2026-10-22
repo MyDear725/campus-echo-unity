@@ -1,0 +1,17 @@
+PASS: 16 scenes, 48490 objects, 777 visible text components; scene names, labels and outdoor map are anonymous.
+PASS scene: Assets/CampusPlanRevision/Dormitory7.unity
+PASS scene: Assets/Interiors/Scenes/cafeteria.unity
+PASS scene: Assets/Interiors/Scenes/dormitory-1.unity
+PASS scene: Assets/Interiors/Scenes/dormitory-2.unity
+PASS scene: Assets/Interiors/Scenes/dormitory-4.unity
+PASS scene: Assets/Interiors/Scenes/dormitory-5.unity
+PASS scene: Assets/Interiors/Scenes/dormitory-6.unity
+PASS scene: Assets/Interiors/Scenes/dormitory-west.unity
+PASS scene: Assets/Interiors/Scenes/gymnasium.unity
+PASS scene: Assets/Interiors/Scenes/library.unity
+PASS scene: Assets/Interiors/Scenes/teaching-a.unity
+PASS scene: Assets/Interiors/Scenes/teaching-b.unity
+PASS scene: Assets/Interiors/Scenes/teaching-c.unity
+PASS scene: Assets/Scenes/Campus.unity
+PASS scene: Assets/Scenes/CampusLiving.unity
+PASS scene: Assets/Scenes/CampusPixel.unity
