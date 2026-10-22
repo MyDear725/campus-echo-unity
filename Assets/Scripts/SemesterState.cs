@@ -31,6 +31,7 @@ using UnityEngine;
     public List<SemesterAssignment> assignments = new List<SemesterAssignment>();
     public List<string> flags = new List<string>(), attendance = new List<string>(), remindersSeen = new List<string>();
     public List<SemesterJournalEntry> journal = new List<SemesterJournalEntry>();
+    public List<SemesterDailyRecord> dailyActivities = new List<SemesterDailyRecord>();
     public static SemesterState Fresh()
     {
         return new SemesterState { courses = new List<SemesterCourse> {
@@ -56,6 +57,7 @@ public sealed class SemesterLesson
 [Serializable] public sealed class SemesterStoryBeat
 {
     public string id, chapter, title, speaker, place, location, requires, effect, text, closing;
+    public string clubRequirement, recallFlag, recallText, alternateRecallText;
     public int day, minutes;
     public string[] choices, replies;
 }
@@ -84,7 +86,9 @@ public static class SemesterRules
     }
     public static bool Available(SemesterState state, SemesterStoryBeat beat, int day)
     {
-        return day >= beat.day && !state.Has(beat.id) && (string.IsNullOrEmpty(beat.requires) || beat.requires.Split(',').All(state.Has));
+        return day >= beat.day && !state.Has(beat.id)
+            && (string.IsNullOrEmpty(beat.clubRequirement) || state.club == beat.clubRequirement)
+            && (string.IsNullOrEmpty(beat.requires) || beat.requires.Split(',').All(state.Has));
     }
     public static int ExamScore(SemesterCourse c, int energy) => Mathf.Clamp(Mathf.RoundToInt(c.mastery * .85f + c.Coursework * .15f - (energy < 20 ? 8 : 0)), 0, 100);
     public static float StudyGain(SemesterCourse c, int minutes) => Mathf.Max(.5f, (100 - c.mastery) / 100f * minutes / 6f);

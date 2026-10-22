@@ -8,6 +8,7 @@ Shader "Campus/DaySky" {
  #pragma vertex vert
  #pragma fragment frag
  #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+ #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
  float4 _TopColor,_HorizonColor;
  float _CampusNightAmount;
  struct A{float4 p:POSITION;};struct V{float4 p:SV_POSITION;float3 d:TEXCOORD0;};
@@ -18,9 +19,13 @@ Shader "Campus/DaySky" {
  half4 frag(V i):SV_Target {
   float3 d=normalize(i.d);float h=saturate(d.y);float3 sky=lerp(_HorizonColor.rgb,_TopColor.rgb,pow(h,.45));
   float2 p=d.xz/(max(.04,d.y)+.23)*2.2+float2(5.1,1.2)+_Time.y*.0005;
-  float n=fbm(p);float clouds=smoothstep(.51,.69,n)*smoothstep(.02,.20,h);
-  float edge=fbm(p+float2(.08,.14));float3 white=lerp(float3(.71,.77,.8),float3(.99,.98,.95),saturate((n-edge)*6+.68));
-  sky=lerp(sky,white,clouds*.92);float3 night=lerp(float3(.025,.04,.075),float3(.004,.009,.025),pow(h,.45));sky=lerp(sky,night,saturate(_CampusNightAmount));return half4(sky,1);
+  float n=fbm(p+noise(p*.7)*.45);float clouds=smoothstep(.53,.70,n)*smoothstep(.02,.20,h);
+  float edge=fbm(p+float2(.06,.12));float3 white=lerp(float3(.66,.75,.82),float3(1,.98,.92),saturate((n-edge)*5+.58));
+  sky=lerp(sky,white,clouds*.86);
+  float sun=saturate(dot(d,GetMainLight().direction));
+  sky+=float3(1,.79,.48)*pow(sun,48)*.12;
+  sky+=float3(1,.92,.72)*smoothstep(.99990,.99997,sun)*.8;
+  float3 night=lerp(float3(.025,.04,.075),float3(.004,.009,.025),pow(h,.45));sky=lerp(sky,night,saturate(_CampusNightAmount));return half4(sky,1);
  }
  ENDHLSL
  }

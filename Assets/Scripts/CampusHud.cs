@@ -12,7 +12,9 @@ public class CampusHud : MonoBehaviour, ICampusOverlay
 {
     public static CampusHud Instance;
 
-    public bool OverlayVisible => true;
+    // The handbook already shows the date and balance. Its close control must
+    // remain visible instead of sitting under the persistent top-right HUD.
+    public bool OverlayVisible => !(CampusSemester.Instance && CampusSemester.Instance.UI && CampusSemester.Instance.UI.IsOpen);
 
     // ---------------------------------------------------------------- style
     GUIStyle balanceStyle, smallStyle, bigStyle, bodyStyle, promptStyle, promptBig;

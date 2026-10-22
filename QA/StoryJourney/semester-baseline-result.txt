@@ -1,0 +1,364 @@
+PASS: 363 checks passed in the original Unity project with isolated preferences.
+PASS: Original CampusLiving gameplay systems are present
+PASS: Fresh fixed calendar starts at 2026-09-01 08:00
+PASS: Exploration pace is five game seconds per real second
+PASS: Onboarding cannot bypass classroom gating
+PASS: Full-semester story catalog loaded
+PASS: Every story has two complete choices and replies
+PASS: Story IDs are unique
+PASS: First independent morning has real A101 class
+PASS: Weekend permits free campus life
+PASS: Classes stop after the semester
+PASS: Repeated mastery has diminishing study returns
+PASS: Original E dispatcher enters dormitory-1
+PASS: Real interior loaded: dormitory-1
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: dorm
+PASS: Point has capsule clearance: dorm 
+PASS: Dormitory rest starts first independent day
+PASS: Rest advances to September 2 at 07:00
+PASS: Sleep restores energy
+PASS: Reading or owned UI pauses the common calendar
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters teaching-a
+PASS: Real interior loaded: teaching-a
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: a
+PASS: Point has capsule clearance: a 
+PASS: First classroom encounter records chosen conversation
+PASS: Cannot attend too early
+PASS: Waiting reaches classroom preparation time
+PASS: Contextual E opens actual classroom handbook
+PASS: Classroom can use an existing first-row chair
+PASS: Classroom uses actual seated pose and movement lock
+PASS: Classroom snapshots keep safe standing position
+PASS: Leaving classroom interaction restores safe standing state
+PASS: First real classroom session completes
+PASS: Same lesson cannot be attended twice
+PASS: Class issues one assignment and first-class milestone
+PASS: Unprepared homework cannot be submitted
+PASS: Teacher responds to actual completed class
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters library
+PASS: Real interior loaded: library
+PASS: Interior points appear automatically after real entry
+PASS: Original library seats are registered
+PASS: Use existing reservation service
+PASS: Use existing real seat and seated pose
+PASS: Library snapshots keep safe standing position
+PASS: Targeted library study advances mastery
+PASS: Study outcome changes specific course knowledge
+PASS: Prepared homework can be submitted
+PASS: Homework credit cannot be claimed twice
+PASS: Daily reset accepted valid complete snapshot
+PASS: Daily reset restores balance and inventory together
+PASS: Daily reset rolls back reward flags and energy
+PASS: Daily reset rolls back course knowledge
+PASS: Daily reset restores additive interior location
+PASS: Reset keeps a complete recoverable backup
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters dormitory-1
+PASS: Real interior loaded: dormitory-1
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: dorm
+PASS: Point has capsule clearance: dorm 
+PASS: Actual dormitory fourth-floor room is entered
+PASS: Daily reset supports logical floor and bedroom state
+PASS: Daily reset restores fourth floor and bedroom geometry
+PASS: Bedroom reset restores recorded player position
+PASS: Restore from bedroom to campus has no stale room state
+PASS: Bedroom transition cleans up the old additive interior
+PASS: Malformed snapshot is rejected before mutation
+PASS: Original E dispatcher enters cafeteria
+PASS: Real interior loaded: cafeteria
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: cafeteria
+PASS: Point has capsule clearance: cafeteria 
+PASS: Story completes at actual location: meal-friend
+PASS: Story/reward cannot repeat: meal-friend
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters library
+PASS: Real interior loaded: library
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: library
+PASS: Point has capsule clearance: library 
+PASS: Story completes at actual location: study-promise
+PASS: Story/reward cannot repeat: study-promise
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters teaching-a
+PASS: Real interior loaded: teaching-a
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: a
+PASS: Point has capsule clearance: a 
+PASS: Story completes at actual location: quiz
+PASS: Story/reward cannot repeat: quiz
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters library
+PASS: Real interior loaded: library
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: library
+PASS: Point has capsule clearance: library 
+PASS: Story completes at actual location: job
+PASS: Story/reward cannot repeat: job
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters teaching-c
+PASS: Real interior loaded: teaching-c
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: c
+PASS: Point has capsule clearance: c 
+PASS: Story completes at actual location: bug
+PASS: Story/reward cannot repeat: bug
+PASS: Return to campus for outdoor story
+PASS: Action point and player share location: track
+PASS: Point has capsule clearance: track 
+PASS: Outdoor point is on the actual walkable campus map: track
+PASS: Story completes at actual location: run
+PASS: Story/reward cannot repeat: run
+PASS: Original E dispatcher enters teaching-a
+PASS: Real interior loaded: teaching-a
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: a
+PASS: Point has capsule clearance: a 
+PASS: Story completes at actual location: daily-learning-memory
+PASS: Story/reward cannot repeat: daily-learning-memory
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters library
+PASS: Real interior loaded: library
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: library
+PASS: Point has capsule clearance: library 
+PASS: Story completes at actual location: daily-company-memory
+PASS: Story/reward cannot repeat: daily-company-memory
+PASS: Return to campus for outdoor story
+PASS: Action point and player share location: bridge
+PASS: Point has capsule clearance: bridge 
+PASS: Outdoor point is on the actual walkable campus map: bridge
+PASS: Story completes at actual location: club
+PASS: Story/reward cannot repeat: club
+PASS: Original E dispatcher enters teaching-b
+PASS: Real interior loaded: teaching-b
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: b
+PASS: Point has capsule clearance: b 
+PASS: Story completes at actual location: group-plan
+PASS: Story/reward cannot repeat: group-plan
+PASS: Return to campus for outdoor story
+PASS: Action point and player share location: lake
+PASS: Point has capsule clearance: lake 
+PASS: Outdoor point is on the actual walkable campus map: lake
+PASS: Story completes at actual location: daily-rest-memory
+PASS: Story/reward cannot repeat: daily-rest-memory
+PASS: Original E dispatcher enters teaching-c
+PASS: Real interior loaded: teaching-c
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: c
+PASS: Point has capsule clearance: c 
+PASS: Story completes at actual location: group-submit
+PASS: Story/reward cannot repeat: group-submit
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters teaching-c
+PASS: Real interior loaded: teaching-c
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: c
+PASS: Point has capsule clearance: c 
+PASS: Story completes at actual location: club-code-workshop
+PASS: Story/reward cannot repeat: club-code-workshop
+PASS: Return to campus for outdoor story
+PASS: Action point and player share location: lake
+PASS: Point has capsule clearance: lake 
+PASS: Outdoor point is on the actual walkable campus map: lake
+PASS: Story completes at actual location: club-photo-walk
+PASS: Story/reward cannot repeat: club-photo-walk
+PASS: Action point and player share location: lake
+PASS: Point has capsule clearance: lake 
+PASS: Outdoor point is on the actual walkable campus map: lake
+PASS: Story completes at actual location: photo
+PASS: Story/reward cannot repeat: photo
+PASS: Action point and player share location: bridge
+PASS: Point has capsule clearance: bridge 
+PASS: Outdoor point is on the actual walkable campus map: bridge
+PASS: Story completes at actual location: volunteer
+PASS: Story/reward cannot repeat: volunteer
+PASS: Original E dispatcher enters cafeteria
+PASS: Real interior loaded: cafeteria
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: cafeteria
+PASS: Point has capsule clearance: cafeteria 
+PASS: Story completes at actual location: group-friction
+PASS: Story/reward cannot repeat: group-friction
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters teaching-a
+PASS: Real interior loaded: teaching-a
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: a
+PASS: Point has capsule clearance: a 
+PASS: Story completes at actual location: feedback
+PASS: Story/reward cannot repeat: feedback
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters library
+PASS: Real interior loaded: library
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: library
+PASS: Point has capsule clearance: library 
+PASS: Story completes at actual location: tutoring
+PASS: Story/reward cannot repeat: tutoring
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters library
+PASS: Real interior loaded: library
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: library
+PASS: Point has capsule clearance: library 
+PASS: Story completes at actual location: followthrough
+PASS: Story/reward cannot repeat: followthrough
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters teaching-c
+PASS: Real interior loaded: teaching-c
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: c
+PASS: Point has capsule clearance: c 
+PASS: Story completes at actual location: club-code-demo
+PASS: Story/reward cannot repeat: club-code-demo
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters library
+PASS: Real interior loaded: library
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: library
+PASS: Point has capsule clearance: library 
+PASS: Story completes at actual location: club-photo-select
+PASS: Story/reward cannot repeat: club-photo-select
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters dormitory-1
+PASS: Real interior loaded: dormitory-1
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: dorm
+PASS: Point has capsule clearance: dorm 
+PASS: Story completes at actual location: exam-eve
+PASS: Story/reward cannot repeat: exam-eve
+PASS: Return to campus for outdoor story
+PASS: Action point and player share location: lake
+PASS: Point has capsule clearance: lake 
+PASS: Outdoor point is on the actual walkable campus map: lake
+PASS: Story completes at actual location: exhibit-prep
+PASS: Story/reward cannot repeat: exhibit-prep
+PASS: Action point and player share location: lake
+PASS: Point has capsule clearance: lake 
+PASS: Outdoor point is on the actual walkable campus map: lake
+PASS: Story completes at actual location: midterm-letter
+PASS: Story/reward cannot repeat: midterm-letter
+PASS: Action point and player share location: bridge
+PASS: Point has capsule clearance: bridge 
+PASS: Outdoor point is on the actual walkable campus map: bridge
+PASS: Story completes at actual location: exhibit
+PASS: Story/reward cannot repeat: exhibit
+PASS: Action point and player share location: bridge
+PASS: Point has capsule clearance: bridge 
+PASS: Outdoor point is on the actual walkable campus map: bridge
+PASS: Story completes at actual location: lead
+PASS: Story/reward cannot repeat: lead
+PASS: Original E dispatcher enters teaching-c
+PASS: Real interior loaded: teaching-c
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: c
+PASS: Point has capsule clearance: c 
+PASS: Story completes at actual location: project-topic
+PASS: Story/reward cannot repeat: project-topic
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters library
+PASS: Real interior loaded: library
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: library
+PASS: Point has capsule clearance: library 
+PASS: Story completes at actual location: project-draft
+PASS: Story/reward cannot repeat: project-draft
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters teaching-c
+PASS: Real interior loaded: teaching-c
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: c
+PASS: Point has capsule clearance: c 
+PASS: Story completes at actual location: project-feedback
+PASS: Story/reward cannot repeat: project-feedback
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters library
+PASS: Real interior loaded: library
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: library
+PASS: Point has capsule clearance: library 
+PASS: Story completes at actual location: project-revise
+PASS: Story/reward cannot repeat: project-revise
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters cafeteria
+PASS: Real interior loaded: cafeteria
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: cafeteria
+PASS: Point has capsule clearance: cafeteria 
+PASS: Story completes at actual location: winter-dinner
+PASS: Story/reward cannot repeat: winter-dinner
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters teaching-c
+PASS: Real interior loaded: teaching-c
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: c
+PASS: Point has capsule clearance: c 
+PASS: Story completes at actual location: project-present
+PASS: Story/reward cannot repeat: project-present
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters teaching-b
+PASS: Real interior loaded: teaching-b
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: b
+PASS: Point has capsule clearance: b 
+PASS: Story completes at actual location: award-apply
+PASS: Story/reward cannot repeat: award-apply
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters library
+PASS: Real interior loaded: library
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: library
+PASS: Point has capsule clearance: library 
+PASS: Story completes at actual location: partner-return
+PASS: Story/reward cannot repeat: partner-return
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters teaching-a
+PASS: Real interior loaded: teaching-a
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: a
+PASS: Point has capsule clearance: a 
+PASS: Midterm evaluates actual course progress
+PASS: Final evaluates actual course progress
+PASS: All courses yield final grades and earned credits
+PASS: Applied eligible semester award can be claimed
+PASS: Semester money cannot be collected twice
+PASS: Five-step project produces an actual inventory artifact
+PASS: Action point and player share location: bridge
+PASS: Point has capsule clearance: bridge 
+PASS: Outdoor point is on the actual walkable campus map: bridge
+PASS: Semester ending responds to completed finals
+PASS: Original E dispatcher enters dormitory-1
+PASS: Real interior loaded: dormitory-1
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: dorm
+PASS: Point has capsule clearance: dorm 
+PASS: Dormitory farewell follows the actual semester ending
+PASS: Clock crosses midnight at exact calendar boundary
+PASS: Midnight does not restore energy
+PASS: New week grants one allowance
+PASS: Natural midnight writes actual new-day checkpoint
+PASS: Future story cannot be started before its opening date
+PASS: Leave previous building using real travel
+PASS: Original E dispatcher enters dormitory-1
+PASS: Real interior loaded: dormitory-1
+PASS: Interior points appear automatically after real entry
+PASS: Action point and player share location: dorm
+PASS: Point has capsule clearance: dorm 
+PASS: Ordinary-day plan works from morning dormitory point
+PASS: Ordinary-day plan ends exactly at 21:00
+PASS: Ordinary-day plan cannot be repeated at night
+PASS: Important or first-week day cannot be silently skipped
+PASS: Full-semester reset is accepted
+PASS: Full reset returns exactly to September 1 at 08:00
+PASS: Full reset restores initial allowance and empty inventory
+PASS: Full reset restores welcome and every academic/story flag
+PASS: Resume position restoration preserves the initial character/pause screen
+PASS: Complete pre-reset backup can be restored
+PASS: Backup restores original ending and claimed reward together

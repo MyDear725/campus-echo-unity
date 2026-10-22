@@ -1,0 +1,64 @@
+PASS: 63 checks passed; actual scene actions, isolated save keys; actual GUI rendering and button callbacks at two window sizes; native mouse not tested
+PASS: Twelve daily templates and 39 story beats loaded
+PASS: Every daily activity has two complete, timed choices
+PASS: Every semester day offers exactly three distinct activity categories
+PASS: Date-based selection is deterministic
+PASS: All twelve activities appear across four consecutive dates
+PASS: Onboarding cannot be bypassed through daily activities
+PASS: Player reaches the real activity point: bridge
+PASS: Remote completion rejects without state or time changes
+PASS: Actual interior entry accepted: teaching-a
+PASS: Player reaches the real activity point: a
+PASS: Invalid choices reject safely
+PASS: Class conflict requires an explicit override
+PASS: Handbook opens through normal input ownership: daily
+PASS: Daily option button callback opens its confirmation
+PASS: GUI confirmation explains the overlapping course before committing
+PASS: Cancel button callback preserves daily history and time
+PASS: Daily confirmation can reopen after cancel
+PASS: Confirm button rechecks changed energy and keeps the rejected preview
+PASS: Confirm button callback completes exactly one daily activity
+PASS: Chosen activity settles exactly 15 minutes, two energy and one mastery
+PASS: Daily study does not charge money or fabricate classes and homework
+PASS: Repeat choice cannot farm rewards, time or energy
+PASS: An activity must finish inside its opening window
+PASS: Insufficient energy rejects without committing
+PASS: Recurring activity recalls the previous chosen reply
+PASS: Actual interior exit accepted
+PASS: Player reaches the real activity point: lake
+PASS: Restorative activity caps energy at 100
+PASS: Actual interior entry accepted: cafeteria
+PASS: Player reaches the real activity point: cafeteria
+PASS: Meal conversation completes at the real cafeteria point
+PASS: Actual interior exit accepted
+PASS: Player reaches the real activity point: bridge
+PASS: Next-day social activity rotates and has its own choice
+PASS: Actual interior entry accepted: library
+PASS: Player reaches the real activity point: library
+PASS: Three real social activities unlock a persistent story milestone
+PASS: Daily milestone story completes at the actual library
+PASS: Programming club unlocks its own story and locks the alternate route
+PASS: Photography club unlocks its own story and locks the alternate route
+PASS: Locked future dialogue does not invent an unseen earlier choice
+PASS: Later dialogue changes its recall according to the earlier choice
+PASS: Daily history, choices and story milestones survive save and reload
+PASS: Legacy fixture has no new daily-history field
+PASS: Older saves retain their progress and acquire an empty daily history
+PASS: Actual interior exit accepted
+PASS: Player reaches the real activity point: lake
+PASS: Second restorative day is recorded independently
+PASS: Third restorative day unlocks its story
+PASS: Complete daily reset accepted
+PASS: Daily reset rolls back completion, milestone and recovered energy together
+PASS: Actual interior entry accepted: dormitory-1
+PASS: Player reaches the real activity point: dorm
+PASS: Ordinary-day auto-plan never fabricates optional daily participation
+PASS: Sleep preserves yesterday's recap while preparing the next day
+PASS: New morning refreshes daily offers without erasing earlier history
+PASS: Full semester reset accepted
+PASS: Full reset removes new daily history and unlocks
+PASS: Complete pre-reset backup accepted
+PASS: Backup restores daily choices and related story progress together
+PASS: Handbook opens through normal input ownership: daily
+PASS: Handbook opens through normal input ownership: story
+PASS: Handbook opens through normal input ownership: daily

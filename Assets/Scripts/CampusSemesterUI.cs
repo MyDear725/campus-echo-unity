@@ -8,7 +8,7 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
     CampusSemester semester;
     public bool IsOpen { get; private set; }
     public bool OverlayVisible => IsOpen;
-    string page="today", selectedBeat, confirmTitle, confirmText;
+    string page="today", selectedBeat, selectedDaily, confirmTitle, confirmText;
     Func<bool> confirmAction;
     Func<string> confirmUnavailable;
     string actionFeedback;
@@ -27,7 +27,7 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.K))
         {
             CampusOverlayHub.ConsumeInput();
-            if (confirmAction != null) { confirmAction=null; semester.EndClassroom(); return; }
+            if (confirmAction != null) { CancelConfirmation(); return; }
             Close();
         }
     }
@@ -40,7 +40,7 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
             previousPaused=semester.Game.paused;
         }
         if (PhoneUI.Instance && PhoneUI.Instance.IsOpen) PhoneUI.Instance.Close();
-        CampusOverlayHub.ConsumeInput(); IsOpen=true; page=target; scroll=Vector2.zero; selectedBeat=null; actionFeedback=null;
+        CampusOverlayHub.ConsumeInput(); IsOpen=true; page=target; scroll=Vector2.zero; selectedBeat=null; selectedDaily=null; actionFeedback=null;
         semester.Game.SetUiCursor(true);
     }
     public void Close()
@@ -52,9 +52,11 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
     }
     public void OpenAt(CampusSemesterPoint point)
     {
-        if(point.location=="dorm"){Open("life");return;}
         var beat=semester.Catalog.beats.FirstOrDefault(b=>b.location==point.location&&SemesterRules.Available(semester.State,b,semester.Clock.DayIndex));
         if(beat!=null){Open("story");selectedBeat=beat.id;return;}
+        if(point.location=="dorm"){Open("life");return;}
+        var daily=semester.DailyOptions.FirstOrDefault(a=>a.location==point.location&&!semester.DailyCompleted(a.id));
+        if(daily!=null&&point.location!="a"&&point.location!="b"&&point.location!="c"){Open("daily");selectedDaily=daily.id;return;}
         Open(point.location=="a"||point.location=="b"||point.location=="c"?"today":"story");
     }
     public void RequestReset(bool whole)
@@ -79,6 +81,27 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
         actionFeedback=semester.LastMessage;
         if (succeeded) { confirmAction=null;confirmUnavailable=null; }
         scroll=Vector2.zero;
+    }
+    void CancelConfirmation()
+    {
+        confirmAction=null;confirmUnavailable=null;actionFeedback=null;scroll=Vector2.zero;semester.EndClassroom();
+    }
+    public bool PreviewDaily(string id,int choice)
+    {
+        string reason=semester.DailyUnavailableReason(id,choice,true);
+        if(!string.IsNullOrEmpty(reason))return semester.Tell(reason);
+        var activity=semester.DailyOptions.First(a=>a.id==id);var option=activity.choices[choice];
+        string result=DailyEffect(option),conflict=semester.Conflict(option.minutes);
+        Ask(activity.title,option.label+"\n预计结束 "+semester.Clock.Now.AddMinutes(option.minutes).ToString("HH:mm")+" · "+result+(string.IsNullOrEmpty(conflict)?"":"\n"+conflict+"继续会占用这段课程时间。"),
+            ()=>semester.CompleteDaily(id,choice,true),()=>semester.DailyUnavailableReason(id,choice,true));
+        return true;
+    }
+    string DailyEffect(SemesterDailyChoice option)
+    {
+        string result=option.energy<0?"恢复精力 "+(-option.energy):"消耗精力 "+option.energy;
+        if(!string.IsNullOrEmpty(option.course))result+=" · "+semester.State.Course(option.course).name+"掌握 +"+option.mastery.ToString("F0");
+        if(option.fitness>0)result+=" · 体能 +"+option.fitness;
+        return result;
     }
     void WithTime(string heading,int minutes,Func<bool> normal,Func<bool> overrideConflict,string except=null)
     {
@@ -124,10 +147,10 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
         GUI.Label(new Rect(panel.x+28,panel.y+88,960,25),semester.Clock.DateTimeText+"  ·  "+semester.Clock.WeekText,muted);
         if(GUI.Button(new Rect(panel.x+962,panel.y+24,110,42),"关闭  K",button))Close();
         Fill(new Rect(panel.x+24,panel.y+122,1052,1),CampusStoryStyle.Line);
-        string[] ids={"today","study","growth","story","life"};string[] labels={"今日日程","学习与作业","成绩与奖励","故事与回忆","生活与设置"};
+        string[] ids={"today","daily","study","growth","story","life"};string[] labels={"今日日程","今日小事","学习与作业","成绩与奖励","故事与回忆","生活与设置"};
         for(int i=0;i<ids.Length;i++){
-            var tab=new Rect(panel.x+24,panel.y+142+i*62,178,50);
-            if(GUI.Button(tab,labels[i],page==ids[i]?selectedButton:button)){page=ids[i];scroll=Vector2.zero;selectedBeat=null;confirmAction=null;actionFeedback=null;}
+            var tab=new Rect(panel.x+24,panel.y+142+i*54,178,46);
+            if(GUI.Button(tab,labels[i],page==ids[i]?selectedButton:button)){page=ids[i];scroll=Vector2.zero;selectedBeat=null;selectedDaily=null;confirmAction=null;actionFeedback=null;}
             if(page==ids[i])Fill(new Rect(tab.x,tab.y+12,3,26),CampusStoryStyle.Gold);
         }
         GUI.Label(new Rect(panel.x+28,panel.y+492,168,110),"精力 "+semester.State.energy+" / 100\n"+CampusWallet.BalanceText,body);
@@ -140,6 +163,7 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
         else switch(page)
         {
             case "today": Today();break;
+            case "daily": Daily();break;
             case "study": Study();break;
             case "growth": Growth();break;
             case "story": Stories();break;
@@ -157,7 +181,8 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
     bool Btn(string text,bool enabled=true)
     {
         bool old=GUI.enabled;GUI.enabled=enabled;
-        bool clicked=GUILayout.Button(text,button,GUILayout.Height(text.Contains("\n")?76:48));GUI.enabled=old;return clicked;
+        bool clicked=GUILayout.Button(text,button,GUILayout.Height(text.Contains("\n")?76:48));
+        GUI.enabled=old;return clicked;
     }
     void DrawConfirmation()
     {
@@ -173,7 +198,7 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
         if(LibraryUiProbe.Button("semester:confirm",new Rect(panel.x+240,panel.y+540,812,48),"确认 · "+confirmTitle,button))ExecuteConfirmation();
         GUI.enabled=enabled;
         if(LibraryUiProbe.Button("semester:return",new Rect(panel.x+240,panel.y+599,812,48),"返回，保留当前进度",button))
-        {confirmAction=null;actionFeedback=null;scroll=Vector2.zero;semester.EndClassroom();}
+        CancelConfirmation();
     }
     void Today()
     {
@@ -209,6 +234,51 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
         }
         var next=semester.Catalog.beats.FirstOrDefault(b=>SemesterRules.Available(semester.State,b,semester.Clock.DayIndex));
         if(next!=null){Heading("可以继续的故事");Text(next.title+" · "+next.place);if(Btn("查看故事与前往指引")){page="story";selectedBeat=next.id;}}
+        Heading("课表之外，也有自己的安排");Hint(semester.DailyRecap);
+        if(Btn("看看今天的三件课余小事")){page="daily";selectedDaily=null;scroll=Vector2.zero;}
+    }
+    void Daily()
+    {
+        if(selectedDaily!=null)
+        {
+            var activity=semester.DailyOptions.FirstOrDefault(a=>a.id==selectedDaily);
+            if(activity==null){selectedDaily=null;return;}
+            if(Btn("返回今日小事")){selectedDaily=null;scroll=Vector2.zero;return;}
+            Heading(activity.title);Hint(activity.speaker+" · "+activity.place);
+            Text(semester.DailyFollowUp(activity));
+            var record=semester.State.dailyActivities.FirstOrDefault(a=>a.day==semester.Clock.DayIndex&&a.id==activity.id);
+            if(record!=null){Heading("今天留下的片段");Text("我："+activity.choices[record.choice].label+"\n"+activity.speaker+"："+record.reply);return;}
+            Hint("参与时段 "+activity.openHour.ToString("00")+":00—"+activity.closeHour.ToString("00")+":00 · 每天完成一次 · 不代替上课与作业");
+            if(Btn("前往 "+activity.place))Track(activity.location);
+            for(int i=0;i<activity.choices.Length;i++)
+            {
+                int choice=i;var option=activity.choices[i];
+                string reason=semester.DailyUnavailableReason(activity.id,i,true);
+                string result=DailyEffect(option);
+                if(Btn(option.label+"\n"+option.minutes+"分钟 · "+result,string.IsNullOrEmpty(reason)))PreviewDaily(activity.id,choice);
+                if(!string.IsNullOrEmpty(reason))Hint(reason);
+            }
+            return;
+        }
+        Heading("每天留下一点自己的生活");Hint("每天轮换三件可选小事：学习、同伴、放松各一件。到现场参与，选择怎样度过这一小段时间；不必全部完成，也没有连续打卡惩罚。");
+        Text(semester.DailyRecap);
+        if(!semester.Ready){Hint("先和小岚完成迎新。9月2日起，就可以自己安排课余时间了。");return;}
+        if(semester.Clock.DayIndex<1)
+        {
+            Hint("今天先把迎新的事情慢慢收好。在宿舍一楼休息至明早，进入9月2日后会出现三件可选小事。");
+            if(Btn("前往宿舍，准备明天的生活"))Track("dorm");
+            return;
+        }
+        foreach(var activity in semester.DailyOptions)
+        {
+            Heading(CampusDailyRules.CategoryName(activity.category));
+            string state=semester.DailyCompleted(activity.id)?"已留下回忆":semester.DailyTimeAvailable(activity)?"可以安排":semester.Clock.Now.Hour<activity.openHour?"稍后开始":"时段已过";
+            if(Btn(activity.title+" · "+state+"\n"+activity.place)){selectedDaily=activity.id;scroll=Vector2.zero;}
+            Hint(activity.openHour.ToString("00")+":00—"+activity.closeHour.ToString("00")+":00 · 两种参与方式");
+        }
+        Heading("慢慢积累的熟悉感");
+        foreach(var category in new[]{"learn","company","rest"})
+            Hint(CampusDailyRules.CategoryName(category)+"已参与 "+semester.State.dailyActivities.Count(a=>a.category==category)+" 次；累计三次后，可按故事页的日期继续生活支线。");
     }
     void Study()
     {
@@ -255,7 +325,7 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
         {
             var beat=semester.Catalog.beats.First(b=>b.id==selectedBeat);
             if(Btn("返回故事列表")){selectedBeat=null;return;}
-            Heading(beat.title);Hint(beat.speaker+" · "+beat.place+" · "+beat.minutes+"分钟");Text(beat.text);
+            Heading(beat.title);Hint(beat.speaker+" · "+beat.place+" · "+beat.minutes+"分钟");Text(semester.StoryText(beat));
             bool available=semester.Ready&&SemesterRules.Available(semester.State,beat,semester.Clock.DayIndex);
             if(semester.State.Has(beat.id))
             {
@@ -275,6 +345,7 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
         Heading("校园里的故事");
         foreach(var beat in semester.Catalog.beats)
         {
+            if(!string.IsNullOrEmpty(semester.State.club)&&!string.IsNullOrEmpty(beat.clubRequirement)&&semester.State.club!=beat.clubRequirement&&!semester.State.Has(beat.id))continue;
             string state=semester.State.Has(beat.id)?"已完成":SemesterRules.Available(semester.State,beat,semester.Clock.DayIndex)?"可继续":"尚未开放";
             if(Btn(beat.title+"  ·  "+state+"\n"+beat.place)){selectedBeat=beat.id;scroll=Vector2.zero;}
             if(state=="尚未开放")Hint(Requirement(beat));
@@ -283,9 +354,10 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
     string Requirement(SemesterStoryBeat beat)
     {
         string info="从"+GameClock.SemesterStart.AddDays(beat.day).ToString("M月d日")+"开放";
+        if(!string.IsNullOrEmpty(beat.clubRequirement)&&semester.State.club!=beat.clubRequirement)info+="；需要加入"+beat.clubRequirement;
         if(!string.IsNullOrEmpty(beat.requires))
         {
-            var names=beat.requires.Split(',').Where(id=>!semester.State.Has(id)).Select(id=>semester.Catalog.beats.FirstOrDefault(b=>b.id==id)?.title??(id=="class-first"?"参加第一节课":id=="homework-first"?"提交第一份作业":id=="finals"?"完成期末考核":id=="meal"?"完成一次用餐与还盘":id.StartsWith("study-")?"完成"+semester.State.Course(id.Substring(6)).name+"学习":id));
+            var names=beat.requires.Split(',').Where(id=>!semester.State.Has(id)).Select(id=>semester.Catalog.beats.FirstOrDefault(b=>b.id==id)?.title??(id=="class-first"?"参加第一节课":id=="homework-first"?"提交第一份作业":id=="finals"?"完成期末考核":id=="midterms"?"完成期中考核":id=="meal"?"完成一次用餐与还盘":id.StartsWith("study-")?"完成"+semester.State.Course(id.Substring(6)).name+"学习":CampusDailyRules.MilestoneName(id)));
             var text=string.Join("、",names);if(text.Length>0)info+="；先完成："+text;
         }
         return info;
@@ -297,8 +369,10 @@ public sealed class CampusSemesterUI : MonoBehaviour, ICampusOverlay
     void Life()
     {
         Heading("生活与日程");Text("每周生活费300元自动到账。到第六食堂完整用餐可恢复精力，每个用餐时段生效一次。图书整理岗位提供一次30元补贴。休息恢复精力，跨过午夜本身不会恢复。");
+        Hint(semester.DailyRecap);
+        if(Btn("安排一件课余小事")){page="daily";selectedDaily=null;scroll=Vector2.zero;}
         if(Btn("指引至宿舍休息登记处"))Track("dorm");
-        if(Btn("休息至明早07:00",semester.Ready&&semester.At("dorm")))Ask("休息至明早","将结束今天，未完成的课程与任务不会自动完成。明早恢复精力并生成新的每日起点存档。",()=>semester.Rest());
+        if(Btn("休息至明早07:00",semester.Ready&&semester.At("dorm")))Ask("休息至明早",semester.DailyRecap+"\n将结束今天，未完成的课程与任务不会自动完成。明早恢复精力并生成新的每日起点存档。",()=>semester.Rest());
         if(Btn("查看平常日计划"))ShowRoutinePlan();
         string routineReason=semester.RoutineDayUnavailableReason();
         Hint(string.IsNullOrEmpty(routineReason)?"平常日计划当前可用：餐费20元，结算至今晚21:00。":"平常日计划暂不可用：\n"+routineReason);

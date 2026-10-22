@@ -44,7 +44,12 @@ public class BuildingInteriorTravel : MonoBehaviour
     }
     void Update(){
         fade=Mathf.MoveTowards(fade,Busy?1:0,Time.unscaledDeltaTime*5);
-        if(State==TravelState.Inside&&Interior&&game.player.position.y<Interior.fallRecoveryHeight)PlaceInside(Interior.FindSpawn(CurrentSpawnId));
+        if(State==TravelState.Inside&&Interior)
+        {
+            var dorm=Interior.GetComponent<DormitoryCorridor>();
+            if(dorm)dorm.RecoverIfUnsafe();
+            else if(game.player.position.y<Interior.fallRecoveryHeight)PlaceInside(Interior.FindSpawn(CurrentSpawnId));
+        }
     }
     public BuildingEntranceDefinition NearbyEntrance() {
         if(State!=TravelState.Outside)return null;

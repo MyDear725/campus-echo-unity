@@ -19,6 +19,15 @@ public sealed class DormitoryRoomInterior : MonoBehaviour
     public bool Inside => inside;
     public Vector3 ExitApproach => bedroom?bedroom.TransformPoint(new Vector3(0,.06f,1.15f)):transform.position;
     public string RoomNumber => hallway ? hallway.CurrentRoomNumber : "";
+    public bool RecoverIfUnsafe()
+    {
+        if(!inside||busy||!bedroom)return false;
+        Vector3 p=bedroom.InverseTransformPoint(game.player.position);
+        if(p.y>=-1.5f&&p.y<4.5f&&Mathf.Abs(p.x)<3.7f&&p.z> -3.7f&&p.z<12.5f)return false;
+        var cc=game.Interiors.IndoorController;bool wasEnabled=cc&&cc.enabled;if(cc)cc.enabled=false;
+        game.SetTravelPose(ExitApproach,bedroom.eulerAngles.y);Physics.SyncTransforms();if(cc)cc.enabled=wasEnabled;
+        game.Notify("已回到宿舍 "+RoomNumber+" 的安全位置。");return true;
+    }
 
     public string Prompt
     {

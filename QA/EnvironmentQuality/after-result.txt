@@ -1,0 +1,1 @@
+PASS: saved CampusLiving loaded; courtyard, avenue and lake rendered at 1600x900; five environment shaders compiled. Editor renders, no gameplay or performance claim.

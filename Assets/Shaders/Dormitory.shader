@@ -15,10 +15,11 @@ Shader "Campus/Dormitory" {
    #pragma vertex vert
    #pragma fragment frag
    #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
-   #pragma multi_compile_fragment _ _SHADOWS_SOFT
+   #pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
    #include "CampusNightLighting.hlsl"
+   #include "CampusEnvironmentLighting.hlsl"
    CBUFFER_START(UnityPerMaterial)
     float4 _BaseColor; float _Smoothness,_Tile,_Glass,_CampusOutdoorSurface;
    CBUFFER_END
@@ -40,6 +41,7 @@ Shader "Campus/Dormitory" {
     }
     Light l=GetMainLight(TransformWorldToShadowCoord(i.w));
     float3 ambient=max(SampleSH(n),lerp(float3(.27,.29,.28),float3(.55,.59,.63),n.y*.5+.5));
+    ambient=lerp(ambient,CampusEnvironmentAmbient(n),_CampusOutdoorSurface);
     float3 lit=c*(ambient+l.color*saturate(dot(n,l.direction))*(.13+.87*l.shadowAttenuation));
     lit+=l.color*pow(saturate(dot(n,normalize(view+l.direction))),lerp(16,170,_Smoothness))*_Smoothness*.22*l.shadowAttenuation;
     float alpha=_BaseColor.a;

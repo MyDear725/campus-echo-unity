@@ -19,6 +19,7 @@ Shader "Campus/RoadLandscape" {
    #pragma multi_compile_fog
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+   #include "CampusEnvironmentLighting.hlsl"
    CBUFFER_START(UnityPerMaterial)
    float4 _BaseColor,_TileSize;float _Surface,_Smoothness,_Metallic,_VertexTint;
    CBUFFER_END
@@ -45,10 +46,10 @@ Shader "Campus/RoadLandscape" {
     else if(_Surface<4.5)c*=.86+.14*noise(i.w.xz*10+i.w.y);
     else if(_Surface>5.5)c*=.72+.32*noise(uv*float2(30,2));
     InputData d=(InputData)0;d.positionWS=i.w;d.normalWS=n;d.viewDirectionWS=view;
-    d.shadowCoord=TransformWorldToShadowCoord(i.w);d.bakedGI=SampleSH(n);d.normalizedScreenSpaceUV=GetNormalizedScreenSpaceUV(i.p);d.shadowMask=1;
+    d.shadowCoord=TransformWorldToShadowCoord(i.w);d.bakedGI=CampusEnvironmentAmbient(n);d.normalizedScreenSpaceUV=GetNormalizedScreenSpaceUV(i.p);d.shadowMask=1;
     SurfaceData s=(SurfaceData)0;s.albedo=c;s.alpha=1;s.metallic=_Metallic;s.smoothness=smoothness;s.occlusion=1;s.normalTS=float3(0,0,1);
     if(_Surface>3.5&&_Surface<4.5){Light l=GetMainLight(d.shadowCoord);s.emission=c*l.color*pow(saturate(dot(-l.direction,view)),3)*.13*l.shadowAttenuation;}
-    half4 col=UniversalFragmentPBR(d,s);col.rgb=CampusOutdoorLight(col.rgb,c,n,i.w,1);col.rgb=MixFog(col.rgb,i.fog);return col;
+    half4 col=UniversalFragmentPBR(d,s);col.rgb=CampusOutdoorLight(col.rgb,c,n,i.w,1);col.rgb=CampusEnvironmentFog(col.rgb,i.w);return col;
    }
    ENDHLSL
   }

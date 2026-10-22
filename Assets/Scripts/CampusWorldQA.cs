@@ -20,7 +20,7 @@ public sealed class CampusWorldQA : MonoBehaviour
     }
     void Start()
     {
-        folder=Path.GetFullPath("QA/WorldGuidance");Directory.CreateDirectory(folder);File.WriteAllText(Path.Combine(folder,"result.txt"),"RUNNING");
+        folder=Path.GetFullPath(Environment.GetCommandLineArgs().Contains("-environmentQualityQA")?"QA/EnvironmentQuality/runtime":"QA/WorldGuidance");Directory.CreateDirectory(folder);File.WriteAllText(Path.Combine(folder,"result.txt"),"RUNNING");
         Application.logMessageReceived+=Log;StartCoroutine(Run());StartCoroutine(Timeout());
     }
     void OnDestroy(){Application.logMessageReceived-=Log;}
@@ -49,6 +49,9 @@ public sealed class CampusWorldQA : MonoBehaviour
     }
     IEnumerator Shot(string name)
     {
+        // Environment review already renders real camera views before Play Mode.
+        // Batch-mode players do not issue WaitForEndOfFrame callbacks.
+        if(Environment.GetCommandLineArgs().Contains("-environmentQualityQA")){yield return null;yield break;}
         yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(folder,name+".png"));yield return new WaitForSecondsRealtime(.4f);
     }
     IEnumerator Route(string target)
@@ -81,6 +84,11 @@ public sealed class CampusWorldQA : MonoBehaviour
         Check(CampusDayNight.LightsScheduled(5.999f)&&!CampusDayNight.LightsScheduled(6),"Campus lights switch off exactly at 06:00");
         Check(CampusDayNight.DaylightAt(16.5f)>CampusDayNight.DaylightAt(17.5f)&&CampusDayNight.DaylightAt(17.5f)>CampusDayNight.DaylightAt(18.5f),"Daylight decreases continuously through dusk");
         AtHour(12);Check(semester.Lighting.LampCount>8,"Actual campus path and courtyard lamps were created");Check(!semester.Lighting.LampsOn,"Midday lamps are off");float noon=semester.Lighting.Sun.intensity;
+        var presentation=game.GetComponentInChildren<CampusEnvironmentPresentation>();
+        var outdoorVolume=presentation?presentation.GetComponent<UnityEngine.Rendering.Volume>():null;
+        Check(outdoorVolume&&outdoorVolume.weight==1,"Outdoor atmosphere is active on campus");
+        CampusEnvironmentPresentation.CreateProfile(game.gameObject);
+        Check(game.GetComponentsInChildren<CampusEnvironmentPresentation>().Length==1,"Repeated binding reuses one outdoor profile");
         AtHour(17.5f);Check(semester.Lighting.Sun.intensity<noon,"Afternoon sun dims before lights switch on");Check(!semester.Lighting.LampsOn,"17:30 lamps stay off");
         AtHour(18);Check(semester.Lighting.LampsOn,"Saved clock at 18:00 enables lamps immediately");
         AtHour(22);Check(semester.Lighting.Sun.intensity<noon*.1f,"Night main-light intensity is substantially below midday");Check(Shader.GetGlobalFloat("_CampusNightAmount")>.99f,"Fixed-brightness campus shaders receive night state");
@@ -101,6 +109,7 @@ public sealed class CampusWorldQA : MonoBehaviour
         semester.Route.SetEnabled(true);Check(semester.Route.LineEnabled,"Guidance preference is saved and can be enabled again");
         yield return Route("library");
         yield return Enter("teaching-a");yield return Route("a");
+        Check(outdoorVolume.weight==0,"Outdoor grading is removed inside the actual teaching building");
         Check(semester.Route.Path.All(p=>p.y<1),"First-floor classroom route remains on its own floor");
         Check(semester.Route.Path.Last().x< -4,"Indoor route reaches the actual room rather than stopping in the corridor");
         yield return Shot("02-indoor-route");
@@ -114,6 +123,8 @@ public sealed class CampusWorldQA : MonoBehaviour
         dorm.RestoreFloor(1);
         var exitDoor=game.Interiors.Interior.exits.First(e=>e&&e.gameObject.activeInHierarchy);game.SetTravelPose(exitDoor.position,0,12);game.paused=false;game.SetUiCursor(false);game.Interiors.TryExit();while(game.Interiors.Busy)yield return null;
         game.SetUiCursor(true);semester.State.trackedLocation="";
+        yield return null;
+        Check(outdoorVolume.weight==1,"Outdoor atmosphere returns after exiting the dormitory");
         game.SetTravelPose(game.MapToWorld(new Vector3(245,.23f,-90)),180,12);game.enabled=false;
         var camera=game.followCamera;
         camera.transform.position=game.MapToWorld(new Vector3(245,12,-49));camera.transform.LookAt(game.MapToWorld(new Vector3(245,1,-91)));

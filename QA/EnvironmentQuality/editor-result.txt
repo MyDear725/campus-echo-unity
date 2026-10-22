@@ -1,0 +1,50 @@
+PASS: 49 checks passed in the original Unity project.
+PASS: Route and day/night systems are bound to the real semester clock
+PASS: Campus lights switch on exactly at 18:00
+PASS: Campus lights switch off exactly at 06:00
+PASS: Daylight decreases continuously through dusk
+PASS: Actual campus path and courtyard lamps were created
+PASS: Midday lamps are off
+PASS: Outdoor atmosphere is active on campus
+PASS: Repeated binding reuses one outdoor profile
+PASS: Afternoon sun dims before lights switch on
+PASS: 17:30 lamps stay off
+PASS: Saved clock at 18:00 enables lamps immediately
+PASS: Night main-light intensity is substantially below midday
+PASS: Fixed-brightness campus shaders receive night state
+PASS: Navigable route found: a (前往教学楼 A，按 E 进入)
+PASS: Guidance line is visible for a
+PASS: Outdoor rendered segment 1 avoids actual campus collisions
+PASS: Outdoor rendered segment 2 avoids actual campus collisions
+PASS: Outdoor rendered segment 3 avoids actual campus collisions
+PASS: Outdoor rendered segment 4 avoids actual campus collisions
+PASS: Outdoor rendered segment 5 avoids actual campus collisions
+PASS: Outdoor rendered segment 6 avoids actual campus collisions
+PASS: Outdoor rendered segment 7 avoids actual campus collisions
+PASS: Outdoor rendered segment 8 avoids actual campus collisions
+PASS: Turning guidance off hides the line immediately
+PASS: Direction guidance remains available with the line disabled
+PASS: Guidance preference is saved and can be enabled again
+PASS: Navigable route found: library (前往图书馆，按 E 进入)
+PASS: Guidance line is visible for library
+PASS: Enter actual building teaching-a
+PASS: Navigable route found: a (A101教室)
+PASS: Guidance line is visible for a
+PASS: Outdoor grading is removed inside the actual teaching building
+PASS: First-floor classroom route remains on its own floor
+PASS: Indoor route reaches the actual room rather than stopping in the corridor
+PASS: Day/night does not overwrite authored interior ambient light
+PASS: Navigable route found: library (先到出口按 E 返回校园)
+PASS: Guidance line is visible for library
+PASS: A different building is routed through the current real exit
+PASS: Leave real interior
+PASS: Enter actual building dormitory-1
+PASS: Navigable route found: dorm (先到楼梯口按 E 下至一楼)
+PASS: Guidance line is visible for dorm
+PASS: Upper dormitory floor routes to the downstairs interaction
+PASS: Outdoor atmosphere returns after exiting the dormitory
+PASS: Settings handbook opens for the guidance switch
+PASS: Daily reset accepts the tracked target state
+PASS: Reset preserves the user's guidance display preference
+PASS: Daily reset restores the tracked task together with semester progress
+PASS: Lighting resynchronizes to restored morning time

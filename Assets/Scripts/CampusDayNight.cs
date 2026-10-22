@@ -68,6 +68,8 @@ public sealed class CampusDayNight : MonoBehaviour
             RenderSettings.ambientGroundColor=Color.Lerp(new Color(.018f,.022f,.03f),ambientGround,Daylight);
             RenderSettings.fogColor=Color.Lerp(new Color(.025f,.04f,.07f),fog,Daylight);
             float warmth=Mathf.Sin(Daylight*Mathf.PI);
+            if(sky.HasProperty("_TopColor"))sky.SetColor("_TopColor",Color.Lerp(new Color(.23f,.43f,.68f),new Color(.39f,.37f,.57f),warmth*.55f));
+            if(sky.HasProperty("_HorizonColor"))sky.SetColor("_HorizonColor",Color.Lerp(new Color(.77f,.84f,.88f),new Color(.96f,.63f,.42f),warmth*.65f));
             if(sky.HasProperty("_Exposure"))sky.SetFloat("_Exposure",Mathf.Lerp(.075f,baseExposure,Daylight));
             if(sky.HasProperty("_SkyTint"))sky.SetColor("_SkyTint",Color.Lerp(new Color(.1f,.16f,.3f),Color.Lerp(new Color(.49f,.55f,.61f),new Color(.69f,.36f,.23f),warmth*.7f),Daylight));
             if(sky.HasProperty("_GroundColor"))sky.SetColor("_GroundColor",Color.Lerp(new Color(.015f,.025f,.045f),new Color(.37f,.35f,.34f),Daylight));
@@ -87,6 +89,7 @@ public sealed class CampusDayNight : MonoBehaviour
         originalSky=RenderSettings.skybox;
         if(originalSky){sky=new Material(originalSky){name="Campus sky · runtime day and night"};baseExposure=sky.HasProperty("_Exposure")?sky.GetFloat("_Exposure"):1.1f;}
         ambientSky=RenderSettings.ambientSkyColor;ambientEquator=RenderSettings.ambientEquatorColor;ambientGround=RenderSettings.ambientGroundColor;fog=RenderSettings.fogColor;
+        CampusEnvironmentPresentation.CreateProfile(game.gameObject);
         var environment=roots.FirstOrDefault(r=>r.name=="开发区校区 · 校园环境");
         if(!environment)return;
         foreach(var renderer in environment.GetComponentsInChildren<MeshRenderer>(true))

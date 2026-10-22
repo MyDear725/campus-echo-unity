@@ -57,6 +57,10 @@ public class LibraryStudy : MonoBehaviour
 
     public LibrarySeat SeatNearPlayer()
     {
+        // This service survives a semester/day restore while CampusGame does not.
+        // Rebind before proximity selection, otherwise E never reaches TrySit's
+        // existing rebind and the reserved chair becomes unusable after a reload.
+        if (!game) game = FindFirstObjectByType<CampusGame>();
         if (!game || !game.player) return null;
         var reg = LibrarySeatRegistry.Instance;
         if (!reg) return null;

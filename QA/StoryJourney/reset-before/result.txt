@@ -1,0 +1,12 @@
+FAIL: E sits at reserved library seat; boundGame=False, currentGame=False, nearest=none
+PASS: route 0 / E enters library
+PASS: route 0 / Travel settles
+PASS: route 0 / Correct interior library
+PASS: route 0 / Real library reservation
+PASS: route 0 / E sits at reserved library seat; boundGame=True, currentGame=True, nearest=2F-B-012
+PASS: route 0 / Onboarding start-study callback accepted
+PASS: route 0 / Reset after using persistent library service
+PASS: route 0 / E enters library
+PASS: route 0 / Travel settles
+PASS: route 0 / Correct interior library
+PASS: route 0 / Real library reservation

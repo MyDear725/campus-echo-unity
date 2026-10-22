@@ -1,0 +1,201 @@
+PASS: 200 checks; actual CharacterController movement, room portals, stairs and real camera renders. No frame-rate benchmark.
+PASS: Actual building entrance accepted: dormitory-1
+PASS: Generated dormitory initialized: dormitory-1
+PASS: Floor 1 stair route -1/-1 sealed by full wall
+PASS: Stair capsule remains supported
+PASS: Floor 1 stair route -1/1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 1 stair route 1/-1 sealed by full wall
+PASS: Stair capsule remains supported
+PASS: Floor 1 stair route 1/1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 2 stair route -1/-1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 2 stair route -1/1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 2 stair route 1/-1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 2 stair route 1/1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 3 stair route -1/-1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 3 stair route -1/1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 3 stair route 1/-1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 3 stair route 1/1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 4 stair route -1/-1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 4 stair route -1/1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 4 stair route 1/-1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 4 stair route 1/1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 5 stair route -1/-1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 5 stair route -1/1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 5 stair route 1/-1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 5 stair route 1/1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 6 stair route -1/-1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 6 stair route -1/1 sealed by full wall
+PASS: Stair capsule remains supported
+PASS: Floor 6 stair route 1/-1 reaches landing
+PASS: Stair capsule remains supported
+PASS: Outer stair side has no void gap
+PASS: Inner stair side has no void gap
+PASS: Stair side remains sealed while jumping
+PASS: Capsule returns from flight to landing
+PASS: Floor 6 stair route 1/1 sealed by full wall
+PASS: Stair capsule remains supported
+PASS: Injected corridor fall recovers on the same floor
+PASS: Stair interaction accepted
+PASS: Stair transition reaches floor 2
+PASS: Stair interaction accepted
+PASS: Stair transition reaches floor 3
+PASS: Stair interaction accepted
+PASS: Stair transition reaches floor 4
+PASS: Stair interaction accepted
+PASS: Stair transition reaches floor 5
+PASS: Stair interaction accepted
+PASS: Stair transition reaches floor 6
+PASS: Stair interaction accepted
+PASS: Stair transition reaches floor 5
+PASS: Stair interaction accepted
+PASS: Stair transition reaches floor 4
+PASS: Stair interaction accepted
+PASS: Stair transition reaches floor 3
+PASS: Stair interaction accepted
+PASS: Stair transition reaches floor 2
+PASS: Stair interaction accepted
+PASS: Stair transition reaches floor 1
+PASS: Room portal selects room 101
+PASS: Capsule walks from room entry to balcony
+PASS: Balcony rear blocks capsule and supports feet
+PASS: Balcony side contains capsule: -1
+PASS: Jumping against balcony side cannot escape: -1
+PASS: Balcony side contains capsule: 1
+PASS: Jumping against balcony side cannot escape: 1
+PASS: Room central aisle remains traversable both ways
+PASS: Injected fall recovers inside the current bedroom
+PASS: Room exit interaction accepted
+PASS: Room returns to its corridor
+PASS: Room portal selects room 612
+PASS: Capsule walks from room entry to balcony
+PASS: Balcony rear blocks capsule and supports feet
+PASS: Balcony side contains capsule: -1
+PASS: Jumping against balcony side cannot escape: -1
+PASS: Balcony side contains capsule: 1
+PASS: Jumping against balcony side cannot escape: 1
+PASS: Room central aisle remains traversable both ways
+PASS: Injected fall recovers inside the current bedroom
+PASS: Room exit interaction accepted
+PASS: Room returns to its corridor
+PASS: Actual campus exit accepted
+PASS: Returned to campus
+PASS: Actual building entrance accepted: dormitory-2
+PASS: Generated dormitory initialized: dormitory-2
+PASS: Shared solid wall present in dormitory-2
+PASS: Actual campus exit accepted
+PASS: Returned to campus
+PASS: Actual building entrance accepted: dormitory-west
+PASS: Generated dormitory initialized: dormitory-west
+PASS: Shared solid wall present in dormitory-west
+PASS: Actual campus exit accepted
+PASS: Returned to campus
+PASS: Actual building entrance accepted: dormitory-4
+PASS: Generated dormitory initialized: dormitory-4
+PASS: Shared solid wall present in dormitory-4
+PASS: Actual campus exit accepted
+PASS: Returned to campus
+PASS: Actual building entrance accepted: dormitory-5
+PASS: Generated dormitory initialized: dormitory-5
+PASS: Shared solid wall present in dormitory-5
+PASS: Actual campus exit accepted
+PASS: Returned to campus
+PASS: Actual building entrance accepted: dormitory-6
+PASS: Generated dormitory initialized: dormitory-6
+PASS: Shared solid wall present in dormitory-6
+PASS: Actual campus exit accepted
+PASS: Returned to campus

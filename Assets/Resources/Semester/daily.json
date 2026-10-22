@@ -1,0 +1,376 @@
+{
+  "activities": [
+    {
+      "id": "margin-note",
+      "category": "learn",
+      "title": "笔记空白处的那个问号",
+      "speaker": "同班伙伴",
+      "location": "a",
+      "place": "A101 教室门口",
+      "text": "同学把笔记翻到折角的一页：“这一行我抄下来了，可一合上本子，又不知道为什么。你愿意一起试一个最简单的例子吗？”",
+      "choices": [
+        {
+          "label": "找一个小例子，一步一步解释。",
+          "reply": "把条件写出来之后，原来不是整章都不会，只是漏掉了这一小步。下次我们先从问号开始。",
+          "minutes": 25,
+          "energy": 5,
+          "course": "math",
+          "mastery": 2,
+          "fitness": 0
+        },
+        {
+          "label": "先把不明白的地方整理成提问清单。",
+          "reply": "我们圈出了两个具体问题。下次去答疑，就不用只说“老师，我全都没懂”了。",
+          "minutes": 15,
+          "energy": 2,
+          "course": "math",
+          "mastery": 1,
+          "fitness": 0
+        }
+      ],
+      "openHour": 7,
+      "closeHour": 22
+    },
+    {
+      "id": "small-test",
+      "category": "learn",
+      "title": "让程序只跑一个小例子",
+      "speaker": "机房同学",
+      "location": "c",
+      "place": "C103 机房",
+      "text": "屏幕上的结果一直多出一行。同学已经把整段代码重写了两次，开始怀疑自己：“是不是我根本不适合这个？”",
+      "choices": [
+        {
+          "label": "先用最小输入复现，再逐项检查。",
+          "reply": "原来是结束条件多算了一次。能把错误说清楚，比不停重写更让人踏实。",
+          "minutes": 25,
+          "energy": 5,
+          "course": "code",
+          "mastery": 2,
+          "fitness": 0
+        },
+        {
+          "label": "把预期结果写在纸上，再和实际输出对照。",
+          "reply": "纸上的三行和屏幕上的四行一对照，问题就有了边界。下次我也这样试。",
+          "minutes": 20,
+          "energy": 3,
+          "course": "code",
+          "mastery": 1,
+          "fitness": 0
+        }
+      ],
+      "openHour": 7,
+      "closeHour": 22
+    },
+    {
+      "id": "campus-english",
+      "category": "learn",
+      "title": "用自己的话介绍这条路",
+      "speaker": "同班伙伴",
+      "location": "b",
+      "place": "B103 教室门口",
+      "text": "课后练习要介绍校园里的一个地方。同学背了很长的句子，却总在第三句停住：“能不能先说一段我真的会说的？”",
+      "choices": [
+        {
+          "label": "从食堂到教学楼的路线开始，两人轮流说。",
+          "reply": "不华丽，但现在我能完整说清楚了。下回换一个地方，再加一点自己的感受。",
+          "minutes": 25,
+          "energy": 5,
+          "course": "english",
+          "mastery": 2,
+          "fitness": 0
+        },
+        {
+          "label": "先画三个关键词，再用短句连接。",
+          "reply": "三个关键词像路标，不看整段稿子也不会迷路了。",
+          "minutes": 15,
+          "energy": 2,
+          "course": "english",
+          "mastery": 1,
+          "fitness": 0
+        }
+      ],
+      "openHour": 7,
+      "closeHour": 22
+    },
+    {
+      "id": "booklist",
+      "category": "learn",
+      "title": "书单不必从第一本读起",
+      "speaker": "图书馆同学",
+      "location": "library",
+      "place": "图书馆服务台",
+      "text": "桌上摊着一长列推荐书。同学问你：“都说值得读，可一口气借这么多，反而一本也不想打开。你会怎么选？”",
+      "choices": [
+        {
+          "label": "挑一本正好能回答眼前问题的书。",
+          "reply": "今天先把这个小问题弄明白。那张很长的书单，可以慢慢读，不用一次证明什么。",
+          "minutes": 20,
+          "energy": 2,
+          "course": "",
+          "mastery": 0,
+          "fitness": 0
+        },
+        {
+          "label": "各读一小段，再交换感兴趣的地方。",
+          "reply": "同一本书，我们圈出的地方居然完全不同。下次在这里交换读到的新东西吧。",
+          "minutes": 25,
+          "energy": 3,
+          "course": "",
+          "mastery": 0,
+          "fitness": 0
+        }
+      ],
+      "openHour": 7,
+      "closeHour": 22
+    },
+    {
+      "id": "lunch-talk",
+      "category": "company",
+      "title": "饭后再坐一会儿",
+      "speaker": "同班伙伴",
+      "location": "cafeteria",
+      "place": "第六食堂同学交流处",
+      "text": "同学把托盘放好，没有急着起身：“今天大家好像都有点忙。要不要聊一件和作业没关系的小事？”这里只安排餐后交流；吃饭仍在食堂正常点餐。",
+      "choices": [
+        {
+          "label": "说说今天路上遇到的一件有趣的事。",
+          "reply": "原来你也注意到了桥边那块总被风翻过来的指示牌。以后走过那里，大概会想起这顿饭。",
+          "minutes": 15,
+          "energy": -4,
+          "course": "",
+          "mastery": 0,
+          "fitness": 0
+        },
+        {
+          "label": "先听听对方最近有什么烦恼。",
+          "reply": "谢谢你没急着给建议。把事情讲完整，我已经没那么乱了。下次也换我听你说。",
+          "minutes": 20,
+          "energy": -2,
+          "course": "",
+          "mastery": 0,
+          "fitness": 0
+        }
+      ],
+      "openHour": 11,
+      "closeHour": 20
+    },
+    {
+      "id": "wayfinding",
+      "category": "company",
+      "title": "路标旁的一次停步",
+      "speaker": "来访同学",
+      "location": "bridge",
+      "place": "学苑桥校园活动点",
+      "text": "一个来参加活动的同学拿着通知，分不清桥两边的楼号。你想起刚来校园时，自己也曾把课表看反。",
+      "choices": [
+        {
+          "label": "在地图上标出入口，再说清楚沿途路标。",
+          "reply": "明白了，先过桥，再找入口。我刚才一直盯着楼顶，难怪绕了两圈。",
+          "minutes": 15,
+          "energy": 2,
+          "course": "",
+          "mastery": 0,
+          "fitness": 0
+        },
+        {
+          "label": "陪对方核对活动楼号，并提醒确认房间。",
+          "reply": "幸好又看了一眼通知，原来集合点在另一层。谢谢你愿意多等这一会儿。",
+          "minutes": 20,
+          "energy": 3,
+          "course": "",
+          "mastery": 0,
+          "fitness": 0
+        }
+      ],
+      "openHour": 7,
+      "closeHour": 22
+    },
+    {
+      "id": "shared-table",
+      "category": "company",
+      "title": "留在桌角的便签",
+      "speaker": "自习伙伴",
+      "location": "library",
+      "place": "图书馆服务台",
+      "text": "伙伴拿来一张便签：“上次你说想把计划排得松一点。我今天试了，空出来的半小时反而把事情收好了。你今天想怎么安排？”",
+      "choices": [
+        {
+          "label": "互相说一件今天最想完成的小事。",
+          "reply": "我们各自写了一件最想做完的事。不是监督，只是晚些时候见面时，可以问一句“怎么样了”。",
+          "minutes": 15,
+          "energy": 1,
+          "course": "",
+          "mastery": 0,
+          "fitness": 0
+        },
+        {
+          "label": "约好各忙一会儿，结束后再交换近况。",
+          "reply": "不用一直聊天也能作伴。晚些时候，带着一点新进展来见面就好。",
+          "minutes": 20,
+          "energy": 2,
+          "course": "",
+          "mastery": 0,
+          "fitness": 0
+        }
+      ],
+      "openHour": 7,
+      "closeHour": 22
+    },
+    {
+      "id": "dorm-message",
+      "category": "company",
+      "title": "走廊尽头的一条消息",
+      "speaker": "小岚 · 消息",
+      "location": "dorm",
+      "place": "宿舍一楼休息登记处",
+      "text": "小岚发来消息：“今天顺利吗？我刚从自己的小组讨论回来，原来学姐也会把计划排得太满。你愿意交换一个今天的小发现吗？”",
+      "choices": [
+        {
+          "label": "告诉她一件自己独立处理好的事情。",
+          "reply": "这次你已经有自己的办法了。等我们都忙完，下次碰面时认真讲给我听。",
+          "minutes": 15,
+          "energy": -3,
+          "course": "",
+          "mastery": 0,
+          "fitness": 0
+        },
+        {
+          "label": "坦白说说今天没做好、但想再试的事情。",
+          "reply": "我也有没做好的一段。先留一个能重新开始的小步骤，明天不用一下子解决全部。",
+          "minutes": 20,
+          "energy": -4,
+          "course": "",
+          "mastery": 0,
+          "fitness": 0
+        }
+      ],
+      "openHour": 7,
+      "closeHour": 22
+    },
+    {
+      "id": "lake-pause",
+      "category": "rest",
+      "title": "湖边十分钟，先不用赶路",
+      "speaker": "湖边的自己",
+      "location": "lake",
+      "place": "湖畔作品采集点",
+      "text": "风把湖面的亮光吹散又聚起。你原本只是从这里经过，忽然想给自己留一小段不用追赶进度的时间。",
+      "choices": [
+        {
+          "label": "沿岸慢慢走一段，听听周围的声音。",
+          "reply": "脚步放慢之后，刚才挤在一起的念头也慢慢散开了。回去再处理下一件事。",
+          "minutes": 20,
+          "energy": -7,
+          "course": "",
+          "mastery": 0,
+          "fitness": 0
+        },
+        {
+          "label": "记下一段今天想保留的景色。",
+          "reply": "你在回忆里记下了水光、树影和风。它不需要成为一张完美的作品，也值得留下。",
+          "minutes": 15,
+          "energy": -5,
+          "course": "",
+          "mastery": 0,
+          "fitness": 0
+        }
+      ],
+      "openHour": 7,
+      "closeHour": 22
+    },
+    {
+      "id": "easy-run",
+      "category": "rest",
+      "title": "今天也可以只跑一小圈",
+      "speaker": "跑步伙伴",
+      "location": "track",
+      "place": "田径场跑步集合点",
+      "text": "伙伴没有按下计时器：“今天不比速度。你想慢跑一圈，还是边走边把这周的事情理一理？”",
+      "choices": [
+        {
+          "label": "按能轻松说话的速度慢跑。",
+          "reply": "跑完没有想象中那么累。下次从这个速度开始，不用和别人的圈数比较。",
+          "minutes": 25,
+          "energy": 6,
+          "course": "",
+          "mastery": 0,
+          "fitness": 2
+        },
+        {
+          "label": "沿跑道散步，聊聊最近的节奏。",
+          "reply": "今天先把身体活动开，也把呼吸放慢。选择散步同样算给自己留了时间。",
+          "minutes": 20,
+          "energy": -5,
+          "course": "",
+          "mastery": 0,
+          "fitness": 1
+        }
+      ],
+      "openHour": 7,
+      "closeHour": 22
+    },
+    {
+      "id": "bridge-sunset",
+      "category": "rest",
+      "title": "晚风从桥的另一头过来",
+      "speaker": "同班伙伴",
+      "location": "bridge",
+      "place": "学苑桥校园活动点",
+      "text": "晚饭前的风吹过桥廊。同学问：“刚来时觉得这座桥特别长，现在来回都能认出几个熟悉的人了。你最先记住的是哪里？”",
+      "choices": [
+        {
+          "label": "说说最先认熟的一条路。",
+          "reply": "第一次记住路线时，校园好像一下缩小了一点。后来记住的人多了，它又慢慢变大了。",
+          "minutes": 15,
+          "energy": -5,
+          "course": "",
+          "mastery": 0,
+          "fitness": 0
+        },
+        {
+          "label": "各选一个下次想认真逛逛的角落。",
+          "reply": "我们把那个角落留给下一次空课。先有个想去的地方，也是一种小小的期待。",
+          "minutes": 20,
+          "energy": -6,
+          "course": "",
+          "mastery": 0,
+          "fitness": 0
+        }
+      ],
+      "openHour": 16,
+      "closeHour": 21
+    },
+    {
+      "id": "evening-reset",
+      "category": "rest",
+      "title": "给明天留一个轻一点的开头",
+      "speaker": "走廊里的自己",
+      "location": "dorm",
+      "place": "宿舍一楼休息登记处",
+      "text": "到了宿舍，你没有马上把明天排满。今天的事还在脑海里，或许可以先收好一件，再让自己休息。",
+      "choices": [
+        {
+          "label": "只写下明天最重要的一件事。",
+          "reply": "明天先做这一件，剩下的看当时的精力。计划终于不再像一张催促自己的清单。",
+          "minutes": 15,
+          "energy": -6,
+          "course": "",
+          "mastery": 0,
+          "fitness": 0
+        },
+        {
+          "label": "给今天写一句话，允许自己先到这里。",
+          "reply": "今天有完成的，也有没完成的。你把它们留在这一页，准备好从明天继续。",
+          "minutes": 10,
+          "energy": -4,
+          "course": "",
+          "mastery": 0,
+          "fitness": 0
+        }
+      ],
+      "openHour": 18,
+      "closeHour": 23
+    }
+  ]
+}

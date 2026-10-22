@@ -1,0 +1,8 @@
+PASS: 7 checks; actual CharacterController movement, room portals, stairs and real camera renders. No frame-rate benchmark.
+PASS: Actual building entrance accepted: dormitory-1
+PASS: Generated dormitory initialized: dormitory-1
+PASS: Room portal selects room 101
+PASS: Room exit interaction accepted
+PASS: Room returns to its corridor
+PASS: Actual campus exit accepted
+PASS: Returned to campus

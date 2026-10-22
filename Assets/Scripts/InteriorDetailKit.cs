@@ -5,6 +5,7 @@ using UnityEngine;
 public sealed class InteriorDetailKit : MonoBehaviour
 {
     readonly List<Mesh> owned=new List<Mesh>();
+    readonly List<Material> ownedMaterials=new List<Material>();
     public InteriorRefinementPalette palette;
     public static InteriorDetailKit Create(Transform parent,string name)
     {
@@ -126,6 +127,41 @@ public sealed class InteriorDetailKit : MonoBehaviour
         var mesh=Bevel(size,radius);owned.Add(mesh);filter.sharedMesh=mesh;go.transform.localScale=Vector3.one;
         var collider=go.GetComponent<BoxCollider>();if(collider){collider.size=size;collider.center=Vector3.zero;}
     }
+    public Material Tint(Material source,Color color)
+    {
+        var material=new Material(source){name=source.name+" · dorm accent",color=color};
+        if(material.HasProperty("_BaseColor"))material.SetColor("_BaseColor",color);
+        ownedMaterials.Add(material);return material;
+    }
+    // Repeated decorative modules share a draw call per material. Keep original
+    // transforms and colliders intact, including signs with child world lettering.
+    public void CombineDecorations()
+    {
+        var renderers=GetComponentsInChildren<MeshRenderer>(true);
+        var groups=new Dictionary<Material,List<MeshRenderer>>();
+        foreach(var renderer in renderers)
+        {
+            if(!renderer.enabled||renderer.GetComponent<TextMesh>()||renderer.sharedMaterials.Length!=1||!renderer.sharedMaterial)continue;
+            if(!groups.TryGetValue(renderer.sharedMaterial,out var list))groups[renderer.sharedMaterial]=list=new List<MeshRenderer>();
+            list.Add(renderer);
+        }
+        foreach(var pair in groups)
+        {
+            if(pair.Value.Count<2)continue;
+            var instances=new List<CombineInstance>();
+            foreach(var renderer in pair.Value)
+            {
+                var filter=renderer.GetComponent<MeshFilter>();if(!filter||!filter.sharedMesh)continue;
+                instances.Add(new CombineInstance{mesh=filter.sharedMesh,transform=transform.worldToLocalMatrix*renderer.transform.localToWorldMatrix});
+            }
+            if(instances.Count<2)continue;
+            var mesh=new Mesh{name="Combined dorm details · "+pair.Key.name,indexFormat=UnityEngine.Rendering.IndexFormat.UInt32};
+            mesh.CombineMeshes(instances.ToArray(),true,true);owned.Add(mesh);
+            var go=new GameObject(mesh.name);go.transform.SetParent(transform,false);
+            go.AddComponent<MeshFilter>().sharedMesh=mesh;go.AddComponent<MeshRenderer>().sharedMaterial=pair.Key;
+            foreach(var renderer in pair.Value)renderer.enabled=false;
+        }
+    }
     public static Mesh Bevel(Vector3 size,float radius)
     {
         var h=size*.5f;float r=Mathf.Max(.0001f,Mathf.Min(radius,Mathf.Min(h.x,Mathf.Min(h.y,h.z))*.8f));var inner=h-Vector3.one*r;
@@ -145,5 +181,5 @@ public sealed class InteriorDetailKit : MonoBehaviour
         }
         var mesh=new Mesh{name="Refined bevelled module"};mesh.SetVertices(vertices);mesh.SetNormals(normals);mesh.SetTriangles(indices,0);mesh.RecalculateBounds();return mesh;
     }
-    void OnDestroy(){if(Application.isPlaying)foreach(var mesh in owned)if(mesh)Destroy(mesh);}
+    void OnDestroy(){if(Application.isPlaying){foreach(var mesh in owned)if(mesh)Destroy(mesh);foreach(var material in ownedMaterials)if(material)Destroy(material);}}
 }

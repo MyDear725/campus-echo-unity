@@ -57,7 +57,9 @@ public sealed class CampusRouteGuide : MonoBehaviour
             if(dorm&&dorm.Floor>1)
             {
                 float side=root.transform.InverseTransformPoint(game.player.position).x<0?-1:1;
-                destination=root.transform.TransformPoint(new Vector3(side*(dorm.Layout.stairX-.2f),.06f,-.8f));instruction="先到楼梯口按 E 下至一楼";return true;
+                // Stand on the landing, inside the down-interaction zone. The old
+                // target hugged the inner shaft edge now enclosed by masonry.
+                destination=root.transform.TransformPoint(new Vector3(side*(dorm.Layout.stairX+2),.06f,-.4f));instruction="先到楼梯口按 E 下至一楼";return true;
             }
             var point=FindObjectsByType<CampusSemesterPoint>(FindObjectsSortMode.None).FirstOrDefault(p=>p.location==Target&&p.gameObject.scene==root.gameObject.scene);
             if(point){destination=point.transform.position;instruction=CampusSemesterPoint.PlaceName(Target);return true;}

@@ -99,6 +99,7 @@ public sealed class SemesterIntegrationQA : MonoBehaviour
     }
     IEnumerator Shot(string name,string page)
     {
+        if(Application.isBatchMode){yield return null;yield break;}
         semester.UI.Open(page);yield return null;yield return new WaitForEndOfFrame();
         ScreenCapture.CaptureScreenshot(Path.Combine(folder,name+".png"));
         yield return new WaitForSecondsRealtime(.7f);
@@ -194,7 +195,10 @@ public sealed class SemesterIntegrationQA : MonoBehaviour
         var remaining=semester.Catalog.beats.Where(b=>!semester.State.Has(b.id)).OrderBy(b=>b.day).ToArray();
         foreach(var beat in remaining)
         {
-            if(beat.id=="ending")continue;
+            if(beat.id=="ending"||beat.id=="goodbye-list")continue;
+            string previousClub=semester.State.club;
+            bool hadMidterms=semester.State.Has("midterms");
+            if(!string.IsNullOrEmpty(beat.clubRequirement))semester.State.club=beat.clubRequirement;
             foreach(var required in (beat.requires??"").Split(','))if(!string.IsNullOrEmpty(required))semester.State.Mark(required);
             semester.Clock.Restore((GameClock.SemesterStart.Date.AddDays(Math.Max(beat.day,2)).AddHours(17)-GameClock.SemesterStart).TotalSeconds);
             semester.State.energy=100;
@@ -208,11 +212,13 @@ public sealed class SemesterIntegrationQA : MonoBehaviour
             }
             else
             {
-                string building=beat.location=="a"?"teaching-a":beat.location=="b"?"teaching-b":beat.location=="c"?"teaching-c":beat.location;
+                string building=beat.location=="a"?"teaching-a":beat.location=="b"?"teaching-b":beat.location=="c"?"teaching-c":beat.location=="dorm"?"dormitory-1":beat.location;
                 yield return Enter(building);GoPoint(beat.location);
             }
             Check(semester.CompleteBeat(beat.id,1,true),"Story completes at actual location: "+beat.id);
             long reward=CampusWallet.BalanceFen;Check(!semester.CompleteBeat(beat.id,1,true)&&CampusWallet.BalanceFen==reward,"Story/reward cannot repeat: "+beat.id);
+            semester.State.club=previousClub;
+            if(!hadMidterms&&beat.requires.Split(',').Contains("midterms"))semester.State.flags.Remove("midterms");
         }
         semester.Clock.Restore((new DateTime(2027,1,12,17,0,0)-GameClock.SemesterStart).TotalSeconds);semester.State.energy=100;
         yield return Enter("teaching-a");GoPoint("a");
@@ -228,6 +234,8 @@ public sealed class SemesterIntegrationQA : MonoBehaviour
         var ending=semester.Catalog.beats.First(b=>b.id=="ending");
         var exitFinal=game.Interiors.Interior.exits[0];game.SetTravelPose(exitFinal.position,0,12);game.paused=false;game.SetUiCursor(false);game.Interiors.TryExit();while(game.Interiors.Busy)yield return null;semester.Bind();GoPoint("bridge");
         Check(semester.CompleteBeat(ending.id,0),"Semester ending responds to completed finals");
+        yield return Enter("dormitory-1");GoPoint("dorm");
+        Check(semester.CompleteBeat("goodbye-list",0),"Dormitory farewell follows the actual semester ending");
         yield return Shot("05-campus-stories","story");
         yield return Shot("06-campus-memories","life");
         // Pure clock advancement uses isolated state and checks exact daily boundaries.

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 // Owns all semester transactions. World actions and the phone use the same state and validation.
-public sealed class CampusSemester : MonoBehaviour
+public sealed partial class CampusSemester : MonoBehaviour
 {
     public static CampusSemester Instance;
     public const string PrefsKey = "CampusSemesterV1";
@@ -14,6 +14,7 @@ public sealed class CampusSemester : MonoBehaviour
     public static string SaveKey => KeyOverride ?? PrefsKey;
     public SemesterState State { get; private set; }
     public SemesterStoryCatalog Catalog { get; private set; }
+    public SemesterDailyCatalog DailyCatalog { get; private set; }
     public CampusGame Game { get; private set; }
     public GameClock Clock => GameClock.Ensure();
     public CampusSemesterUI UI { get; private set; }
@@ -45,6 +46,7 @@ public sealed class CampusSemester : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         var source = Resources.Load<TextAsset>("Semester/story");
         Catalog = JsonUtility.FromJson<SemesterStoryCatalog>(source.text);
+        DailyCatalog = JsonUtility.FromJson<SemesterDailyCatalog>(Resources.Load<TextAsset>("Semester/daily").text);
         ReloadState();
         UI = gameObject.AddComponent<CampusSemesterUI>();
         UI.Initialize(this);
@@ -81,6 +83,7 @@ public sealed class CampusSemester : MonoBehaviour
         State.flags ??= new List<string>(); State.attendance ??= new List<string>();
         State.assignments ??= new List<SemesterAssignment>(); State.journal ??= new List<SemesterJournalEntry>();
         State.remindersSeen ??= new List<string>();
+        State.dailyActivities ??= new List<SemesterDailyRecord>();
         State.energy = Mathf.Clamp(State.energy, 0, 100);
     }
     void Update()
@@ -124,7 +127,9 @@ public sealed class CampusSemester : MonoBehaviour
             var lesson = SemesterRules.Lessons(Clock.Now).FirstOrDefault(l => l.end > Clock.Now && !State.attendance.Contains(l.id));
             if (lesson != null) return lesson.start.ToString("HH:mm") + " " + lesson.title + " · " + lesson.room;
             var beat = Catalog.beats.FirstOrDefault(b => SemesterRules.Available(State, b, Clock.DayIndex));
-            return beat != null ? beat.title + " · " + beat.place : "今日课余时间 · 学习、活动或回宿舍休息";
+            if(beat != null)return beat.title + " · " + beat.place;
+            var daily=DailyOptions.FirstOrDefault(d=>!DailyCompleted(d.id)&&DailyTimeAvailable(d));
+            return daily != null ? "课余可选："+daily.title+" · "+daily.place : "今日课余时间 · 学习、活动或回宿舍休息";
         }
     }
     public string Objective
@@ -347,13 +352,14 @@ public sealed class CampusSemester : MonoBehaviour
         if (!RequireReady() || !RequirePlace("dorm")) return false;
         if (Clock.Now.Date >= GameClock.SemesterEnd.Date) return Tell("本学期已结束，先查看回顾吧。");
         if (LibraryStudy.Instance) LibraryStudy.Instance.ForceUp();
+        string recap=DailyRecap;
         // Sleep restores energy only after the date advance; midnight alone never restores it.
         Clock.AdvanceMinutes((Clock.Now.Date.AddDays(1).AddHours(7) - Clock.Now).TotalMinutes);
         State.energy = 100;
-        State.Note(Clock.Now, "新的一天", "小岚：先看课表，也给自己留一点课余时间。");
+        State.Note(Clock.Now, "新的一天", "昨日回顾："+recap+"\n小岚：先看课表，也给自己留一点课余时间。");
         Save();
         CampusSemesterSave.CaptureDay(this, true);
-        Tell("早上好。" + NextSchedule);
+        Tell("昨日回顾："+recap+"\n早上好。" + NextSchedule);
         return true;
     }
     // Shared by the preview and transaction; inspecting availability never changes progress.

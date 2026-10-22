@@ -27,6 +27,7 @@ public sealed class DormitoryCorridor : MonoBehaviour
     TextMesh westSign, eastSign, exitSign;
     readonly List<TextMesh> upSigns = new List<TextMesh>(), downSigns = new List<TextMesh>();
     readonly List<GameObject> upBarriers = new List<GameObject>(), downBarriers = new List<GameObject>();
+    readonly List<GameObject> upFlights = new List<GameObject>(), downFlights = new List<GameObject>();
     InteriorSceneRoot interior;
     CampusGame game;
     DormitoryLayout layout;
@@ -104,7 +105,7 @@ public sealed class DormitoryCorridor : MonoBehaviour
                     Text(parent,"Hallway motto",i%4==0?"好好学习 · 天天向上":"文明宿舍 · 温暖同行",
                         new Vector3(x,2.94f,z+side*.015f),face,.19f,new Color(.25f,.35f,.28f));
             }
-            for(int i=0;i<42;i++)Box(parent,"Tile joint",new Vector3(-20.5f+i,.006f,side*.95f),new Vector3(.015f,.008f,1.88f),stone);
+            // Tile seams belong to the floor material, not tiny walkable colliders.
         }
         Box(parent,"Entrance west jamb",new Vector3(-1.60f,1.6f,-2.75f),new Vector3(.2f,3.2f,1.9f),plaster);
         Box(parent,"Entrance east jamb",new Vector3(1.60f,1.6f,-2.75f),new Vector3(.2f,3.2f,1.9f),plaster);
@@ -128,6 +129,7 @@ public sealed class DormitoryCorridor : MonoBehaviour
             {
                 var flight = new GameObject(direction==1?"Ascending flight":"Descending flight");
                 flight.transform.SetParent(parent,false);
+                (direction==1?upFlights:downFlights).Add(flight);
                 // Keep a continuous hidden collision ramp under the visible stair
                 // treads. The small gaps between separate tread boxes must never
                 // expose the floorless stair shaft to the player capsule.
@@ -155,11 +157,21 @@ public sealed class DormitoryCorridor : MonoBehaviour
                 Box(flight.transform,"Safe stair landing",new Vector3(x,direction*1.2f-.08f,direction*3.52f),new Vector3(2.36f,.16f,1.08f),stone);
                 var label=Text(parent,"Stair direction",direction==1?"上楼  [E]":"下楼  [E]",new Vector3(x,2.3f,direction*1.75f),direction==1?180:0,.17f,dark.color);
                 (direction==1?upSigns:downSigns).Add(label);
-                var barrier=Box(parent,"Terminal floor safety barrier",new Vector3(x,.55f,direction*.74f),new Vector3(2.12f,1.1f,.08f),dark);
-                (direction==1?upBarriers:downBarriers).Add(barrier);
+                var terminal=new GameObject("Terminal floor closed stairwell");terminal.transform.SetParent(parent,false);
+                Box(terminal.transform,"Terminal floor plaster wall",new Vector3(x,1.6f,direction*.84f),new Vector3(4,3.2f,.26f),plaster);
+                Box(terminal.transform,"Terminal sage dado",new Vector3(x,.61f,direction*.697f),new Vector3(4,1.22f,.025f),lower);
+                Box(terminal.transform,"Terminal skirting",new Vector3(x,.075f,direction*.68f),new Vector3(4,.15f,.035f),dark);
+                (direction==1?upBarriers:downBarriers).Add(terminal);
+                // Enclose the otherwise floorless strips beside each 2m flight.
+                // Solid masonry reaches below the lowest tread and up to the roof.
+                foreach(int edge in new[]{-1,1})
+                    Box(parent,"Stairwell side wall",new Vector3(x+edge*1.55f,.7f,direction*2.43f),new Vector3(.9f,5f,3.46f),plaster);
                 // Block deeper travel beyond the landing during the interaction.
                 Box(parent,"Stair boundary",new Vector3(x,.95f,direction*4.1f),new Vector3(4,5.1f,.15f),plaster);
             }
+            Box(parent,"Stairwell ceiling",new Vector3(x,3.28f,0),new Vector3(4.2f,.16f,8.4f),white);
+            // Secondary solid foundation catches the feet even at tread/landing seams.
+            Box(parent,"Stairwell foundation",new Vector3(x,-1.6f,0),new Vector3(4.2f,.20f,8.4f),stone).GetComponent<Renderer>().enabled=false;
             // Close the outside edge; leave the corridor mouth open.
             Box(parent,"Stair outer guard",new Vector3(end*25,1.15f,0),new Vector3(.12f,2.3f,7),lower);
             var sign=Text(parent,"Floor sign","1F",new Vector3(end*24.85f,2.15f,0),end==-1?90:270,.48f,dark.color);
@@ -227,8 +239,12 @@ public sealed class DormitoryCorridor : MonoBehaviour
         westSign.text=eastSign.text=Floor+"F";
         foreach(var sign in upSigns)sign.text=Floor<layout.floors?"上楼  [E]":"六楼 · 无上行楼层";
         foreach(var sign in downSigns)sign.text=Floor>1?"下楼  [E]":"一楼 · 无下行楼层";
+        foreach(var sign in upSigns)sign.gameObject.SetActive(Floor<layout.floors);
+        foreach(var sign in downSigns)sign.gameObject.SetActive(Floor>1);
         foreach(var barrier in upBarriers)barrier.SetActive(Floor==layout.floors);
         foreach(var barrier in downBarriers)barrier.SetActive(Floor==1);
+        foreach(var flight in upFlights)flight.SetActive(Floor<layout.floors);
+        foreach(var flight in downFlights)flight.SetActive(Floor>1);
         foreach(var exit in interior.exits)if(exit)exit.gameObject.SetActive(Floor==1);
         exitSign.text=Floor==1?"出口 · 返回校园":"请从两端楼梯返回一楼";
     }
@@ -271,6 +287,18 @@ public sealed class DormitoryCorridor : MonoBehaviour
         fade=0;Transitioning=false;game.SetUiCursor(restoringUi);
     }
     public void RestoreFloor(int floor) { Floor=Mathf.Clamp(floor,1,layout.floors);RefreshFloor(); }
+    // Keep recovery in the active room/floor; the generic entrance spawn is hidden
+    // while a bedroom is active and is therefore not a safe recovery destination.
+    public bool RecoverIfUnsafe()
+    {
+        if(!game||Transitioning)return false;
+        if(InsideRoom)return roomInterior.RecoverIfUnsafe();
+        Vector3 p=transform.InverseTransformPoint(game.player.position);
+        if(p.y>=-2.8f&&p.y<5&&Mathf.Abs(p.x)<25.8f&&Mathf.Abs(p.z)<4.7f)return false;
+        var cc=game.Interiors.IndoorController;bool wasEnabled=cc&&cc.enabled;if(cc)cc.enabled=false;
+        game.SetTravelPose(transform.TransformPoint(new Vector3(0,.06f,-.7f)),transform.eulerAngles.y+90);
+        Physics.SyncTransforms();if(cc)cc.enabled=wasEnabled;game.Notify("已回到本层安全位置。");return true;
+    }
     public IEnumerator RestoreRoom(int index)
     {
         if(roomInterior) yield return roomInterior.RestoreRoom(index);
